@@ -9,56 +9,144 @@
         rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
         crossorigin="anonymous">
+    <style>
+        .required-badge {
+            color: #b02a37;
+            font-weight: 700;
+            margin-left: 0.35rem;
+        }
+    </style>
 </head>
 <body class="bg-light">
-    <main class="container py-5">
+    <main class="container py-4 py-md-5">
         <div class="mb-4">
-            <h1 class="h2 mb-2">レース記録登録</h1>
-            <p class="text-secondary mb-0">レースの情報を入力して記録できます。</p>
+            <h1 class="h2 fw-bold mb-2">レース記録登録</h1>
+            <p class="text-secondary mb-0">必要な内容を上から順番に入力すると、記録を残せます。</p>
         </div>
 
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-body p-4 p-md-5">
-                <form th:action="@{/records}" th:object="${record}" method="post">
+        <form th:action="@{/records}" th:object="${record}" method="post" class="vstack gap-4">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="h4 mb-4">基本情報</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label for="raceDate" class="form-label fw-semibold">
+                                開催日<span class="required-badge">必須</span>
+                            </label>
+                            <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="venue" class="form-label fw-semibold">
+                                レース場<span class="required-badge">必須</span>
+                            </label>
+                            <select id="venue" th:field="*{venue}" class="form-select form-select-lg" required>
+                                <option value="">選択してください</option>
+                                <option value="川口">川口</option>
+                                <option value="伊勢崎">伊勢崎</option>
+                                <option value="浜松">浜松</option>
+                                <option value="飯塚">飯塚</option>
+                                <option value="山陽">山陽</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="raceNumber" class="form-label fw-semibold">
+                                レース番号<span class="required-badge">必須</span>
+                            </label>
+                            <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg" required>
+                                <option value="">選択してください</option>
+                                <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="h4 mb-4">当日状況</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label for="weather" class="form-label fw-semibold">天気</label>
+                            <input type="text" id="weather" th:field="*{weather}" class="form-control form-control-lg" placeholder="例: 晴れ">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="temperature" class="form-label fw-semibold">気温</label>
+                            <input type="text" id="temperature" th:field="*{temperature}" class="form-control form-control-lg" placeholder="例: 20℃">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="humidity" class="form-label fw-semibold">湿度</label>
+                            <input type="text" id="humidity" th:field="*{humidity}" class="form-control form-control-lg" placeholder="例: 60%">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="trackTemperature" class="form-label fw-semibold">
+                                走路温度<span class="required-badge">必須</span>
+                            </label>
+                            <input type="text" id="trackTemperature" th:field="*{trackTemperature}" class="form-control form-control-lg" placeholder="例: 28℃" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="trackCondition" class="form-label fw-semibold">
+                                走路状況<span class="required-badge">必須</span>
+                            </label>
+                            <select id="trackCondition" th:field="*{trackCondition}" class="form-select form-select-lg" required>
+                                <option value="">選択してください</option>
+                                <option value="良走路">良走路</option>
+                                <option value="斑走路">斑走路</option>
+                                <option value="湿走路">湿走路</option>
+                                <option value="風">風</option>
+                                <option value="荒">荒</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="h4 mb-4">予想</h2>
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label for="raceDate" class="form-label">開催日</label>
-                            <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control" placeholder="開催日を入力してください">
+                            <label for="featuredRider" class="form-label fw-semibold">注目選手</label>
+                            <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control form-control-lg" placeholder="例: 大都太郎">
                         </div>
 
                         <div class="col-md-6">
-                            <label for="venue" class="form-label">レース場</label>
-                            <input type="text" id="venue" th:field="*{venue}" class="form-control" placeholder="例: 川口">
+                            <label for="betType" class="form-label fw-semibold">賭け式</label>
+                            <select id="betType" th:field="*{betType}" class="form-select form-select-lg">
+                                <option value="">選択してください</option>
+                                <option value="単勝">単勝</option>
+                                <option value="複勝">複勝</option>
+                                <option value="ワイド">ワイド</option>
+                                <option value="2連単">2連単</option>
+                                <option value="2連複">2連複</option>
+                                <option value="3連単">3連単</option>
+                                <option value="3連複">3連複</option>
+                            </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="raceNumber" class="form-label">レース番号</label>
-                            <input type="number" id="raceNumber" th:field="*{raceNumber}" class="form-control" placeholder="例: 8">
+                        <div class="col-12">
+                            <label for="finalPrediction" class="form-label fw-semibold">最終予想</label>
+                            <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 1-2-3">
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="weather" class="form-label">天候</label>
-                            <input type="text" id="weather" th:field="*{weather}" class="form-control" placeholder="例: 晴">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="featuredRider" class="form-label">注目選手</label>
-                            <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control" placeholder="例: 青山 周平">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="finalPrediction" class="form-label">最終予想</label>
-                            <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control" placeholder="例: 1-2-3">
+                        <div class="col-12">
+                            <label for="note" class="form-label fw-semibold">備考</label>
+                            <textarea id="note" th:field="*{note}" class="form-control form-control-lg" rows="4" placeholder="気になったことを自由に書いてください。"></textarea>
                         </div>
                     </div>
-
-                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary">保存</button>
-                        <a th:href="@{/records}" class="btn btn-outline-secondary">一覧へ戻る</a>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
+
+            <div class="d-flex flex-column flex-md-row gap-3">
+                <button type="submit" class="btn btn-primary btn-lg px-4">保存する</button>
+                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4">一覧へ戻る</a>
+            </div>
+        </form>
     </main>
 </body>
 </html>

@@ -11,7 +11,7 @@ import com.example.autoraceapp.repository.RaceRecordRepository;
 
 /**
  * レース記録に関する処理をまとめるサービスです。
- * 今回は最小構成なので、DBにデータがない場合はダミーデータを返します。
+ * DBにデータがないときは、画面確認しやすいようにダミーデータを返します。
  */
 @Service
 public class RaceRecordService {
@@ -32,8 +32,34 @@ public class RaceRecordService {
         }
 
         List<RaceRecord> dummyRecords = new ArrayList<>();
-        dummyRecords.add(new RaceRecord(1L, "2026-03-31", "川口", 8, "晴", "青山 周平", "1-2-3"));
-        dummyRecords.add(new RaceRecord(2L, "2026-03-30", "浜松", 10, "曇", "鈴木 圭一郎", "2-1-5"));
+        dummyRecords.add(new RaceRecord(
+                1L,
+                "2026-03-31",
+                "川口",
+                8,
+                "晴",
+                "22℃",
+                "48%",
+                "31℃",
+                "良走路",
+                "大都太郎",
+                "3連単",
+                "1-2-3",
+                "スタート重視で確認したいレースです。"));
+        dummyRecords.add(new RaceRecord(
+                2L,
+                "2026-03-30",
+                "浜松",
+                10,
+                "曇",
+                "18℃",
+                "62%",
+                "24℃",
+                "斑走路",
+                "大都太郎",
+                "2連単",
+                "2-1",
+                "試走気配を見て買い目を絞る予定です。"));
         return dummyRecords;
     }
 
@@ -56,7 +82,7 @@ public class RaceRecordService {
      * 登録画面で使う空のデータです。
      */
     public RaceRecord createEmptyRecord() {
-        return new RaceRecord(null, "", "", null, "", "", "");
+        return new RaceRecord(null, "", "", null, "", "", "", "", "", "", "", "", "");
     }
 
     /**
