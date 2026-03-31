@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>レース記録一覧</title>
+    <title>&#12524;&#12540;&#12473;&#35352;&#37682;&#19968;&#35239;</title>
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -11,53 +11,91 @@
         crossorigin="anonymous">
 </head>
 <body class="bg-light">
-    <main class="container py-5">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <main class="container py-4 py-md-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
             <div>
-                <h1 class="h2 mb-1">レース記録一覧</h1>
-                <p class="text-secondary mb-0">これまでに登録したレース記録を確認できます。</p>
+                <h1 class="fw-bold mb-2">&#12524;&#12540;&#12473;&#35352;&#37682;&#19968;&#35239;</h1>
+                <p class="text-secondary mb-0">&#30331;&#37682;&#12375;&#12383;&#12524;&#12540;&#12473;&#35352;&#37682;&#12434;&#19968;&#35239;&#12391;&#30906;&#35469;&#12391;&#12365;&#12414;&#12377;&#12290;</p>
             </div>
-            <div class="d-flex gap-2">
-                <a th:href="@{/records/new}" class="btn btn-primary">新しく記録する</a>
-                <a th:href="@{/}" class="btn btn-outline-secondary">ホームへ戻る</a>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">&#26032;&#12375;&#12367;&#35352;&#37682;&#12377;&#12427;</a>
+                <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">&#12507;&#12540;&#12512;&#12408;&#25147;&#12427;</a>
             </div>
         </div>
 
-        <div class="bg-white border rounded-4 shadow-sm p-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">開催日</th>
-                            <th scope="col">レース場</th>
-                            <th scope="col">レース番号</th>
-                            <th scope="col">天候</th>
-                            <th scope="col">注目選手</th>
-                            <th scope="col">最終予想</th>
-                            <th scope="col">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="record : ${records}">
-                            <td th:text="${record.raceDate}">2026-03-31</td>
-                            <td th:text="${record.venue}">川口</td>
-                            <td th:text="${record.raceNumber}">8</td>
-                            <td th:text="${record.weather}">晴</td>
-                            <td th:text="${record.featuredRider}">青山 周平</td>
-                            <td th:text="${record.finalPrediction}">1-2-3</td>
-                            <td>
-                                <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-sm btn-outline-primary">
-                                    詳細を見る
-                                </a>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(records)}">
-                            <td colspan="7" class="text-center text-secondary py-4">まだレース記録がありません。</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <section class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">&#26908;&#32034;</h2>
+                <form method="get" th:action="@{/records}">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="venue" class="form-label fw-semibold">&#12524;&#12540;&#12473;&#22580;</label>
+                            <select id="venue" name="venue" class="form-select form-select-lg">
+                                <option value="">&#12377;&#12409;&#12390;</option>
+                                <option value="&#24029;&#21475;" th:selected="${selectedVenue == '&#24029;&#21475;'}">&#24029;&#21475;</option>
+                                <option value="&#20234;&#21218;&#23822;" th:selected="${selectedVenue == '&#20234;&#21218;&#23822;'}">&#20234;&#21218;&#23822;</option>
+                                <option value="&#27996;&#26494;" th:selected="${selectedVenue == '&#27996;&#26494;'}">&#27996;&#26494;</option>
+                                <option value="&#39151;&#22618;" th:selected="${selectedVenue == '&#39151;&#22618;'}">&#39151;&#22618;</option>
+                                <option value="&#23665;&#38525;" th:selected="${selectedVenue == '&#23665;&#38525;'}">&#23665;&#38525;</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="weatherCondition" class="form-label fw-semibold">&#22825;&#27671;</label>
+                            <input type="text" id="weatherCondition" name="weatherCondition" class="form-control form-control-lg" placeholder="&#20363;: &#26228;&#12428;" th:value="${weatherCondition}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="featuredRider" class="form-label fw-semibold">&#27880;&#30446;&#36984;&#25163;</label>
+                            <input type="text" id="featuredRider" name="featuredRider" class="form-control form-control-lg" placeholder="&#20363;: &#22823;&#37117;&#22826;&#37070;" th:value="${featuredRider}">
+                        </div>
+
+                        <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-2">
+                            <button type="submit" class="btn btn-primary btn-lg">&#26908;&#32034;&#12377;&#12427;</button>
+                            <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">&#26465;&#20214;&#12434;&#12522;&#12475;&#12483;&#12488;</a>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
+        </section>
+
+        <section class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">&#38283;&#20652;&#26085;</th>
+                                <th scope="col">&#12524;&#12540;&#12473;&#22580;</th>
+                                <th scope="col">&#12524;&#12540;&#12473;&#30058;&#21495;</th>
+                                <th scope="col">&#22825;&#27671;</th>
+                                <th scope="col">&#36208;&#36335;&#29366;&#27841;</th>
+                                <th scope="col">&#27880;&#30446;&#36984;&#25163;</th>
+                                <th scope="col">&#36077;&#12369;&#24335;</th>
+                                <th scope="col">&#26368;&#32066;&#20104;&#24819;</th>
+                                <th scope="col">&#25805;&#20316;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="record : ${records}">
+                                <td th:text="${record.raceDate}">2026-03-31</td>
+                                <td th:text="${record.venue}">&#24029;&#21475;</td>
+                                <td th:text="${record.raceNumber}">8</td>
+                                <td th:text="${record.weatherCondition}">&#26228;&#12428;</td>
+                                <td th:text="${record.trackCondition}">&#33391;&#36208;&#36335;</td>
+                                <td th:text="${record.featuredRider}">&#22823;&#37117;&#22826;&#37070;</td>
+                                <td th:text="${record.betType}">3&#36899;&#21336;</td>
+                                <td th:text="${record.finalPrediction}">1-2-3</td>
+                                <td><a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">&#20869;&#23481;&#12434;&#35211;&#12427;</a></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(records)}">
+                                <td colspan="9" class="text-center text-secondary py-4">&#26465;&#20214;&#12395;&#21512;&#12358;&#12524;&#12540;&#12473;&#35352;&#37682;&#12364;&#12354;&#12426;&#12414;&#12379;&#12435;&#12290;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
     </main>
 </body>
 </html>

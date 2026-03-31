@@ -5,73 +5,38 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-/**
- * レース記録を表すクラスです。
- * 1件分の入力内容をこのクラスにまとめます。
- */
 @Entity
 public class RaceRecord {
 
-    /**
-     * データを区別するための番号です。
-     * 保存時に自動で入ります。
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** 開催日です。 */
     private String raceDate;
-
-    /** レース場です。 */
     private String venue;
-
-    /** レース番号です。 */
     private Integer raceNumber;
-
-    /** 天気です。 */
-    private String weather;
-
-    /** 気温です。 */
+    private String weatherCondition;
     private String temperature;
-
-    /** 湿度です。 */
     private String humidity;
-
-    /** 走路温度です。 */
     private String trackTemperature;
-
-    /** 走路状況です。 */
     private String trackCondition;
-
-    /** 注目選手です。 */
     private String featuredRider;
-
-    /** 賭け式です。 */
     private String betType;
-
-    /** 最終予想です。 */
     private String finalPrediction;
-
-    /** 備考です。 */
     private String note;
 
-    /** JPAで使うための空のコンストラクタです。 */
     public RaceRecord() {
     }
 
-    /**
-     * ダミーデータを作りやすくするためのコンストラクタです。
-     */
     public RaceRecord(Long id, String raceDate, String venue, Integer raceNumber,
-            String weather, String temperature, String humidity, String trackTemperature,
-            String trackCondition, String featuredRider, String betType,
-            String finalPrediction, String note) {
+            String weatherCondition, String temperature, String humidity,
+            String trackTemperature, String trackCondition, String featuredRider,
+            String betType, String finalPrediction, String note) {
         this.id = id;
         this.raceDate = raceDate;
         this.venue = venue;
         this.raceNumber = raceNumber;
-        this.weather = weather;
+        this.weatherCondition = weatherCondition;
         this.temperature = temperature;
         this.humidity = humidity;
         this.trackTemperature = trackTemperature;
@@ -114,12 +79,12 @@ public class RaceRecord {
         this.raceNumber = raceNumber;
     }
 
-    public String getWeather() {
-        return weather;
+    public String getWeatherCondition() {
+        return weatherCondition;
     }
 
-    public void setWeather(String weather) {
-        this.weather = weather;
+    public void setWeatherCondition(String weatherCondition) {
+        this.weatherCondition = weatherCondition;
     }
 
     public String getTemperature() {
