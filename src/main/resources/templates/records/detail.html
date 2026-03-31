@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>レース記録詳細</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+        crossorigin="anonymous">
+</head>
+<body class="bg-light">
+    <main class="container py-5">
+        <div class="mb-4">
+            <h1 class="h2 mb-2">レース記録詳細</h1>
+            <p class="text-secondary mb-0">登録されたレース記録の内容を確認できます。</p>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 mb-4">基本情報</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="border rounded-3 p-3 bg-light">
+                            <div class="text-secondary small mb-1">開催日</div>
+                            <div class="fw-semibold" th:text="${record.raceDate}">2026-03-31</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border rounded-3 p-3 bg-light">
+                            <div class="text-secondary small mb-1">レース場</div>
+                            <div class="fw-semibold" th:text="${record.venue}">川口</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border rounded-3 p-3 bg-light">
+                            <div class="text-secondary small mb-1">レース番号</div>
+                            <div class="fw-semibold" th:text="${record.raceNumber}">8</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border rounded-3 p-3 bg-light">
+                            <div class="text-secondary small mb-1">天候</div>
+                            <div class="fw-semibold" th:text="${record.weather}">晴</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="border rounded-3 p-3 bg-light">
+                            <div class="text-secondary small mb-1">注目選手</div>
+                            <div class="fw-semibold" th:text="${record.featuredRider}">青山 周平</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 mb-4">予想内容</h2>
+                <div class="border rounded-3 p-3 bg-light">
+                    <div class="text-secondary small mb-1">最終予想</div>
+                    <div class="fw-semibold fs-5" th:text="${record.finalPrediction}">1-2-3</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <a th:href="@{/records}" class="btn btn-outline-secondary">一覧へ戻る</a>
+        </div>
+    </main>
+</body>
+</html>

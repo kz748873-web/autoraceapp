@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -19,7 +19,7 @@
                     <p class="lead text-secondary mb-4">
                         前日予想から試走後判断、結果記録までを整理する試作アプリです。
                     </p>
-                    <a href="#" class="btn btn-primary btn-lg">新しく記録する</a>
+                    <a th:href="@{/records/new}" class="btn btn-primary btn-lg">新しく記録する</a>
                 </div>
             </div>
         </div>
