@@ -9,13 +9,6 @@
         rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
         crossorigin="anonymous">
-    <style>
-        .required-badge {
-            color: #b02a37;
-            font-weight: 700;
-            margin-left: 0.35rem;
-        }
-    </style>
 </head>
 <body class="bg-light">
     <main class="container py-4 py-md-5">
@@ -30,16 +23,12 @@
                     <h2 class="h4 mb-4">基本情報</h2>
                     <div class="row g-4">
                         <div class="col-md-4">
-                            <label for="raceDate" class="form-label fw-semibold">
-                                開催日<span class="required-badge">必須</span>
-                            </label>
+                            <label for="raceDate" class="form-label fw-semibold">開催日</label>
                             <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg" required>
                         </div>
 
                         <div class="col-md-4">
-                            <label for="venue" class="form-label fw-semibold">
-                                レース場<span class="required-badge">必須</span>
-                            </label>
+                            <label for="venue" class="form-label fw-semibold">レース場</label>
                             <select id="venue" th:field="*{venue}" class="form-select form-select-lg" required>
                                 <option value="">選択してください</option>
                                 <option value="川口">川口</option>
@@ -51,9 +40,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="raceNumber" class="form-label fw-semibold">
-                                レース番号<span class="required-badge">必須</span>
-                            </label>
+                            <label for="raceNumber" class="form-label fw-semibold">レース番号</label>
                             <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg" required>
                                 <option value="">選択してください</option>
                                 <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
@@ -83,16 +70,12 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="trackTemperature" class="form-label fw-semibold">
-                                走路温度<span class="required-badge">必須</span>
-                            </label>
+                            <label for="trackTemperature" class="form-label fw-semibold">走路温度</label>
                             <input type="text" id="trackTemperature" th:field="*{trackTemperature}" class="form-control form-control-lg" placeholder="例: 28℃" required>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="trackCondition" class="form-label fw-semibold">
-                                走路状況<span class="required-badge">必須</span>
-                            </label>
+                            <label for="trackCondition" class="form-label fw-semibold">走路状況</label>
                             <select id="trackCondition" th:field="*{trackCondition}" class="form-select form-select-lg" required>
                                 <option value="">選択してください</option>
                                 <option value="良走路">良走路</option>
