@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>&#12524;&#12540;&#12473;&#35352;&#37682;&#19968;&#35239;</title>
+    <title>レース記録一覧</title>
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -15,45 +15,52 @@
     <main class="container py-4 py-md-5">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
             <div>
-                <h1 class="fw-bold mb-2">&#12524;&#12540;&#12473;&#35352;&#37682;&#19968;&#35239;</h1>
-                <p class="text-secondary mb-0">&#30331;&#37682;&#12375;&#12383;&#12524;&#12540;&#12473;&#35352;&#37682;&#12434;&#19968;&#35239;&#12391;&#30906;&#35469;&#12391;&#12365;&#12414;&#12377;&#12290;</p>
+                <h1 class="fw-bold mb-2">レース記録一覧</h1>
+                <p class="text-secondary mb-0">登録したレース記録を、重要な項目だけに絞って見やすく確認できます。</p>
             </div>
             <div class="d-flex flex-column flex-sm-row gap-2">
-                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">&#26032;&#12375;&#12367;&#35352;&#37682;&#12377;&#12427;</a>
-                <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">&#12507;&#12540;&#12512;&#12408;&#25147;&#12427;</a>
+                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">新しく記録する</a>
+                <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">ホームへ戻る</a>
             </div>
         </div>
 
         <section class="card border-0 shadow-sm rounded-4 mb-4">
             <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">&#26908;&#32034;</h2>
+                <h2 class="h5 fw-bold mb-3">検索</h2>
                 <form method="get" th:action="@{/records}">
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label for="venue" class="form-label fw-semibold">&#12524;&#12540;&#12473;&#22580;</label>
+                            <label for="venue" class="form-label fw-semibold">レース場</label>
                             <select id="venue" name="venue" class="form-select form-select-lg">
-                                <option value="">&#12377;&#12409;&#12390;</option>
-                                <option value="&#24029;&#21475;" th:selected="${selectedVenue == '&#24029;&#21475;'}">&#24029;&#21475;</option>
-                                <option value="&#20234;&#21218;&#23822;" th:selected="${selectedVenue == '&#20234;&#21218;&#23822;'}">&#20234;&#21218;&#23822;</option>
-                                <option value="&#27996;&#26494;" th:selected="${selectedVenue == '&#27996;&#26494;'}">&#27996;&#26494;</option>
-                                <option value="&#39151;&#22618;" th:selected="${selectedVenue == '&#39151;&#22618;'}">&#39151;&#22618;</option>
-                                <option value="&#23665;&#38525;" th:selected="${selectedVenue == '&#23665;&#38525;'}">&#23665;&#38525;</option>
+                                <option value="">すべて</option>
+                                <option value="川口" th:selected="${selectedVenue == '川口'}">川口</option>
+                                <option value="伊勢崎" th:selected="${selectedVenue == '伊勢崎'}">伊勢崎</option>
+                                <option value="浜松" th:selected="${selectedVenue == '浜松'}">浜松</option>
+                                <option value="飯塚" th:selected="${selectedVenue == '飯塚'}">飯塚</option>
+                                <option value="山陽" th:selected="${selectedVenue == '山陽'}">山陽</option>
                             </select>
                         </div>
 
                         <div class="col-md-4">
-                            <label for="weatherCondition" class="form-label fw-semibold">&#22825;&#27671;</label>
-                            <input type="text" id="weatherCondition" name="weatherCondition" class="form-control form-control-lg" placeholder="&#20363;: &#26228;&#12428;" th:value="${weatherCondition}">
+                            <label for="weatherCondition" class="form-label fw-semibold">天気</label>
+                            <select id="weatherCondition" name="weatherCondition" class="form-select form-select-lg">
+                                <option value="">すべて</option>
+                                <option value="晴れ" th:selected="${weatherCondition == '晴れ'}">晴れ</option>
+                                <option value="曇り" th:selected="${weatherCondition == '曇り'}">曇り</option>
+                                <option value="小雨" th:selected="${weatherCondition == '小雨'}">小雨</option>
+                                <option value="雨" th:selected="${weatherCondition == '雨'}">雨</option>
+                                <option value="雪" th:selected="${weatherCondition == '雪'}">雪</option>
+                            </select>
                         </div>
 
                         <div class="col-md-4">
-                            <label for="featuredRider" class="form-label fw-semibold">&#27880;&#30446;&#36984;&#25163;</label>
-                            <input type="text" id="featuredRider" name="featuredRider" class="form-control form-control-lg" placeholder="&#20363;: &#22823;&#37117;&#22826;&#37070;" th:value="${featuredRider}">
+                            <label for="featuredRider" class="form-label fw-semibold">注目選手</label>
+                            <input type="text" id="featuredRider" name="featuredRider" class="form-control form-control-lg" placeholder="例: 青山周平" th:value="${featuredRider}">
                         </div>
 
                         <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-2">
-                            <button type="submit" class="btn btn-primary btn-lg">&#26908;&#32034;&#12377;&#12427;</button>
-                            <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">&#26465;&#20214;&#12434;&#12522;&#12475;&#12483;&#12488;</a>
+                            <button type="submit" class="btn btn-primary btn-lg">検索する</button>
+                            <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">条件をリセット</a>
                         </div>
                     </div>
                 </form>
@@ -66,31 +73,33 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col">&#38283;&#20652;&#26085;</th>
-                                <th scope="col">&#12524;&#12540;&#12473;&#22580;</th>
-                                <th scope="col">&#12524;&#12540;&#12473;&#30058;&#21495;</th>
-                                <th scope="col">&#22825;&#27671;</th>
-                                <th scope="col">&#36208;&#36335;&#29366;&#27841;</th>
-                                <th scope="col">&#27880;&#30446;&#36984;&#25163;</th>
-                                <th scope="col">&#36077;&#12369;&#24335;</th>
-                                <th scope="col">&#26368;&#32066;&#20104;&#24819;</th>
-                                <th scope="col">&#25805;&#20316;</th>
+                                <th scope="col">開催日</th>
+                                <th scope="col">レース場</th>
+                                <th scope="col">レース番号</th>
+                                <th scope="col">天気</th>
+                                <th scope="col">走路状況</th>
+                                <th scope="col">本命印の選手</th>
+                                <th scope="col">賭け式</th>
+                                <th scope="col">何点買い</th>
+                                <th scope="col">購入金額</th>
+                                <th scope="col">操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="record : ${records}">
-                                <td th:text="${record.raceDate}">2026-03-31</td>
-                                <td th:text="${record.venue}">&#24029;&#21475;</td>
-                                <td th:text="${record.raceNumber}">8</td>
-                                <td th:text="${record.weatherCondition}">&#26228;&#12428;</td>
-                                <td th:text="${record.trackCondition}">&#33391;&#36208;&#36335;</td>
-                                <td th:text="${record.featuredRider}">&#22823;&#37117;&#22826;&#37070;</td>
-                                <td th:text="${record.betType}">3&#36899;&#21336;</td>
-                                <td th:text="${record.finalPrediction}">1-2-3</td>
-                                <td><a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">&#20869;&#23481;&#12434;&#35211;&#12427;</a></td>
+                                <td th:text="${record.raceDate}">2026-04-02</td>
+                                <td th:text="${record.venue}">川口</td>
+                                <td th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</td>
+                                <td th:text="${record.weatherCondition} ?: '未入力'">晴れ</td>
+                                <td th:text="${record.trackCondition} ?: '未入力'">良走路</td>
+                                <td th:text="${record.featuredRider1Mark == '◎' ? record.featuredRider1Name : (record.featuredRider2Mark == '◎' ? record.featuredRider2Name : (record.featuredRider3Mark == '◎' ? record.featuredRider3Name : '未設定'))}">青山周平</td>
+                                <td th:text="${record.betType} ?: '未入力'">3連単</td>
+                                <td th:text="${record.betCount != null ? record.betCount + '点' : '未入力'}">6点</td>
+                                <td th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</td>
+                                <td><a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">内容を見る</a></td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(records)}">
-                                <td colspan="9" class="text-center text-secondary py-4">&#26465;&#20214;&#12395;&#21512;&#12358;&#12524;&#12540;&#12473;&#35352;&#37682;&#12364;&#12354;&#12426;&#12414;&#12379;&#12435;&#12290;</td>
+                                <td colspan="10" class="text-center text-secondary py-4">条件に合うレース記録がありません。</td>
                             </tr>
                         </tbody>
                     </table>
