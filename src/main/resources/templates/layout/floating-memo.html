@@ -1,0 +1,69 @@
+﻿<div th:fragment="floatingMemo">
+    <style>
+        .floating-memo-wrapper {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 1080;
+        }
+
+        .floating-memo-panel {
+            width: min(360px, calc(100vw - 2rem));
+            border: 1px solid #cfdced;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 1rem 2rem rgba(13, 79, 139, 0.16);
+            overflow: hidden;
+        }
+
+        .floating-memo-header {
+            background: #eef5fc;
+            color: #0b4d87;
+            font-weight: 700;
+        }
+
+        .floating-memo-textarea {
+            min-height: 180px;
+            resize: vertical;
+            border: none;
+            box-shadow: none;
+        }
+
+        .floating-memo-textarea:focus {
+            box-shadow: none;
+        }
+    </style>
+
+    <div class="floating-memo-wrapper">
+        <div class="collapse mb-2" id="floatingMemoPanel">
+            <div class="floating-memo-panel">
+                <div class="floating-memo-header px-3 py-2 d-flex justify-content-between align-items-center">
+                    <span>簡易メモ</span>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-secondary"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#floatingMemoPanel"
+                            aria-expanded="true"
+                            aria-controls="floatingMemoPanel">閉じる</button>
+                </div>
+                <div class="p-3">
+                    <textarea class="form-control floating-memo-textarea"
+                              placeholder="気になったことをここにメモできます。保存機能はまだありません。"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <button type="button"
+                class="btn btn-primary btn-lg rounded-pill shadow"
+                data-bs-toggle="collapse"
+                data-bs-target="#floatingMemoPanel"
+                aria-expanded="false"
+                aria-controls="floatingMemoPanel">
+            メモ
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+</div>

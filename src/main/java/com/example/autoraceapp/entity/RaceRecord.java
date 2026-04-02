@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /**
- * 1レース分の記録を保持するEntityです。
+ * 1レース分の記録を保持する Entity です。
  *
  * 既存の一覧・登録・詳細の流れを崩さずに、
  * 1件のレース記録に対して情報を追加する形で拡張しています。
@@ -24,6 +24,18 @@ public class RaceRecord {
     private Integer raceNumber;
 
     // 前日予想
+    /**
+     * 開催時間帯です。
+     * 例: アーリー / 通常 / ナイター / ミッドナイト / オーバーミッドナイト
+     */
+    private String raceScheduleType;
+
+    /**
+     * ハンデ情報です。
+     * 数値だけでも、補足込みのテキストでも入力できるように文字列で持ちます。
+     */
+    private String handicapInfo;
+
     private String featuredRider1Name;
     private Integer featuredRider1Number;
     private String featuredRider1Mark;
@@ -128,6 +140,22 @@ public class RaceRecord {
 
     public void setRaceNumber(Integer raceNumber) {
         this.raceNumber = raceNumber;
+    }
+
+    public String getRaceScheduleType() {
+        return raceScheduleType;
+    }
+
+    public void setRaceScheduleType(String raceScheduleType) {
+        this.raceScheduleType = raceScheduleType;
+    }
+
+    public String getHandicapInfo() {
+        return handicapInfo;
+    }
+
+    public void setHandicapInfo(String handicapInfo) {
+        this.handicapInfo = handicapInfo;
     }
 
     public String getFeaturedRider1Name() {
