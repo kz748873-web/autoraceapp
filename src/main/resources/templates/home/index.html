@@ -166,29 +166,77 @@
         }
 
         .video-box {
-            min-height: 320px;
+            min-height: 340px;
             border: 2px dashed #9cb6d1;
             border-radius: 1rem;
             background: linear-gradient(180deg, #f9fbff 0%, #edf4fb 100%);
+            color: #35506d;
+        }
+
+        .video-badge {
+            display: inline-block;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            background: #e8f1fb;
+            color: #0b4d87;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .video-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+        }
+
+        .video-placeholder {
+            min-height: 190px;
+            border: 2px dashed #b7cbe1;
+            border-radius: 1rem;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: #4d6b88;
+            color: #52708f;
         }
 
-        .video-box strong {
+        .video-placeholder strong {
             display: block;
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             margin-bottom: 0.5rem;
         }
 
+        .video-switch-panel {
+            border: 1px solid #d5e2ef;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .video-status {
+            border-radius: 0.85rem;
+            background: #eef5fc;
+            color: #0b4d87;
+            font-weight: 700;
+        }
+
         .action-link,
-        .nav-action {
+        .nav-action,
+        .external-link-btn {
             min-width: 220px;
             padding: 0.95rem 1.2rem;
             font-size: 1.06rem;
             font-weight: 700;
+        }
+
+        .external-link-btn {
+            min-width: 0;
+            border-radius: 1rem;
+        }
+
+        .link-note {
+            color: var(--text-sub);
+            font-size: 0.94rem;
+            line-height: 1.6;
         }
 
         .footer-note {
@@ -233,7 +281,7 @@
             <div class="hero-content">
                 <div class="row g-4 align-items-center">
                     <div class="col-lg-8">
-                        <div class="hero-badge mb-3">デモ用トップページ  /  背景切り替えイメージ</div>
+                        <div class="hero-badge mb-3">デモ用トップページ / 背景切り替えイメージ</div>
                         <h2 class="page-title mb-3">オートレースの予想整理を、見やすく、迷わず、すぐ始められるトップページです。</h2>
                         <p class="lead-text mb-4">
                             このアプリは、オートレース公式投票サイトを見ながら、前日予想、当日情報、動画確認、記録管理を整理して進めるための予想補助アプリです。
@@ -242,7 +290,7 @@
                         <div class="d-flex flex-column flex-md-row flex-wrap gap-3 mb-4">
                             <a th:href="@{/records/new}" class="btn btn-primary btn-lg nav-action">新しく記録する</a>
                             <a th:href="@{/records}" class="btn btn-light btn-lg nav-action">記録一覧を見る</a>
-                            <a href="/links" class="btn btn-outline-light btn-lg nav-action">公式サイトを見る</a>
+                            <a th:href="@{/links}" class="btn btn-outline-light btn-lg nav-action">外部リンクを見る</a>
                         </div>
                         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
                             <div class="text-white-50">背景写真はオートレース画像のサンプルです。今後も差し替えしやすい構成です。</div>
@@ -277,7 +325,7 @@
                     <div class="d-flex flex-column flex-md-row flex-wrap gap-3 justify-content-lg-end">
                         <a th:href="@{/records/new}" class="btn btn-primary btn-lg action-link">新しく記録する</a>
                         <a th:href="@{/records}" class="btn btn-outline-primary btn-lg action-link">記録一覧を見る</a>
-                        <a href="/links" class="btn btn-outline-secondary btn-lg action-link">公式サイトを見る</a>
+                        <a th:href="@{/links}" class="btn btn-outline-secondary btn-lg action-link">外部リンクを見る</a>
                     </div>
                 </div>
             </div>
@@ -347,53 +395,97 @@
         <section class="section-card p-4 p-md-5 mb-4">
             <div class="mb-3">
                 <h2 class="section-title mb-2">動画エリア</h2>
-                <p class="text-secondary mb-0">動画を2画面分並べて確認できる想定のプレースホルダーです。</p>
+                <p class="text-secondary mb-0">左は公式YouTube固定枠、右はレース場選択に応じて切り替える想定の動画枠です。スマホでは縦並びで見やすく表示されます。</p>
             </div>
-            <div class="row g-4">
+            <div class="row g-4 align-items-stretch">
                 <div class="col-lg-6">
-                    <div class="video-box p-4">
-                        <div>
-                            <strong>YouTube動画エリア 1</strong>
-                            <div class="fs-6">レース解説や予想動画を表示する想定です</div>
+                    <div class="video-box p-4 h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <div>
+                                <span class="video-badge mb-2">固定表示</span>
+                                <div class="video-title">公式YouTube</div>
+                            </div>
+                            <a th:href="@{/links}" class="btn btn-outline-primary btn-lg">外部リンク</a>
+                        </div>
+                        <p class="text-secondary fs-5 mb-4">公式配信や公式チャンネル動画を常に確認するための表示枠です。今後は固定URLを設定しやすい前提で使えます。</p>
+                        <div class="video-placeholder flex-grow-1">
+                            <div>
+                                <strong>公式YouTube表示枠</strong>
+                                <div class="fs-6">ここに公式YouTubeの埋め込みや固定リンクを設定する想定です</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="video-box p-4">
-                        <div>
-                            <strong>YouTube動画エリア 2</strong>
-                            <div class="fs-6">公式配信や比較用の動画を表示する想定です</div>
+                    <div class="video-box p-4 h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <div>
+                                <span class="video-badge mb-2">切り替え想定</span>
+                                <div class="video-title">レース場動画</div>
+                            </div>
+                            <span class="badge text-bg-light border fs-6">将来は動画URL切り替え対応</span>
+                        </div>
+
+                        <div class="video-switch-panel p-3 p-md-4 mb-4">
+                            <label for="videoVenueSelect" class="form-label fw-bold fs-5">表示するレース場を選ぶ</label>
+                            <select id="videoVenueSelect" class="form-select form-select-lg mb-3" aria-describedby="videoVenueHelp">
+                                <option selected>川口</option>
+                                <option>伊勢崎</option>
+                                <option>浜松</option>
+                                <option>飯塚</option>
+                                <option>山陽</option>
+                            </select>
+                            <div id="videoVenueHelp" class="text-secondary">今は見た目だけの選択欄です。今後ここを使ってレース場ごとの動画URLを切り替える想定です。</div>
+                        </div>
+
+                        <div class="video-status p-3 mb-4 text-center fs-5">
+                            選択中のレース場動画: 川口
+                        </div>
+
+                        <p class="text-secondary fs-5 mb-4">選んだレース場に応じて動画を切り替える前提の表示枠です。あとから SiteLink やリンク管理とつなげやすい形で整理しています。</p>
+                        <div class="video-placeholder flex-grow-1">
+                            <div>
+                                <strong>レース場動画表示枠</strong>
+                                <div class="fs-6">選択したレース場に応じた動画をここに表示する想定です</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <p class="text-secondary mt-4 mb-0">デモ時は、左で公式動画、右で会場別動画という役割の違いが一目で伝わる構成になっています。</p>
         </section>
 
         <section class="section-card p-4 p-md-5 mb-4">
-            <div class="mb-3">
-                <h2 class="section-title mb-2">外部リンクエリア</h2>
-                <p class="text-secondary mb-0">公式投票サイトや参考ページへ移動するためのプレースホルダーです。</p>
+            <div class="mb-4">
+                <h2 class="section-title mb-2">外部リンク</h2>
+                <p class="text-secondary mb-0">公式、ファンクラブ、レース場、YouTube、SNS をカテゴリごとにまとめて管理できる構成です。</p>
             </div>
-            <div class="row g-3">
-                <div class="col-md-4">
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" th:each="entry : ${linkGroups}">
                     <div class="link-card p-4 h-100">
-                        <div class="fw-bold fs-5 mb-2">公式投票サイト</div>
-                        <p class="text-secondary mb-3">投票や公式情報を確認するためのリンク想定です。</p>
-                        <a href="/links" class="btn btn-outline-primary btn-lg w-100">サイトを見る</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="link-card p-4 h-100">
-                        <div class="fw-bold fs-5 mb-2">動画・配信ページ</div>
-                        <p class="text-secondary mb-3">予想に使う動画や配信先への導線を置く想定です。</p>
-                        <a href="/links" class="btn btn-outline-primary btn-lg w-100">動画先を見る</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="link-card p-4 h-100">
-                        <div class="fw-bold fs-5 mb-2">参考情報ページ</div>
-                        <p class="text-secondary mb-3">オッズや条件確認用の補助リンクを置く想定です。</p>
-                        <a href="/links" class="btn btn-outline-primary btn-lg w-100">参考情報を見る</a>
+                        <div class="fw-bold fs-5 mb-3" th:text="${entry.key}">公式</div>
+                        <div class="vstack gap-3" th:if="${!#lists.isEmpty(entry.value)}">
+                            <div class="border rounded-4 p-3 bg-light" th:each="link : ${entry.value}">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                    <div class="fw-semibold" th:text="${link.siteName}">リンク名</div>
+                                    <span class="badge text-bg-primary" th:if="${link.primary}">主要</span>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <span class="badge text-bg-light border" th:if="${link.venueName != null and !#strings.isEmpty(link.venueName)}" th:text="${link.venueName}">川口</span>
+                                    <span class="badge text-bg-light border" th:if="${link.linkTypeLabel != null and !#strings.isEmpty(link.linkTypeLabel)}" th:text="${link.linkTypeLabel}">WEB</span>
+                                </div>
+                                <div class="link-note mb-3" th:text="${link.note}">補足説明</div>
+                                <a th:href="${link.url}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-outline-primary btn-lg external-link-btn w-100">サイトを見る</a>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(entry.value)}">
+                            <p class="text-secondary mb-3">今後このカテゴリのリンクを追加できます。</p>
+                            <a href="#" class="btn btn-outline-secondary btn-lg external-link-btn w-100" th:text="${entry.key + ' 追加予定'}">追加予定</a>
+                        </div>
                     </div>
                 </div>
             </div>

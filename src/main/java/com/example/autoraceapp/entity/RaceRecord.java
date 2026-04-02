@@ -1,4 +1,4 @@
-﻿package com.example.autoraceapp.entity;
+package com.example.autoraceapp.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

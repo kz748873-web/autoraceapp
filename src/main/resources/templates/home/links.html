@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>外部リンク一覧 | オートレース予想補助アプリ</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+        crossorigin="anonymous">
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <style>
+        body {
+            background: #f4f7fb;
+        }
+
+        .link-card {
+            border: 1px solid #d9e3f0;
+            border-radius: 1.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(13, 79, 139, 0.08);
+        }
+
+        .link-item {
+            border: 1px solid #d9e3f0;
+            border-radius: 1rem;
+            background: #f8fbff;
+        }
+
+        .link-btn {
+            padding: 0.95rem 1rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <main class="container py-4 py-md-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+            <div>
+                <h1 class="h2 fw-bold mb-2">外部リンク一覧</h1>
+                <p class="text-secondary mb-0">オートレース公式サイト、ファンクラブ、各レース場サイト、今後の YouTube / SNS 導線をまとめて確認できます。</p>
+            </div>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">TOPへ戻る</a>
+                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">新しく記録する</a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" th:each="entry : ${linkGroups}">
+                <section class="card border-0 link-card h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h4 fw-bold mb-3" th:text="${entry.key}">公式</h2>
+                        <div class="vstack gap-3" th:if="${!#lists.isEmpty(entry.value)}">
+                            <div class="link-item p-3" th:each="link : ${entry.value}">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                    <div class="fw-bold" th:text="${link.siteName}">リンク名</div>
+                                    <span class="badge text-bg-primary" th:if="${link.primary}">主要</span>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <span class="badge text-bg-light border" th:if="${link.venueName != null and !#strings.isEmpty(link.venueName)}" th:text="${link.venueName}">川口</span>
+                                    <span class="badge text-bg-light border" th:if="${link.linkTypeLabel != null and !#strings.isEmpty(link.linkTypeLabel)}" th:text="${link.linkTypeLabel}">WEB</span>
+                                </div>
+                                <p class="text-secondary small mb-3" th:text="${link.note}">補足説明</p>
+                                <a th:href="${link.url}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-outline-primary btn-lg link-btn w-100">サイトを見る</a>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(entry.value)}">
+                            <p class="text-secondary mb-3">このカテゴリは今後追加予定です。</p>
+                            <a href="#" class="btn btn-outline-secondary btn-lg link-btn w-100" th:text="${entry.key + ' 追加予定'}">追加予定</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
