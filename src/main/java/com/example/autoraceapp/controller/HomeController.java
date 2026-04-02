@@ -4,20 +4,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * ホーム画面を表示するためのコントローラです。
- * 最初に "/" へアクセスしたとき、このクラスがテンプレートを返します。
+ * ホーム画面と共通リソースへの導線を扱うコントローラです。
  */
 @Controller
 public class HomeController {
 
-	/**
-	 * トップページへの GET リクエストを受け取り、
-	 * src/main/resources/templates/home/index.html を表示します。
-	 *
-	 * @return 表示する Thymeleaf テンプレート名
-	 */
-	@GetMapping("/")
-	public String showHomePage() {
-		return "home/index";
-	}
+    /**
+     * トップページを表示します。
+     */
+    @GetMapping("/")
+    public String showHomePage() {
+        return "home/index";
+    }
+
+    /**
+     * ブラウザが自動で要求する favicon.ico を SVG に転送します。
+     */
+    @GetMapping("/favicon.ico")
+    public String redirectFavicon() {
+        return "forward:/favicon.svg";
+    }
 }
