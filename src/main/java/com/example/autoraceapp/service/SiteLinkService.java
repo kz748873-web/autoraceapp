@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,17 @@ import com.example.autoraceapp.entity.SiteLinkType;
 import com.example.autoraceapp.repository.SiteLinkRepository;
 
 /**
- * 外部リンクをカテゴリごとに整理して扱うサービスです。
- *
- * 今後 YouTube や SNS が増えても、
- * SiteLink にデータを追加するだけで画面に出しやすい形を目指しています。
+ * 外部リンクをカテゴリごと、会場ごとに整理して扱うサービスです。
  */
 @Service
 public class SiteLinkService {
+
+    private static final String SERVICE_OFFICIAL_SITE = "公式サイト";
+    private static final String SERVICE_FANCLUB = "ファンクラブ";
+    private static final String SERVICE_YOUTUBE = "YouTube";
+    private static final String SERVICE_X = "X";
+    private static final String SERVICE_INSTAGRAM = "Instagram";
+    private static final String DEFAULT_VENUE = "川口";
 
     private final SiteLinkRepository siteLinkRepository;
 
@@ -28,25 +33,80 @@ public class SiteLinkService {
         this.siteLinkRepository = siteLinkRepository;
     }
 
-    /**
-     * 画面表示用に、カテゴリごとのリンク一覧を返します。
-     */
-    public Map<String, List<SiteLink>> getLinkGroups() {
+    public List<SiteLink> getOfficialRelatedLinks() {
         initializeIfEmpty();
 
-        Map<String, List<SiteLink>> groupedLinks = createEmptyGroups();
-        List<SiteLink> links = new ArrayList<>(siteLinkRepository.findAll());
-        links.sort(createLinkComparator());
-
-        for (SiteLink link : links) {
-            groupedLinks.computeIfAbsent(link.getCategoryLabel(), key -> new ArrayList<>()).add(link);
-        }
-        return groupedLinks;
+        return siteLinkRepository.findAll().stream()
+                .filter(link -> link.getCategory() == SiteLinkCategory.OFFICIAL
+                        || link.getCategory() == SiteLinkCategory.FANCLUB)
+                .sorted(createLinkComparator())
+                .collect(Collectors.toList());
     }
 
-    /**
-     * 初回起動時に、最低限の公式リンクとレース場リンクを登録します。
-     */
+    public List<String> getVenueNames() {
+        initializeIfEmpty();
+
+        return siteLinkRepository.findAll().stream()
+                .filter(link -> link.getCategory() == SiteLinkCategory.VENUE)
+                .sorted(createLinkComparator())
+                .map(SiteLink::getVenueName)
+                .filter(name -> name != null && !name.isBlank())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public String resolveSelectedVenue(String requestedVenue) {
+        List<String> venueNames = getVenueNames();
+        if (requestedVenue == null || requestedVenue.isBlank()) {
+            return venueNames.isEmpty() ? DEFAULT_VENUE : venueNames.get(0);
+        }
+
+        for (String venueName : venueNames) {
+            if (venueName.equals(requestedVenue)) {
+                return venueName;
+            }
+        }
+
+        return venueNames.isEmpty() ? DEFAULT_VENUE : venueNames.get(0);
+    }
+
+    public Map<String, SiteLink> getVenueDetailLinks(String venueName) {
+        initializeIfEmpty();
+
+        String selectedVenue = resolveSelectedVenue(venueName);
+        Map<String, SiteLink> detailLinks = createEmptyVenueDetailMap();
+
+        siteLinkRepository.findAll().stream()
+                .filter(link -> selectedVenue.equals(link.getVenueName()))
+                .sorted(createLinkComparator())
+                .forEach(link -> {
+                    String serviceName = link.getServiceName();
+                    if (SERVICE_OFFICIAL_SITE.equals(serviceName)) {
+                        detailLinks.put("officialSite", link);
+                    } else if (SERVICE_YOUTUBE.equals(serviceName)) {
+                        detailLinks.put("youtube", link);
+                    } else if (SERVICE_X.equals(serviceName)) {
+                        detailLinks.put("x", link);
+                    } else if (SERVICE_INSTAGRAM.equals(serviceName)) {
+                        detailLinks.put("instagram", link);
+                    } else {
+                        detailLinks.put("supplement", link);
+                    }
+                });
+
+        return detailLinks;
+    }
+
+    private Map<String, SiteLink> createEmptyVenueDetailMap() {
+        Map<String, SiteLink> detailLinks = new LinkedHashMap<>();
+        detailLinks.put("officialSite", null);
+        detailLinks.put("youtube", null);
+        detailLinks.put("x", null);
+        detailLinks.put("instagram", null);
+        detailLinks.put("supplement", null);
+        return detailLinks;
+    }
+
     private void initializeIfEmpty() {
         if (siteLinkRepository.count() > 0) {
             return;
@@ -62,87 +122,86 @@ public class SiteLinkService {
                 1,
                 "投票や開催情報を確認するための公式サイトです。",
                 true,
-                SiteLinkType.WEB));
+                SiteLinkType.WEB,
+                SERVICE_OFFICIAL_SITE));
 
         initialLinks.add(new SiteLink(
                 "AutoRace FANCLUB",
                 SiteLinkCategory.FANCLUB,
                 "https://autorace-fanclub.jp/",
                 null,
-                1,
-                "ファンクラブ向けの情報を確認できます。",
-                true,
-                SiteLinkType.WEB));
-
-        initialLinks.add(new SiteLink(
-                "川口オートレース場",
-                SiteLinkCategory.VENUE,
-                "https://www.kawaguchiauto.jp/",
-                "川口",
-                1,
-                "川口オートレース場の公式サイトです。",
-                true,
-                SiteLinkType.WEB));
-
-        initialLinks.add(new SiteLink(
-                "伊勢崎オートレース場",
-                SiteLinkCategory.VENUE,
-                "https://isesaki-auto.jp/",
-                "伊勢崎",
                 2,
-                "伊勢崎オートレース場の公式サイトです。",
+                "ファンクラブ向けの情報を確認できます。",
                 false,
-                SiteLinkType.WEB));
+                SiteLinkType.WEB,
+                SERVICE_FANCLUB));
 
         initialLinks.add(new SiteLink(
-                "浜松オートレース場",
-                SiteLinkCategory.VENUE,
-                "https://www.hamamatsuauto.jp/",
-                "浜松",
-                3,
-                "浜松オートレース場の公式サイトです。",
-                false,
-                SiteLinkType.WEB));
+                "オートレース公式YouTube",
+                SiteLinkCategory.YOUTUBE,
+                "https://www.youtube.com/channel/UCJAPqcMNYk3HMknRuPMNvKA",
+                null,
+                1,
+                "公式配信や動画を確認するための公式YouTubeです。",
+                true,
+                SiteLinkType.YOUTUBE,
+                SERVICE_YOUTUBE));
 
-        initialLinks.add(new SiteLink(
-                "飯塚オートレース場",
-                SiteLinkCategory.VENUE,
-                "https://www.iizuka-auto.jp/",
-                "飯塚",
-                4,
-                "飯塚オートレース場の公式サイトです。",
-                false,
-                SiteLinkType.WEB));
-
-        initialLinks.add(new SiteLink(
-                "山陽オートレース場",
-                SiteLinkCategory.VENUE,
-                "https://sanyoauto.jp/",
-                "山陽",
-                5,
-                "山陽オートレース場の公式サイトです。",
-                false,
-                SiteLinkType.WEB));
+        addVenueLinks(initialLinks, "川口", "https://www.kawaguchiauto.jp/", "https://www.youtube.com/channel/UCM3t31-x3BYX9s2xGkIqk8w", 1);
+        addVenueLinks(initialLinks, "伊勢崎", "https://isesaki-auto.jp/", "https://www.youtube.com/channel/UCVytM2dZnTp6oOfBpv7_jLg", 2);
+        addVenueLinks(initialLinks, "浜松", "https://www.hamamatsuauto.jp/", "https://www.youtube.com/user/hamamatsuauto", 3);
+        addVenueLinks(initialLinks, "飯塚", "https://www.iizuka-auto.jp/", "https://www.youtube.com/channel/UCUwiFvrK2oCwwSA-1SVtOLA", 4);
+        addVenueLinks(initialLinks, "山陽", "https://sanyoauto.jp/", "https://www.youtube.com/channel/UCGercgXIY9l1H5r45XqQPEA", 5);
 
         siteLinkRepository.saveAll(initialLinks);
     }
 
-    /**
-     * 画面上のカテゴリ表示順を固定します。
-     */
-    private Map<String, List<SiteLink>> createEmptyGroups() {
-        Map<String, List<SiteLink>> groupedLinks = new LinkedHashMap<>();
-        groupedLinks.put(SiteLinkCategory.OFFICIAL.getLabel(), new ArrayList<>());
-        groupedLinks.put(SiteLinkCategory.FANCLUB.getLabel(), new ArrayList<>());
-        groupedLinks.put(SiteLinkCategory.VENUE.getLabel(), new ArrayList<>());
-        groupedLinks.put(SiteLinkCategory.YOUTUBE.getLabel(), new ArrayList<>());
-        groupedLinks.put(SiteLinkCategory.SNS.getLabel(), new ArrayList<>());
-        return groupedLinks;
+    private void addVenueLinks(List<SiteLink> links, String venueName, String officialUrl, String youtubeUrl, int order) {
+        links.add(new SiteLink(
+                venueName + "オートレース場",
+                SiteLinkCategory.VENUE,
+                officialUrl,
+                venueName,
+                order,
+                venueName + "の公式サイトです。",
+                true,
+                SiteLinkType.WEB,
+                SERVICE_OFFICIAL_SITE));
+
+        links.add(new SiteLink(
+                venueName + " YouTube",
+                SiteLinkCategory.YOUTUBE,
+                youtubeUrl,
+                venueName,
+                order,
+                venueName + "の配信や動画を確認するためのYouTubeです。",
+                true,
+                SiteLinkType.YOUTUBE,
+                SERVICE_YOUTUBE));
+
+        links.add(new SiteLink(
+                venueName + " X",
+                SiteLinkCategory.SNS,
+                "#",
+                venueName,
+                order,
+                venueName + "のXリンクは後から設定できます。",
+                false,
+                SiteLinkType.SNS,
+                SERVICE_X));
+
+        links.add(new SiteLink(
+                venueName + " Instagram",
+                SiteLinkCategory.SNS,
+                "#",
+                venueName,
+                order,
+                venueName + "のInstagramリンクは後から設定できます。",
+                false,
+                SiteLinkType.SNS,
+                SERVICE_INSTAGRAM));
     }
 
-    /**
-     * カテゴリ順 → 表示順 → サイト名の順で並べます。
-     */
     private Comparator<SiteLink> createLinkComparator() {
         return Comparator
                 .comparingInt((SiteLink link) -> getCategoryOrder(link.getCategory()))

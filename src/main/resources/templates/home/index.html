@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -95,7 +95,6 @@
             background: rgba(255,255,255,0.14);
             font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: 0.02em;
         }
 
         .page-title {
@@ -162,7 +161,6 @@
             text-align: center;
             font-size: 1.04rem;
             font-weight: 700;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
         }
 
         .video-box {
@@ -173,7 +171,8 @@
             color: #35506d;
         }
 
-        .video-badge {
+        .video-badge,
+        .mini-badge {
             display: inline-block;
             padding: 0.45rem 0.8rem;
             border-radius: 999px;
@@ -206,10 +205,12 @@
             margin-bottom: 0.5rem;
         }
 
-        .video-switch-panel {
+        .video-switch-panel,
+        .venue-detail-card,
+        .venue-selector-card {
             border: 1px solid #d5e2ef;
             border-radius: 1rem;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.92);
         }
 
         .video-status {
@@ -228,9 +229,60 @@
             font-weight: 700;
         }
 
-        .external-link-btn {
-            min-width: 0;
+        .external-link-btn,
+        .venue-select-btn,
+        .social-link-btn {
             border-radius: 1rem;
+        }
+
+        .venue-select-btn {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            font-size: 1.02rem;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .social-link-btn {
+            padding: 1rem 1.1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .youtube-btn {
+            background: #ff0000;
+            border-color: #ff0000;
+            color: #ffffff;
+        }
+
+        .youtube-btn:hover {
+            background: #d90000;
+            border-color: #d90000;
+            color: #ffffff;
+        }
+
+        .x-btn {
+            background: #111111;
+            border-color: #111111;
+            color: #ffffff;
+        }
+
+        .x-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            color: #ffffff;
+        }
+
+        .instagram-btn {
+            background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+            border: none;
+            color: #ffffff;
+        }
+
+        .instagram-btn:hover {
+            color: #ffffff;
+            opacity: 0.92;
         }
 
         .link-note {
@@ -425,24 +477,19 @@
                             </div>
                             <span class="badge text-bg-light border fs-6">将来は動画URL切り替え対応</span>
                         </div>
-
                         <div class="video-switch-panel p-3 p-md-4 mb-4">
                             <label for="videoVenueSelect" class="form-label fw-bold fs-5">表示するレース場を選ぶ</label>
-                            <select id="videoVenueSelect" class="form-select form-select-lg mb-3" aria-describedby="videoVenueHelp">
+                            <select id="videoVenueSelect" class="form-select form-select-lg mb-3">
                                 <option selected>川口</option>
                                 <option>伊勢崎</option>
                                 <option>浜松</option>
                                 <option>飯塚</option>
                                 <option>山陽</option>
                             </select>
-                            <div id="videoVenueHelp" class="text-secondary">今は見た目だけの選択欄です。今後ここを使ってレース場ごとの動画URLを切り替える想定です。</div>
+                            <div class="text-secondary">今は見た目だけの選択欄です。今後ここを使ってレース場ごとの動画URLを切り替える想定です。</div>
                         </div>
-
-                        <div class="video-status p-3 mb-4 text-center fs-5">
-                            選択中のレース場動画: 川口
-                        </div>
-
-                        <p class="text-secondary fs-5 mb-4">選んだレース場に応じて動画を切り替える前提の表示枠です。あとから SiteLink やリンク管理とつなげやすい形で整理しています。</p>
+                        <div class="video-status p-3 mb-4 text-center fs-5">選択中のレース場動画: 川口</div>
+                        <p class="text-secondary fs-5 mb-4">選んだレース場に応じて動画を切り替える前提の表示枠です。あとから SiteLink とつなげやすい形で整理しています。</p>
                         <div class="video-placeholder flex-grow-1">
                             <div>
                                 <strong>レース場動画表示枠</strong>
@@ -452,39 +499,97 @@
                     </div>
                 </div>
             </div>
-            <p class="text-secondary mt-4 mb-0">デモ時は、左で公式動画、右で会場別動画という役割の違いが一目で伝わる構成になっています。</p>
         </section>
 
-        <section class="section-card p-4 p-md-5 mb-4">
+        <section id="external-links" class="section-card p-4 p-md-5 mb-4">
             <div class="mb-4">
                 <h2 class="section-title mb-2">外部リンク</h2>
-                <p class="text-secondary mb-0">公式、ファンクラブ、レース場、YouTube、SNS をカテゴリごとにまとめて管理できる構成です。</p>
+                <p class="text-secondary mb-0">公式関連を左上にまとめ、レース場を選ぶと右側でその会場の公式サイトやSNS導線を確認できる構成です。</p>
             </div>
-
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6" th:each="entry : ${linkGroups}">
-                    <div class="link-card p-4 h-100">
-                        <div class="fw-bold fs-5 mb-3" th:text="${entry.key}">公式</div>
-                        <div class="vstack gap-3" th:if="${!#lists.isEmpty(entry.value)}">
-                            <div class="border rounded-4 p-3 bg-light" th:each="link : ${entry.value}">
-                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                                    <div class="fw-semibold" th:text="${link.siteName}">リンク名</div>
-                                    <span class="badge text-bg-primary" th:if="${link.primary}">主要</span>
-                                </div>
-                                <div class="d-flex flex-wrap gap-2 mb-2">
-                                    <span class="badge text-bg-light border" th:if="${link.venueName != null and !#strings.isEmpty(link.venueName)}" th:text="${link.venueName}">川口</span>
-                                    <span class="badge text-bg-light border" th:if="${link.linkTypeLabel != null and !#strings.isEmpty(link.linkTypeLabel)}" th:text="${link.linkTypeLabel}">WEB</span>
-                                </div>
-                                <div class="link-note mb-3" th:text="${link.note}">補足説明</div>
-                                <a th:href="${link.url}"
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-4">
+                    <div class="vstack gap-4">
+                        <div class="link-card p-4">
+                            <div class="fw-bold fs-4 mb-3">公式関連</div>
+                            <div class="vstack gap-3">
+                                <a th:each="link : ${officialRelatedLinks}"
+                                   th:href="${link.url}"
+                                   th:text="${link.siteName}"
                                    target="_blank"
                                    rel="noopener noreferrer"
-                                   class="btn btn-outline-primary btn-lg external-link-btn w-100">サイトを見る</a>
+                                   class="btn btn-outline-primary btn-lg external-link-btn text-start">公式関連リンク</a>
                             </div>
                         </div>
-                        <div th:if="${#lists.isEmpty(entry.value)}">
-                            <p class="text-secondary mb-3">今後このカテゴリのリンクを追加できます。</p>
-                            <a href="#" class="btn btn-outline-secondary btn-lg external-link-btn w-100" th:text="${entry.key + ' 追加予定'}">追加予定</a>
+
+                        <div class="venue-selector-card p-4">
+                            <div class="fw-bold fs-4 mb-2">オートレース場</div>
+                            <p class="text-secondary mb-3">見たい会場を選ぶと、右側にその会場のリンク導線をまとめて表示します。</p>
+                            <div class="vstack gap-2">
+                                <a th:each="venueName : ${venueNames}"
+                                   th:href="@{/(venue=${venueName})}"
+                                   th:text="${venueName}"
+                                   th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'"
+                                   class="btn btn-lg venue-select-btn">川口</a>
+                            </div>
+                            <div class="link-note mt-3">今はTOPページ上で見せる構造を優先しています。詳しい一覧は外部リンクページでも確認できます。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="venue-detail-card p-4 p-md-5">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                            <div>
+                                <span class="mini-badge mb-2">選択中のレース場</span>
+                                <div class="fs-2 fw-bold" th:text="${selectedVenue}">川口</div>
+                            </div>
+                            <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg">外部リンク一覧で見る</a>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <a th:if="${selectedVenueLinks['officialSite'] != null}"
+                                   th:href="${selectedVenueLinks['officialSite'].url}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-outline-primary btn-lg w-100 social-link-btn">公式サイト</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a th:if="${selectedVenueLinks['youtube'] != null}"
+                                   th:href="${selectedVenueLinks['youtube'].url}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-lg w-100 social-link-btn youtube-btn">YouTube</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a th:if="${selectedVenueLinks['x'] != null}"
+                                   th:href="${selectedVenueLinks['x'].url}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-lg w-100 social-link-btn x-btn">X</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a th:if="${selectedVenueLinks['instagram'] != null}"
+                                   th:href="${selectedVenueLinks['instagram'].url}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-lg w-100 social-link-btn instagram-btn">Instagram</a>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="border rounded-4 p-3 bg-light h-100">
+                                    <div class="fw-semibold mb-2">会場公式サイト</div>
+                                    <div class="link-note" th:text="${selectedVenueLinks['officialSite'] != null ? selectedVenueLinks['officialSite'].note : 'リンク準備中です。'}">会場公式サイトの説明</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="border rounded-4 p-3 bg-light h-100">
+                                    <div class="fw-semibold mb-2">動画・SNS導線</div>
+                                    <div class="link-note">YouTube は実URLを設定済みです。X と Instagram は、あとから会場ごとに追加しやすいようにプレースホルダーで置いています。</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

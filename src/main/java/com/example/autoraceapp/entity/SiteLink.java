@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 /**
  * 外部リンクを管理する Entity です。
  *
- * 今後リンクが増えても扱いやすいように、
- * カテゴリ、リンク種別、会場名、表示順などを持てる形にしています。
+ * カテゴリ、リンク種別、会場名、表示順に加えて、
+ * そのリンクが何の役割を持つかを serviceName で表せるようにしています。
  */
 @Entity
 public class SiteLink {
@@ -21,13 +21,12 @@ public class SiteLink {
     private Long id;
 
     /**
-     * 画面に表示するサイト名です。
+     * 画面に表示する名前です。
      */
     private String siteName;
 
     /**
-     * どのカテゴリのリンクかを表します。
-     * 例: OFFICIAL / FANCLUB / VENUE / YOUTUBE / SNS
+     * リンクのカテゴリです。
      */
     @Enumerated(EnumType.STRING)
     private SiteLinkCategory category;
@@ -38,8 +37,7 @@ public class SiteLink {
     private String url;
 
     /**
-     * レース場名を持たせたいときに使います。
-     * 例: 川口 / 伊勢崎 / 浜松 / 飯塚 / 山陽
+     * 会場別リンクに使う会場名です。
      */
     private String venueName;
 
@@ -54,16 +52,21 @@ public class SiteLink {
     private String note;
 
     /**
-     * そのカテゴリの中で主導線として見せたいリンクかどうかです。
+     * 主要導線として見せたいリンクかどうかです。
      */
     private Boolean isPrimary;
 
     /**
-     * リンクの種類です。
-     * 例: WEB / YOUTUBE / SNS
+     * WEB / YOUTUBE / SNS などのリンク種別です。
      */
     @Enumerated(EnumType.STRING)
     private SiteLinkType linkType;
+
+    /**
+     * そのリンクの役割です。
+     * 例: 公式サイト / ファンクラブ / YouTube / X / Instagram
+     */
+    private String serviceName;
 
     public SiteLink() {
     }
@@ -76,7 +79,8 @@ public class SiteLink {
             Integer displayOrder,
             String note,
             Boolean isPrimary,
-            SiteLinkType linkType) {
+            SiteLinkType linkType,
+            String serviceName) {
         this.siteName = siteName;
         this.category = category;
         this.url = url;
@@ -85,6 +89,7 @@ public class SiteLink {
         this.note = note;
         this.isPrimary = isPrimary;
         this.linkType = linkType;
+        this.serviceName = serviceName;
     }
 
     public Long getId() {
@@ -159,9 +164,14 @@ public class SiteLink {
         this.linkType = linkType;
     }
 
-    /**
-     * 既存テンプレートとの互換用です。
-     */
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     public String getDisplayName() {
         return siteName;
     }
@@ -170,9 +180,6 @@ public class SiteLink {
         this.siteName = displayName;
     }
 
-    /**
-     * 既存 Service との互換用です。
-     */
     public Integer getSortOrder() {
         return displayOrder;
     }
@@ -181,23 +188,14 @@ public class SiteLink {
         this.displayOrder = sortOrder;
     }
 
-    /**
-     * 画面表示用のカテゴリ名です。
-     */
     public String getCategoryLabel() {
         return category != null ? category.getLabel() : "未分類";
     }
 
-    /**
-     * 画面表示用のリンク種別名です。
-     */
     public String getLinkTypeLabel() {
         return linkType != null ? linkType.getLabel() : "";
     }
 
-    /**
-     * Thymeleaf で扱いやすいように boolean 風の getter も用意しています。
-     */
     public boolean isPrimary() {
         return Boolean.TRUE.equals(isPrimary);
     }
