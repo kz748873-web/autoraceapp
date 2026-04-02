@@ -1,0 +1,33 @@
+<header xmlns:th="http://www.thymeleaf.org" th:fragment="siteHeader" class="border-bottom bg-white shadow-sm">
+    <div class="container py-3 py-md-4">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+            <div>
+                <div class="text-primary fw-semibold mb-1">AUTO RACE SUPPORT APP</div>
+                <h1 class="h3 fw-bold mb-0">オートレース予想補助アプリ</h1>
+            </div>
+            <div class="d-flex flex-column align-items-lg-end gap-2">
+                <div class="app-theme-toolbar">
+                    <span class="app-theme-label">テーマ</span>
+                    <span class="app-theme-dot" id="appThemeDot"></span>
+                    <select id="appThemeSelect" class="form-select form-select-sm app-theme-select" aria-label="カラーテーマ選択">
+                        <option value="default">デフォルト</option>
+                        <option value="white">1 白</option>
+                        <option value="black">2 黒</option>
+                        <option value="red">3 赤</option>
+                        <option value="blue">4 青</option>
+                        <option value="yellow">5 黄</option>
+                        <option value="green">6 緑</option>
+                        <option value="orange">7 オレンジ</option>
+                        <option value="pink">8 ピンク</option>
+                    </select>
+                </div>
+                <nav class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                    <a th:href="@{/}" class="btn btn-outline-primary btn-lg">TOPページ</a>
+                    <a th:href="@{/records/new}" class="btn btn-outline-secondary btn-lg">新規記録</a>
+                    <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">記録一覧を見る</a>
+                    <a href="#help" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

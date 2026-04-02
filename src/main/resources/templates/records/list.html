@@ -1,18 +1,12 @@
 ﻿<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>レース記録一覧</title>
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-        crossorigin="anonymous">
-    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <th:block th:replace="~{layout/base :: commonHead('レース記録一覧 | オートレース予想補助アプリ')}"></th:block>
 </head>
-<body class="bg-light">
-    <main class="container py-4 py-md-5">
+<body>
+    <div class="app-shell d-flex flex-column">
+    <div th:replace="~{layout/header :: siteHeader}"></div>
+    <main class="container py-4 py-md-5 flex-grow-1">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
             <div>
                 <h1 class="fw-bold mb-2">レース記録一覧</h1>
@@ -107,6 +101,9 @@
             </div>
         </section>
     </main>
+    <div th:replace="~{layout/footer :: siteFooter}"></div>
     <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
+    </div>
+    <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
 </body>
 </html>

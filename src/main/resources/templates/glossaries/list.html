@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout/base :: commonHead('用語集 | オートレース予想補助アプリ')}"></th:block>
+</head>
+<body>
+    <div class="app-shell d-flex flex-column">
+        <div th:replace="~{layout/header :: siteHeader}"></div>
+        <main class="container py-4 py-md-5 flex-grow-1">
+            <section class="page-card p-4 p-md-5">
+                <span class="section-badge mb-2">準備中</span>
+                <h1 class="section-title mb-2">用語集</h1>
+                <p class="helper-text mb-0">オートレースの基本用語や見方をまとめる画面を今後追加する予定です。</p>
+            </section>
+        </main>
+        <div th:replace="~{layout/footer :: siteFooter}"></div>
+        <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
+    </div>
+    <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+</body>
+</html>

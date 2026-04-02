@@ -1,0 +1,326 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="commonHead(pageTitle)">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title th:text="${pageTitle}">オートレース予想補助アプリ</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+            crossorigin="anonymous">
+        <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+        <style>
+            :root {
+                --page-bg: #f3f7fb;
+                --page-bg-top: #f8fbff;
+                --card: #d7e3f0;
+                --main: #1f2d3d;
+                --sub: #62758a;
+                --brand: #dbeafe;
+                --brand-strong: #bfdbfe;
+                --deep: #1e3a5f;
+                --surface: #ffffff;
+                --soft-surface: #f8fbff;
+                --section-badge-bg: #eaf3fd;
+                --theme-text: #1f2d3d;
+                --btn-on-brand: #16324f;
+            }
+
+            body {
+                background: linear-gradient(180deg, var(--page-bg-top) 0%, var(--page-bg) 100%);
+                color: var(--main);
+            }
+
+            .app-shell {
+                min-height: 100vh;
+            }
+
+            .page-card,
+            .section-card,
+            .page-panel {
+                background: var(--surface);
+                border: 1px solid var(--card);
+                border-radius: 1.35rem;
+                box-shadow: 0 0.75rem 1.5rem rgba(13, 79, 139, 0.08);
+            }
+
+            .section-badge {
+                display: inline-flex;
+                padding: 0.5rem 0.85rem;
+                border-radius: 999px;
+                font-weight: 700;
+                font-size: 0.9rem;
+                background: var(--section-badge-bg);
+                color: var(--deep);
+            }
+
+            .section-title {
+                font-size: 1.45rem;
+                font-weight: 700;
+            }
+
+            .helper-text {
+                color: var(--sub);
+                line-height: 1.7;
+            }
+
+            .btn-primary {
+                background-color: var(--brand) !important;
+                border-color: var(--brand-strong) !important;
+                color: var(--btn-on-brand) !important;
+            }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: var(--brand-strong) !important;
+                border-color: var(--brand-strong) !important;
+                color: var(--btn-on-brand) !important;
+            }
+
+            .btn-outline-primary {
+                color: var(--deep) !important;
+                border-color: var(--brand-strong) !important;
+                background: #ffffff !important;
+            }
+
+            .btn-outline-primary:hover,
+            .btn-outline-primary:focus {
+                background-color: var(--brand) !important;
+                border-color: var(--brand-strong) !important;
+                color: var(--theme-text) !important;
+            }
+
+            .text-primary {
+                color: var(--deep) !important;
+            }
+
+            .app-theme-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .app-theme-label {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: var(--sub);
+            }
+
+            .app-theme-select {
+                min-width: 172px;
+                border-radius: 999px;
+                border-color: var(--card);
+                font-size: 0.95rem;
+            }
+
+            .app-theme-dot {
+                width: 0.95rem;
+                height: 0.95rem;
+                border-radius: 999px;
+                border: 1px solid #ffffff;
+                box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+                background: var(--brand);
+                flex: 0 0 auto;
+            }
+
+            .app-footer-note {
+                color: #60758b;
+                font-size: 0.98rem;
+            }
+
+            @media (max-width: 991.98px) {
+                .app-theme-toolbar {
+                    justify-content: flex-start;
+                }
+            }
+        </style>
+    </th:block>
+
+    <th:block th:fragment="commonScripts">
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+        <script>
+            const appThemes = {
+                default: {
+                    label: "デフォルト",
+                    vars: {
+                        "--page-bg": "#f3f7fb",
+                        "--page-bg-top": "#f8fbff",
+                        "--card": "#d7e3f0",
+                        "--brand": "#dbeafe",
+                        "--brand-strong": "#bfdbfe",
+                        "--deep": "#1e3a5f",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#f8fbff",
+                        "--section-badge-bg": "#eaf3fd",
+                        "--theme-text": "#1f2d3d",
+                        "--btn-on-brand": "#16324f"
+                    }
+                },
+                white: {
+                    label: "1 白",
+                    vars: {
+                        "--page-bg": "#f8f8f8",
+                        "--page-bg-top": "#ffffff",
+                        "--card": "#dddddd",
+                        "--brand": "#f4f4f4",
+                        "--brand-strong": "#e7e7e7",
+                        "--deep": "#4e5966",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#fcfcfc",
+                        "--section-badge-bg": "#f2f2f2",
+                        "--theme-text": "#243240",
+                        "--btn-on-brand": "#243240"
+                    }
+                },
+                black: {
+                    label: "2 黒",
+                    vars: {
+                        "--page-bg": "#eef1f4",
+                        "--page-bg-top": "#f8fafc",
+                        "--card": "#d4d9df",
+                        "--brand": "#dde2e7",
+                        "--brand-strong": "#cdd4db",
+                        "--deep": "#2f3740",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#f7f9fb",
+                        "--section-badge-bg": "#e9edf1",
+                        "--theme-text": "#1f2d3d",
+                        "--btn-on-brand": "#1f2d3d"
+                    }
+                },
+                red: {
+                    label: "3 赤",
+                    vars: {
+                        "--page-bg": "#fdf3f4",
+                        "--page-bg-top": "#fff9f9",
+                        "--card": "#ead4d8",
+                        "--brand": "#f8d7da",
+                        "--brand-strong": "#f2c4c8",
+                        "--deep": "#7a3040",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#fff8f8",
+                        "--section-badge-bg": "#fae7e9",
+                        "--theme-text": "#5b1f2a",
+                        "--btn-on-brand": "#5b1f2a"
+                    }
+                },
+                blue: {
+                    label: "4 青",
+                    vars: {
+                        "--page-bg": "#f3f8ff",
+                        "--page-bg-top": "#f9fbff",
+                        "--card": "#d7e4f5",
+                        "--brand": "#dbeafe",
+                        "--brand-strong": "#c7defc",
+                        "--deep": "#244a73",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#f8fbff",
+                        "--section-badge-bg": "#ebf3ff",
+                        "--theme-text": "#183a5a",
+                        "--btn-on-brand": "#183a5a"
+                    }
+                },
+                yellow: {
+                    label: "5 黄",
+                    vars: {
+                        "--page-bg": "#fffdf4",
+                        "--page-bg-top": "#fffef9",
+                        "--card": "#eadfb5",
+                        "--brand": "#fff3cd",
+                        "--brand-strong": "#fde8b5",
+                        "--deep": "#6a5700",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#fffef8",
+                        "--section-badge-bg": "#fff7de",
+                        "--theme-text": "#5e4d00",
+                        "--btn-on-brand": "#5e4d00"
+                    }
+                },
+                green: {
+                    label: "6 緑",
+                    vars: {
+                        "--page-bg": "#f3fbf6",
+                        "--page-bg-top": "#fbfffc",
+                        "--card": "#d3e7da",
+                        "--brand": "#d1e7dd",
+                        "--brand-strong": "#bfdccc",
+                        "--deep": "#2f6b4b",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#f7fcf9",
+                        "--section-badge-bg": "#e3f1ea",
+                        "--theme-text": "#1f5d36",
+                        "--btn-on-brand": "#1f5d36"
+                    }
+                },
+                orange: {
+                    label: "7 オレンジ",
+                    vars: {
+                        "--page-bg": "#fff7f1",
+                        "--page-bg-top": "#fffbf8",
+                        "--card": "#ead8ca",
+                        "--brand": "#fde2cf",
+                        "--brand-strong": "#f9d1b4",
+                        "--deep": "#8a5428",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#fffaf6",
+                        "--section-badge-bg": "#fdf0e6",
+                        "--theme-text": "#72411b",
+                        "--btn-on-brand": "#72411b"
+                    }
+                },
+                pink: {
+                    label: "8 ピンク",
+                    vars: {
+                        "--page-bg": "#fef6fa",
+                        "--page-bg-top": "#fffafd",
+                        "--card": "#ead8e2",
+                        "--brand": "#fce4ec",
+                        "--brand-strong": "#f8d2df",
+                        "--deep": "#7c4561",
+                        "--surface": "#ffffff",
+                        "--soft-surface": "#fff9fb",
+                        "--section-badge-bg": "#fdeef3",
+                        "--theme-text": "#67324c",
+                        "--btn-on-brand": "#67324c"
+                    }
+                }
+            };
+
+            function applyAppTheme(themeKey) {
+                const selectedTheme = appThemes[themeKey] || appThemes.default;
+                const root = document.documentElement;
+
+                Object.entries(selectedTheme.vars).forEach(function ([cssVar, value]) {
+                    root.style.setProperty(cssVar, value);
+                });
+
+                const themeDot = document.getElementById("appThemeDot");
+                if (themeDot) {
+                    themeDot.title = selectedTheme.label;
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const storageKey = "autoraceapp-theme";
+                const themeSelect = document.getElementById("appThemeSelect");
+
+                if (!themeSelect) {
+                    return;
+                }
+
+                const savedTheme = localStorage.getItem(storageKey) || "default";
+                themeSelect.value = appThemes[savedTheme] ? savedTheme : "default";
+                applyAppTheme(themeSelect.value);
+
+                themeSelect.addEventListener("change", function () {
+                    applyAppTheme(themeSelect.value);
+                    localStorage.setItem(storageKey, themeSelect.value);
+                });
+            });
+        </script>
+    </th:block>
+</th:block>
