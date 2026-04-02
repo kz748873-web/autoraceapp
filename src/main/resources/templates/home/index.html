@@ -11,86 +11,201 @@
         crossorigin="anonymous">
     <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
     <style>
-        body {
-            background: #f4f7fb;
-            color: #1f2d3d;
+        :root {
+            --page-bg: #f3f7fb;
+            --card-border: #d7e3f0;
+            --text-main: #1f2d3d;
+            --text-sub: #62758a;
+            --brand: #0d6efd;
+            --brand-deep: #0b4d87;
+            --brand-soft: #eef4fb;
         }
 
-        .hero-card,
+        body {
+            background: linear-gradient(180deg, #f7fafe 0%, var(--page-bg) 100%);
+            color: var(--text-main);
+        }
+
         .section-card,
-        .memo-card,
-        .info-card {
-            border: 1px solid #d9e3f0;
-            border-radius: 1.25rem;
+        .info-card,
+        .link-card,
+        .hero-card {
             background: #ffffff;
-            box-shadow: 0 0.5rem 1rem rgba(15, 76, 129, 0.08);
+            border: 1px solid var(--card-border);
+            border-radius: 1.4rem;
+            box-shadow: 0 0.75rem 1.5rem rgba(13, 79, 139, 0.08);
+        }
+
+        .hero-stage {
+            position: relative;
+            overflow: hidden;
+            min-height: 520px;
+            border-radius: 1.6rem;
+            background:
+                linear-gradient(120deg, rgba(5, 31, 60, 0.78), rgba(13, 79, 139, 0.62)),
+                #11385f;
+            box-shadow: 0 1rem 2rem rgba(12, 54, 94, 0.18);
+        }
+
+        .hero-stage::before,
+        .hero-stage::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.32;
+        }
+
+        .hero-stage::before {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)),
+                url('https://commons.wikimedia.org/wiki/Special:FilePath/Auto%20Race%20in%20Kawaguchi.jpg');
+            animation: heroFadeA 12s infinite;
+        }
+
+        .hero-stage::after {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04), rgba(255,255,255,0.04)),
+                url('https://commons.wikimedia.org/wiki/Special:FilePath/Isesaki-Auto.jpg');
+            animation: heroFadeB 12s infinite;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 32%),
+                linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: #ffffff;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 0.95rem;
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
         }
 
         .page-title {
-            font-size: clamp(2rem, 3vw, 2.8rem);
-            font-weight: 700;
-            line-height: 1.3;
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.28;
         }
 
         .lead-text {
-            font-size: 1.1rem;
+            font-size: 1.12rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.92);
+        }
+
+        .hero-panel {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 1.2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-panel-title {
+            color: #d9ebff;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-panel li {
+            font-size: 1.02rem;
             line-height: 1.8;
+            color: #ffffff;
+        }
+
+        .slide-indicators {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .slide-dot {
+            width: 0.8rem;
+            height: 0.8rem;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.35);
+        }
+
+        .slide-dot.active {
+            width: 2.1rem;
+            background: #ffffff;
         }
 
         .section-title {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             font-weight: 700;
         }
 
-        .tab-button {
-            min-width: 130px;
-            padding: 0.9rem 1.2rem;
+        .nav-pill {
+            min-width: 132px;
+            padding: 0.95rem 1.25rem;
             border: 1px solid #b7c9df;
             border-radius: 999px;
-            background: #eef4fb;
-            color: #0d4f8b;
-            font-size: 1.05rem;
-            font-weight: 600;
+            background: var(--brand-soft);
+            color: var(--brand-deep);
             text-align: center;
+            font-size: 1.04rem;
+            font-weight: 700;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
         }
 
-        .video-placeholder {
-            min-height: 360px;
-            border: 2px dashed #9bb5d1;
+        .video-box {
+            min-height: 320px;
+            border: 2px dashed #9cb6d1;
             border-radius: 1rem;
-            background: linear-gradient(180deg, #f8fbff 0%, #edf4fb 100%);
+            background: linear-gradient(180deg, #f9fbff 0%, #edf4fb 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 1.35rem;
-            font-weight: 700;
             color: #4d6b88;
         }
 
-        .memo-box {
-            min-height: 140px;
-            border: 1px solid #d8e4f2;
-            border-radius: 1rem;
-            background: #f8fbff;
+        .video-box strong {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
         }
 
-        .memo-box textarea {
-            min-height: 95px;
-            resize: vertical;
-            font-size: 1rem;
-        }
-
-        .action-link {
+        .action-link,
+        .nav-action {
             min-width: 220px;
             padding: 0.95rem 1.2rem;
-            font-size: 1.05rem;
+            font-size: 1.06rem;
             font-weight: 700;
         }
 
-        .subtle-label {
-            color: #5d748c;
-            font-weight: 600;
+        .footer-note {
+            color: #60758b;
+            font-size: 0.98rem;
+        }
+
+        @keyframes heroFadeA {
+            0%, 45% { opacity: 0.34; }
+            50%, 95% { opacity: 0.08; }
+            100% { opacity: 0.34; }
+        }
+
+        @keyframes heroFadeB {
+            0%, 45% { opacity: 0.08; }
+            50%, 95% { opacity: 0.34; }
+            100% { opacity: 0.08; }
         }
     </style>
 </head>
@@ -100,8 +215,8 @@
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
                 <div>
                     <div class="text-primary fw-semibold mb-1">AUTO RACE SUPPORT APP</div>
-                    <h1 class="h2 h1-md fw-bold mb-1">オートレース予想補助アプリ</h1>
-                    <p class="text-secondary mb-0">公式投票サイトと並行して使いやすい、予想整理用のトップページです。</p>
+                    <h1 class="h2 fw-bold mb-1">オートレース予想補助アプリ</h1>
+                    <p class="text-secondary mb-0">公式投票サイトと並行して使いやすい、予想整理用のデモトップページです。</p>
                 </div>
                 <nav class="d-flex flex-wrap gap-2">
                     <a th:href="@{/}" class="btn btn-outline-primary btn-lg">TOP</a>
@@ -113,148 +228,50 @@
     </header>
 
     <main class="container py-4 py-md-5">
-        <!-- アプリ概要と導線 -->
-        <section class="hero-card p-4 p-md-5 mb-4">
-            <div class="row g-4 align-items-center">
-                <div class="col-lg-8">
-                    <p class="text-primary fw-semibold mb-2">このアプリでできること</p>
-                    <h2 class="page-title mb-3">前日予想から当日整理、結果比較までを1つの流れで見やすく管理できます。</h2>
-                    <p class="lead-text text-secondary mb-0">
-                        レース場やレース番号を確認しながら、試走タイム、気になる選手、予想メモを整理するための補助画面です。
-                        初めて見る方にも「何のアプリで、どこから始めるか」が伝わるように、必要なエリアを1ページにまとめています。
-                    </p>
-                </div>
-                <div class="col-lg-4">
-                    <div class="info-card p-4 h-100 bg-light">
-                        <div class="subtle-label mb-2">使い方の流れ</div>
-                        <ol class="mb-0 ps-3 fs-5">
-                            <li class="mb-2">レース場とレース番号を確認する</li>
-                            <li class="mb-2">動画や試走情報を見ながらメモする</li>
-                            <li>記録登録や一覧確認へ進む</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- レース選択エリア -->
-        <section class="section-card p-4 p-md-5 mb-4">
-            <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
-                <div>
-                    <h2 class="section-title mb-2">レース選択エリア</h2>
-                    <p class="text-secondary mb-0">ここでは確認したいレースを選ぶ想定です。今は見た目のみの配置です。</p>
-                </div>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label for="venueSelect" class="form-label fw-semibold fs-5">レース場選択</label>
-                    <select id="venueSelect" class="form-select form-select-lg">
-                        <option selected>選択してください</option>
-                        <option>川口</option>
-                        <option>伊勢崎</option>
-                        <option>浜松</option>
-                        <option>飯塚</option>
-                        <option>山陽</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号選択</label>
-                    <select id="raceNumberSelect" class="form-select form-select-lg">
-                        <option selected>選択してください</option>
-                        <option>1レース</option>
-                        <option>2レース</option>
-                        <option>3レース</option>
-                        <option>4レース</option>
-                        <option>5レース</option>
-                        <option>6レース</option>
-                        <option>7レース</option>
-                        <option>8レース</option>
-                        <option>9レース</option>
-                        <option>10レース</option>
-                        <option>11レース</option>
-                        <option>12レース</option>
-                    </select>
-                </div>
-            </div>
-        </section>
-
-        <!-- タブ風メニュー -->
-        <section class="section-card p-4 p-md-5 mb-4">
-            <div class="mb-3">
-                <h2 class="section-title mb-2">タブ風メニュー</h2>
-                <p class="text-secondary mb-0">今後の機能切り替えを想定した見た目です。現在は表示のみです。</p>
-            </div>
-            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-                <div class="tab-button">前日予想</div>
-                <div class="tab-button">当日予想</div>
-                <div class="tab-button">結果</div>
-                <div class="tab-button">比較</div>
-                <div class="tab-button">サイト</div>
-            </div>
-        </section>
-
-        <!-- メイン情報エリア -->
-        <section class="mb-4">
-            <div class="row g-4">
-                <div class="col-lg-7">
-                    <div class="section-card p-4 p-md-5 h-100">
-                        <!-- 動画エリア -->
-                        <div class="mb-3">
-                            <h2 class="section-title mb-2">動画エリア</h2>
-                            <p class="text-secondary mb-0">YouTubeやレース解説動画を確認する想定のプレースホルダーです。</p>
+        <section class="hero-stage p-4 p-md-5 mb-4">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="hero-badge mb-3">デモ用トップページ  /  背景切り替えイメージ</div>
+                        <h2 class="page-title mb-3">オートレースの予想整理を、見やすく、迷わず、すぐ始められるトップページです。</h2>
+                        <p class="lead-text mb-4">
+                            このアプリは、オートレース公式投票サイトを見ながら、前日予想、当日情報、動画確認、記録管理を整理して進めるための予想補助アプリです。
+                            デモとして見せたときにも、何のアプリかが一目で伝わるように、トップページらしい見た目と導線を意識して整えています。
+                        </p>
+                        <div class="d-flex flex-column flex-md-row flex-wrap gap-3 mb-4">
+                            <a th:href="@{/records/new}" class="btn btn-primary btn-lg nav-action">新しく記録する</a>
+                            <a th:href="@{/records}" class="btn btn-light btn-lg nav-action">記録一覧を見る</a>
+                            <a href="/links" class="btn btn-outline-light btn-lg nav-action">公式サイトを見る</a>
                         </div>
-                        <div class="video-placeholder">
-                            <div>
-                                <div class="mb-2">YouTube動画エリア</div>
-                                <div class="fs-6 fw-normal">ここに動画や配信画面が入る想定です</div>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                            <div class="text-white-50">背景写真はオートレース画像のサンプルです。今後も差し替えしやすい構成です。</div>
+                            <div class="slide-indicators" aria-label="スライド表示イメージ">
+                                <span class="slide-dot active"></span>
+                                <span class="slide-dot"></span>
+                                <span class="slide-dot"></span>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-lg-5">
-                    <div class="d-grid gap-4">
-                        <!-- 試走タイムメモ -->
-                        <section class="memo-card p-4">
-                            <h2 class="section-title mb-2">試走タイムメモ</h2>
-                            <p class="text-secondary mb-3">試走の気配や数字を整理するためのメモ欄です。</p>
-                            <div class="memo-box p-3">
-                                <textarea class="form-control border-0 bg-transparent" placeholder="例: 5号車の試走タイムが良い。内枠より伸びそう。"></textarea>
-                            </div>
-                        </section>
-
-                        <!-- 気になる選手メモ -->
-                        <section class="memo-card p-4">
-                            <h2 class="section-title mb-2">気になる選手メモ</h2>
-                            <p class="text-secondary mb-3">注目したい選手や印を付けたい候補を残せます。</p>
-                            <div class="memo-box p-3">
-                                <textarea class="form-control border-0 bg-transparent" placeholder="例: 1号車は安定感あり。5号車はスタート次第で逆転もある。"></textarea>
-                            </div>
-                        </section>
-
-                        <!-- 予想メモ -->
-                        <section class="memo-card p-4">
-                            <h2 class="section-title mb-2">予想メモ</h2>
-                            <p class="text-secondary mb-3">最終的に残したい買い目や考え方をまとめるエリアです。</p>
-                            <div class="memo-box p-3">
-                                <textarea class="form-control border-0 bg-transparent" placeholder="例: 本線は1-5-3。押さえで5-1-3も検討。"></textarea>
-                            </div>
-                        </section>
+                    <div class="col-lg-4">
+                        <div class="hero-panel p-4">
+                            <div class="hero-panel-title">このトップで伝えたいこと</div>
+                            <ul class="mb-0 ps-3">
+                                <li>何のアプリかがすぐ分かる</li>
+                                <li>どこから始めるか迷わない</li>
+                                <li>動画・レース情報・外部リンクの配置が見やすい</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 導線ボタン -->
         <section class="section-card p-4 p-md-5 mb-4">
             <div class="row g-4 align-items-center">
                 <div class="col-lg-5">
                     <h2 class="section-title mb-2">どこから始めるか</h2>
-                    <p class="text-secondary mb-0">
-                        すぐに記録を始めたい場合は新規登録へ、過去の内容を見たい場合は一覧へ、
-                        公式情報を確認したい場合はサイト導線から進める想定です。
-                    </p>
+                    <p class="text-secondary mb-0">新しく記録を始める、過去の記録を確認する、公式情報を見る、という3つの入口を分かりやすく配置しています。</p>
                 </div>
                 <div class="col-lg-7">
                     <div class="d-flex flex-column flex-md-row flex-wrap gap-3 justify-content-lg-end">
@@ -266,20 +283,127 @@
             </div>
         </section>
 
-        <!-- 下部のレース情報エリア -->
-        <section class="section-card p-4 p-md-5">
+        <section class="section-card p-4 p-md-5 mb-4">
             <div class="mb-3">
                 <h2 class="section-title mb-2">レース情報</h2>
-                <p class="text-secondary mb-0">今後、出走表、オッズ、条件などを表示することを想定したエリアです。</p>
+                <p class="text-secondary mb-0">出走表、オッズ、天候、条件などを今後まとめて表示する想定のプレースホルダーです。</p>
             </div>
             <div class="info-card p-4 bg-light">
                 <div class="fs-4 fw-bold text-primary mb-2">レース情報エリア</div>
-                <p class="mb-0 text-secondary fs-5">
-                    ここに今後、出走表、オッズ、天候、走路状況などの情報を表示して、
-                    予想補助アプリとしての使いやすさを高めていく想定です。
-                </p>
+                <p class="mb-0 text-secondary fs-5">ここに今後、出走表、オッズ、天候、走路状況、メモに必要な補助情報などを整理して表示する予定です。</p>
+            </div>
+        </section>
+
+        <section class="section-card p-4 p-md-5 mb-4">
+            <div class="row g-4 align-items-end mb-4">
+                <div class="col-lg-7">
+                    <h2 class="section-title mb-2">レース選択＋機能切り替えナビ</h2>
+                    <p class="text-secondary mb-0">レース選択と機能切り替えをひとまとまりのナビゲーションとして整理しています。</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="venueSelect" class="form-label fw-semibold fs-5">レース場選択</label>
+                            <select id="venueSelect" class="form-select form-select-lg">
+                                <option selected>選択してください</option>
+                                <option>川口</option>
+                                <option>伊勢崎</option>
+                                <option>浜松</option>
+                                <option>飯塚</option>
+                                <option>山陽</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号選択</label>
+                            <select id="raceNumberSelect" class="form-select form-select-lg">
+                                <option selected>選択してください</option>
+                                <option>1レース</option>
+                                <option>2レース</option>
+                                <option>3レース</option>
+                                <option>4レース</option>
+                                <option>5レース</option>
+                                <option>6レース</option>
+                                <option>7レース</option>
+                                <option>8レース</option>
+                                <option>9レース</option>
+                                <option>10レース</option>
+                                <option>11レース</option>
+                                <option>12レース</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                <div class="nav-pill">前日予想</div>
+                <div class="nav-pill">当日予想</div>
+                <div class="nav-pill">結果</div>
+                <div class="nav-pill">比較</div>
+                <div class="nav-pill">サイト</div>
+            </div>
+        </section>
+
+        <section class="section-card p-4 p-md-5 mb-4">
+            <div class="mb-3">
+                <h2 class="section-title mb-2">動画エリア</h2>
+                <p class="text-secondary mb-0">動画を2画面分並べて確認できる想定のプレースホルダーです。</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="video-box p-4">
+                        <div>
+                            <strong>YouTube動画エリア 1</strong>
+                            <div class="fs-6">レース解説や予想動画を表示する想定です</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="video-box p-4">
+                        <div>
+                            <strong>YouTube動画エリア 2</strong>
+                            <div class="fs-6">公式配信や比較用の動画を表示する想定です</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card p-4 p-md-5 mb-4">
+            <div class="mb-3">
+                <h2 class="section-title mb-2">外部リンクエリア</h2>
+                <p class="text-secondary mb-0">公式投票サイトや参考ページへ移動するためのプレースホルダーです。</p>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="link-card p-4 h-100">
+                        <div class="fw-bold fs-5 mb-2">公式投票サイト</div>
+                        <p class="text-secondary mb-3">投票や公式情報を確認するためのリンク想定です。</p>
+                        <a href="/links" class="btn btn-outline-primary btn-lg w-100">サイトを見る</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="link-card p-4 h-100">
+                        <div class="fw-bold fs-5 mb-2">動画・配信ページ</div>
+                        <p class="text-secondary mb-3">予想に使う動画や配信先への導線を置く想定です。</p>
+                        <a href="/links" class="btn btn-outline-primary btn-lg w-100">動画先を見る</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="link-card p-4 h-100">
+                        <div class="fw-bold fs-5 mb-2">参考情報ページ</div>
+                        <p class="text-secondary mb-3">オッズや条件確認用の補助リンクを置く想定です。</p>
+                        <a href="/links" class="btn btn-outline-primary btn-lg w-100">参考情報を見る</a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
+    <footer class="border-top bg-white">
+        <div class="container py-4 text-center footer-note">
+            © Auto Race Support App Demo Top Page
+        </div>
+    </footer>
 </body>
 </html>
