@@ -1,0 +1,11 @@
+.git
+.idea
+.vscode
+target
+build
+out
+
+.m2
+spring-boot-8081.log
+spring-boot.out.log
+spring-boot.err.log
