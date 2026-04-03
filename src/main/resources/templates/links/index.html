@@ -4,28 +4,76 @@
     <th:block th:replace="~{layout/base :: commonHead('外部リンク一覧 | オートレース予想補助アプリ')}"></th:block>
     <style>
         .page-card {
-            border: 1px solid #d9e3f0;
+            border: 1px solid var(--card);
             border-radius: 1.25rem;
             box-shadow: 0 0.5rem 1rem rgba(13, 79, 139, 0.08);
             background: #ffffff;
         }
 
+        .official-link-card,
         .venue-select-btn,
-        .link-btn,
         .social-link-btn {
             border-radius: 1rem;
             font-weight: 700;
         }
 
-        .venue-select-btn,
-        .link-btn {
+        .official-link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 1rem 1.1rem;
+            border: 1px solid var(--card);
+            background: #ffffff;
+            color: var(--deep);
+            text-decoration: none;
+        }
+
+        .official-link-card:hover {
+            border-color: var(--brand-strong);
+            background: var(--soft-surface);
+            color: var(--deep);
+        }
+
+        .official-link-text {
+            display: grid;
+            gap: 0.2rem;
+        }
+
+        .official-link-title {
+            font-size: 1.02rem;
+            font-weight: 700;
+        }
+
+        .official-link-note {
+            font-size: 0.92rem;
+            color: var(--sub);
+        }
+
+        .venue-select-btn {
             padding: 0.95rem 1rem;
             font-size: 1.02rem;
         }
 
         .social-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
             padding: 1rem 1.1rem;
             font-size: 1rem;
+        }
+
+        .social-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            font-size: 0.88rem;
+            font-weight: 800;
         }
 
         .youtube-btn {
@@ -40,18 +88,6 @@
             color: #ffffff;
         }
 
-        .x-btn {
-            background: #111111;
-            border-color: #111111;
-            color: #ffffff;
-        }
-
-        .x-btn:hover {
-            background: #000000;
-            border-color: #000000;
-            color: #ffffff;
-        }
-
         .instagram-btn {
             background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
             border: none;
@@ -61,6 +97,18 @@
         .instagram-btn:hover {
             color: #ffffff;
             opacity: 0.92;
+        }
+
+        .facebook-btn {
+            background: #1877f2;
+            border-color: #1877f2;
+            color: #ffffff;
+        }
+
+        .facebook-btn:hover {
+            background: #1266d1;
+            border-color: #1266d1;
+            color: #ffffff;
         }
 
         .mini-badge {
@@ -81,7 +129,7 @@
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                 <div>
                     <h1 class="h2 fw-bold mb-2">外部リンク一覧</h1>
-                    <p class="text-secondary mb-0">公式関連とレース場ごとの導線を、左右2カラムで見やすく整理しています。</p>
+                    <p class="text-secondary mb-0">公式2件と、選択したレース場のSNS・動画リンクを見やすく整理しています。</p>
                 </div>
                 <div class="d-flex flex-column flex-sm-row gap-2">
                     <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">TOPへ戻る</a>
@@ -94,26 +142,23 @@
                     <div class="vstack gap-4">
                         <section class="page-card p-4">
                             <h2 class="h4 fw-bold mb-3">公式関連</h2>
-                            <p class="text-secondary mb-3">公式サイトとファンクラブをまとめて置いています。</p>
+                            <p class="text-secondary mb-3">AutoRace.jp と 公式FANCLUB だけを分かりやすく並べています。</p>
                             <div class="vstack gap-3">
-                                <a th:each="link : ${officialRelatedLinks}"
-                                   th:href="${link.url}"
-                                   th:text="${link.siteName}"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   class="btn btn-outline-primary btn-lg link-btn text-start">公式関連</a>
+                                <a th:each="link : ${officialRelatedLinks}" th:href="${link.url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
+                                    <span class="official-link-text">
+                                        <span class="official-link-title" th:text="${link.siteName}">AutoRace.jp</span>
+                                        <span class="official-link-note" th:text="${link.note}">公式案内</span>
+                                    </span>
+                                    <span class="mini-badge">公式</span>
+                                </a>
                             </div>
                         </section>
 
                         <section class="page-card p-4">
-                            <h2 class="h4 fw-bold mb-3">オートレース場</h2>
-                            <p class="text-secondary mb-3">会場を選ぶと、右側にその会場の公式サイトやSNS導線を表示します。</p>
+                            <h2 class="h4 fw-bold mb-3">レース場</h2>
+                            <p class="text-secondary mb-3">会場を選ぶと、右側にその会場の公式サイト、YouTube、Instagram、Facebook を表示します。</p>
                             <div class="vstack gap-2">
-                                <a th:each="venueName : ${venueNames}"
-                                   th:href="@{/links(venue=${venueName})}"
-                                   th:text="${venueName}"
-                                   th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'"
-                                   class="btn btn-lg venue-select-btn text-start">川口</a>
+                                <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn text-start">川口</a>
                             </div>
                         </section>
                     </div>
@@ -131,32 +176,28 @@
 
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <a th:if="${selectedVenueLinks['officialSite'] != null}"
-                                   th:href="${selectedVenueLinks['officialSite'].url}"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   class="btn btn-outline-primary btn-lg w-100 social-link-btn">公式サイト</a>
+                                <a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg w-100 social-link-btn">
+                                    <span class="social-logo">公</span>
+                                    <span>公式サイト</span>
+                                </a>
                             </div>
                             <div class="col-md-6">
-                                <a th:if="${selectedVenueLinks['youtube'] != null}"
-                                   th:href="${selectedVenueLinks['youtube'].url}"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   class="btn btn-lg w-100 social-link-btn youtube-btn">YouTube</a>
+                                <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg w-100 social-link-btn youtube-btn">
+                                    <span class="social-logo">YT</span>
+                                    <span>YouTube</span>
+                                </a>
                             </div>
                             <div class="col-md-6">
-                                <a th:if="${selectedVenueLinks['x'] != null}"
-                                   th:href="${selectedVenueLinks['x'].url}"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   class="btn btn-lg w-100 social-link-btn x-btn">X</a>
+                                <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg w-100 social-link-btn instagram-btn">
+                                    <span class="social-logo">IG</span>
+                                    <span>Instagram</span>
+                                </a>
                             </div>
                             <div class="col-md-6">
-                                <a th:if="${selectedVenueLinks['instagram'] != null}"
-                                   th:href="${selectedVenueLinks['instagram'].url}"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   class="btn btn-lg w-100 social-link-btn instagram-btn">Instagram</a>
+                                <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg w-100 social-link-btn facebook-btn">
+                                    <span class="social-logo">f</span>
+                                    <span>Facebook</span>
+                                </a>
                             </div>
                         </div>
 
@@ -169,8 +210,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="border rounded-4 p-3 bg-light h-100">
-                                    <div class="fw-semibold mb-2">YouTube・SNS案内</div>
-                                    <div class="text-secondary">YouTube は実URLを設定済みです。X と Instagram は今後追加しやすいよう、会場ごとに分けて管理しています。</div>
+                                    <div class="fw-semibold mb-2">SNS・動画案内</div>
+                                    <div class="text-secondary">YouTube、Instagram、Facebook を会場ごとにまとめています。今後リンクを追加するときも同じ並びで増やせます。</div>
                                 </div>
                             </div>
                         </div>

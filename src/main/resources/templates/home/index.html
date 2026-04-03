@@ -1,15 +1,22 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{layout/base :: commonHead('トップページ | オートレース予想補助アプリ')}"></th:block>
+    <th:block th:replace="~{layout/base :: commonHead('TOP繝壹・繧ｸ | 繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ莠域Φ陬懷勧繧｢繝励Μ')}"></th:block>
     <style>
         .hero-stage {
             position: relative;
             overflow: hidden;
             color: #ffffff;
             background:
-                linear-gradient(135deg, rgba(10, 24, 44, 0.68), rgba(21, 46, 79, 0.38)),
+                linear-gradient(135deg, rgba(10, 31, 58, 0.86), rgba(23, 76, 124, 0.56)),
                 url("https://commons.wikimedia.org/wiki/Special:FilePath/Auto%20Race%20in%20Kawaguchi.jpg") center / cover;
+        }
+
+        .hero-stage::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(7, 24, 47, 0.12), rgba(7, 24, 47, 0.28));
         }
 
         .hero-content {
@@ -17,26 +24,35 @@
             z-index: 1;
         }
 
-        .hero-badge {
+        .hero-badge,
+        .section-chip {
             display: inline-flex;
-            padding: 0.5rem 0.85rem;
+            padding: 0.5rem 0.9rem;
             border-radius: 999px;
             font-weight: 700;
-            font-size: 0.9rem;
-            background: rgba(255, 255, 255, 0.14);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .hero-badge {
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.32);
             color: #ffffff;
         }
 
         .page-title {
-            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-size: clamp(2rem, 4vw, 3.3rem);
             font-weight: 800;
-            line-height: 1.3;
+            line-height: 1.25;
+        }
+
+        .lead-text {
+            font-size: 1.08rem;
+            line-height: 1.8;
         }
 
         .hero-stage .lead-text,
         .hero-stage .helper-text {
-            color: rgba(255, 255, 255, 0.92);
+            color: rgba(255, 255, 255, 0.94);
         }
 
         .selector-card,
@@ -44,81 +60,110 @@
         .timer-card,
         .link-card,
         .summary-card,
-        .tab-card {
+        .guide-card {
             border: 1px solid var(--card);
-            border-radius: 1.1rem;
+            border-radius: 1.2rem;
             background: var(--soft-surface);
+        }
+
+        .selector-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 253, 0.98));
+            box-shadow: 0 1rem 2rem rgba(20, 61, 105, 0.08);
+        }
+
+        .selector-note {
+            border-radius: 1rem;
+            background: #ffffff;
+            border: 1px solid var(--card);
+            color: var(--sub);
+        }
+
+        .search-button,
+        .mobile-switch-btn {
+            min-height: 3.25rem;
         }
 
         .placeholder {
             min-height: 160px;
-            border: 2px dashed #b8cde2;
+            border: 2px dashed #a9c3df;
             border-radius: 1rem;
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: #557392;
+            color: #446685;
         }
 
-        .placeholder strong {
-            display: block;
-            font-size: 1.2rem;
-            margin-bottom: 0.35rem;
+        .mobile-video-switch {
+            display: grid;
+            gap: 0.9rem;
         }
 
-        .mobile-tabs {
-            flex-wrap: nowrap;
-            overflow-x: auto;
+        .mobile-switch-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 0.75rem;
         }
 
-        .mobile-tabs .nav-link {
-            min-width: 108px;
+        .mobile-switch-btn {
+            width: 100%;
+            border-radius: 1rem;
             border: 1px solid var(--card);
-            border-radius: 999px;
             background: #ffffff;
             color: var(--deep);
             font-weight: 700;
-            padding: 0.9rem 1rem;
+            padding: 0.8rem 0.9rem;
         }
 
-        .mobile-tabs .nav-link.active {
+        .mobile-switch-btn.active {
             background: var(--brand);
             border-color: var(--brand-strong);
             color: var(--theme-text);
         }
 
+        .mobile-video-panel {
+            display: none;
+        }
+
+        .mobile-video-panel.active {
+            display: block;
+        }
+
+        .mobile-memo-box,
+        .memo-inline {
+            min-height: 170px;
+            resize: vertical;
+        }
+
         .timer-display-card {
-            border: 2px solid #d7e3f0;
+            border: 2px solid #bfd3e9;
             border-radius: 1.2rem;
             background: #ffffff;
             text-align: center;
-            transition: all 0.2s ease;
         }
 
         .timer-display-card.state-safe {
-            border-color: #9bc8a8;
-            background: #f3fbf5;
+            border-color: #96c6a5;
+            background: #eff9f2;
             color: #1f5d36;
         }
 
         .timer-display-card.state-warning {
-            border-color: #e4c681;
-            background: #fff9ec;
-            color: #8a6500;
+            border-color: #e1c170;
+            background: #fff8e8;
+            color: #865f00;
         }
 
         .timer-display-card.state-danger {
-            border-color: #e3a7ae;
-            background: #fff3f4;
-            color: #9a2f3e;
+            border-color: #de95a6;
+            background: #fff0f3;
+            color: #a02746;
         }
 
         .timer-display-card.state-closed {
-            border-color: #c5d0db;
-            background: #f4f7fa;
+            border-color: #c1ccd8;
+            background: #f1f4f8;
             color: #42576d;
         }
 
@@ -129,32 +174,16 @@
             letter-spacing: 0.04em;
         }
 
-        .timer-status-text {
-            font-size: 1.15rem;
-            font-weight: 700;
-        }
-
         .timer-alert-box {
             border-radius: 1rem;
             font-weight: 700;
-            font-size: 1.05rem;
-        }
-
-        .timer-now-text {
-            font-size: 1rem;
-            color: var(--sub);
         }
 
         .venue-btn,
-        .link-btn,
-        .social-btn {
+        .social-btn,
+        .official-link-card {
             border-radius: 1rem;
             font-weight: 700;
-        }
-
-        .venue-btn,
-        .link-btn {
-            padding: 0.95rem 1rem;
         }
 
         .social-btn {
@@ -162,15 +191,44 @@
             padding: 1rem;
         }
 
+        .official-link-grid {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .official-link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 1rem 1.1rem;
+            border: 1px solid var(--card);
+            background: #ffffff;
+            color: var(--deep);
+            text-decoration: none;
+        }
+
+        .official-link-card:hover {
+            border-color: var(--brand-strong);
+            background: var(--soft-surface);
+            color: var(--deep);
+        }
+
+        .social-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+
         .youtube-btn {
             background: #ff0000;
             border-color: #ff0000;
-            color: #ffffff;
-        }
-
-        .x-btn {
-            background: #111111;
-            border-color: #111111;
             color: #ffffff;
         }
 
@@ -180,9 +238,16 @@
             color: #ffffff;
         }
 
-        .memo-inline {
-            min-height: 180px;
-            resize: vertical;
+        .facebook-btn {
+            background: #1877f2;
+            border-color: #1877f2;
+            color: #ffffff;
+        }
+
+        .venue-summary {
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         @media (max-width: 991.98px) {
@@ -201,191 +266,222 @@
                 <div class="hero-content">
                     <div class="row g-4 align-items-center">
                         <div class="col-lg-8">
-                            <div class="hero-badge mb-3">スマホ利用を見据えたトップページ</div>
-                            <h2 class="page-title mb-3">必要な情報を切り替えながら、スマホでも使いやすい構成へ整理しています。</h2>
-                            <p class="lead-text mb-4">動画、予想、結果、リンク、メモを一度に並べすぎず、スマホでは切替しながら見られる形にしています。</p>
+                            <div class="hero-badge mb-3">隕九ｄ縺吶￥謨ｴ逅・＠縺鬱OP繝壹・繧ｸ</div>
+                            <h2 class="page-title mb-3">蠢・ｦ√↑諠・ｱ縺ｫ縺吶＄螻翫￥縲√ｄ縺輔＠縺剰ｦ九ｄ縺吶＞繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ陬懷勧逕ｻ髱｢縺ｧ縺吶・/h2>
+                            <p class="lead-text mb-4">蜍慕判遒ｺ隱阪∫ｷ蛻・ｮ｡逅・√Μ繝ｳ繧ｯ遒ｺ隱阪∬ｨ倬鹸蜈･蜉帙∈縺ｮ遘ｻ蜍輔ｒ縲√・縺ｨ縺､縺ｮ豬√ｌ縺ｧ霑ｷ繧上★菴ｿ縺医ｋ繧医≧縺ｫ縺ｾ縺ｨ繧√※縺・∪縺吶・/p>
                             <div class="d-flex flex-column flex-md-row flex-wrap gap-3">
-                                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">新しく記録する</a>
-                                <a th:href="@{/records}" class="btn btn-light btn-lg">記録一覧を見る</a>
-                                <a th:href="@{/links}" class="btn btn-outline-light btn-lg">外部リンクを見る</a>
+                                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">譁ｰ縺励￥險倬鹸縺吶ｋ</a>
+                                <a th:href="@{/records}" class="btn btn-light btn-lg">險倬鹸荳隕ｧ繧定ｦ九ｋ</a>
+                                <a th:href="@{/links}" class="btn btn-outline-light btn-lg">螟夜Κ繝ｪ繝ｳ繧ｯ繧定ｦ九ｋ</a>
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <div class="tab-card bg-white bg-opacity-10 border border-light-subtle text-white p-4">
-                                <div class="fw-bold mb-2">このページで使う項目</div>
-                                <div>レース場選択、動画、タイマー、予想確認、結果確認、リンク、メモ</div>
+                            <div class="venue-summary p-4">
+                                <div class="fw-bold mb-2">縺・∪隕九※縺・ｋ繝ｬ繝ｼ繧ｹ蝣ｴ</div>
+                                <div class="fs-3 fw-bold mb-2" th:text="${selectedVenue}">蟾晏哨</div>
+                                <div class="helper-text mb-0">荳九・蝓ｺ譛ｬ謫堺ｽ懊°繧峨Ξ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ縺ｨ縲√◎縺ｮ縺ｾ縺ｾ遒ｺ隱阪＠繧・☆縺・ｽ咲ｽｮ縺ｸ騾ｲ繧√∪縺吶・/div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="page-card p-4 p-md-5 mb-4">
+            <section id="basic-actions" class="page-card p-4 p-md-5 mb-4">
                 <div class="row g-4 align-items-end">
-                    <div class="col-lg-6">
-                        <span class="section-badge mb-2">基本操作</span>
-                        <h2 class="section-title mb-2">最初にレースを選ぶ</h2>
-                        <p class="text-secondary mb-0">スマホでも迷いにくいように、レース場とレース番号を上にまとめています。</p>
+                    <div class="col-lg-5">
+                        <span class="section-badge mb-2">蝓ｺ譛ｬ謫堺ｽ・/span>
+                        <h2 class="section-title mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈繧薙〒遒ｺ隱・/h2>
+                        <p class="text-secondary mb-0">菴ｿ縺・◆縺・ｼ壼ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈繧薙〒讀懃ｴ｢縺吶ｋ縺ｨ縲ゝOP繝壹・繧ｸ蜀・・陦ｨ遉ｺ菴咲ｽｮ縺ｾ縺ｧ遘ｻ蜍輔＠縺ｾ縺吶・/p>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="selector-card p-3 p-md-4">
-                            <div class="row g-3">
-                                <div class="col-sm-6">
-                                    <label for="venueSelect" class="form-label fw-semibold fs-5">レース場選択</label>
-                                    <select id="venueSelect" class="form-select form-select-lg">
-                                        <option selected>選択してください</option>
-                                        <option>川口</option>
-                                        <option>伊勢崎</option>
-                                        <option>浜松</option>
-                                        <option>飯塚</option>
-                                        <option>山陽</option>
+                    <div class="col-lg-7">
+                        <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="venueSelect" class="form-label fw-semibold fs-5">繝ｬ繝ｼ繧ｹ蝣ｴ</label>
+                                    <select id="venueSelect" name="venue" class="form-select form-select-lg">
+                                        <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
+                                        <option th:each="venueName : ${venueNames}" th:value="${venueName}" th:text="${venueName}">蟾晏哨</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号選択</label>
-                                    <select id="raceNumberSelect" class="form-select form-select-lg">
-                                        <option selected>選択してください</option>
-                                        <option>1レース</option>
-                                        <option>2レース</option>
-                                        <option>3レース</option>
-                                        <option>4レース</option>
-                                        <option>5レース</option>
-                                        <option>6レース</option>
-                                        <option>7レース</option>
-                                        <option>8レース</option>
-                                        <option>9レース</option>
-                                        <option>10レース</option>
-                                        <option>11レース</option>
-                                        <option>12レース</option>
+                                <div class="col-md-4">
+                                    <label for="raceNumberSelect" class="form-label fw-semibold fs-5">繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ</label>
+                                    <select id="raceNumberSelect" name="raceNumber" class="form-select form-select-lg">
+                                        <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
+                                        <option value="1">1繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="2">2繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="3">3繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="4">4繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="5">5繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="6">6繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="7">7繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="8">8繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="9">9繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="10">10繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="11">11繝ｬ繝ｼ繧ｹ</option>
+                                        <option value="12">12繝ｬ繝ｼ繧ｹ</option>
                                     </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 search-button">讀懃ｴ｢</button>
+                                </div>
+                                <div class="col-12">
+                                    <div id="selectionSummary" class="selector-note p-3">驕ｸ謚槭＠縺滓擅莉ｶ縺ｫ蜷医ｏ縺帙※遒ｺ隱阪お繝ｪ繧｢縺ｸ騾ｲ繧√∪縺吶・/div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </section>
 
             <section id="mobile-switch" class="page-card p-4 p-md-5 mb-4 d-lg-none">
-                <span class="section-badge mb-2">スマホ向け</span>
-                <h2 class="section-title mb-2">切替メニュー</h2>
-                <p class="text-secondary mb-4">スマホでは必要な内容だけをタブで切り替えて確認する想定です。</p>
-                <ul class="nav mobile-tabs mb-4" role="tablist">
-                    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-video" type="button">動画</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-pre" type="button">前日予想</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-today" type="button">当日予想</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-result" type="button">結果</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-link" type="button">リンク</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-memo" type="button">メモ</button></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="tab-video">
-                        <div class="tab-card p-3">
-                            <div class="vstack gap-3">
-                                <div class="summary-card p-3">
-                                    <div class="fw-bold mb-2">公式動画</div>
-                                    <div class="placeholder"><div><strong>公式動画表示枠</strong><div>公式動画をここに表示する想定です</div></div></div>
+                <span class="section-badge mb-2">繧ｹ繝槭・蜷代￠</span>
+                <h2 class="section-title mb-2">蜍慕判繧ｨ繝ｪ繧｢繧呈款縺励ｄ縺吶＞莠梧ｮｵ繝懊ち繝ｳ縺ｫ謨ｴ逅・/h2>
+                <p class="text-secondary mb-4">讓ｪ縺ｫ豬√☆蛻・崛縺ｯ繧・ａ縺ｦ縲∽ｸ翫°繧蛾・↓謚ｼ縺励ｄ縺吶＞莠梧ｮｵ繝懊ち繝ｳ蝙九↓縺励※縺・∪縺吶・/p>
+                <div class="mobile-video-switch mb-4">
+                    <div class="mobile-switch-row" role="group" aria-label="蜍慕判蜈・・蛻・崛">
+                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">蜈ｬ蠑・/button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">繝ｬ繝ｼ繧ｹ蝣ｴ</button>
+                    </div>
+                    <div class="mobile-switch-row" role="group" aria-label="陦ｨ遉ｺ蜀・ｮｹ縺ｮ蛻・崛">
+                        <button type="button" class="mobile-switch-btn active" data-mobile-content="video">蜍慕判</button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-content="memo">繝｡繝｢</button>
+                    </div>
+                </div>
+
+                <div class="mobile-video-panel active" data-mobile-panel="official-video">
+                    <div class="summary-card p-3 mb-3">
+                        <div class="fw-bold mb-2">蜈ｬ蠑丞虚逕ｻ</div>
+                        <div class="placeholder"><div><strong>蜈ｬ蠑丞虚逕ｻ陦ｨ遉ｺ繧ｨ繝ｪ繧｢</strong><div>螳滓ｳ√ｄ驟堺ｿ｡繧偵％縺薙°繧臥｢ｺ隱阪＠繧・☆縺上☆繧区Φ螳壹〒縺吶・/div></div></div>
+                    </div>
+                    <div class="summary-card p-3">
+                        <div class="fw-bold mb-3">繝ｬ繝ｼ繧ｹ邱蛻・ち繧､繝槭・</div>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="mobileDeadlineInput" class="form-label fw-semibold">邱蛻・律譎・/label>
+                                <input type="datetime-local" id="mobileDeadlineInput" class="form-control form-control-lg">
+                            </div>
+                            <div class="col-12">
+                                <div id="mobileTimerCard" class="timer-display-card state-safe p-3">
+                                    <div class="fw-bold mb-2">邱蛻・∪縺ｧ縺ｮ谿九ｊ譎る俣</div>
+                                    <div id="mobileTimerCount" class="timer-count">--:--:--</div>
+                                    <div id="mobileTimerNow" class="text-secondary mt-2">迴ｾ蝨ｨ譎ょ綾: --:--:--</div>
                                 </div>
-                                <div class="summary-card p-3">
-                                    <div class="fw-bold mb-2">レース場動画</div>
-                                    <div class="placeholder"><div><strong>レース場動画表示枠</strong><div>選択した会場の動画を表示する想定です</div></div></div>
-                                </div>
-                                <div class="summary-card p-3">
-                                    <div class="fw-bold mb-3">レースタイマー</div>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label for="mobileDeadlineInput" class="form-label fw-semibold">締切時刻を入力</label>
-                                            <input type="datetime-local" id="mobileDeadlineInput" class="form-control form-control-lg">
-                                        </div>
-                                        <div class="col-12">
-                                            <div id="mobileTimerCard" class="timer-display-card state-safe p-3">
-                                                <div class="timer-status-text mb-2">締切までの残り時間</div>
-                                                <div id="mobileTimerCount" class="timer-count">--:--:--</div>
-                                                <div id="mobileTimerNow" class="timer-now-text mt-2">現在時刻: --:--:--</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div id="mobileTimerAlert" class="timer-alert-box alert alert-success mb-0">締切時刻を入力するとカウントダウンを開始します。</div>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div id="mobileTimerAlert" class="timer-alert-box alert alert-success mb-0">邱蛻・律譎ゅｒ蜈･蜉帙☆繧九→繧ｫ繧ｦ繝ｳ繝医ム繧ｦ繝ｳ繧帝幕蟋九＠縺ｾ縺吶・/div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="tab-pre"><div class="tab-card p-3"><div class="fw-bold mb-2">前日予想</div><p class="helper-text">開催時間帯、ハンデ情報、注目選手、買い目の方向性を確認する想定です。</p><a th:href="@{/records/new}" class="btn btn-primary btn-lg link-btn w-100">前日予想を記録する</a></div></div>
-                    <div class="tab-pane fade" id="tab-today"><div class="tab-card p-3"><div class="fw-bold mb-2">当日予想</div><p class="helper-text">天気、試走タイム、購入内容を確認しながら入力する想定です。</p><a th:href="@{/records/new}" class="btn btn-outline-primary btn-lg link-btn w-100">当日予想を開く</a></div></div>
-                    <div class="tab-pane fade" id="tab-result"><div class="tab-card p-3"><div class="fw-bold mb-2">結果</div><p class="helper-text">レース結果、比較、考察を見返す入口です。</p><a th:href="@{/records}" class="btn btn-outline-secondary btn-lg link-btn w-100">結果一覧を見る</a></div></div>
-                    <div class="tab-pane fade" id="tab-link"><div class="tab-card p-3"><div class="fw-bold mb-3">リンク</div><div class="d-grid gap-3 mb-3"><a th:each="link : ${officialRelatedLinks}" th:href="${link.url}" th:text="${link.siteName}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg link-btn text-start">公式関連リンク</a></div><div class="row g-2"><div class="col-12"><a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg social-btn">公式サイト</a></div><div class="col-12"><a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn youtube-btn">YouTube</a></div><div class="col-6"><a th:if="${selectedVenueLinks['x'] != null}" th:href="${selectedVenueLinks['x'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn x-btn">X</a></div><div class="col-6"><a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn instagram-btn">Instagram</a></div></div></div></div>
-                    <div class="tab-pane fade" id="tab-memo"><div class="tab-card p-3"><div class="fw-bold mb-2">メモ</div><p class="helper-text mb-3">気になったことをすぐ残せるように大きめのメモ欄を置いています。</p><textarea class="form-control form-control-lg memo-inline" placeholder="気になったことをここにメモできます。保存機能はまだありません。"></textarea></div></div>
+                </div>
+
+                <div class="mobile-video-panel" data-mobile-panel="venue-video">
+                    <div class="summary-card p-3 mb-3">
+                        <div class="fw-bold mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判</div>
+                        <div class="placeholder"><div><strong>繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判陦ｨ遉ｺ繧ｨ繝ｪ繧｢</strong><div>驕ｸ謚樔ｸｭ縺ｮ莨壼ｴ縺ｫ蜷医ｏ縺帙◆蜍慕判遒ｺ隱阪∈縺､縺ｪ縺偵ｄ縺吶￥縺励※縺・∪縺吶・/div></div></div>
+                    </div>
+                    <div class="summary-card p-3">
+                        <div class="fw-bold mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ繝ｪ繝ｳ繧ｯ</div>
+                        <div class="row g-2">
+                            <div class="col-12"><a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg social-btn">蜈ｬ蠑上し繧､繝・/a></div>
+                            <div class="col-12"><a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn youtube-btn">YouTube</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-video-panel" data-mobile-panel="official-memo">
+                    <div class="guide-card p-3">
+                        <div class="fw-bold mb-2">蜈ｬ蠑上Γ繝｢</div>
+                        <p class="helper-text mb-3">蜈ｬ蠑丞虚逕ｻ繧・ｷ蛻・｢ｺ隱阪〒豌励▼縺・◆縺薙→繧偵√◎縺ｮ蝣ｴ縺ｧ縺吶＄谿九○縺ｾ縺吶・/p>
+                        <textarea class="form-control form-control-lg mobile-memo-box" placeholder="蜈ｬ蠑丞・縺ｧ豌励▼縺・◆縺薙→繧偵Γ繝｢縺ｧ縺阪∪縺吶・></textarea>
+                    </div>
+                </div>
+
+                <div class="mobile-video-panel" data-mobile-panel="venue-memo">
+                    <div class="guide-card p-3">
+                        <div class="fw-bold mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ繝｡繝｢</div>
+                        <p class="helper-text mb-3">莨壼ｴ縺斐→縺ｮ迚ｹ蠕ｴ繧・ｰ励↓縺ｪ縺｣縺溽せ繧偵√せ繝槭・縺ｧ繧ょ・蜉帙＠繧・☆縺・､ｧ縺阪＆縺ｧ谿九○縺ｾ縺吶・/p>
+                        <textarea class="form-control form-control-lg mobile-memo-box" placeholder="繝ｬ繝ｼ繧ｹ蝣ｴ縺斐→縺ｮ豌励▼縺阪ｒ繝｡繝｢縺ｧ縺阪∪縺吶・></textarea>
+                    </div>
                 </div>
             </section>
 
             <section class="d-none d-lg-block page-card p-4 p-md-5 mb-4">
-                <span class="section-badge mb-2">PC表示</span>
-                <h2 class="section-title mb-2">動画とタイマー</h2>
-                <p class="text-secondary mb-4">PCでは横並びで広く見られるようにしつつ、締切時刻を手動入力してカウントダウンを確認できるようにしています。</p>
+                <span class="section-badge mb-2">PC陦ｨ遉ｺ</span>
+                <h2 class="section-title mb-2">蜍慕判縺ｨ邱蛻・ｒ讓ｪ荳ｦ縺ｳ縺ｧ遒ｺ隱・/h2>
                 <div class="row g-4 mb-4">
-                    <div class="col-lg-6"><div class="video-card p-4 h-100"><div class="fw-bold mb-2">公式動画</div><div class="placeholder"><div><strong>公式動画表示枠</strong><div>公式動画をここに表示する想定です</div></div></div></div></div>
-                    <div class="col-lg-6"><div class="video-card p-4 h-100"><div class="fw-bold mb-2">レース場動画</div><div class="placeholder"><div><strong>レース場動画表示枠</strong><div>会場別の動画をここに表示する想定です</div></div></div></div></div>
-                </div>
-                <div class="timer-card p-4">
-                    <div class="row g-4 align-items-stretch">
-                        <div class="col-lg-4">
-                            <label for="deadlineInput" class="form-label fw-semibold fs-5">締切時刻を入力</label>
-                            <input type="datetime-local" id="deadlineInput" class="form-control form-control-lg mb-3">
-                            <div class="helper-text">まずは手動入力で使う想定です。後から試走時刻や締切時刻の自動連携を追加しやすいように、入力欄と表示欄を分けています。</div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div id="timerCard" class="timer-display-card state-safe p-4 h-100">
-                                <div class="timer-status-text mb-2">締切までの残り時間</div>
-                                <div id="timerCount" class="timer-count mb-2">--:--:--</div>
-                                <div id="timerNow" class="timer-now-text">現在時刻: --:--:--</div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div id="timerAlert" class="timer-alert-box alert alert-success mb-0">締切時刻を入力するとカウントダウンを開始します。</div>
-                        </div>
-                    </div>
+                    <div class="col-lg-6"><div class="video-card p-4 h-100"><div class="fw-bold mb-2">蜈ｬ蠑丞虚逕ｻ</div><div class="placeholder"><div><strong>蜈ｬ蠑丞虚逕ｻ陦ｨ遉ｺ繧ｨ繝ｪ繧｢</strong><div>蜈ｬ蠑城・菫｡縺ｮ遒ｺ隱阪ｒ縺薙％縺九ｉ陦後≧諠ｳ螳壹〒縺吶・/div></div></div></div></div>
+                    <div class="col-lg-6"><div class="video-card p-4 h-100"><div class="fw-bold mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判</div><div class="placeholder"><div><strong>繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判陦ｨ遉ｺ繧ｨ繝ｪ繧｢</strong><div>驕ｸ謚樔ｸｭ縺ｮ莨壼ｴ縺ｫ蜷医ｏ縺帙◆蜍慕判縺ｮ遒ｺ隱阪↓菴ｿ縺医∪縺吶・/div></div></div></div></div>
                 </div>
             </section>
 
-            <section id="external-links" class="page-card p-4 p-md-5 mb-4">
-                <span class="section-badge mb-2">リンク導線</span>
-                <h2 class="section-title mb-2">外部リンク</h2>
-                <p class="text-secondary mb-4">スマホでは押しやすく、PCでは会場ごとの情報をまとめて見やすくしています。</p>
+                        <section id="external-links" class="page-card p-4 p-md-5 mb-4">
+                <span class="section-badge mb-2">リンク案内</span>
+                <h2 class="section-title mb-2">公式リンクとレース場リンク</h2>
                 <div class="row g-4 align-items-start">
                     <div class="col-lg-4">
                         <div class="link-card p-4 h-100">
                             <div class="fw-bold fs-4 mb-3">公式関連</div>
-                            <div class="d-grid gap-3">
-                                <a th:each="link : ${officialRelatedLinks}" th:href="${link.url}" th:text="${link.siteName}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg link-btn text-start">公式関連リンク</a>
+                            <p class="text-secondary mb-3">AutoRace.jp と 公式FANCLUB を見やすく並べています。</p>
+                            <div class="official-link-grid">
+                                <a th:each="link : ${officialRelatedLinks}" th:href="${link.url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
+                                    <span th:text="${link.siteName}">AutoRace.jp</span>
+                                    <span class="section-badge">公式</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-8">
                         <div class="link-card p-4 p-md-5">
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-                                <div><span class="section-badge mb-2">選択中のレース場</span><div class="fs-2 fw-bold" th:text="${selectedVenue}">川口</div></div>
+                                <div>
+                                    <span class="section-badge mb-2">選択中のレース場</span>
+                                    <div class="fs-2 fw-bold" th:text="${selectedVenue}">川口</div>
+                                </div>
                                 <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg">外部リンク一覧で見る</a>
                             </div>
                             <div class="row g-3 mb-4">
-                                <div class="col-md-4" th:each="venueName : ${venueNames}"><a th:href="@{/(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-btn">川口</a></div>
+                                <div class="col-md-4" th:each="venueName : ${venueNames}">
+                                    <a th:href="@{/(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-btn js-keep-mobile-scroll">川口</a>
+                                </div>
                             </div>
                             <div class="row g-3 mb-4">
-                                <div class="col-md-6"><a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg social-btn">公式サイト</a></div>
-                                <div class="col-md-6"><a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn youtube-btn">YouTube</a></div>
-                                <div class="col-md-6"><a th:if="${selectedVenueLinks['x'] != null}" th:href="${selectedVenueLinks['x'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn x-btn">X</a></div>
-                                <div class="col-md-6"><a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn instagram-btn">Instagram</a></div>
+                                <div class="col-md-6"><a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg social-btn"><span class="social-logo">公</span><span>公式サイト</span></a></div>
+                                <div class="col-md-6"><a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn youtube-btn"><span class="social-logo">YT</span><span>YouTube</span></a></div>
+                                <div class="col-md-6"><a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn instagram-btn"><span class="social-logo">IG</span><span>Instagram</span></a></div>
+                                <div class="col-md-6"><a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn facebook-btn"><span class="social-logo">f</span><span>Facebook</span></a></div>
                             </div>
-                            <div class="summary-card p-3"><div class="fw-bold mb-2">会場メモ</div><div class="helper-text">YouTube は実URLを設定済みです。X と Instagram はあとから会場ごとに追加しやすい構成です。</div></div>
+                            <div class="summary-card p-3">
+                                <div class="fw-bold mb-2">リンク案内</div>
+                                <div class="helper-text">レース場を選ぶと、右側のリンク情報がその会場に合わせて切り替わります。表示は 公式サイト、YouTube、Instagram、Facebook に統一しています。</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
+<section id="glossary" class="page-card p-4 p-md-5 mb-4">
+                <span class="section-badge mb-2">逕ｨ隱・/span>
+                <h2 class="section-title mb-2">逕ｨ隱槭ｒ遒ｺ隱阪＠縺溘＞縺ｨ縺阪・蜈･蜿｣</h2>
+                <p class="text-secondary mb-0">繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ縺ｮ蝓ｺ譛ｬ逕ｨ隱槭ｄ隕区婿繧偵∽ｻ雁ｾ後％縺ｮ逕ｻ髱｢縺九ｉ蛻・°繧翫ｄ縺吶￥遒ｺ隱阪〒縺阪ｋ繧医≧縺ｫ蠎・￡縺ｦ縺・″縺ｾ縺吶・/p>
+            </section>
 
-            <section id="help" class="page-card p-4 p-md-5">
-                <span class="section-badge mb-2">ヘルプ</span>
-                <h2 class="section-title mb-2">使い方の目安</h2>
-                <p class="text-secondary mb-0">スマホでは切替メニューから「動画」「前日予想」「当日予想」「結果」「リンク」「メモ」を順番に見ていく使い方を想定しています。PCでは動画やリンクを広めに確認しながら使えます。</p>
+                        <section id="glossary-search" class="page-card p-4 p-md-5 mb-4">
+                <span class="section-badge mb-2">用語検索</span>
+                <h2 class="section-title mb-2">わからない言葉をすぐ調べる</h2>
+                <p class="text-secondary mb-4">オートレース用語を検索しながら、自分のメモとして少しずつ残していけます。</p>
+                <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
+                    <div class="col-lg-9">
+                        <label for="glossaryQuery" class="form-label fw-semibold">検索キーワード</label>
+                        <input id="glossaryQuery" type="text" name="q" th:value="${glossaryQuery}" class="form-control form-control-lg" placeholder="例: 試走 / オッズ / 走路状況">
+                    </div>
+                    <div class="col-lg-3 d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">用語を探す</button>
+                    </div>
+                </form>
+            </section>
+<section id="help" class="page-card p-4 p-md-5">
+                <span class="section-badge mb-2">繝倥Ν繝・/span>
+                <h2 class="section-title mb-2">菴ｿ縺・婿縺ｮ豬√ｌ</h2>
+                <p class="text-secondary mb-0">TOP繝壹・繧ｸ縺ｧ縺ｯ縲∝渕譛ｬ謫堺ｽ懊°繧峨Ξ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｳ縲∝虚逕ｻ遒ｺ隱阪ｄ繝ｪ繝ｳ繧ｯ遒ｺ隱阪∈騾ｲ繧√∪縺吶・/p>
             </section>
         </main>
 
@@ -396,10 +492,9 @@
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
     <script>
         function updateTimerView(targets, state) {
-            targets.card.classList.remove("state-safe", "state-warning", "state-danger", "state-closed");
-            targets.card.classList.add(state.cardClass);
+            targets.card.className = "timer-display-card p-3 " + state.cardClass;
             targets.count.textContent = state.countText;
-            targets.now.textContent = "現在時刻: " + state.nowText;
+            targets.now.textContent = "迴ｾ蝨ｨ譎ょ綾: " + state.nowText;
             targets.alert.className = "timer-alert-box alert " + state.alertClass + " mb-0";
             targets.alert.textContent = state.alertText;
         }
@@ -407,116 +502,96 @@
         function buildTimerState(deadlineValue) {
             const now = new Date();
             const nowText = now.toLocaleTimeString("ja-JP");
-
             if (!deadlineValue) {
-                return {
-                    cardClass: "state-safe",
-                    countText: "--:--:--",
-                    nowText: nowText,
-                    alertClass: "alert-success",
-                    alertText: "締切時刻を入力するとカウントダウンを開始します。"
-                };
+                return { cardClass: "state-safe", countText: "--:--:--", nowText: nowText, alertClass: "alert-success", alertText: "邱蛻・律譎ゅｒ蜈･蜉帙☆繧九→繧ｫ繧ｦ繝ｳ繝医ム繧ｦ繝ｳ繧帝幕蟋九＠縺ｾ縺吶・ };
             }
-
             const deadline = new Date(deadlineValue);
             if (Number.isNaN(deadline.getTime())) {
-                return {
-                    cardClass: "state-warning",
-                    countText: "--:--:--",
-                    nowText: nowText,
-                    alertClass: "alert-warning",
-                    alertText: "締切時刻の形式を確認してください。"
-                };
+                return { cardClass: "state-warning", countText: "--:--:--", nowText: nowText, alertClass: "alert-warning", alertText: "邱蛻・律譎ゅ・蠖｢蠑上ｒ遒ｺ隱阪＠縺ｦ縺上□縺輔＞縲・ };
             }
-
             const diffMs = deadline.getTime() - now.getTime();
             if (diffMs <= 0) {
-                return {
-                    cardClass: "state-closed",
-                    countText: "締切",
-                    nowText: nowText,
-                    alertClass: "alert-dark",
-                    alertText: "このレースの投票締切を過ぎています。"
-                };
+                return { cardClass: "state-closed", countText: "邱蛻・, nowText: nowText, alertClass: "alert-dark", alertText: "縺薙・繝ｬ繝ｼ繧ｹ縺ｮ謚慕･ｨ邱蛻・ｒ驕弱℃縺ｦ縺・∪縺吶・ };
             }
-
             const totalSeconds = Math.floor(diffMs / 1000);
             const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
             const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
             const seconds = String(totalSeconds % 60).padStart(2, "0");
-            const countText = hours + ":" + minutes + ":" + seconds;
-
-            if (totalSeconds <= 180) {
-                return {
-                    cardClass: "state-danger",
-                    countText: countText,
-                    nowText: nowText,
-                    alertClass: "alert-danger",
-                    alertText: "投票してください"
-                };
-            }
-
-            if (totalSeconds <= 900) {
-                return {
-                    cardClass: "state-warning",
-                    countText: countText,
-                    nowText: nowText,
-                    alertClass: "alert-warning",
-                    alertText: "締切が近づいています。投票内容を確認してください。"
-                };
-            }
-
-            return {
-                cardClass: "state-safe",
-                countText: countText,
-                nowText: nowText,
-                alertClass: "alert-success",
-                alertText: "まだ時間に余裕があります。"
-            };
+            return totalSeconds <= 180
+                ? { cardClass: "state-danger", countText: hours + ":" + minutes + ":" + seconds, nowText: nowText, alertClass: "alert-danger", alertText: "邱蛻・′霑代▼縺・※縺・∪縺吶・ }
+                : { cardClass: "state-safe", countText: hours + ":" + minutes + ":" + seconds, nowText: nowText, alertClass: "alert-success", alertText: "縺ｾ縺譎る俣縺ｫ菴呵｣輔′縺ゅｊ縺ｾ縺吶・ };
         }
 
-        function syncTimer(deadlineValue) {
-            const desktopTargets = {
-                card: document.getElementById("timerCard"),
-                count: document.getElementById("timerCount"),
-                now: document.getElementById("timerNow"),
-                alert: document.getElementById("timerAlert")
-            };
+        function updateSelectionSummary(venueValue, raceNumberValue) {
+            const summary = document.getElementById("selectionSummary");
+            if (!summary) return;
+            const venueText = venueValue || "繝ｬ繝ｼ繧ｹ蝣ｴ譛ｪ驕ｸ謚・;
+            const raceText = raceNumberValue ? raceNumberValue + "繝ｬ繝ｼ繧ｹ" : "繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ譛ｪ驕ｸ謚・;
+            summary.textContent = venueText + " / " + raceText + " 繧帝∈謚樔ｸｭ縺ｧ縺吶・;
+        }
+
+        function showMobileVideoPanel() {
+            const sourceButton = document.querySelector("[data-mobile-source].active");
+            const contentButton = document.querySelector("[data-mobile-content].active");
+            if (!sourceButton || !contentButton) return;
+            const panelKey = sourceButton.dataset.mobileSource + "-" + contentButton.dataset.mobileContent;
+            document.querySelectorAll("[data-mobile-panel]").forEach(function (panel) {
+                panel.classList.toggle("active", panel.dataset.mobilePanel === panelKey);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
             const mobileTargets = {
                 card: document.getElementById("mobileTimerCard"),
                 count: document.getElementById("mobileTimerCount"),
                 now: document.getElementById("mobileTimerNow"),
                 alert: document.getElementById("mobileTimerAlert")
             };
-
-            const state = buildTimerState(deadlineValue);
-            updateTimerView(desktopTargets, state);
-            updateTimerView(mobileTargets, state);
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const desktopInput = document.getElementById("deadlineInput");
             const mobileInput = document.getElementById("mobileDeadlineInput");
+            const venueSelect = document.getElementById("venueSelect");
+            const raceNumberSelect = document.getElementById("raceNumberSelect");
+            const searchParams = new URLSearchParams(window.location.search);
 
-            function handleInputChange(sourceInput, targetInput) {
-                const value = sourceInput.value;
-                targetInput.value = value;
-                syncTimer(value);
+            if (venueSelect && searchParams.get("venue")) venueSelect.value = searchParams.get("venue");
+            if (raceNumberSelect && searchParams.get("raceNumber")) raceNumberSelect.value = searchParams.get("raceNumber");
+            updateSelectionSummary(venueSelect ? venueSelect.value : "", raceNumberSelect ? raceNumberSelect.value : "");
+
+            document.querySelectorAll("[data-mobile-source], [data-mobile-content]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const selector = button.dataset.mobileSource ? "[data-mobile-source]" : "[data-mobile-content]";
+                    document.querySelectorAll(selector).forEach(function (peer) {
+                        peer.classList.remove("active");
+                    });
+                    button.classList.add("active");
+                    showMobileVideoPanel();
+                });
+            });
+
+            document.querySelectorAll(".js-keep-mobile-scroll").forEach(function (link) {
+                link.addEventListener("click", function () {
+                    sessionStorage.setItem("autoraceapp-home-scroll", String(window.scrollY));
+                });
+            });
+
+            const savedScroll = sessionStorage.getItem("autoraceapp-home-scroll");
+            if (savedScroll !== null) {
+                sessionStorage.removeItem("autoraceapp-home-scroll");
+                window.scrollTo(0, Number(savedScroll));
             }
 
-            desktopInput.addEventListener("input", function () {
-                handleInputChange(desktopInput, mobileInput);
-            });
-
-            mobileInput.addEventListener("input", function () {
-                handleInputChange(mobileInput, desktopInput);
-            });
-
-            syncTimer("");
-            setInterval(function () {
-                syncTimer(desktopInput.value || mobileInput.value);
-            }, 1000);
+            if (venueSelect) venueSelect.addEventListener("change", function () { updateSelectionSummary(venueSelect.value, raceNumberSelect ? raceNumberSelect.value : ""); });
+            if (raceNumberSelect) raceNumberSelect.addEventListener("change", function () { updateSelectionSummary(venueSelect ? venueSelect.value : "", raceNumberSelect.value); });
+            if (mobileInput) {
+                mobileInput.addEventListener("input", function () {
+                    updateTimerView(mobileTargets, buildTimerState(mobileInput.value));
+                });
+                updateTimerView(mobileTargets, buildTimerState(""));
+            }
+            showMobileVideoPanel();
         });
     </script>
 </body>
 </html>
+
+
+
