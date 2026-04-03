@@ -1,17 +1,139 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout/base :: commonHead('用語集 | オートレース予想補助アプリ')}"></th:block>
+    <style>
+        .glossary-layout {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .glossary-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .glossary-item {
+            border: 1px solid var(--card);
+            border-radius: 1.25rem;
+            background: #ffffff;
+            box-shadow: 0 0.6rem 1.2rem rgba(18, 61, 106, 0.08);
+        }
+
+        .glossary-check {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .glossary-item.is-checked {
+            background: #f6fbf7;
+            border-color: #a9d0b3;
+        }
+
+        .glossary-help {
+            color: var(--sub);
+            line-height: 1.7;
+        }
+
+        .glossary-sticky {
+            position: sticky;
+            top: 1.5rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .glossary-sticky {
+                position: static;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
         <main class="container py-4 py-md-5 flex-grow-1">
-            <section class="page-card p-4 p-md-5">
-                <span class="section-badge mb-2">準備中</span>
-                <h1 class="section-title mb-2">用語集</h1>
-                <p class="helper-text mb-0">オートレースの基本用語や見方をまとめる画面を今後追加する予定です。</p>
-            </section>
+            <div class="glossary-layout row g-4 align-items-start">
+                <div class="col-lg-4">
+                    <div class="page-card p-4 p-md-5 glossary-sticky">
+                        <span class="section-badge mb-2">用語追加</span>
+                        <h1 class="section-title mb-2">自分の用語メモを増やす</h1>
+                        <p class="glossary-help mb-4">意味があいまいな言葉を、自分の言葉で少しずつ残していける ToDo リスト風の画面です。</p>
+
+                        <form th:action="@{/glossaries}" method="post" th:object="${newTerm}" class="vstack gap-3">
+                            <div>
+                                <label for="term" class="form-label fw-semibold">用語</label>
+                                <input id="term" th:field="*{term}" class="form-control form-control-lg" placeholder="例: 試走">
+                            </div>
+                            <div>
+                                <label for="meaning" class="form-label fw-semibold">意味</label>
+                                <textarea id="meaning" th:field="*{meaning}" class="form-control" rows="4" placeholder="意味や見方を入力します"></textarea>
+                            </div>
+                            <div>
+                                <label for="memo" class="form-label fw-semibold">自分のメモ</label>
+                                <textarea id="memo" th:field="*{memo}" class="form-control" rows="4" placeholder="覚え方や気づきを残せます"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">用語を追加する</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <section class="page-card p-4 p-md-5 mb-4">
+                        <span class="section-badge mb-2">用語検索</span>
+                        <h2 class="section-title mb-2">知りたい言葉を探す</h2>
+                        <p class="glossary-help mb-4">用語、意味、自分のメモからまとめて検索できます。</p>
+                        <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
+                            <div class="col-md-9">
+                                <label for="q" class="form-label fw-semibold">検索キーワード</label>
+                                <input id="q" type="text" name="q" th:value="${query}" class="form-control form-control-lg" placeholder="例: オッズ / 走路 / スタート">
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button type="submit" class="btn btn-outline-primary btn-lg">検索</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="glossary-list">
+                        <article th:each="term : ${terms}" class="glossary-item p-4" th:classappend="${term.checked} ? ' is-checked' : ''">
+                            <form th:action="@{/glossaries/{id}(id=${term.id})}" method="post" class="vstack gap-3">
+                                <input type="hidden" name="q" th:value="${query}">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                    <div>
+                                        <span class="section-badge">用語カード</span>
+                                    </div>
+                                    <div class="form-check fs-5 mb-0">
+                                        <input class="form-check-input glossary-check" type="checkbox" name="checked" value="true" th:checked="${term.checked}" th:id="${'checked-' + term.id}">
+                                        <label class="form-check-label fw-semibold" th:for="${'checked-' + term.id}">確認できた</label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="form-label fw-semibold" th:for="${'term-' + term.id}">用語</label>
+                                    <input class="form-control form-control-lg" type="text" name="term" th:id="${'term-' + term.id}" th:value="${term.term}">
+                                </div>
+
+                                <div>
+                                    <label class="form-label fw-semibold" th:for="${'meaning-' + term.id}">意味</label>
+                                    <textarea class="form-control" name="meaning" rows="4" th:id="${'meaning-' + term.id}" th:text="${term.meaning}"></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="form-label fw-semibold" th:for="${'memo-' + term.id}">自分のメモ</label>
+                                    <textarea class="form-control" name="memo" rows="4" th:id="${'memo-' + term.id}" th:text="${term.memo}"></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">このカードを更新</button>
+                                </div>
+                            </form>
+                        </article>
+
+                        <div th:if="${#lists.isEmpty(terms)}" class="page-card p-4 p-md-5 text-center">
+                            <div class="fw-bold mb-2">見つかる用語がありませんでした</div>
+                            <div class="glossary-help">検索条件を変えるか、新しい用語を左側から追加してください。</div>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </main>
         <div th:replace="~{layout/footer :: siteFooter}"></div>
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>

@@ -1,4 +1,4 @@
-package com.example.autoraceapp.controller;
+﻿package com.example.autoraceapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.autoraceapp.service.SiteLinkService;
 
-/**
- * ホーム画面と外部リンク画面の導線を担当するコントローラです。
- */
 @Controller
 public class HomeController {
 
@@ -22,8 +19,10 @@ public class HomeController {
     @GetMapping("/")
     public String showHomePage(
             @RequestParam(required = false) String venue,
+            @RequestParam(required = false) String glossaryQuery,
             Model model) {
         addLinkPageAttributes(model, venue);
+        model.addAttribute("glossaryQuery", glossaryQuery == null ? "" : glossaryQuery);
         return "home/index";
     }
 
