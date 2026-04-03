@@ -95,28 +95,33 @@
             }
 
             .app-theme-toolbar {
-                display: flex;
+                display: inline-flex;
                 align-items: center;
-                gap: 0.75rem;
-                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 0.45rem;
+                flex-wrap: nowrap;
+                padding: 0.2rem 0;
             }
 
             .app-theme-label {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
                 font-weight: 700;
                 color: var(--sub);
+                white-space: nowrap;
             }
 
             .app-theme-select {
-                min-width: 172px;
+                width: 150px;
+                min-width: 150px;
                 border-radius: 999px;
                 border-color: var(--card);
-                font-size: 0.95rem;
+                font-size: 0.88rem;
+                line-height: 1.2;
             }
 
             .app-theme-dot {
-                width: 0.95rem;
-                height: 0.95rem;
+                width: 0.8rem;
+                height: 0.8rem;
                 border-radius: 999px;
                 border: 1px solid #ffffff;
                 box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
@@ -132,6 +137,10 @@
             @media (max-width: 991.98px) {
                 .app-theme-toolbar {
                     justify-content: flex-start;
+                }
+
+                .app-theme-select {
+                    width: 150px;
                 }
             }
         </style>
