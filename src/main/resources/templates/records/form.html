@@ -2,384 +2,738 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout/base :: commonHead('レース記録登録 | オートレース予想補助アプリ')}"></th:block>
+    <style>
+        .section-subtitle {
+            color: var(--sub);
+            line-height: 1.8;
+        }
+
+        .sub-block {
+            border: 1px solid var(--card);
+            border-radius: 1.2rem;
+            background: var(--soft-surface);
+        }
+
+        .todo-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .todo-item {
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            background: #ffffff;
+        }
+
+        .todo-check {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .todo-label {
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        .sticky-bottom-actions {
+            position: sticky;
+            bottom: 1rem;
+            z-index: 10;
+        }
+
+        .unit-input .form-control {
+            border-right: 0;
+        }
+
+        .unit-input .input-group-text {
+            min-width: 4.25rem;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--sub);
+            background: #ffffff;
+            border-left: 0;
+        }
+
+        .start-diagram-shell {
+            border: 1px solid var(--card);
+            border-radius: 1.25rem;
+            background: var(--soft-surface);
+        }
+
+        .start-diagram-note {
+            color: var(--sub);
+            line-height: 1.75;
+        }
+
+        .start-diagram-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .start-diagram-stage {
+            border: 1px solid var(--card);
+            border-radius: 1.2rem;
+            background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+            padding: 1rem;
+        }
+
+        .start-diagram-board {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 2px solid #c8d9eb;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 253, 0.92)),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(31, 77, 130, 0.05) 0,
+                    rgba(31, 77, 130, 0.05) 12.5%,
+                    rgba(255, 255, 255, 0.96) 12.5%,
+                    rgba(255, 255, 255, 0.96) 25%
+                );
+            touch-action: none;
+            user-select: none;
+        }
+
+        .start-diagram-board::before {
+            content: "";
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            top: 18%;
+            bottom: 18%;
+            border: 2px dashed rgba(31, 77, 130, 0.18);
+            border-radius: 1rem;
+            pointer-events: none;
+        }
+
+        .start-diagram-board::after {
+            content: "スタートライン";
+            position: absolute;
+            left: 50%;
+            bottom: 0.9rem;
+            transform: translateX(-50%);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(31, 77, 130, 0.18);
+            color: var(--deep);
+            font-size: 0.9rem;
+            font-weight: 700;
+            pointer-events: none;
+        }
+
+        .start-guide-line {
+            position: absolute;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            border-top: 1px dashed rgba(31, 77, 130, 0.18);
+            pointer-events: none;
+        }
+
+        .start-guide-line.line-1 { top: 22%; }
+        .start-guide-line.line-2 { top: 38%; }
+        .start-guide-line.line-3 { top: 54%; }
+        .start-guide-line.line-4 { top: 70%; }
+
+        .start-token {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 999px;
+            border: 2px solid rgba(31, 45, 61, 0.12);
+            box-shadow: 0 0.65rem 1rem rgba(15, 47, 79, 0.18);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: grab;
+            touch-action: none;
+            transform: translate(-50%, -50%);
+        }
+
+        .start-token.is-dragging {
+            cursor: grabbing;
+            box-shadow: 0 0.9rem 1.2rem rgba(15, 47, 79, 0.24);
+            z-index: 2;
+        }
+
+        .start-token.token-1 {
+            background: #ffffff;
+            color: #243240;
+            border-color: #cfd8e3;
+        }
+
+        .start-token.token-2 {
+            background: #1f1f1f;
+            color: #ffffff;
+        }
+
+        .start-token.token-3 {
+            background: #d64545;
+            color: #ffffff;
+        }
+
+        .start-token.token-4 {
+            background: #2f77d8;
+            color: #ffffff;
+        }
+
+        .start-token.token-5 {
+            background: #f2cc3d;
+            color: #3f3200;
+        }
+
+        .start-token.token-6 {
+            background: #3fa968;
+            color: #ffffff;
+        }
+
+        .start-token.token-7 {
+            background: #f08a32;
+            color: #ffffff;
+        }
+
+        .start-token.token-8 {
+            background: #d96ba5;
+            color: #ffffff;
+        }
+
+        .start-token-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .start-token-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 0.9rem;
+            border-radius: 1rem;
+            border: 1px solid var(--card);
+            background: #ffffff;
+            font-weight: 700;
+            color: var(--main);
+        }
+
+        .start-token-chip-dot {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 999px;
+            border: 1px solid rgba(31, 45, 61, 0.14);
+            flex: 0 0 auto;
+        }
+
+        .start-token-chip-dot.token-1 { background: #ffffff; }
+        .start-token-chip-dot.token-2 { background: #1f1f1f; }
+        .start-token-chip-dot.token-3 { background: #d64545; }
+        .start-token-chip-dot.token-4 { background: #2f77d8; }
+        .start-token-chip-dot.token-5 { background: #f2cc3d; }
+        .start-token-chip-dot.token-6 { background: #3fa968; }
+        .start-token-chip-dot.token-7 { background: #f08a32; }
+        .start-token-chip-dot.token-8 { background: #d96ba5; }
+
+        @media (max-width: 991.98px) {
+            .sticky-bottom-actions {
+                position: static;
+            }
+
+            .start-token {
+                width: 2.9rem;
+                height: 2.9rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .start-diagram-stage {
+                padding: 0.8rem;
+            }
+
+            .start-token {
+                width: 2.7rem;
+                height: 2.7rem;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-shell d-flex flex-column">
-    <div th:replace="~{layout/header :: siteHeader}"></div>
-    <main class="container py-4 py-md-5 flex-grow-1">
-        <div class="mb-4">
-            <h1 class="h2 fw-bold mb-2">繝ｬ繝ｼ繧ｹ險倬鹸逋ｻ骭ｲ</h1>
-            <p class="text-secondary mb-0">
-                蜑肴律莠域Φ繝ｻ蠖捺律莠域Φ繝ｻ繝ｬ繝ｼ繧ｹ蠕後・謖ｯ繧願ｿ斐ｊ繧偵・・分縺ｫ謨ｴ逅・＠縺ｪ縺後ｉ蜈･蜉帙〒縺阪ｋ逕ｻ髱｢縺ｧ縺吶・            </p>
-        </div>
-
-        <form th:action="@{/records}" th:object="${record}" method="post" class="vstack gap-4">
-            <div class="card border-0 section-card">
-                <div class="card-body p-4 p-md-5">
-                    <div class="section-header d-flex flex-column flex-lg-row justify-content-between gap-3">
-                        <div>
-                            <h2 class="section-title mb-2">1. 蜑肴律莠域Φ</h2>
-                            <p class="section-subtitle mb-0">
-                                繝ｬ繝ｼ繧ｹ縺ｮ蜑肴律縺ｫ縲∵ｳｨ逶ｮ驕ｸ謇九ｄ迢吶＞譁ｹ繧呈紛逅・＠縺ｦ縺翫￥縺溘ａ縺ｮ蜈･蜉帙お繝ｪ繧｢縺ｧ縺吶ゅ≠縺ｨ縺九ｉ蟆代＠縺壹▽霑ｽ險倥＠繧・☆縺・ｈ縺・↓縺ｾ縺ｨ繧√※縺・∪縺吶・                            </p>
-                        </div>
-                        <div class="text-danger fw-semibold align-self-lg-center">窶ｻ 縺ｯ蠢・磯・岼縺ｧ縺・/div>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <label for="raceDate" class="form-label fw-semibold">髢句ぎ譌･ <span class="text-danger">窶ｻ</span></label>
-                            <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="venue" class="form-label fw-semibold">繝ｬ繝ｼ繧ｹ蝣ｴ <span class="text-danger">窶ｻ</span></label>
-                            <select id="venue" th:field="*{venue}" class="form-select form-select-lg" required>
-                                <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                <option value="蟾晏哨">蟾晏哨</option>
-                                <option value="莨雁兇蟠・>莨雁兇蟠・/option>
-                                <option value="豬懈收">豬懈收</option>
-                                <option value="鬟ｯ蝪・>鬟ｯ蝪・/option>
-                                <option value="螻ｱ髯ｽ">螻ｱ髯ｽ</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="raceNumber" class="form-label fw-semibold">繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ <span class="text-danger">窶ｻ</span></label>
-                            <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg" required>
-                                <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + '繝ｬ繝ｼ繧ｹ'}">1繝ｬ繝ｼ繧ｹ</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="raceScheduleType" class="form-label fw-semibold">髢句ぎ譎る俣蟶ｯ</label>
-                            <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
-                                <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                <option value="繧｢繝ｼ繝ｪ繝ｼ">繧｢繝ｼ繝ｪ繝ｼ</option>
-                                <option value="騾壼ｸｸ">騾壼ｸｸ</option>
-                                <option value="繝翫う繧ｿ繝ｼ">繝翫う繧ｿ繝ｼ</option>
-                                <option value="繝溘ャ繝峨リ繧､繝・>繝溘ャ繝峨リ繧､繝・/option>
-                                <option value="繧ｪ繝ｼ繝舌・繝溘ャ繝峨リ繧､繝・>繧ｪ繝ｼ繝舌・繝溘ャ繝峨リ繧､繝・/option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="handicapInfo" class="form-label fw-semibold">繝上Φ繝・ュ蝣ｱ</label>
-                            <input type="text" id="handicapInfo" th:field="*{handicapInfo}" class="form-control form-control-lg" placeholder="萓・ 0m / 10m / 譛驥阪ワ繝ｳ 20m">
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <h3 class="h4 fw-bold mb-3">豕ｨ逶ｮ驕ｸ謇・/h3>
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="sub-block p-3 p-md-4">
-                                <h4 class="h5 fw-bold mb-3">豕ｨ逶ｮ驕ｸ謇・</h4>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="featuredRider1Name" class="form-label fw-semibold">驕ｸ謇句錐</label>
-                                        <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="萓・ 髱貞ｱｱ蜻ｨ蟷ｳ">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="featuredRider1Number" class="form-label fw-semibold">蜿ｷ霆・/label>
-                                        <input type="number" id="featuredRider1Number" th:field="*{featuredRider1Number}" class="form-control form-control-lg" min="1" max="8" placeholder="萓・ 1">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="sub-block p-3 p-md-4">
-                                <h4 class="h5 fw-bold mb-3">豕ｨ逶ｮ驕ｸ謇・</h4>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="featuredRider2Name" class="form-label fw-semibold">驕ｸ謇句錐</label>
-                                        <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="萓・ 驤ｴ譛ｨ蝨ｭ荳驛・>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="featuredRider2Number" class="form-label fw-semibold">蜿ｷ霆・/label>
-                                        <input type="number" id="featuredRider2Number" th:field="*{featuredRider2Number}" class="form-control form-control-lg" min="1" max="8" placeholder="萓・ 3">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="sub-block p-3 p-md-4">
-                                <h4 class="h5 fw-bold mb-3">豕ｨ逶ｮ驕ｸ謇・</h4>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="featuredRider3Name" class="form-label fw-semibold">驕ｸ謇句錐</label>
-                                        <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="萓・ 菴占陸鞫ｩ蠑･">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="featuredRider3Number" class="form-label fw-semibold">蜿ｷ霆・/label>
-                                        <input type="number" id="featuredRider3Number" th:field="*{featuredRider3Number}" class="form-control form-control-lg" min="1" max="8" placeholder="萓・ 5">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="preRacePrediction" class="form-label fw-semibold">蜑肴律莠域Φ繝｡繝｢</label>
-                            <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control form-control-lg" rows="4" placeholder="萓・ 譫鬆・→蜑咲ｯ謌千ｸｾ縺九ｉ縲∝・譫荳ｭ蠢・〒邨・∩遶九※縺溘＞縲・></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label for="preRaceNote" class="form-label fw-semibold">陬懆ｶｳ繝｡繝｢</label>
-                            <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control form-control-lg" rows="3" placeholder="萓・ 蜑肴律繧ｪ繝・ぜ繧・ｿ第ｳ√Γ繝｢縺ｪ縺ｩ繧定ｨ伜・縺励∪縺吶・></textarea>
-                        </div>
-                    </div>
-
-                    <div class="section-action-bar">
-                        <div class="d-flex flex-column flex-md-row gap-3">
-                            <button type="button" class="btn btn-primary btn-lg px-4">縺薙・蜑肴律莠域Φ繧剃ｿ晏ｭ・/button>
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4">縺薙・蜑肴律莠域Φ繧堤ｷｨ髮・/button>
-                            <button type="button" class="btn btn-outline-danger btn-lg px-4">縺薙・蜑肴律莠域Φ繧貞炎髯､</button>
-                        </div>
-                        <div class="helper-text mt-2">縺ゅ→縺ｧ驛ｨ蛻・ｿ晏ｭ俶ｩ溯・繧剃ｻ倥￠繧区Φ螳壹〒縲∽ｻ翫・謚ｼ縺励ｄ縺吶＞謫堺ｽ懊・繧ｿ繝ｳ縺ｨ縺励※驟咲ｽｮ縺励※縺・∪縺吶・/div>
-                    </div>
-                </div>
+        <div th:replace="~{layout/header :: siteHeader}"></div>
+        <main class="container py-4 py-md-5 flex-grow-1">
+            <div class="mb-4">
+                <h1 class="h2 fw-bold mb-2">レース記録登録</h1>
+                <p class="text-secondary mb-0">前日予想、当日予想、レース後の振り返りを一つの画面でまとめて記録できます。</p>
             </div>
 
-            <div class="card border-0 section-card">
-                <div class="card-body p-4 p-md-5">
-                    <div class="section-header">
-                        <h2 class="section-title mb-2">2. 蠖捺律莠域Φ</h2>
-                        <p class="section-subtitle mb-0">
-                            蜈ｬ蠑上し繧､繝医ｄ隧ｦ襍ｰ諠・ｱ繧定ｦ九↑縺後ｉ縲∝ｽ捺律縺ｮ繧ｳ繝ｳ繝・ぅ繧ｷ繝ｧ繝ｳ縺ｨ雉ｼ蜈･蜀・ｮｹ繧呈紛逅・☆繧九◆繧√・繧ｨ繝ｪ繧｢縺ｧ縺吶・                        </p>
-                    </div>
-
-                    <h3 class="h4 fw-bold mb-3">蠖捺律繧ｳ繝ｳ繝・ぅ繧ｷ繝ｧ繝ｳ</h3>
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <label for="weatherCondition" class="form-label fw-semibold">螟ｩ豌・/label>
-                            <select id="weatherCondition" th:field="*{weatherCondition}" class="form-select form-select-lg">
-                                <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                <option value="譎ｴ繧・>譎ｴ繧・/option>
-                                <option value="譖・ｊ">譖・ｊ</option>
-                                <option value="蟆城岑">蟆城岑</option>
-                                <option value="髮ｨ">髮ｨ</option>
-                                <option value="髮ｪ">髮ｪ</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="temperature" class="form-label fw-semibold">豌玲ｸｩ</label>
-                            <input type="text" id="temperature" th:field="*{temperature}" class="form-control form-control-lg" placeholder="萓・ 18邃・>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="humidity" class="form-label fw-semibold">貉ｿ蠎ｦ</label>
-                            <input type="text" id="humidity" th:field="*{humidity}" class="form-control form-control-lg" placeholder="萓・ 65%">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="windSpeed" class="form-label fw-semibold">鬚ｨ騾・/label>
-                            <input type="text" id="windSpeed" th:field="*{windSpeed}" class="form-control form-control-lg" placeholder="萓・ 3m">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="trackTemperature" class="form-label fw-semibold">襍ｰ霍ｯ貂ｩ蠎ｦ</label>
-                            <input type="text" id="trackTemperature" th:field="*{trackTemperature}" class="form-control form-control-lg" placeholder="萓・ 26邃・>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="trackCondition" class="form-label fw-semibold">襍ｰ霍ｯ迥ｶ豕・/label>
-                            <select id="trackCondition" th:field="*{trackCondition}" class="form-select form-select-lg">
-                                <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                <option value="濶ｯ襍ｰ霍ｯ">濶ｯ襍ｰ霍ｯ</option>
-                                <option value="譁題ｵｰ霍ｯ">譁題ｵｰ霍ｯ</option>
-                                <option value="貉ｿ襍ｰ霍ｯ">貉ｿ襍ｰ霍ｯ</option>
-                                <option value="鬚ｨ">鬚ｨ</option>
-                                <option value="闕・>闕・/option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <h3 class="h4 fw-bold mb-3">蜈ｨ霆願ｩｦ襍ｰ繧ｿ繧､繝</h3>
-                    <div class="row g-4">
-                        <div class="col-md-3 col-sm-6"><label for="trialTime1" class="form-label fw-semibold">1蜿ｷ霆・/label><input type="text" id="trialTime1" th:field="*{trialTime1}" class="form-control form-control-lg" placeholder="萓・ 3.34"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime2" class="form-label fw-semibold">2蜿ｷ霆・/label><input type="text" id="trialTime2" th:field="*{trialTime2}" class="form-control form-control-lg" placeholder="萓・ 3.36"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime3" class="form-label fw-semibold">3蜿ｷ霆・/label><input type="text" id="trialTime3" th:field="*{trialTime3}" class="form-control form-control-lg" placeholder="萓・ 3.35"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime4" class="form-label fw-semibold">4蜿ｷ霆・/label><input type="text" id="trialTime4" th:field="*{trialTime4}" class="form-control form-control-lg" placeholder="萓・ 3.37"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime5" class="form-label fw-semibold">5蜿ｷ霆・/label><input type="text" id="trialTime5" th:field="*{trialTime5}" class="form-control form-control-lg" placeholder="萓・ 3.33"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime6" class="form-label fw-semibold">6蜿ｷ霆・/label><input type="text" id="trialTime6" th:field="*{trialTime6}" class="form-control form-control-lg" placeholder="萓・ 3.39"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime7" class="form-label fw-semibold">7蜿ｷ霆・/label><input type="text" id="trialTime7" th:field="*{trialTime7}" class="form-control form-control-lg" placeholder="萓・ 3.40"></div>
-                        <div class="col-md-3 col-sm-6"><label for="trialTime8" class="form-label fw-semibold">8蜿ｷ霆・/label><input type="text" id="trialTime8" th:field="*{trialTime8}" class="form-control form-control-lg" placeholder="萓・ 3.38"></div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="row g-4 mb-4">
-                        <div class="col-12">
-                            <label for="featuredTrialTimeNote" class="form-label fw-semibold">豌励↓縺ｪ繧矩∈謇九・隧ｦ襍ｰ繧ｿ繧､繝谺・/label>
-                            <textarea id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" rows="3" placeholder="萓・ 5蜿ｷ霆翫・隧ｦ襍ｰ繧ｿ繧､繝縺瑚憶縺上∵ｰ鈴・縺御ｸ雁髄縺阪↓隕九∴繧九・></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label for="raceOverallNote" class="form-label fw-semibold">繝ｬ繝ｼ繧ｹ蜈ｨ菴薙ｒ隕九◆繝｡繝｢谺・/label>
-                            <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control form-control-lg" rows="3" placeholder="萓・ 螟匁棧蜍｢縺ｮ蜍輔″谺｡隨ｬ縺ｧ螻暮幕縺悟､ｧ縺阪￥螟峨ｏ繧翫◎縺・・></textarea>
-                        </div>
-                    </div>
-
-                    <div class="todo-panel p-4 p-md-5">
+            <form th:action="@{/records}" th:object="${record}" method="post" class="vstack gap-4">
+                <div class="card border-0 section-card">
+                    <div class="card-body p-4 p-md-5">
                         <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
                             <div>
-                                <h3 class="todo-title mb-2">雉ｼ蜈･蜀・ｮｹ縺ｨ譛邨ゆｺ域Φ</h3>
-                                <p class="text-secondary mb-0">繧・ｋ縺薙→繧帝・↓蝓九ａ繧九う繝｡繝ｼ繧ｸ縺ｧ縲∬ｿｷ繧上★蜈･蜉帙〒縺阪ｋ ToDo 繝ｪ繧ｹ繝磯｢ｨ縺ｮ隕九◆逶ｮ縺ｧ縺吶・/p>
+                                <h2 class="section-title mb-2">1. 前日予想</h2>
+                                <p class="section-subtitle mb-0">レース前日に、開催時間帯やハンデ、注目選手などの見立てを整理しておくための入力エリアです。</p>
+                            </div>
+                            <div class="text-danger fw-semibold align-self-lg-center">必須項目あり</div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <label for="raceDate" class="form-label fw-semibold">開催日 <span class="text-danger">*</span></label>
+                                <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="venue" class="form-label fw-semibold">レース場 <span class="text-danger">*</span></label>
+                                <select id="venue" th:field="*{venue}" class="form-select form-select-lg" required>
+                                    <option value="">選択してください</option>
+                                    <option value="川口">川口</option>
+                                    <option value="伊勢崎">伊勢崎</option>
+                                    <option value="浜松">浜松</option>
+                                    <option value="飯塚">飯塚</option>
+                                    <option value="山陽">山陽</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="raceNumber" class="form-label fw-semibold">レース番号 <span class="text-danger">*</span></label>
+                                <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg" required>
+                                    <option value="">選択してください</option>
+                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="raceScheduleType" class="form-label fw-semibold">開催時間帯</label>
+                                <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option value="アーリー">アーリー</option>
+                                    <option value="普通開催">普通開催</option>
+                                    <option value="ナイター">ナイター</option>
+                                    <option value="ミッドナイト">ミッドナイト</option>
+                                    <option value="オーバーミッドナイト">オーバーミッドナイト</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="handicapInfo" class="form-label fw-semibold">ハンデ情報</label>
+                                <input type="text" id="handicapInfo" th:field="*{handicapInfo}" class="form-control form-control-lg" placeholder="例: 0m / 10m / 最重ハンデ20m">
                             </div>
                         </div>
 
-                        <div class="vstack gap-3">
-                            <div class="todo-item p-3 p-md-4">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-md-1 col-2 text-center">
-                                        <input class="todo-check" type="checkbox" disabled>
-                                    </div>
-                                    <div class="col-md-3 col-10 todo-label">1. 雉ｭ縺大ｼ上ｒ豎ｺ繧√ｋ</div>
-                                    <div class="col-md-8">
-                                        <select id="betType" th:field="*{betType}" class="form-select form-select-lg">
-                                            <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                            <option value="蜊伜享">蜊伜享</option>
-                                            <option value="隍・享">隍・享</option>
-                                            <option value="繝ｯ繧､繝・>繝ｯ繧､繝・/option>
-                                            <option value="2騾｣蜊・>2騾｣蜊・/option>
-                                            <option value="2騾｣隍・>2騾｣隍・/option>
-                                            <option value="3騾｣蜊・>3騾｣蜊・/option>
-                                            <option value="3騾｣隍・>3騾｣隍・/option>
-                                        </select>
+                        <hr class="my-4">
+
+                        <h3 class="h4 fw-bold mb-3">注目選手</h3>
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <div class="sub-block p-3 p-md-4">
+                                    <h4 class="h5 fw-bold mb-3">注目選手1</h4>
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            <label for="featuredRider1Name" class="form-label fw-semibold">選手名</label>
+                                            <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 青山周平">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="featuredRider1Number" class="form-label fw-semibold">号車</label>
+                                            <input type="number" id="featuredRider1Number" th:field="*{featuredRider1Number}" class="form-control form-control-lg" min="1" max="8" placeholder="1">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="todo-item p-3 p-md-4">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-md-1 col-2 text-center">
-                                        <input class="todo-check" type="checkbox" disabled>
-                                    </div>
-                                    <div class="col-md-3 col-10 todo-label">2. 菴慕せ雋ｷ縺・°豎ｺ繧√ｋ</div>
-                                    <div class="col-md-8">
-                                        <input type="number" id="betCount" th:field="*{betCount}" class="form-control form-control-lg" min="0" placeholder="萓・ 6">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="todo-item p-3 p-md-4">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-md-1 col-2 text-center">
-                                        <input class="todo-check" type="checkbox" disabled>
-                                    </div>
-                                    <div class="col-md-3 col-10 todo-label">3. 1轤ｹ縺ゅ◆繧企≡鬘阪ｒ豎ｺ繧√ｋ</div>
-                                    <div class="col-md-8">
-                                        <input type="number" id="unitBetAmount" th:field="*{unitBetAmount}" class="form-control form-control-lg" min="0" placeholder="萓・ 100">
+                            <div class="col-12">
+                                <div class="sub-block p-3 p-md-4">
+                                    <h4 class="h5 fw-bold mb-3">注目選手2</h4>
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            <label for="featuredRider2Name" class="form-label fw-semibold">選手名</label>
+                                            <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 鈴木圭一郎">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="featuredRider2Number" class="form-label fw-semibold">号車</label>
+                                            <input type="number" id="featuredRider2Number" th:field="*{featuredRider2Number}" class="form-control form-control-lg" min="1" max="8" placeholder="2">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="todo-item p-3 p-md-4">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-md-1 col-2 text-center">
-                                        <input class="todo-check" type="checkbox" disabled>
-                                    </div>
-                                    <div class="col-md-3 col-10 todo-label">4. 雉ｼ蜈･驥鷹｡阪ｒ遒ｺ隱阪☆繧・/div>
-                                    <div class="col-md-8">
-                                        <input type="number" id="purchaseAmount" th:field="*{purchaseAmount}" class="form-control form-control-lg" min="0" placeholder="萓・ 600">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="todo-item p-3 p-md-4">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-md-1 col-2 text-center">
-                                        <input class="todo-check" type="checkbox" disabled>
-                                    </div>
-                                    <div class="col-md-3 col-10 todo-label">5. 譛邨ゆｺ域Φ繧呈嶌縺・/div>
-                                    <div class="col-md-8">
-                                        <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="萓・ 1-3-5 / 5-1-3">
+                            <div class="col-12">
+                                <div class="sub-block p-3 p-md-4">
+                                    <h4 class="h5 fw-bold mb-3">注目選手3</h4>
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            <label for="featuredRider3Name" class="form-label fw-semibold">選手名</label>
+                                            <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 佐藤摩弥">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="featuredRider3Number" class="form-label fw-semibold">号車</label>
+                                            <input type="number" id="featuredRider3Number" th:field="*{featuredRider3Number}" class="form-control form-control-lg" min="1" max="8" placeholder="3">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="todo-item p-3 p-md-4">
-                                <div class="row align-items-start g-3">
-                                    <div class="col-md-1 col-2 text-center pt-2">
-                                        <input class="todo-check" type="checkbox" disabled>
-                                    </div>
-                                    <div class="col-md-3 col-10 todo-label pt-2">6. 莠域Φ霑ｽ蜉繝｡繝｢繧呈ｮ九☆</div>
-                                    <div class="col-md-8">
-                                        <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control form-control-lg" rows="4" placeholder="萓・ 隧ｦ襍ｰ蠕後↓5蜿ｷ霆頑悽蜻ｽ縺ｸ螟画峩縲りｲｷ縺・岼縺ｯ蜀・､悶・邨・∩蜷医ｏ縺帙ｒ荳ｭ蠢・↓隱ｿ謨ｴ縲・></textarea>
-                                    </div>
-                                </div>
+                            <div class="col-12">
+                                <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
+                                <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control form-control-lg" rows="4" placeholder="例: 内枠中心で組み立てたい。スタート力と近況を重視。"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="preRaceNote" class="form-label fw-semibold">補足メモ</label>
+                                <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control form-control-lg" rows="4" placeholder="例: 前日オッズ、気になる選手コメント、走路傾向など。"></textarea>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="section-action-bar">
-                        <div class="d-flex flex-column flex-md-row gap-3">
-                            <button type="button" class="btn btn-primary btn-lg px-4">縺薙・蠖捺律莠域Φ繧剃ｿ晏ｭ・/button>
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4">縺薙・蠖捺律莠域Φ繧堤ｷｨ髮・/button>
-                            <button type="button" class="btn btn-outline-danger btn-lg px-4">縺薙・蠖捺律莠域Φ繧貞炎髯､</button>
-                        </div>
-                        <div class="helper-text mt-2">蠖捺律諠・ｱ縺縺題ｦ狗峩縺励◆縺・→縺阪↓蛻・°繧翫ｄ縺吶＞繧医≧縲∵桃菴懊・繧ｿ繝ｳ繧偵％縺ｮ菴咲ｽｮ縺ｫ縺ｾ縺ｨ繧√※縺・∪縺吶・/div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card border-0 section-card">
-                <div class="card-body p-4 p-md-5">
-                    <div class="section-header">
-                        <h2 class="section-title mb-2">3. 繝ｬ繝ｼ繧ｹ邨先棡繝ｻ豈碑ｼ・・閠・ｯ・/h2>
-                        <p class="section-subtitle mb-0">
-                            繝ｬ繝ｼ繧ｹ蠕後↓邨先棡繧定ｨ倬鹸縺励∽ｺ域Φ縺ｨ縺ｮ蟾ｮ繧・ｬ｡蝗槭↓豢ｻ縺九＠縺溘＞縺薙→繧呈ｮ九☆縺溘ａ縺ｮ繧ｨ繝ｪ繧｢縺ｧ縺吶・                        </p>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <label for="raceResult" class="form-label fw-semibold">繝ｬ繝ｼ繧ｹ邨先棡</label>
-                            <textarea id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg" rows="3" placeholder="萓・ 邨先棡縺ｯ 5-1-3縲ゅせ繧ｿ繝ｼ繝医〒5蜿ｷ霆翫′荳ｻ蟆取ｨｩ繧呈升縺｣縺溘・></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label for="resultComparison" class="form-label fw-semibold">豈碑ｼ・/label>
-                            <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control form-control-lg" rows="3" placeholder="萓・ 譛ｬ蜻ｽ縺ｯ蜷医▲縺ｦ縺・◆縺後・逹隧穂ｾ｡縺後★繧後※縺・◆縲・></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label for="reviewNote" class="form-label fw-semibold">閠・ｯ・/label>
-                            <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control form-control-lg" rows="4" placeholder="萓・ 貉ｿ襍ｰ霍ｯ蟇・ｊ縺ｮ螟牙喧繧偵ｂ縺・ｰ代＠驥阪￥隕九ｋ縺ｹ縺阪□縺｣縺溘・></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label for="note" class="form-label fw-semibold">蛯呵・/label>
-                            <textarea id="note" th:field="*{note}" class="form-control form-control-lg" rows="3" placeholder="萓・ 谺｡蝗槭・隧ｦ襍ｰ繧ｿ繧､繝縺ｨ鬚ｨ蜷代″縺ｮ髢｢菫ゅｂ遒ｺ隱阪☆繧九・></textarea>
-                        </div>
-                    </div>
-
-                    <div class="section-action-bar">
-                        <div class="d-flex flex-column flex-md-row gap-3">
-                            <button type="button" class="btn btn-primary btn-lg px-4">縺薙・邨先棡閠・ｯ溘ｒ菫晏ｭ・/button>
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4">縺薙・邨先棡閠・ｯ溘ｒ邱ｨ髮・/button>
-                            <button type="button" class="btn btn-outline-danger btn-lg px-4">縺薙・邨先棡閠・ｯ溘ｒ蜑企勁</button>
-                        </div>
-                        <div class="helper-text mt-2">繝ｬ繝ｼ繧ｹ蠕後↓隕玖ｿ斐＠縺ｪ縺後ｉ蟆代＠縺壹▽譖ｸ縺崎ｶｳ縺励ｄ縺吶＞繧医≧縺ｫ縺励※縺・∪縺吶・/div>
                     </div>
                 </div>
-            </div>
 
-            <div class="sticky-bottom-actions">
                 <div class="card border-0 section-card">
-                    <div class="card-body p-4">
-                        <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
-                            <div>
-                                <h2 class="h4 fw-bold mb-1">縺ｾ縺ｨ繧∵桃菴・/h2>
-                                <p class="text-secondary mb-0">譛蠕後↓蜈ｨ菴薙ｒ縺ｾ縺ｨ繧√※菫晏ｭ倥＠縺溘＞縺ｨ縺阪・謫堺ｽ懊お繝ｪ繧｢縺ｧ縺吶・/p>
+                    <div class="card-body p-4 p-md-5">
+                        <div class="mb-4">
+                            <h2 class="section-title mb-2">2. 当日予想</h2>
+                            <p class="section-subtitle mb-0">当日の天候や走路コンディション、試走タイム、購入内容を整理して最終予想まで記録できます。</p>
+                        </div>
+
+                        <h3 class="h4 fw-bold mb-3">当日コンディション</h3>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-4">
+                                <label for="weatherCondition" class="form-label fw-semibold">天気</label>
+                                <select id="weatherCondition" th:field="*{weatherCondition}" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option value="晴れ">晴れ</option>
+                                    <option value="曇り">曇り</option>
+                                    <option value="小雨">小雨</option>
+                                    <option value="雨">雨</option>
+                                    <option value="雪">雪</option>
+                                </select>
                             </div>
-                            <div class="d-flex flex-column flex-md-row flex-wrap gap-3">
-                                <button type="submit" class="btn btn-primary btn-lg px-4 py-3">荳諡ｬ菫晏ｭ・/button>
-                                <button type="button" class="btn btn-outline-secondary btn-lg px-4 py-3">荳諡ｬ邱ｨ髮・/button>
-                                <button type="button" class="btn btn-outline-danger btn-lg px-4 py-3">荳諡ｬ蜑企勁</button>
-                                <a th:href="@{/records}" class="btn btn-outline-dark btn-lg px-4 py-3">荳隕ｧ縺ｸ謌ｻ繧・/a>
+                            <div class="col-md-4">
+                                <label for="temperature" class="form-label fw-semibold">気温</label>
+                                <div class="input-group input-group-lg unit-input">
+                                    <input type="number" id="temperature" th:field="*{temperature}" class="form-control" step="0.1" placeholder="例: 20">
+                                    <span class="input-group-text">℃</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="humidity" class="form-label fw-semibold">湿度</label>
+                                <div class="input-group input-group-lg unit-input">
+                                    <input type="number" id="humidity" th:field="*{humidity}" class="form-control" step="1" placeholder="例: 60">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="windSpeed" class="form-label fw-semibold">風速</label>
+                                <div class="input-group input-group-lg unit-input">
+                                    <input type="number" id="windSpeed" th:field="*{windSpeed}" class="form-control" step="0.1" placeholder="例: 3">
+                                    <span class="input-group-text">m/s</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="trackTemperature" class="form-label fw-semibold">走路温度</label>
+                                <div class="input-group input-group-lg unit-input">
+                                    <input type="number" id="trackTemperature" th:field="*{trackTemperature}" class="form-control" step="0.1" placeholder="例: 26">
+                                    <span class="input-group-text">℃</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="trackCondition" class="form-label fw-semibold">走路状況</label>
+                                <input type="text" id="trackCondition" th:field="*{trackCondition}" class="form-control form-control-lg" placeholder="例: 良走路 / 湿走路">
+                            </div>
+                        </div>
+
+                        <h3 class="h4 fw-bold mb-3">全車試走タイム</h3>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-3 col-sm-6"><label for="trialTime1" class="form-label fw-semibold">1号車</label><input type="text" id="trialTime1" th:field="*{trialTime1}" class="form-control form-control-lg" placeholder="3.34"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime2" class="form-label fw-semibold">2号車</label><input type="text" id="trialTime2" th:field="*{trialTime2}" class="form-control form-control-lg" placeholder="3.36"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime3" class="form-label fw-semibold">3号車</label><input type="text" id="trialTime3" th:field="*{trialTime3}" class="form-control form-control-lg" placeholder="3.35"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime4" class="form-label fw-semibold">4号車</label><input type="text" id="trialTime4" th:field="*{trialTime4}" class="form-control form-control-lg" placeholder="3.37"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime5" class="form-label fw-semibold">5号車</label><input type="text" id="trialTime5" th:field="*{trialTime5}" class="form-control form-control-lg" placeholder="3.33"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime6" class="form-label fw-semibold">6号車</label><input type="text" id="trialTime6" th:field="*{trialTime6}" class="form-control form-control-lg" placeholder="3.39"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime7" class="form-label fw-semibold">7号車</label><input type="text" id="trialTime7" th:field="*{trialTime7}" class="form-control form-control-lg" placeholder="3.40"></div>
+                            <div class="col-md-3 col-sm-6"><label for="trialTime8" class="form-label fw-semibold">8号車</label><input type="text" id="trialTime8" th:field="*{trialTime8}" class="form-control form-control-lg" placeholder="3.38"></div>
+                        </div>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-12">
+                                <label for="featuredTrialTimeNote" class="form-label fw-semibold">気になる選手の試走タイムメモ</label>
+                                <textarea id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" rows="3" placeholder="例: 5号車の試走タイムが良く、上積みがありそう。"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="raceOverallNote" class="form-label fw-semibold">レース全体メモ</label>
+                                <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control form-control-lg" rows="3" placeholder="例: 外枠勢の進み方次第で展開が変わりそう。"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+                                <div>
+                                    <h3 class="todo-title mb-2">購入内容と最終予想</h3>
+                                    <p class="text-secondary mb-0">やることを順番に埋めていける ToDo リスト風の入力エリアです。</p>
+                                </div>
+                            </div>
+
+                            <div class="vstack gap-3">
+                                <div class="todo-item p-3 p-md-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
+                                        <div class="col-md-3 col-10 todo-label">1. 賭け式を決める</div>
+                                        <div class="col-md-8">
+                                            <select id="betType" th:field="*{betType}" class="form-select form-select-lg">
+                                                <option value="">選択してください</option>
+                                                <option value="単勝">単勝</option>
+                                                <option value="複勝">複勝</option>
+                                                <option value="ワイド">ワイド</option>
+                                                <option value="2連単">2連単</option>
+                                                <option value="2連複">2連複</option>
+                                                <option value="3連単">3連単</option>
+                                                <option value="3連複">3連複</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="todo-item p-3 p-md-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
+                                        <div class="col-md-3 col-10 todo-label">2. 買い目数を決める</div>
+                                        <div class="col-md-8">
+                                            <input type="number" id="betCount" th:field="*{betCount}" class="form-control form-control-lg" min="0" placeholder="例: 6">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="todo-item p-3 p-md-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
+                                        <div class="col-md-3 col-10 todo-label">3. 1点あたり金額を決める</div>
+                                        <div class="col-md-8">
+                                            <input type="number" id="unitBetAmount" th:field="*{unitBetAmount}" class="form-control form-control-lg" min="0" placeholder="例: 100">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="todo-item p-3 p-md-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
+                                        <div class="col-md-3 col-10 todo-label">4. 購入金額を確認する</div>
+                                        <div class="col-md-8">
+                                            <input type="number" id="purchaseAmount" th:field="*{purchaseAmount}" class="form-control form-control-lg" min="0" placeholder="例: 600">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="todo-item p-3 p-md-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
+                                        <div class="col-md-3 col-10 todo-label">5. 最終予想を書く</div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 1-3-5 / 5-1-3">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="todo-item p-3 p-md-4">
+                                    <div class="row align-items-start g-3">
+                                        <div class="col-md-1 col-2 text-center pt-2"><input class="todo-check" type="checkbox" disabled></div>
+                                        <div class="col-md-3 col-10 todo-label pt-2">6. 予想追加メモを残す</div>
+                                        <div class="col-md-8">
+                                            <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control form-control-lg" rows="4" placeholder="例: 試走後に5号車本命へ変更。迷いがあった点も含めて記録する。"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </main>
-    <div th:replace="~{layout/footer :: siteFooter}"></div>
-    <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
+
+                <div class="card border-0 section-card">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="mb-4">
+                            <h2 class="section-title mb-2">3. スタート展開図</h2>
+                            <p class="section-subtitle mb-0">スタート直後の並びや気になる位置取りを、丸を動かしながら視覚的にメモできるデモ用UIです。</p>
+                        </div>
+
+                        <div class="start-diagram-shell p-3 p-md-4">
+                            <div class="start-diagram-toolbar mb-3">
+                                <div>
+                                    <div class="fw-bold">固定スタート図面プレースホルダー</div>
+                                    <div class="start-diagram-note">PCではマウス、スマホではスライド操作を想定した構造です。将来的にこのエリア全体を画像化しやすいよう、ひとつのステージにまとめています。</div>
+                                </div>
+                                <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
+                            </div>
+
+                            <div id="startDiagramStage" class="start-diagram-stage">
+                                <div id="startDiagramBoard" class="start-diagram-board" aria-label="スタート展開図">
+                                    <span class="start-guide-line line-1" aria-hidden="true"></span>
+                                    <span class="start-guide-line line-2" aria-hidden="true"></span>
+                                    <span class="start-guide-line line-3" aria-hidden="true"></span>
+                                    <span class="start-guide-line line-4" aria-hidden="true"></span>
+
+                                    <button type="button" class="start-token token-1" data-token="1" data-default-x="16" data-default-y="66" aria-label="1 白">1</button>
+                                    <button type="button" class="start-token token-2" data-token="2" data-default-x="25" data-default-y="60" aria-label="2 黒">2</button>
+                                    <button type="button" class="start-token token-3" data-token="3" data-default-x="34" data-default-y="54" aria-label="3 赤">3</button>
+                                    <button type="button" class="start-token token-4" data-token="4" data-default-x="43" data-default-y="48" aria-label="4 青">4</button>
+                                    <button type="button" class="start-token token-5" data-token="5" data-default-x="56" data-default-y="43" aria-label="5 黄">5</button>
+                                    <button type="button" class="start-token token-6" data-token="6" data-default-x="67" data-default-y="38" aria-label="6 緑">6</button>
+                                    <button type="button" class="start-token token-7" data-token="7" data-default-x="78" data-default-y="34" aria-label="7 オレンジ">7</button>
+                                    <button type="button" class="start-token token-8" data-token="8" data-default-x="88" data-default-y="30" aria-label="8 ピンク">8</button>
+                                </div>
+                            </div>
+
+                            <div class="start-token-legend mt-3">
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-1"></span><span>1 白</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-2"></span><span>2 黒</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-3"></span><span>3 赤</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-4"></span><span>4 青</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-5"></span><span>5 黄</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-6"></span><span>6 緑</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-7"></span><span>7 オレンジ</span></div>
+                                <div class="start-token-chip"><span class="start-token-chip-dot token-8"></span><span>8 ピンク</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 section-card">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="mb-4">
+                            <h2 class="section-title mb-2">4. レース結果・比較・考察</h2>
+                            <p class="section-subtitle mb-0">レース後に結果を記録し、予想との差や次回に活かしたい点を残すエリアです。</p>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label for="raceResult" class="form-label fw-semibold">レース結果</label>
+                                <textarea id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg" rows="3" placeholder="例: 結果は 5-1-3。スタートで5号車が主導権。"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="resultComparison" class="form-label fw-semibold">比較</label>
+                                <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control form-control-lg" rows="3" placeholder="例: 本命は合っていたが、2着評価がずれていた。"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="reviewNote" class="form-label fw-semibold">考察</label>
+                                <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control form-control-lg" rows="4" placeholder="例: 走路変化をもう少し重く見るべきだった。"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="note" class="form-label fw-semibold">備考</label>
+                                <textarea id="note" th:field="*{note}" class="form-control form-control-lg" rows="3" placeholder="例: 次回は風向きと試走の関係も確認したい。"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sticky-bottom-actions">
+                    <div class="card border-0 section-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
+                                <div>
+                                    <h2 class="h4 fw-bold mb-1">まとめて保存</h2>
+                                    <p class="text-secondary mb-0">最後に内容を確認して、そのまま登録できます。</p>
+                                </div>
+                                <div class="d-flex flex-column flex-md-row flex-wrap gap-3">
+                                    <button type="submit" class="btn btn-primary btn-lg px-4 py-3">登録する</button>
+                                    <a th:href="@{/records}" class="btn btn-outline-dark btn-lg px-4 py-3">一覧へ戻る</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <div th:replace="~{layout/footer :: siteFooter}"></div>
+        <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+    <script>
+        function clampStartTokenValue(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+        }
+
+        function setStartTokenPosition(token, xPercent, yPercent) {
+            token.dataset.x = xPercent.toFixed(2);
+            token.dataset.y = yPercent.toFixed(2);
+            token.style.left = xPercent + "%";
+            token.style.top = yPercent + "%";
+        }
+
+        function resetStartDiagramTokens() {
+            document.querySelectorAll(".start-token").forEach(function (token) {
+                const defaultX = Number(token.dataset.defaultX);
+                const defaultY = Number(token.dataset.defaultY);
+                setStartTokenPosition(token, defaultX, defaultY);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const board = document.getElementById("startDiagramBoard");
+            const resetButton = document.getElementById("resetStartDiagram");
+
+            if (!board) {
+                return;
+            }
+
+            let activeToken = null;
+            let activePointerId = null;
+
+            resetStartDiagramTokens();
+
+            function moveActiveToken(clientX, clientY) {
+                if (!activeToken) {
+                    return;
+                }
+
+                const rect = board.getBoundingClientRect();
+                const tokenHalfWidth = activeToken.offsetWidth / 2;
+                const tokenHalfHeight = activeToken.offsetHeight / 2;
+                const rawX = clientX - rect.left;
+                const rawY = clientY - rect.top;
+                const clampedX = clampStartTokenValue(rawX, tokenHalfWidth, rect.width - tokenHalfWidth);
+                const clampedY = clampStartTokenValue(rawY, tokenHalfHeight, rect.height - tokenHalfHeight);
+                const xPercent = (clampedX / rect.width) * 100;
+                const yPercent = (clampedY / rect.height) * 100;
+
+                setStartTokenPosition(activeToken, xPercent, yPercent);
+            }
+
+            document.querySelectorAll(".start-token").forEach(function (token) {
+                token.addEventListener("pointerdown", function (event) {
+                    activeToken = token;
+                    activePointerId = event.pointerId;
+                    token.classList.add("is-dragging");
+                    token.setPointerCapture(event.pointerId);
+                    moveActiveToken(event.clientX, event.clientY);
+                });
+
+                token.addEventListener("pointermove", function (event) {
+                    if (activeToken !== token || activePointerId !== event.pointerId) {
+                        return;
+                    }
+                    moveActiveToken(event.clientX, event.clientY);
+                });
+
+                function finishDrag(event) {
+                    if (activeToken !== token || activePointerId !== event.pointerId) {
+                        return;
+                    }
+                    token.classList.remove("is-dragging");
+                    activeToken = null;
+                    activePointerId = null;
+                }
+
+                token.addEventListener("pointerup", finishDrag);
+                token.addEventListener("pointercancel", finishDrag);
+            });
+
+            if (resetButton) {
+                resetButton.addEventListener("click", function () {
+                    resetStartDiagramTokens();
+                });
+            }
+        });
+    </script>
 </body>
 </html>
-

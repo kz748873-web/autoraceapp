@@ -1,4 +1,4 @@
-<th:block xmlns:th="http://www.thymeleaf.org">
+﻿<th:block xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="commonHead(pageTitle)">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,19 +11,23 @@
         <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
         <style>
             :root {
-                --page-bg: #eaf2fb;
-                --page-bg-top: #f3f8fe;
-                --card: #c7d8ec;
+                --page-bg: #eef4fb;
+                --page-bg-top: #f7fafe;
+                --card: #c5d6ea;
                 --main: #17304f;
-                --sub: #586f86;
-                --brand: #c8defc;
-                --brand-strong: #aecdff;
-                --deep: #163b67;
+                --sub: #5c7188;
+                --brand: #bfd8fb;
+                --brand-strong: #98bee9;
+                --deep: #1d4d82;
                 --surface: #ffffff;
-                --soft-surface: #f4f8fd;
-                --section-badge-bg: #deebfb;
+                --soft-surface: #f5f9fe;
+                --section-badge-bg: #e2edf9;
                 --theme-text: #17304f;
-                --btn-on-brand: #122e4b;
+                --btn-on-brand: #123253;
+                --header-surface: rgba(255, 255, 255, 0.96);
+                --hero-panel-bg: rgba(255, 255, 255, 0.78);
+                --hero-panel-text: #18324f;
+                --hero-panel-border: rgba(255, 255, 255, 0.75);
             }
 
             body {
@@ -41,7 +45,24 @@
                 background: var(--surface);
                 border: 1px solid var(--card);
                 border-radius: 1.35rem;
-                box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.1);
+                box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
+            }
+
+            .page-card,
+            .section-card {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .page-card::before,
+            .section-card::before {
+                content: "";
+                position: absolute;
+                inset: 0 auto auto 0;
+                width: 100%;
+                height: 0.28rem;
+                background: linear-gradient(90deg, var(--brand-strong), rgba(255, 255, 255, 0));
+                pointer-events: none;
             }
 
             .section-badge {
@@ -52,6 +73,7 @@
                 font-size: 0.9rem;
                 background: var(--section-badge-bg);
                 color: var(--deep);
+                border: 1px solid color-mix(in srgb, var(--brand-strong) 55%, white);
             }
 
             .section-title {
@@ -64,16 +86,21 @@
                 line-height: 1.7;
             }
 
+            .site-header {
+                background: var(--header-surface) !important;
+                backdrop-filter: blur(10px);
+            }
+
             .btn-primary {
-                background-color: var(--brand) !important;
+                background-color: var(--brand-strong) !important;
                 border-color: var(--brand-strong) !important;
                 color: var(--btn-on-brand) !important;
             }
 
             .btn-primary:hover,
             .btn-primary:focus {
-                background-color: var(--brand-strong) !important;
-                border-color: var(--brand-strong) !important;
+                background-color: color-mix(in srgb, var(--brand-strong) 88%, black) !important;
+                border-color: color-mix(in srgb, var(--brand-strong) 82%, black) !important;
                 color: var(--btn-on-brand) !important;
             }
 
@@ -85,9 +112,22 @@
 
             .btn-outline-primary:hover,
             .btn-outline-primary:focus {
-                background-color: var(--brand) !important;
+                background-color: var(--soft-surface) !important;
                 border-color: var(--brand-strong) !important;
                 color: var(--theme-text) !important;
+            }
+
+            .btn-outline-secondary {
+                color: var(--theme-text) !important;
+                border-color: color-mix(in srgb, var(--card) 75%, var(--brand-strong)) !important;
+                background: #ffffff !important;
+            }
+
+            .btn-outline-secondary:hover,
+            .btn-outline-secondary:focus {
+                color: var(--theme-text) !important;
+                border-color: var(--brand-strong) !important;
+                background: var(--soft-surface) !important;
             }
 
             .text-primary {
@@ -98,12 +138,13 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: flex-end;
-                gap: 0.35rem;
+                gap: 0.45rem;
                 flex-wrap: nowrap;
-                padding: 0.2rem 0.35rem;
-                border: 1px solid var(--card);
+                padding: 0.18rem 0.45rem;
+                border: 1px solid color-mix(in srgb, var(--card) 72%, white);
                 border-radius: 999px;
                 background: rgba(255, 255, 255, 0.92);
+                box-shadow: 0 0.35rem 0.8rem rgba(18, 61, 106, 0.06);
             }
 
             .app-theme-label {
@@ -114,27 +155,18 @@
             }
 
             .app-theme-select {
-                width: 118px;
-                min-width: 118px;
+                width: 132px;
+                min-width: 132px;
                 border-radius: 999px;
-                border-color: var(--card);
+                border-color: color-mix(in srgb, var(--card) 70%, var(--brand-strong));
                 font-size: 0.82rem;
                 line-height: 1.2;
-                padding-top: 0.2rem;
-                padding-bottom: 0.2rem;
+                padding-top: 0.22rem;
+                padding-bottom: 0.22rem;
                 padding-left: 0.55rem;
                 background-color: #ffffff;
                 box-shadow: none;
-            }
-
-            .app-theme-dot {
-                width: 0.72rem;
-                height: 0.72rem;
-                border-radius: 999px;
-                border: 1px solid #ffffff;
-                box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
-                background: var(--brand);
-                flex: 0 0 auto;
+                color: var(--theme-text);
             }
 
             .app-footer-note {
@@ -146,31 +178,54 @@
                 .site-header-actions {
                     width: 100%;
                     align-items: stretch !important;
+                    gap: 0.75rem !important;
+                }
+
+                .site-header-actions > .d-flex {
+                    width: 100%;
+                    justify-content: space-between !important;
+                    align-items: flex-start !important;
                 }
 
                 .site-header-nav {
                     width: 100%;
                     justify-content: flex-start !important;
+                    row-gap: 0.7rem !important;
                 }
 
                 .site-header-nav .btn {
                     flex: 1 1 calc(50% - 0.5rem);
                     min-width: 0;
+                    min-height: 3.1rem;
                 }
 
                 .app-theme-toolbar {
-                    justify-content: flex-start;
+                    justify-content: flex-end;
+                    align-self: flex-end;
+                    margin-left: auto;
+                    width: auto;
+                    max-width: 100%;
                 }
             }
 
             @media (max-width: 575.98px) {
+                .site-header-nav {
+                    gap: 0.6rem !important;
+                }
+
                 .site-header-nav .btn {
-                    padding: 0.7rem 0.8rem;
-                    font-size: 0.98rem;
+                    flex: 1 1 calc(50% - 0.35rem);
+                    padding: 0.8rem 0.7rem;
+                    font-size: 0.96rem;
+                }
+
+                .app-theme-toolbar {
+                    padding: 0.18rem 0.35rem;
                 }
 
                 .app-theme-select {
-                    width: 118px;
+                    width: 124px;
+                    min-width: 124px;
                 }
             }
         </style>
@@ -186,81 +241,81 @@
                 default: {
                     label: "デフォルト",
                     vars: {
-                        "--page-bg": "#eaf2fb",
-                        "--page-bg-top": "#f3f8fe",
-                        "--card": "#c7d8ec",
-                        "--brand": "#c8defc",
-                        "--brand-strong": "#aecdff",
-                        "--deep": "#163b67",
+                        "--page-bg": "#eef4fb",
+                        "--page-bg-top": "#f7fafe",
+                        "--card": "#c5d6ea",
+                        "--brand": "#bfd8fb",
+                        "--brand-strong": "#98bee9",
+                        "--deep": "#1d4d82",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#f4f8fd",
-                        "--section-badge-bg": "#deebfb",
+                        "--soft-surface": "#f5f9fe",
+                        "--section-badge-bg": "#e2edf9",
                         "--theme-text": "#17304f",
-                        "--btn-on-brand": "#122e4b"
+                        "--btn-on-brand": "#123253"
                     }
                 },
                 white: {
                     label: "1 白",
                     vars: {
-                        "--page-bg": "#f6f6f6",
+                        "--page-bg": "#f7f7f6",
                         "--page-bg-top": "#ffffff",
-                        "--card": "#d8d8d8",
-                        "--brand": "#eeeeee",
-                        "--brand-strong": "#dddddd",
-                        "--deep": "#45505c",
+                        "--card": "#d7d7d2",
+                        "--brand": "#eeeeea",
+                        "--brand-strong": "#d8d8d2",
+                        "--deep": "#4c545d",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#fbfbfb",
-                        "--section-badge-bg": "#efefef",
-                        "--theme-text": "#243240",
-                        "--btn-on-brand": "#243240"
+                        "--soft-surface": "#fbfbf9",
+                        "--section-badge-bg": "#f0f0ec",
+                        "--theme-text": "#27313b",
+                        "--btn-on-brand": "#27313b"
                     }
                 },
                 black: {
                     label: "2 黒",
                     vars: {
-                        "--page-bg": "#e9edf2",
-                        "--page-bg-top": "#f5f8fb",
-                        "--card": "#ccd4dc",
-                        "--brand": "#d7dde4",
-                        "--brand-strong": "#c2cad3",
-                        "--deep": "#2d3640",
+                        "--page-bg": "#edf0f4",
+                        "--page-bg-top": "#f8f9fb",
+                        "--card": "#bec7d2",
+                        "--brand": "#4c5866",
+                        "--brand-strong": "#36414d",
+                        "--deep": "#2e3844",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#f6f8fa",
-                        "--section-badge-bg": "#e4e9ee",
-                        "--theme-text": "#1f2d3d",
-                        "--btn-on-brand": "#1f2d3d"
+                        "--soft-surface": "#f5f7f9",
+                        "--section-badge-bg": "#dde4ea",
+                        "--theme-text": "#1e2730",
+                        "--btn-on-brand": "#ffffff"
                     }
                 },
                 red: {
                     label: "3 赤",
                     vars: {
-                        "--page-bg": "#fcedf0",
-                        "--page-bg-top": "#fff7f8",
-                        "--card": "#e9c2ca",
-                        "--brand": "#f5c2c7",
-                        "--brand-strong": "#eb9daa",
-                        "--deep": "#8b2238",
+                        "--page-bg": "#fdf1f2",
+                        "--page-bg-top": "#fff8f8",
+                        "--card": "#e5c3cb",
+                        "--brand": "#f0b8c2",
+                        "--brand-strong": "#c95a72",
+                        "--deep": "#8d233c",
                         "--surface": "#ffffff",
                         "--soft-surface": "#fff5f6",
-                        "--section-badge-bg": "#f8dce2",
-                        "--theme-text": "#6a1730",
-                        "--btn-on-brand": "#6a1730"
+                        "--section-badge-bg": "#f9dde3",
+                        "--theme-text": "#5f1d2b",
+                        "--btn-on-brand": "#ffffff"
                     }
                 },
                 blue: {
                     label: "4 青",
                     vars: {
-                        "--page-bg": "#edf5ff",
+                        "--page-bg": "#eef5ff",
                         "--page-bg-top": "#f8fbff",
-                        "--card": "#c7dbf4",
-                        "--brand": "#cfe3ff",
-                        "--brand-strong": "#aacdfb",
-                        "--deep": "#204d80",
+                        "--card": "#c4d9f1",
+                        "--brand": "#c1ddff",
+                        "--brand-strong": "#5b97d6",
+                        "--deep": "#21558b",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#f6faff",
-                        "--section-badge-bg": "#dfecff",
-                        "--theme-text": "#183a5a",
-                        "--btn-on-brand": "#183a5a"
+                        "--soft-surface": "#f5f9ff",
+                        "--section-badge-bg": "#dfebfa",
+                        "--theme-text": "#173a5a",
+                        "--btn-on-brand": "#ffffff"
                     }
                 },
                 yellow: {
@@ -268,63 +323,63 @@
                     vars: {
                         "--page-bg": "#fffcef",
                         "--page-bg-top": "#fffef8",
-                        "--card": "#e8d9a2",
-                        "--brand": "#ffe9a8",
-                        "--brand-strong": "#f8d978",
-                        "--deep": "#756000",
+                        "--card": "#ead89a",
+                        "--brand": "#ffe28b",
+                        "--brand-strong": "#d4ad2d",
+                        "--deep": "#7a5f00",
                         "--surface": "#ffffff",
                         "--soft-surface": "#fffdf4",
-                        "--section-badge-bg": "#fff1bf",
-                        "--theme-text": "#5e4d00",
-                        "--btn-on-brand": "#5e4d00"
+                        "--section-badge-bg": "#fff0bd",
+                        "--theme-text": "#5a4900",
+                        "--btn-on-brand": "#3f3200"
                     }
                 },
                 green: {
                     label: "6 緑",
                     vars: {
-                        "--page-bg": "#eef8f1",
-                        "--page-bg-top": "#f8fdf9",
-                        "--card": "#c8dfcf",
-                        "--brand": "#c6e5d0",
-                        "--brand-strong": "#9ed0af",
-                        "--deep": "#2d6f49",
+                        "--page-bg": "#eef8f2",
+                        "--page-bg-top": "#f8fcf9",
+                        "--card": "#c4dfcd",
+                        "--brand": "#b9e1c5",
+                        "--brand-strong": "#4d9a67",
+                        "--deep": "#2b6d46",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#f5fbf7",
-                        "--section-badge-bg": "#ddefe3",
-                        "--theme-text": "#1f5d36",
-                        "--btn-on-brand": "#1f5d36"
+                        "--soft-surface": "#f4faf6",
+                        "--section-badge-bg": "#daeee1",
+                        "--theme-text": "#1f5634",
+                        "--btn-on-brand": "#ffffff"
                     }
                 },
                 orange: {
                     label: "7 オレンジ",
                     vars: {
-                        "--page-bg": "#fff4ea",
+                        "--page-bg": "#fff5ec",
                         "--page-bg-top": "#fffaf5",
-                        "--card": "#e8cfbd",
-                        "--brand": "#ffd9ba",
-                        "--brand-strong": "#f5bb85",
-                        "--deep": "#965522",
+                        "--card": "#e8cfbf",
+                        "--brand": "#ffd0a8",
+                        "--brand-strong": "#d88949",
+                        "--deep": "#8f5728",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#fff8f1",
-                        "--section-badge-bg": "#fee7d4",
-                        "--theme-text": "#72411b",
-                        "--btn-on-brand": "#72411b"
+                        "--soft-surface": "#fff8f2",
+                        "--section-badge-bg": "#fee7d6",
+                        "--theme-text": "#6a3d19",
+                        "--btn-on-brand": "#ffffff"
                     }
                 },
                 pink: {
                     label: "8 ピンク",
                     vars: {
-                        "--page-bg": "#fdf2f8",
-                        "--page-bg-top": "#fff8fc",
-                        "--card": "#ebd1df",
-                        "--brand": "#f7d6e7",
-                        "--brand-strong": "#efbad7",
-                        "--deep": "#9a4f79",
+                        "--page-bg": "#fdf4f9",
+                        "--page-bg-top": "#fff9fc",
+                        "--card": "#ead2df",
+                        "--brand": "#f6d0e4",
+                        "--brand-strong": "#c86aa0",
+                        "--deep": "#93466f",
                         "--surface": "#ffffff",
-                        "--soft-surface": "#fff6fb",
-                        "--section-badge-bg": "#f9e3ef",
-                        "--theme-text": "#7c3158",
-                        "--btn-on-brand": "#7c3158"
+                        "--soft-surface": "#fff7fb",
+                        "--section-badge-bg": "#f8e3ee",
+                        "--theme-text": "#6e2f51",
+                        "--btn-on-brand": "#ffffff"
                     }
                 }
             };
@@ -336,11 +391,6 @@
                 Object.entries(selectedTheme.vars).forEach(function ([cssVar, value]) {
                     root.style.setProperty(cssVar, value);
                 });
-
-                const themeDot = document.getElementById("appThemeDot");
-                if (themeDot) {
-                    themeDot.title = selectedTheme.label;
-                }
             }
 
             document.addEventListener("DOMContentLoaded", function () {
@@ -363,3 +413,4 @@
         </script>
     </th:block>
 </th:block>
+
