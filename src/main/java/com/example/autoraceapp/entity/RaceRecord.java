@@ -1,16 +1,10 @@
-package com.example.autoraceapp.entity;
+﻿package com.example.autoraceapp.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-/**
- * 1レース分の記録を保持する Entity です。
- *
- * 既存の一覧・登録・詳細の流れを崩さずに、
- * 1件のレース記録に対して情報を追加する形で拡張しています。
- */
 @Entity
 public class RaceRecord {
 
@@ -18,22 +12,11 @@ public class RaceRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 基本情報
     private String raceDate;
     private String venue;
     private Integer raceNumber;
 
-    // 前日予想
-    /**
-     * 開催時間帯です。
-     * 例: アーリー / 通常 / ナイター / ミッドナイト / オーバーミッドナイト
-     */
     private String raceScheduleType;
-
-    /**
-     * ハンデ情報です。
-     * 数値だけでも、補足込みのテキストでも入力できるように文字列で持ちます。
-     */
     private String handicapInfo;
 
     private String featuredRider1Name;
@@ -51,7 +34,6 @@ public class RaceRecord {
     private String preRacePrediction;
     private String preRaceNote;
 
-    // 当日予想
     private String weatherCondition;
     private String temperature;
     private String humidity;
@@ -59,7 +41,6 @@ public class RaceRecord {
     private String trackTemperature;
     private String trackCondition;
 
-    // 全車試走タイム
     private String trialTime1;
     private String trialTime2;
     private String trialTime3;
@@ -79,12 +60,10 @@ public class RaceRecord {
     private Integer unitBetAmount;
     private Integer totalBetAmount;
 
-    // レース結果・比較・考察
     private String raceResult;
     private String resultComparison;
     private String reviewNote;
 
-    // 既存互換用
     private String featuredRider;
     private String note;
 

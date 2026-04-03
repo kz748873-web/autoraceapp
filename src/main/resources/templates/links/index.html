@@ -10,9 +10,15 @@
             background: #ffffff;
         }
 
+        .section-note {
+            color: var(--sub);
+            line-height: 1.75;
+        }
+
         .official-link-card,
         .venue-select-btn,
-        .social-link-btn {
+        .social-link-btn,
+        .top-link-btn {
             border-radius: 1rem;
             font-weight: 700;
         }
@@ -27,6 +33,7 @@
             background: #ffffff;
             color: var(--deep);
             text-decoration: none;
+            min-height: 4.25rem;
         }
 
         .official-link-card:hover {
@@ -50,9 +57,33 @@
             color: var(--sub);
         }
 
+        .venue-select-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
         .venue-select-btn {
-            padding: 0.95rem 1rem;
+            padding: 1rem 1rem;
             font-size: 1.02rem;
+            text-align: left;
+            min-height: 3.6rem;
+        }
+
+        .venue-summary-card {
+            border: 1px solid var(--card);
+            border-radius: 1.1rem;
+            background: var(--soft-surface);
+        }
+
+        .top-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            min-height: 3.6rem;
+            padding: 1rem 1.1rem;
+            text-decoration: none;
         }
 
         .social-link-btn {
@@ -62,14 +93,15 @@
             gap: 0.55rem;
             padding: 1rem 1.1rem;
             font-size: 1rem;
+            min-height: 4rem;
         }
 
         .social-logo {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 1.8rem;
-            height: 1.8rem;
+            width: 1.9rem;
+            height: 1.9rem;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.18);
             font-size: 0.88rem;
@@ -120,6 +152,20 @@
             font-size: 0.9rem;
             font-weight: 700;
         }
+
+        .detail-tile {
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            background: #ffffff;
+        }
+
+        @media (max-width: 991.98px) {
+            .social-link-btn,
+            .top-link-btn,
+            .venue-select-btn {
+                min-height: 3.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -129,7 +175,7 @@
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                 <div>
                     <h1 class="h2 fw-bold mb-2">外部リンク一覧</h1>
-                    <p class="text-secondary mb-0">公式2件と、選択したレース場のSNS・動画リンクを見やすく整理しています。</p>
+                    <p class="text-secondary mb-0">公式関連とレース場カテゴリを分けて、目的のリンクへ移動しやすく整理しています。</p>
                 </div>
                 <div class="d-flex flex-column flex-sm-row gap-2">
                     <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">TOPへ戻る</a>
@@ -141,8 +187,9 @@
                 <div class="col-lg-4">
                     <div class="vstack gap-4">
                         <section class="page-card p-4">
-                            <h2 class="h4 fw-bold mb-3">公式関連</h2>
-                            <p class="text-secondary mb-3">AutoRace.jp と 公式FANCLUB だけを分かりやすく並べています。</p>
+                            <span class="mini-badge mb-2">公式関連</span>
+                            <h2 class="h4 fw-bold mb-2">公式サイトと FANCLUB</h2>
+                            <p class="section-note mb-3">AutoRace.jp と 公式FANCLUB だけを分かりやすく並べています。</p>
                             <div class="vstack gap-3">
                                 <a th:each="link : ${officialRelatedLinks}" th:href="${link.url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
                                     <span class="official-link-text">
@@ -155,10 +202,11 @@
                         </section>
 
                         <section class="page-card p-4">
-                            <h2 class="h4 fw-bold mb-3">レース場</h2>
-                            <p class="text-secondary mb-3">会場を選ぶと、右側にその会場の公式サイト、YouTube、Instagram、Facebook を表示します。</p>
-                            <div class="vstack gap-2">
-                                <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn text-start">川口</a>
+                            <span class="mini-badge mb-2">レース場カテゴリ</span>
+                            <h2 class="h4 fw-bold mb-2">会場を選んで確認</h2>
+                            <p class="section-note mb-3">川口、伊勢崎、浜松、飯塚、山陽から選ぶと、右側にその会場の公式サイトと SNS を表示します。</p>
+                            <div class="venue-select-grid">
+                                <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn">川口</a>
                             </div>
                         </section>
                     </div>
@@ -172,6 +220,11 @@
                                 <div class="fs-2 fw-bold" th:text="${selectedVenue}">川口</div>
                             </div>
                             <a th:href="@{/(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg">TOPでも見る</a>
+                        </div>
+
+                        <div class="venue-summary-card p-4 mb-4">
+                            <h3 class="h5 fw-bold mb-2">右側の表示内容</h3>
+                            <p class="section-note mb-0">選択したレース場の公式サイト、YouTube、Instagram、Facebook をまとめて表示しています。X は使わず、この4種類に整理しています。</p>
                         </div>
 
                         <div class="row g-3 mb-4">
@@ -203,16 +256,21 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <div class="border rounded-4 p-3 bg-light h-100">
+                                <div class="detail-tile p-4 h-100">
                                     <div class="fw-semibold mb-2">会場公式サイト</div>
                                     <div class="text-secondary" th:text="${selectedVenueLinks['officialSite'] != null ? selectedVenueLinks['officialSite'].note : 'リンク準備中です。'}">会場の案内文</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="border rounded-4 p-3 bg-light h-100">
+                                <div class="detail-tile p-4 h-100">
                                     <div class="fw-semibold mb-2">SNS・動画案内</div>
-                                    <div class="text-secondary">YouTube、Instagram、Facebook を会場ごとにまとめています。今後リンクを追加するときも同じ並びで増やせます。</div>
+                                    <div class="text-secondary">YouTube、Instagram、Facebook を会場ごとにまとめています。今後リンクを追加するときも同じ並びのまま増やせます。</div>
                                 </div>
+                            </div>
+                            <div class="col-12">
+                                <a th:href="@{/(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg top-link-btn">
+                                    <span>TOPページの外部リンク導線へ戻る</span>
+                                </a>
                             </div>
                         </div>
                     </section>

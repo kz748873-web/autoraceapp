@@ -1,4 +1,4 @@
-package com.example.autoraceapp.service;
+﻿package com.example.autoraceapp.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,7 @@ import com.example.autoraceapp.entity.RaceRecord;
 import com.example.autoraceapp.repository.RaceRecordRepository;
 
 /**
- * レース記録の取得・保存・検索を担当するサービスです。
- */
+ * 繝ｬ繝ｼ繧ｹ險倬鹸縺ｮ蜿門ｾ励・菫晏ｭ倥・讀懃ｴ｢繧呈球蠖薙☆繧九し繝ｼ繝薙せ縺ｧ縺吶・ */
 @Service
 public class RaceRecordService {
 
@@ -62,6 +61,8 @@ public class RaceRecordService {
 
         record.setRaceDate("");
         record.setVenue("");
+        record.setRaceScheduleType("");
+        record.setHandicapInfo("");
         record.setWeatherCondition("");
         record.setTemperature("");
         record.setHumidity("");
@@ -130,6 +131,8 @@ public class RaceRecordService {
         record.setWindSpeed(trimToEmpty(record.getWindSpeed()));
         record.setTrackTemperature(trimToEmpty(record.getTrackTemperature()));
         record.setTrackCondition(trimToEmpty(record.getTrackCondition()));
+        record.setRaceScheduleType(trimToEmpty(record.getRaceScheduleType()));
+        record.setHandicapInfo(trimToEmpty(record.getHandicapInfo()));
 
         record.setFeaturedRider1Name(trimToEmpty(record.getFeaturedRider1Name()));
         record.setFeaturedRider1Mark(trimToEmpty(record.getFeaturedRider1Mark()));
@@ -204,29 +207,29 @@ public class RaceRecordService {
         RaceRecord first = new RaceRecord(
                 1L,
                 "2026-03-31",
-                "川口",
+                "蟾晏哨",
                 8,
-                "晴れ",
-                "22℃",
+                "譎ｴ繧・,
+                "22邃・,
                 "48%",
-                "31℃",
-                "良走路",
-                "◎ 大都太郎 / ○ 佐藤花子 / △ 高橋一郎",
-                "3連単",
+                "31邃・,
+                "濶ｯ襍ｰ霍ｯ",
+                "笳・螟ｧ驛ｽ螟ｪ驛・/ 笳・菴占陸闃ｱ蟄・/ 笆ｳ 鬮俶ｩ倶ｸ驛・,
+                "3騾｣蜊・,
                 "1-2-3",
-                "スタート重視で確認したいレースです。"
+                "繧ｹ繧ｿ繝ｼ繝磯㍾隕悶〒遒ｺ隱阪＠縺溘＞繝ｬ繝ｼ繧ｹ縺ｧ縺吶・
         );
-        first.setFeaturedRider1Name("大都太郎");
+        first.setFeaturedRider1Name("螟ｧ驛ｽ螟ｪ驛・);
         first.setFeaturedRider1Number(1);
-        first.setFeaturedRider1Mark("◎");
-        first.setFeaturedRider2Name("佐藤花子");
+        first.setFeaturedRider1Mark("笳・);
+        first.setFeaturedRider2Name("菴占陸闃ｱ蟄・);
         first.setFeaturedRider2Number(3);
-        first.setFeaturedRider2Mark("○");
-        first.setFeaturedRider3Name("高橋一郎");
+        first.setFeaturedRider2Mark("笳・);
+        first.setFeaturedRider3Name("鬮俶ｩ倶ｸ驛・);
         first.setFeaturedRider3Number(5);
-        first.setFeaturedRider3Mark("△");
-        first.setPreRacePrediction("内枠中心で組み立てたい。");
-        first.setPreRaceNote("前日オッズでは1号車中心。");
+        first.setFeaturedRider3Mark("笆ｳ");
+        first.setPreRacePrediction("蜀・棧荳ｭ蠢・〒邨・∩遶九※縺溘＞縲・);
+        first.setPreRaceNote("蜑肴律繧ｪ繝・ぜ縺ｧ縺ｯ1蜿ｷ霆贋ｸｭ蠢・・);
         first.setWindSpeed("2m");
         first.setTrialTime1("3.32");
         first.setTrialTime2("3.35");
@@ -236,43 +239,43 @@ public class RaceRecordService {
         first.setTrialTime6("3.39");
         first.setTrialTime7("3.40");
         first.setTrialTime8("3.38");
-        first.setFeaturedTrialTimeNote("1号車と5号車の気配が良い。");
-        first.setRaceOverallNote("スタートで主導権を取れるかがポイント。");
+        first.setFeaturedTrialTimeNote("1蜿ｷ霆翫→5蜿ｷ霆翫・豌鈴・縺瑚憶縺・・);
+        first.setRaceOverallNote("繧ｹ繧ｿ繝ｼ繝医〒荳ｻ蟆取ｨｩ繧貞叙繧後ｋ縺九′繝昴う繝ｳ繝医・);
         first.setBetCount(6);
         first.setUnitBetAmount(100);
         first.setPurchaseAmount(600);
         first.setTotalBetAmount(600);
-        first.setPredictionNote("試走を見て1号車中心に調整。");
-        first.setRaceResult("結果は1-2-3。");
-        first.setResultComparison("本命と結果が一致した。");
-        first.setReviewNote("走路状態の読みも良かった。");
+        first.setPredictionNote("隧ｦ襍ｰ繧定ｦ九※1蜿ｷ霆贋ｸｭ蠢・↓隱ｿ謨ｴ縲・);
+        first.setRaceResult("邨先棡縺ｯ1-2-3縲・);
+        first.setResultComparison("譛ｬ蜻ｽ縺ｨ邨先棡縺御ｸ閾ｴ縺励◆縲・);
+        first.setReviewNote("襍ｰ霍ｯ迥ｶ諷九・隱ｭ縺ｿ繧り憶縺九▲縺溘・);
 
         RaceRecord second = new RaceRecord(
                 2L,
                 "2026-03-30",
-                "浜松",
+                "豬懈收",
                 10,
-                "曇り",
-                "18℃",
+                "譖・ｊ",
+                "18邃・,
                 "62%",
-                "24℃",
-                "斑走路",
-                "◎ 青山次郎 / 注 中村一樹 / ○ 山田健太",
-                "2連単",
+                "24邃・,
+                "譁題ｵｰ霍ｯ",
+                "笳・髱貞ｱｱ谺｡驛・/ 豕ｨ 荳ｭ譚台ｸ讓ｹ / 笳・螻ｱ逕ｰ蛛･螟ｪ",
+                "2騾｣蜊・,
                 "2-1",
-                "試走気配を見て買い目を絞りたい。"
+                "隧ｦ襍ｰ豌鈴・繧定ｦ九※雋ｷ縺・岼繧堤ｵ槭ｊ縺溘＞縲・
         );
-        second.setFeaturedRider1Name("青山次郎");
+        second.setFeaturedRider1Name("髱貞ｱｱ谺｡驛・);
         second.setFeaturedRider1Number(2);
-        second.setFeaturedRider1Mark("◎");
-        second.setFeaturedRider2Name("中村一樹");
+        second.setFeaturedRider1Mark("笳・);
+        second.setFeaturedRider2Name("荳ｭ譚台ｸ讓ｹ");
         second.setFeaturedRider2Number(6);
-        second.setFeaturedRider2Mark("注");
-        second.setFeaturedRider3Name("山田健太");
+        second.setFeaturedRider2Mark("豕ｨ");
+        second.setFeaturedRider3Name("螻ｱ逕ｰ蛛･螟ｪ");
         second.setFeaturedRider3Number(1);
-        second.setFeaturedRider3Mark("○");
-        second.setPreRacePrediction("2号車の安定感を重視。");
-        second.setPreRaceNote("天候変化があれば再検討。");
+        second.setFeaturedRider3Mark("笳・);
+        second.setPreRacePrediction("2蜿ｷ霆翫・螳牙ｮ壽─繧帝㍾隕悶・);
+        second.setPreRaceNote("螟ｩ蛟吝､牙喧縺後≠繧後・蜀肴､懆ｨ弱・);
         second.setWindSpeed("4m");
         second.setTrialTime1("3.40");
         second.setTrialTime2("3.31");
@@ -282,16 +285,16 @@ public class RaceRecordService {
         second.setTrialTime6("3.36");
         second.setTrialTime7("3.41");
         second.setTrialTime8("3.43");
-        second.setFeaturedTrialTimeNote("2号車が抜けて良い。");
-        second.setRaceOverallNote("斑走路なので外の動きに注意。");
+        second.setFeaturedTrialTimeNote("2蜿ｷ霆翫′謚懊￠縺ｦ濶ｯ縺・・);
+        second.setRaceOverallNote("譁題ｵｰ霍ｯ縺ｪ縺ｮ縺ｧ螟悶・蜍輔″縺ｫ豕ｨ諢上・);
         second.setBetCount(3);
         second.setUnitBetAmount(200);
         second.setPurchaseAmount(600);
         second.setTotalBetAmount(600);
-        second.setPredictionNote("点数を絞って勝負。");
-        second.setRaceResult("結果は2-6。");
-        second.setResultComparison("本命は来たが相手が想定外。");
-        second.setReviewNote("注評価の選手をもう少し上げてもよかった。");
+        second.setPredictionNote("轤ｹ謨ｰ繧堤ｵ槭▲縺ｦ蜍晁ｲ縲・);
+        second.setRaceResult("邨先棡縺ｯ2-6縲・);
+        second.setResultComparison("譛ｬ蜻ｽ縺ｯ譚･縺溘′逶ｸ謇九′諠ｳ螳壼､悶・);
+        second.setReviewNote("豕ｨ隧穂ｾ｡縺ｮ驕ｸ謇九ｒ繧ゅ≧蟆代＠荳翫￡縺ｦ繧ゅｈ縺九▲縺溘・);
 
         dummyRecords.add(first);
         dummyRecords.add(second);
@@ -319,3 +322,5 @@ public class RaceRecordService {
         return value == null ? "" : value.trim();
     }
 }
+
+
