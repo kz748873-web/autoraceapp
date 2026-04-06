@@ -110,6 +110,15 @@ public class RaceRecordService {
         return raceRecordRepository.save(raceRecord);
     }
 
+    public void deleteById(Long id) {
+        if (id == null) {
+            return;
+        }
+        if (raceRecordRepository.existsById(id)) {
+            raceRecordRepository.deleteById(id);
+        }
+    }
+
     private boolean matchesFeaturedRider(RaceRecord record, String searchValue) {
         if (searchValue == null || searchValue.isBlank()) {
             return true;
