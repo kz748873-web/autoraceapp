@@ -1,4 +1,4 @@
-﻿package com.example.autoraceapp.service;
+package com.example.autoraceapp.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;

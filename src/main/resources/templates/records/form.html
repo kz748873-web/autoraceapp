@@ -243,6 +243,20 @@
         .start-token-chip-dot.token-7 { background: #f08a32; }
         .start-token-chip-dot.token-8 { background: #d96ba5; }
 
+        .trial-input-card {
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            background: #ffffff;
+        }
+
+        .trial-input-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            min-height: 2rem;
+            margin-top: 0.75rem;
+        }
+
         @media (max-width: 991.98px) {
             .sticky-bottom-actions {
                 position: static;
@@ -335,13 +349,24 @@
                                 <div class="sub-block p-3 p-md-4">
                                     <h4 class="h5 fw-bold mb-3">注目選手1</h4>
                                     <div class="row g-3">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label for="featuredRider1Name" class="form-label fw-semibold">選手名</label>
                                             <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 青山周平">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="featuredRider1Number" class="form-label fw-semibold">号車</label>
                                             <input type="number" id="featuredRider1Number" th:field="*{featuredRider1Number}" class="form-control form-control-lg" min="1" max="8" placeholder="1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="featuredRider1Mark" class="form-label fw-semibold">印</label>
+                                            <select id="featuredRider1Mark" th:field="*{featuredRider1Mark}" class="form-select form-select-lg">
+                                                <option value="">選択してください</option>
+                                                <option value="◎">◎</option>
+                                                <option value="○">○</option>
+                                                <option value="▲">▲</option>
+                                                <option value="△">△</option>
+                                                <option value="×">×</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -351,13 +376,24 @@
                                 <div class="sub-block p-3 p-md-4">
                                     <h4 class="h5 fw-bold mb-3">注目選手2</h4>
                                     <div class="row g-3">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label for="featuredRider2Name" class="form-label fw-semibold">選手名</label>
                                             <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 鈴木圭一郎">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="featuredRider2Number" class="form-label fw-semibold">号車</label>
                                             <input type="number" id="featuredRider2Number" th:field="*{featuredRider2Number}" class="form-control form-control-lg" min="1" max="8" placeholder="2">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="featuredRider2Mark" class="form-label fw-semibold">印</label>
+                                            <select id="featuredRider2Mark" th:field="*{featuredRider2Mark}" class="form-select form-select-lg">
+                                                <option value="">選択してください</option>
+                                                <option value="◎">◎</option>
+                                                <option value="○">○</option>
+                                                <option value="▲">▲</option>
+                                                <option value="△">△</option>
+                                                <option value="×">×</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -367,13 +403,24 @@
                                 <div class="sub-block p-3 p-md-4">
                                     <h4 class="h5 fw-bold mb-3">注目選手3</h4>
                                     <div class="row g-3">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label for="featuredRider3Name" class="form-label fw-semibold">選手名</label>
                                             <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 佐藤摩弥">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="featuredRider3Number" class="form-label fw-semibold">号車</label>
                                             <input type="number" id="featuredRider3Number" th:field="*{featuredRider3Number}" class="form-control form-control-lg" min="1" max="8" placeholder="3">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="featuredRider3Mark" class="form-label fw-semibold">印</label>
+                                            <select id="featuredRider3Mark" th:field="*{featuredRider3Mark}" class="form-select form-select-lg">
+                                                <option value="">選択してください</option>
+                                                <option value="◎">◎</option>
+                                                <option value="○">○</option>
+                                                <option value="▲">▲</option>
+                                                <option value="△">△</option>
+                                                <option value="×">×</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -447,14 +494,17 @@
 
                         <h3 class="h4 fw-bold mb-3">全車試走タイム</h3>
                         <div class="row g-4 mb-4">
-                            <div class="col-md-3 col-sm-6"><label for="trialTime1" class="form-label fw-semibold">1号車</label><input type="text" id="trialTime1" th:field="*{trialTime1}" class="form-control form-control-lg" placeholder="3.34"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime2" class="form-label fw-semibold">2号車</label><input type="text" id="trialTime2" th:field="*{trialTime2}" class="form-control form-control-lg" placeholder="3.36"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime3" class="form-label fw-semibold">3号車</label><input type="text" id="trialTime3" th:field="*{trialTime3}" class="form-control form-control-lg" placeholder="3.35"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime4" class="form-label fw-semibold">4号車</label><input type="text" id="trialTime4" th:field="*{trialTime4}" class="form-control form-control-lg" placeholder="3.37"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime5" class="form-label fw-semibold">5号車</label><input type="text" id="trialTime5" th:field="*{trialTime5}" class="form-control form-control-lg" placeholder="3.33"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime6" class="form-label fw-semibold">6号車</label><input type="text" id="trialTime6" th:field="*{trialTime6}" class="form-control form-control-lg" placeholder="3.39"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime7" class="form-label fw-semibold">7号車</label><input type="text" id="trialTime7" th:field="*{trialTime7}" class="form-control form-control-lg" placeholder="3.40"></div>
-                            <div class="col-md-3 col-sm-6"><label for="trialTime8" class="form-label fw-semibold">8号車</label><input type="text" id="trialTime8" th:field="*{trialTime8}" class="form-control form-control-lg" placeholder="3.38"></div>
+                            <div class="col-md-3 col-sm-6" th:each="entry : ${record.trialTimeEntries}">
+                                <div class="trial-input-card p-3 h-100">
+                                    <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber + '号車'}">1号車</label>
+                                    <input type="text" th:id="${entry.fieldName}" th:field="*{__${entry.fieldName}__}" class="form-control form-control-lg js-trial-time" placeholder="3.34" th:attr="data-lane=${entry.laneNumber}">
+                                    <div class="trial-input-meta">
+                                        <span class="badge text-bg-primary d-none js-trial-mark"></span>
+                                        <span class="small text-secondary d-none js-trial-rider-name"></span>
+                                        <span class="badge text-bg-light border d-none js-trial-rank"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row g-4 mb-4">
@@ -653,6 +703,111 @@
             return Math.min(Math.max(value, min), max);
         }
 
+        function parseTrialTimeValue(value) {
+            if (!value) {
+                return null;
+            }
+
+            const normalized = Number.parseFloat(String(value).trim());
+            return Number.isFinite(normalized) ? normalized : null;
+        }
+
+        function buildFeaturedRiderMap() {
+            const riderMap = new Map();
+
+            [1, 2, 3].forEach(function (index) {
+                const numberField = document.getElementById("featuredRider" + index + "Number");
+                const markField = document.getElementById("featuredRider" + index + "Mark");
+                const nameField = document.getElementById("featuredRider" + index + "Name");
+
+                if (!numberField || !markField || !nameField) {
+                    return;
+                }
+
+                const lane = Number.parseInt(numberField.value, 10);
+                if (!Number.isInteger(lane) || lane < 1 || lane > 8) {
+                    return;
+                }
+
+                riderMap.set(lane, {
+                    mark: markField.value.trim(),
+                    name: nameField.value.trim()
+                });
+            });
+
+            return riderMap;
+        }
+
+        function updateTrialTimeAssist() {
+            const riderMap = buildFeaturedRiderMap();
+            const cards = Array.from(document.querySelectorAll(".trial-input-card"));
+            const rankedItems = [];
+
+            cards.forEach(function (card) {
+                const input = card.querySelector(".js-trial-time");
+                const lane = Number.parseInt(input.dataset.lane, 10);
+                const parsedTime = parseTrialTimeValue(input.value);
+
+                if (parsedTime !== null) {
+                    rankedItems.push({
+                        lane: lane,
+                        value: parsedTime
+                    });
+                }
+
+                const riderInfo = riderMap.get(lane);
+                const markBadge = card.querySelector(".js-trial-mark");
+                const riderName = card.querySelector(".js-trial-rider-name");
+
+                if (riderInfo && riderInfo.mark) {
+                    markBadge.textContent = riderInfo.mark;
+                    markBadge.classList.remove("d-none");
+                } else {
+                    markBadge.textContent = "";
+                    markBadge.classList.add("d-none");
+                }
+
+                if (riderInfo && riderInfo.mark && riderInfo.name) {
+                    riderName.textContent = riderInfo.name;
+                    riderName.classList.remove("d-none");
+                } else {
+                    riderName.textContent = "";
+                    riderName.classList.add("d-none");
+                }
+            });
+
+            rankedItems.sort(function (left, right) {
+                return left.value - right.value;
+            });
+
+            const rankMap = new Map();
+            let currentRank = 0;
+            let previousValue = null;
+
+            rankedItems.forEach(function (item, index) {
+                if (previousValue === null || item.value !== previousValue) {
+                    currentRank = index + 1;
+                    previousValue = item.value;
+                }
+                rankMap.set(item.lane, currentRank);
+            });
+
+            cards.forEach(function (card) {
+                const input = card.querySelector(".js-trial-time");
+                const lane = Number.parseInt(input.dataset.lane, 10);
+                const rankBadge = card.querySelector(".js-trial-rank");
+                const rank = rankMap.get(lane);
+
+                if (rank) {
+                    rankBadge.textContent = rank + "位";
+                    rankBadge.classList.remove("d-none");
+                } else {
+                    rankBadge.textContent = "";
+                    rankBadge.classList.add("d-none");
+                }
+            });
+        }
+
         function setStartTokenPosition(token, xPercent, yPercent) {
             token.dataset.x = xPercent.toFixed(2);
             token.dataset.y = yPercent.toFixed(2);
@@ -671,68 +826,79 @@
         document.addEventListener("DOMContentLoaded", function () {
             const board = document.getElementById("startDiagramBoard");
             const resetButton = document.getElementById("resetStartDiagram");
+            const trialInputs = document.querySelectorAll(".js-trial-time");
+            const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
 
-            if (!board) {
-                return;
-            }
+            if (board) {
+                let activeToken = null;
+                let activePointerId = null;
 
-            let activeToken = null;
-            let activePointerId = null;
+                resetStartDiagramTokens();
 
-            resetStartDiagramTokens();
-
-            function moveActiveToken(clientX, clientY) {
-                if (!activeToken) {
-                    return;
-                }
-
-                const rect = board.getBoundingClientRect();
-                const tokenHalfWidth = activeToken.offsetWidth / 2;
-                const tokenHalfHeight = activeToken.offsetHeight / 2;
-                const rawX = clientX - rect.left;
-                const rawY = clientY - rect.top;
-                const clampedX = clampStartTokenValue(rawX, tokenHalfWidth, rect.width - tokenHalfWidth);
-                const clampedY = clampStartTokenValue(rawY, tokenHalfHeight, rect.height - tokenHalfHeight);
-                const xPercent = (clampedX / rect.width) * 100;
-                const yPercent = (clampedY / rect.height) * 100;
-
-                setStartTokenPosition(activeToken, xPercent, yPercent);
-            }
-
-            document.querySelectorAll(".start-token").forEach(function (token) {
-                token.addEventListener("pointerdown", function (event) {
-                    activeToken = token;
-                    activePointerId = event.pointerId;
-                    token.classList.add("is-dragging");
-                    token.setPointerCapture(event.pointerId);
-                    moveActiveToken(event.clientX, event.clientY);
-                });
-
-                token.addEventListener("pointermove", function (event) {
-                    if (activeToken !== token || activePointerId !== event.pointerId) {
+                function moveActiveToken(clientX, clientY) {
+                    if (!activeToken) {
                         return;
                     }
-                    moveActiveToken(event.clientX, event.clientY);
-                });
 
-                function finishDrag(event) {
-                    if (activeToken !== token || activePointerId !== event.pointerId) {
-                        return;
-                    }
-                    token.classList.remove("is-dragging");
-                    activeToken = null;
-                    activePointerId = null;
+                    const rect = board.getBoundingClientRect();
+                    const tokenHalfWidth = activeToken.offsetWidth / 2;
+                    const tokenHalfHeight = activeToken.offsetHeight / 2;
+                    const rawX = clientX - rect.left;
+                    const rawY = clientY - rect.top;
+                    const clampedX = clampStartTokenValue(rawX, tokenHalfWidth, rect.width - tokenHalfWidth);
+                    const clampedY = clampStartTokenValue(rawY, tokenHalfHeight, rect.height - tokenHalfHeight);
+                    const xPercent = (clampedX / rect.width) * 100;
+                    const yPercent = (clampedY / rect.height) * 100;
+
+                    setStartTokenPosition(activeToken, xPercent, yPercent);
                 }
 
-                token.addEventListener("pointerup", finishDrag);
-                token.addEventListener("pointercancel", finishDrag);
+                document.querySelectorAll(".start-token").forEach(function (token) {
+                    token.addEventListener("pointerdown", function (event) {
+                        activeToken = token;
+                        activePointerId = event.pointerId;
+                        token.classList.add("is-dragging");
+                        token.setPointerCapture(event.pointerId);
+                        moveActiveToken(event.clientX, event.clientY);
+                    });
+
+                    token.addEventListener("pointermove", function (event) {
+                        if (activeToken !== token || activePointerId !== event.pointerId) {
+                            return;
+                        }
+                        moveActiveToken(event.clientX, event.clientY);
+                    });
+
+                    function finishDrag(event) {
+                        if (activeToken !== token || activePointerId !== event.pointerId) {
+                            return;
+                        }
+                        token.classList.remove("is-dragging");
+                        activeToken = null;
+                        activePointerId = null;
+                    }
+
+                    token.addEventListener("pointerup", finishDrag);
+                    token.addEventListener("pointercancel", finishDrag);
+                });
+
+                if (resetButton) {
+                    resetButton.addEventListener("click", function () {
+                        resetStartDiagramTokens();
+                    });
+                }
+            }
+
+            trialInputs.forEach(function (input) {
+                input.addEventListener("input", updateTrialTimeAssist);
             });
 
-            if (resetButton) {
-                resetButton.addEventListener("click", function () {
-                    resetStartDiagramTokens();
-                });
-            }
+            featuredFields.forEach(function (field) {
+                field.addEventListener("input", updateTrialTimeAssist);
+                field.addEventListener("change", updateTrialTimeAssist);
+            });
+
+            updateTrialTimeAssist();
         });
     </script>
 </body>

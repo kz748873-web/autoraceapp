@@ -1,9 +1,16 @@
-﻿package com.example.autoraceapp.entity;
+package com.example.autoraceapp.entity;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 @Entity
 public class RaceRecord {
@@ -447,5 +454,177 @@ public class RaceRecord {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Transient
+    public List<TrialTimeEntry> getTrialTimeEntries() {
+        Map<Integer, String> trialTimes = buildTrialTimeMap();
+        Map<Integer, String> marks = buildFeaturedMarkMap();
+        Map<Integer, String> riderNames = buildFeaturedRiderNameMap();
+        Map<Integer, Integer> ranks = buildTrialTimeRankMap(trialTimes);
+
+        List<TrialTimeEntry> entries = new ArrayList<>();
+        for (int laneNumber = 1; laneNumber <= 8; laneNumber++) {
+            entries.add(new TrialTimeEntry(
+                    laneNumber,
+                    getTrialTimeFieldName(laneNumber),
+                    trialTimes.getOrDefault(laneNumber, ""),
+                    marks.getOrDefault(laneNumber, ""),
+                    riderNames.getOrDefault(laneNumber, ""),
+                    ranks.get(laneNumber)));
+        }
+        return entries;
+    }
+
+    @Transient
+    public String getPrimaryFeaturedRiderName() {
+        if ("◎".equals(featuredRider1Mark) && featuredRider1Name != null && !featuredRider1Name.isBlank()) {
+            return featuredRider1Name;
+        }
+        if ("◎".equals(featuredRider2Mark) && featuredRider2Name != null && !featuredRider2Name.isBlank()) {
+            return featuredRider2Name;
+        }
+        if ("◎".equals(featuredRider3Mark) && featuredRider3Name != null && !featuredRider3Name.isBlank()) {
+            return featuredRider3Name;
+        }
+        return "";
+    }
+
+    private Map<Integer, String> buildTrialTimeMap() {
+        Map<Integer, String> values = new HashMap<>();
+        values.put(1, trialTime1);
+        values.put(2, trialTime2);
+        values.put(3, trialTime3);
+        values.put(4, trialTime4);
+        values.put(5, trialTime5);
+        values.put(6, trialTime6);
+        values.put(7, trialTime7);
+        values.put(8, trialTime8);
+        return values;
+    }
+
+    private Map<Integer, String> buildFeaturedMarkMap() {
+        Map<Integer, String> values = new HashMap<>();
+        putFeaturedValue(values, featuredRider1Number, featuredRider1Mark);
+        putFeaturedValue(values, featuredRider2Number, featuredRider2Mark);
+        putFeaturedValue(values, featuredRider3Number, featuredRider3Mark);
+        return values;
+    }
+
+    private Map<Integer, String> buildFeaturedRiderNameMap() {
+        Map<Integer, String> values = new HashMap<>();
+        putFeaturedValue(values, featuredRider1Number, featuredRider1Name);
+        putFeaturedValue(values, featuredRider2Number, featuredRider2Name);
+        putFeaturedValue(values, featuredRider3Number, featuredRider3Name);
+        return values;
+    }
+
+    private void putFeaturedValue(Map<Integer, String> values, Integer laneNumber, String value) {
+        if (laneNumber == null || value == null || value.isBlank()) {
+            return;
+        }
+        values.put(laneNumber, value);
+    }
+
+    private Map<Integer, Integer> buildTrialTimeRankMap(Map<Integer, String> trialTimes) {
+        List<TrialTimeRankSeed> seeds = new ArrayList<>();
+        for (Map.Entry<Integer, String> entry : trialTimes.entrySet()) {
+            BigDecimal parsedTime = parseTrialTime(entry.getValue());
+            if (parsedTime == null) {
+                continue;
+            }
+            seeds.add(new TrialTimeRankSeed(entry.getKey(), parsedTime));
+        }
+
+        seeds.sort((left, right) -> left.time.compareTo(right.time));
+
+        Map<Integer, Integer> ranks = new HashMap<>();
+        BigDecimal previousTime = null;
+        int displayRank = 0;
+        int position = 0;
+        for (TrialTimeRankSeed seed : seeds) {
+            position++;
+            if (previousTime == null || previousTime.compareTo(seed.time) != 0) {
+                displayRank = position;
+                previousTime = seed.time;
+            }
+            ranks.put(seed.laneNumber, displayRank);
+        }
+        return ranks;
+    }
+
+    private BigDecimal parseTrialTime(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        try {
+            return new BigDecimal(value.trim());
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    private String getTrialTimeFieldName(int laneNumber) {
+        return "trialTime" + laneNumber;
+    }
+
+    private static class TrialTimeRankSeed {
+        private final int laneNumber;
+        private final BigDecimal time;
+
+        private TrialTimeRankSeed(int laneNumber, BigDecimal time) {
+            this.laneNumber = laneNumber;
+            this.time = time;
+        }
+    }
+
+    public static class TrialTimeEntry {
+        private final int laneNumber;
+        private final String fieldName;
+        private final String time;
+        private final String featuredMark;
+        private final String featuredRiderName;
+        private final Integer rank;
+
+        public TrialTimeEntry(int laneNumber, String fieldName, String time, String featuredMark, String featuredRiderName, Integer rank) {
+            this.laneNumber = laneNumber;
+            this.fieldName = fieldName;
+            this.time = time;
+            this.featuredMark = featuredMark;
+            this.featuredRiderName = featuredRiderName;
+            this.rank = rank;
+        }
+
+        public int getLaneNumber() {
+            return laneNumber;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public String getFeaturedMark() {
+            return featuredMark;
+        }
+
+        public String getFeaturedRiderName() {
+            return featuredRiderName;
+        }
+
+        public Integer getRank() {
+            return rank;
+        }
+
+        public boolean getHasFeaturedMark() {
+            return featuredMark != null && !featuredMark.isBlank();
+        }
+
+        public boolean getHasRank() {
+            return rank != null;
+        }
     }
 }

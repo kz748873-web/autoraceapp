@@ -2,6 +2,20 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout/base :: commonHead('レース記録詳細 | オートレース予想補助アプリ')}"></th:block>
+    <style>
+        .trial-time-card {
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            background: var(--soft-surface);
+        }
+
+        .trial-time-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+    </style>
 </head>
 <body>
     <div class="app-shell d-flex flex-column">
@@ -65,14 +79,17 @@
 
                 <h3 class="h4 fw-bold mb-3">全車試走タイム</h3>
                 <div class="row g-4 mb-4">
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">1号車</div><div class="fw-semibold" th:text="${record.trialTime1} ?: '未入力'">3.34</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">2号車</div><div class="fw-semibold" th:text="${record.trialTime2} ?: '未入力'">3.36</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">3号車</div><div class="fw-semibold" th:text="${record.trialTime3} ?: '未入力'">3.35</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">4号車</div><div class="fw-semibold" th:text="${record.trialTime4} ?: '未入力'">3.37</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">5号車</div><div class="fw-semibold" th:text="${record.trialTime5} ?: '未入力'">3.33</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">6号車</div><div class="fw-semibold" th:text="${record.trialTime6} ?: '未入力'">3.39</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">7号車</div><div class="fw-semibold" th:text="${record.trialTime7} ?: '未入力'">3.40</div></div></div>
-                    <div class="col-md-3 col-sm-6"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">8号車</div><div class="fw-semibold" th:text="${record.trialTime8} ?: '未入力'">3.38</div></div></div>
+                    <div class="col-md-3 col-sm-6" th:each="entry : ${record.trialTimeEntries}">
+                        <div class="trial-time-card p-3 h-100">
+                            <div class="text-secondary small mb-1" th:text="${entry.laneNumber + '号車'}">1号車</div>
+                            <div class="fw-semibold fs-5" th:text="${#strings.isEmpty(entry.time) ? '未入力' : entry.time}">3.34</div>
+                            <div class="trial-time-meta">
+                                <span th:if="${entry.hasFeaturedMark}" class="badge text-bg-primary" th:text="${entry.featuredMark}">◎</span>
+                                <span th:if="${entry.hasFeaturedMark and !#strings.isEmpty(entry.featuredRiderName)}" class="small text-secondary" th:text="${entry.featuredRiderName}">青山周平</span>
+                                <span th:if="${entry.hasRank}" class="badge text-bg-light border" th:text="${entry.rank + '位'}">1位</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row g-4 mb-4">

@@ -1,4 +1,4 @@
-﻿package com.example.autoraceapp.entity;
+package com.example.autoraceapp.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

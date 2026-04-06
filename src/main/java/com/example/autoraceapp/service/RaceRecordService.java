@@ -1,4 +1,4 @@
-﻿package com.example.autoraceapp.service;
+package com.example.autoraceapp.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.autoraceapp.entity.RaceRecord;
 import com.example.autoraceapp.repository.RaceRecordRepository;
 
-/**
- * 繝ｬ繝ｼ繧ｹ險倬鹸縺ｮ蜿門ｾ励・菫晏ｭ倥・讀懃ｴ｢繧呈球蠖薙☆繧九し繝ｼ繝薙せ縺ｧ縺吶・ */
 @Service
 public class RaceRecordService {
 
@@ -207,30 +205,32 @@ public class RaceRecordService {
         RaceRecord first = new RaceRecord(
                 1L,
                 "2026-03-31",
-                "蟾晏哨",
+                "川口",
                 8,
-                "譎ｴ繧・,
-                "22邃・,
-                "48%",
-                "31邃・,
-                "濶ｯ襍ｰ霍ｯ",
-                "笳・螟ｧ驛ｽ螟ｪ驛・/ 笳・菴占陸闃ｱ蟄・/ 笆ｳ 鬮俶ｩ倶ｸ驛・,
-                "3騾｣蜊・,
-                "1-2-3",
-                "繧ｹ繧ｿ繝ｼ繝磯㍾隕悶〒遒ｺ隱阪＠縺溘＞繝ｬ繝ｼ繧ｹ縺ｧ縺吶・
+                "晴れ",
+                "22",
+                "48",
+                "31",
+                "良走路",
+                "◎ 青山周平 / ○ 鈴木圭一郎 / △ 佐藤摩弥",
+                "3連単",
+                "1-3-5 / 1-5-3",
+                "スタート力を重視したレースだった。"
         );
-        first.setFeaturedRider1Name("螟ｧ驛ｽ螟ｪ驛・);
+        first.setRaceScheduleType("普通開催");
+        first.setHandicapInfo("0m / 10m / 20m");
+        first.setFeaturedRider1Name("青山周平");
         first.setFeaturedRider1Number(1);
-        first.setFeaturedRider1Mark("笳・);
-        first.setFeaturedRider2Name("菴占陸闃ｱ蟄・);
+        first.setFeaturedRider1Mark("◎");
+        first.setFeaturedRider2Name("鈴木圭一郎");
         first.setFeaturedRider2Number(3);
-        first.setFeaturedRider2Mark("笳・);
-        first.setFeaturedRider3Name("鬮俶ｩ倶ｸ驛・);
+        first.setFeaturedRider2Mark("○");
+        first.setFeaturedRider3Name("佐藤摩弥");
         first.setFeaturedRider3Number(5);
-        first.setFeaturedRider3Mark("笆ｳ");
-        first.setPreRacePrediction("蜀・棧荳ｭ蠢・〒邨・∩遶九※縺溘＞縲・);
-        first.setPreRaceNote("蜑肴律繧ｪ繝・ぜ縺ｧ縺ｯ1蜿ｷ霆贋ｸｭ蠢・・);
-        first.setWindSpeed("2m");
+        first.setFeaturedRider3Mark("△");
+        first.setPreRacePrediction("内枠中心で組み立てたい。スタート力を重視。");
+        first.setPreRaceNote("前日オッズでは1号車が中心。走路は軽めの想定。");
+        first.setWindSpeed("2.0");
         first.setTrialTime1("3.32");
         first.setTrialTime2("3.35");
         first.setTrialTime3("3.34");
@@ -239,44 +239,46 @@ public class RaceRecordService {
         first.setTrialTime6("3.39");
         first.setTrialTime7("3.40");
         first.setTrialTime8("3.38");
-        first.setFeaturedTrialTimeNote("1蜿ｷ霆翫→5蜿ｷ霆翫・豌鈴・縺瑚憶縺・・);
-        first.setRaceOverallNote("繧ｹ繧ｿ繝ｼ繝医〒荳ｻ蟆取ｨｩ繧貞叙繧後ｋ縺九′繝昴う繝ｳ繝医・);
+        first.setFeaturedTrialTimeNote("1号車と5号車の試走が良く、上積みを感じた。");
+        first.setRaceOverallNote("スタートで主導権を取れるかがポイント。");
         first.setBetCount(6);
         first.setUnitBetAmount(100);
         first.setPurchaseAmount(600);
         first.setTotalBetAmount(600);
-        first.setPredictionNote("隧ｦ襍ｰ繧定ｦ九※1蜿ｷ霆贋ｸｭ蠢・↓隱ｿ謨ｴ縲・);
-        first.setRaceResult("邨先棡縺ｯ1-2-3縲・);
-        first.setResultComparison("譛ｬ蜻ｽ縺ｨ邨先棡縺御ｸ閾ｴ縺励◆縲・);
-        first.setReviewNote("襍ｰ霍ｯ迥ｶ諷九・隱ｭ縺ｿ繧り憶縺九▲縺溘・);
+        first.setPredictionNote("試走後に1号車中心へ寄せた。");
+        first.setRaceResult("結果は1-3-5。");
+        first.setResultComparison("本命からの組み立ては合っていた。");
+        first.setReviewNote("試走上位の車を素直に評価できた。");
 
         RaceRecord second = new RaceRecord(
                 2L,
                 "2026-03-30",
-                "豬懈收",
+                "伊勢崎",
                 10,
-                "譖・ｊ",
-                "18邃・,
-                "62%",
-                "24邃・,
-                "譁題ｵｰ霍ｯ",
-                "笳・髱貞ｱｱ谺｡驛・/ 豕ｨ 荳ｭ譚台ｸ讓ｹ / 笳・螻ｱ逕ｰ蛛･螟ｪ",
-                "2騾｣蜊・,
-                "2-1",
-                "隧ｦ襍ｰ豌鈴・繧定ｦ九※雋ｷ縺・岼繧堤ｵ槭ｊ縺溘＞縲・
+                "曇り",
+                "18",
+                "62",
+                "24",
+                "湿走路",
+                "◎ 高橋貢 / ▲ 中村雅人 / ○ 金子大輔",
+                "2連単",
+                "2-6 / 2-1",
+                "試走気配を見て軸を絞った。"
         );
-        second.setFeaturedRider1Name("髱貞ｱｱ谺｡驛・);
+        second.setRaceScheduleType("ナイター");
+        second.setHandicapInfo("0m / 10m / 10m");
+        second.setFeaturedRider1Name("高橋貢");
         second.setFeaturedRider1Number(2);
-        second.setFeaturedRider1Mark("笳・);
-        second.setFeaturedRider2Name("荳ｭ譚台ｸ讓ｹ");
+        second.setFeaturedRider1Mark("◎");
+        second.setFeaturedRider2Name("中村雅人");
         second.setFeaturedRider2Number(6);
-        second.setFeaturedRider2Mark("豕ｨ");
-        second.setFeaturedRider3Name("螻ｱ逕ｰ蛛･螟ｪ");
+        second.setFeaturedRider2Mark("▲");
+        second.setFeaturedRider3Name("金子大輔");
         second.setFeaturedRider3Number(1);
-        second.setFeaturedRider3Mark("笳・);
-        second.setPreRacePrediction("2蜿ｷ霆翫・螳牙ｮ壽─繧帝㍾隕悶・);
-        second.setPreRaceNote("螟ｩ蛟吝､牙喧縺後≠繧後・蜀肴､懆ｨ弱・);
-        second.setWindSpeed("4m");
+        second.setFeaturedRider3Mark("○");
+        second.setPreRacePrediction("2号車の試走とスタートを軸に考える。");
+        second.setPreRaceNote("湿走路なら差しより先行力を優先。");
+        second.setWindSpeed("4.0");
         second.setTrialTime1("3.40");
         second.setTrialTime2("3.31");
         second.setTrialTime3("3.38");
@@ -285,16 +287,16 @@ public class RaceRecordService {
         second.setTrialTime6("3.36");
         second.setTrialTime7("3.41");
         second.setTrialTime8("3.43");
-        second.setFeaturedTrialTimeNote("2蜿ｷ霆翫′謚懊￠縺ｦ濶ｯ縺・・);
-        second.setRaceOverallNote("譁題ｵｰ霍ｯ縺ｪ縺ｮ縺ｧ螟悶・蜍輔″縺ｫ豕ｨ諢上・);
+        second.setFeaturedTrialTimeNote("2号車が最上位の試走で気配良好。");
+        second.setRaceOverallNote("湿走路なので無理な捲りは届きにくい想定。");
         second.setBetCount(3);
         second.setUnitBetAmount(200);
         second.setPurchaseAmount(600);
         second.setTotalBetAmount(600);
-        second.setPredictionNote("轤ｹ謨ｰ繧堤ｵ槭▲縺ｦ蜍晁ｲ縲・);
-        second.setRaceResult("邨先棡縺ｯ2-6縲・);
-        second.setResultComparison("譛ｬ蜻ｽ縺ｯ譚･縺溘′逶ｸ謇九′諠ｳ螳壼､悶・);
-        second.setReviewNote("豕ｨ隧穂ｾ｡縺ｮ驕ｸ謇九ｒ繧ゅ≧蟆代＠荳翫￡縺ｦ繧ゅｈ縺九▲縺溘・);
+        second.setPredictionNote("点数を絞って回収重視にした。");
+        second.setRaceResult("結果は2-6。");
+        second.setResultComparison("軸選びは良かったが相手評価に課題あり。");
+        second.setReviewNote("湿走路の時は先行力をさらに重視したい。");
 
         dummyRecords.add(first);
         dummyRecords.add(second);
@@ -322,5 +324,3 @@ public class RaceRecordService {
         return value == null ? "" : value.trim();
     }
 }
-
-

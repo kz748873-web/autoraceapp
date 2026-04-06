@@ -2,6 +2,13 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout/base :: commonHead('レース記録一覧 | オートレース予想補助アプリ')}"></th:block>
+    <style>
+        .record-mobile-card {
+            border: 1px solid var(--card);
+            border-radius: 1.2rem;
+            background: #ffffff;
+        }
+    </style>
 </head>
 <body>
     <div class="app-shell d-flex flex-column">
@@ -63,40 +70,55 @@
 
         <section class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">開催日</th>
-                                <th scope="col">レース場</th>
-                                <th scope="col">レース番号</th>
-                                <th scope="col">天気</th>
-                                <th scope="col">走路状況</th>
-                                <th scope="col">本命印の選手</th>
-                                <th scope="col">賭け式</th>
-                                <th scope="col">何点買い</th>
-                                <th scope="col">購入金額</th>
-                                <th scope="col">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="record : ${records}">
-                                <td th:text="${record.raceDate}">2026-04-02</td>
-                                <td th:text="${record.venue}">川口</td>
-                                <td th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</td>
-                                <td th:text="${record.weatherCondition} ?: '未入力'">晴れ</td>
-                                <td th:text="${record.trackCondition} ?: '未入力'">良走路</td>
-                                <td th:text="${record.featuredRider1Mark == '◎' ? record.featuredRider1Name : (record.featuredRider2Mark == '◎' ? record.featuredRider2Name : (record.featuredRider3Mark == '◎' ? record.featuredRider3Name : '未設定'))}">青山周平</td>
-                                <td th:text="${record.betType} ?: '未入力'">3連単</td>
-                                <td th:text="${record.betCount != null ? record.betCount + '点' : '未入力'}">6点</td>
-                                <td th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</td>
-                                <td><a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">内容を見る</a></td>
-                            </tr>
-                            <tr th:if="${#lists.isEmpty(records)}">
-                                <td colspan="10" class="text-center text-secondary py-4">条件に合うレース記録がありません。</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="d-none d-md-block">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">開催日</th>
+                                    <th scope="col">レース場</th>
+                                    <th scope="col">レース番号</th>
+                                    <th scope="col">天気</th>
+                                    <th scope="col">走路状況</th>
+                                    <th scope="col">本命印の選手</th>
+                                    <th scope="col">賭け式</th>
+                                    <th scope="col">何点買い</th>
+                                    <th scope="col">購入金額</th>
+                                    <th scope="col">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="record : ${records}">
+                                    <td th:text="${record.raceDate}">2026-04-02</td>
+                                    <td th:text="${record.venue}">川口</td>
+                                    <td th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</td>
+                                    <td th:text="${record.weatherCondition} ?: '未入力'">晴れ</td>
+                                    <td th:text="${record.trackCondition} ?: '未入力'">良走路</td>
+                                    <td th:text="${record.primaryFeaturedRiderName} ?: '未設定'">青山周平</td>
+                                    <td th:text="${record.betType} ?: '未入力'">3連単</td>
+                                    <td th:text="${record.betCount != null ? record.betCount + '点' : '未入力'}">6点</td>
+                                    <td th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</td>
+                                    <td><a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">内容を見る</a></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(records)}">
+                                    <td colspan="10" class="text-center text-secondary py-4">条件に合うレース記録がありません。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-3 d-md-none">
+                    <article th:each="record : ${records}" class="record-mobile-card p-3 shadow-sm">
+                        <div class="small text-secondary mb-1">開催日</div>
+                        <div class="fw-semibold mb-3" th:text="${record.raceDate}">2026-04-02</div>
+                        <div class="small text-secondary mb-1">レース場</div>
+                        <div class="fw-semibold mb-3" th:text="${record.venue}">川口</div>
+                        <div class="small text-secondary mb-1">レース番号</div>
+                        <div class="fw-semibold mb-3" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</div>
+                        <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm w-100">内容を見る</a>
+                    </article>
+                    <div th:if="${#lists.isEmpty(records)}" class="text-center text-secondary py-4">条件に合うレース記録がありません。</div>
                 </div>
             </div>
         </section>

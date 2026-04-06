@@ -1,4 +1,4 @@
-﻿package com.example.autoraceapp.repository;
+package com.example.autoraceapp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
