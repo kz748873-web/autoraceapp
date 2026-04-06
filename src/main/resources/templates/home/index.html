@@ -3,6 +3,10 @@
 <head>
     <th:block th:replace="~{layout/base :: commonHead('TOPページ | オートレース予想補助アプリ')}"></th:block>
     <style>
+        .site-header .app-theme-toolbar {
+            display: none;
+        }
+
         .hero-stage {
             position: relative;
             overflow: hidden;
@@ -13,32 +17,72 @@
         .hero-content {
             position: relative;
             z-index: 1;
-            padding: clamp(0.5rem, 1vw, 1rem);
+            padding: clamp(0.45rem, 1vw, 1rem);
         }
 
         .hero-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.9fr);
+            grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.9fr);
             gap: 1.25rem;
             align-items: stretch;
         }
 
-        .hero-panel {
-            border-radius: 1.6rem;
-            padding: 1.75rem;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.88);
-            box-shadow: 0 1rem 2rem rgba(13, 39, 67, 0.14);
+        .hero-panel,
+        .current-race-panel,
+        .selector-card,
+        .video-card,
+        .link-card,
+        .timer-card,
+        .note-card,
+        .mobile-switch-shell,
+        .mobile-link-panel,
+        .mobile-video-panel,
+        .theme-floating-bar {
+            border: 1px solid var(--card);
+            border-radius: 1.25rem;
+        }
+
+        .hero-panel,
+        .current-race-panel {
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 1rem 2rem rgba(13, 39, 67, 0.16);
             backdrop-filter: blur(6px);
         }
 
+        .hero-panel {
+            padding: 1.8rem;
+        }
+
         .current-race-panel {
-            border-radius: 1.6rem;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.88);
-            border: 1px solid rgba(255, 255, 255, 0.92);
-            box-shadow: 0 1rem 2rem rgba(13, 39, 67, 0.14);
-            backdrop-filter: blur(6px);
+            padding: 1.45rem;
+        }
+
+        .theme-floating-wrap {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .theme-floating-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.55rem 0.8rem;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 0.65rem 1.35rem rgba(15, 23, 42, 0.12);
+        }
+
+        .theme-floating-label {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: var(--sub);
+            white-space: nowrap;
+        }
+
+        .theme-floating-select {
+            min-width: 9.5rem;
+            min-height: 2.35rem;
+            font-size: 0.9rem;
         }
 
         .hero-badge {
@@ -47,220 +91,210 @@
             border-radius: 999px;
             font-weight: 700;
             font-size: 0.95rem;
-            background: rgba(255, 255, 255, 0.72);
-            border: 1px solid rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.95);
             color: var(--hero-panel-text);
         }
 
         .page-title {
-            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-size: clamp(2rem, 4vw, 3.1rem);
             font-weight: 800;
-            line-height: 1.25;
+            line-height: 1.24;
             color: var(--hero-panel-text);
         }
 
         .lead-text {
             font-size: 1.04rem;
-            line-height: 1.8;
+            line-height: 1.82;
             color: var(--hero-panel-text);
             max-width: 42rem;
         }
 
         .current-race-label {
             color: var(--sub);
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             font-weight: 700;
         }
 
         .current-race-value {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--deep);
         }
 
-        .current-race-help {
+        .current-race-help,
+        .helper-copy,
+        .section-copy,
+        .home-footer-note {
             color: var(--sub);
-            line-height: 1.7;
+            line-height: 1.75;
+        }
+
+        .current-race-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .current-race-tile {
+            border-radius: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid color-mix(in srgb, var(--brand) 18%, white);
         }
 
         .selector-card,
         .video-card,
-        .info-card,
         .link-card,
         .timer-card,
         .note-card,
-        .mobile-switch-shell {
-            border: 1px solid var(--card);
-            border-radius: 1.2rem;
+        .mobile-switch-shell,
+        .mobile-link-panel,
+        .mobile-video-panel {
             background: var(--soft-surface);
+            box-shadow: 0 0.95rem 1.8rem rgba(20, 61, 105, 0.08);
         }
 
         .selector-card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 253, 0.98));
-            box-shadow: 0 1rem 2rem rgba(20, 61, 105, 0.08);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(240, 246, 252, 0.99));
         }
 
         .selector-note,
-        .info-placeholder,
         .video-placeholder,
-        .timer-placeholder {
+        .timer-display,
+        .note-placeholder {
             border-radius: 1rem;
             border: 1px solid var(--card);
             background: #ffffff;
         }
 
-        .selector-note {
+        .selector-note,
+        .note-placeholder {
             color: var(--sub);
         }
 
-        .info-placeholder,
         .video-placeholder,
-        .timer-placeholder {
-            min-height: 170px;
+        .timer-display,
+        .note-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: #446685;
-            padding: 1.2rem;
+            padding: 1.15rem;
+            color: #2f516f;
+        }
+
+        .video-placeholder {
+            min-height: 260px;
+        }
+
+        .note-placeholder {
+            min-height: 108px;
+        }
+
+        .timer-display {
+            min-height: 92px;
+        }
+
+        .timer-clock {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: var(--deep);
+            letter-spacing: 0.04em;
+        }
+
+        .section-heading {
+            max-width: 40rem;
+        }
+
+        .basic-actions-layout {
+            display: grid;
+            grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.3fr);
+            gap: 1.4rem;
+            align-items: center;
+        }
+
+        .media-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .dual-video-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+            gap: 1rem;
+        }
+
+        .video-panel-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--deep);
+        }
+
+        .video-panel-subtitle {
+            font-size: 0.92rem;
+            color: var(--sub);
         }
 
         .status-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.45rem 0.8rem;
+            gap: 0.45rem;
+            padding: 0.42rem 0.82rem;
             border-radius: 999px;
-            background: var(--section-badge-bg);
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--brand) 22%, white);
+            background: color-mix(in srgb, var(--brand) 11%, white);
             color: var(--deep);
             font-weight: 700;
         }
 
-        .weather-tile {
-            border: 1px solid var(--card);
-            border-radius: 1rem;
-            background: #ffffff;
-        }
-
-        .weather-label {
-            color: var(--sub);
-            font-size: 0.95rem;
-            font-weight: 700;
-        }
-
-        .weather-value {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--deep);
-        }
-
-        .link-grid {
+        .link-stack,
+        .mobile-link-stack {
             display: grid;
-            gap: 0.9rem;
-        }
-
-        .official-link-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             gap: 0.75rem;
-            min-height: 3.35rem;
-            padding: 1rem 1.1rem;
-            border: 1px solid var(--card);
-            border-radius: 1rem;
-            background: #ffffff;
-            color: var(--deep);
-            text-decoration: none;
-            font-weight: 700;
         }
 
-        .official-link-card:hover {
-            border-color: var(--brand-strong);
-            background: var(--soft-surface);
-            color: var(--deep);
-        }
-
-        .social-btn {
+        .link-text-btn,
+        .venue-quick-btn,
+        .mobile-switch-btn,
+        .official-entry-btn {
             width: 100%;
-            min-height: 3.45rem;
-            padding: 1rem;
+            min-height: 3.25rem;
             border-radius: 1rem;
             font-weight: 700;
+        }
+
+        .link-text-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.7rem;
-        }
-
-        .social-logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.8rem;
-            height: 1.8rem;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.18);
-            font-size: 0.88rem;
-            font-weight: 800;
-        }
-
-        .youtube-btn {
-            background: #ff0000;
-            border-color: #ff0000;
-            color: #ffffff;
-        }
-
-        .instagram-btn {
-            background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
-            border: none;
-            color: #ffffff;
-        }
-
-        .facebook-btn {
-            background: #1877f2;
-            border-color: #1877f2;
-            color: #ffffff;
+            text-align: center;
+            padding: 0.95rem 1rem;
         }
 
         .venue-quick-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             gap: 0.75rem;
         }
-
-        .venue-quick-btn {
-            width: 100%;
-            min-height: 3.35rem;
-            padding: 0.95rem 0.75rem;
-            border-radius: 1rem;
-            font-weight: 700;
-        }
-
         .mobile-switch-shell {
-            padding: 1rem;
             display: none;
-        }
-
-        .mobile-video-switch {
-            display: grid;
-            gap: 0.9rem;
+            padding: 1rem;
         }
 
         .mobile-switch-row {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.75rem;
+            gap: 0.7rem;
         }
 
         .mobile-switch-btn {
-            width: 100%;
-            min-height: 3.35rem;
-            border-radius: 1rem;
             border: 1px solid var(--card);
             background: #ffffff;
             color: var(--deep);
-            font-weight: 700;
             padding: 0.85rem 0.9rem;
         }
 
@@ -270,62 +304,36 @@
             color: var(--theme-text);
         }
 
-        .mobile-video-panel {
+        .mobile-video-panel,
+        .mobile-link-panel {
             display: none;
+            padding: 1rem;
+            margin-top: 1rem;
         }
 
-        .mobile-video-panel.active {
+        .mobile-video-panel.active,
+        .mobile-link-panel.active {
             display: block;
         }
 
-        .dual-video-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-        }
-
         .compact-timer-card {
-            max-width: 440px;
+            max-width: 420px;
         }
 
-        .compact-timer-display {
-            min-height: 110px;
-            border-radius: 1rem;
-            border: 1px solid var(--card);
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 1rem;
-            color: var(--deep);
-        }
-
-        .official-entry-btn {
-            width: 100%;
-            min-height: 3.35rem;
-            border-radius: 1rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0.95rem 1rem;
-        }
-
-        .home-footer-note {
-            color: var(--sub);
-            font-size: 0.95rem;
-            text-align: center;
+        .soft-strong {
+            color: color-mix(in srgb, var(--deep) 80%, black);
         }
 
         @media (max-width: 991.98px) {
-            .hero-layout {
+            .hero-layout,
+            .basic-actions-layout,
+            .media-layout,
+            .dual-video-grid {
                 grid-template-columns: 1fr;
             }
 
-            .page-title {
-                font-size: 2rem;
+            .theme-floating-wrap {
+                justify-content: flex-start;
             }
 
             .desktop-media-layout {
@@ -334,44 +342,43 @@
 
             .mobile-switch-shell {
                 display: block;
-                padding: 1.1rem;
             }
+        }
 
-            .mobile-switch-btn {
-                font-size: 1rem;
-            }
-
-            .mobile-video-panel .video-card,
-            .mobile-video-panel .link-card,
-            .mobile-switch-shell .timer-card {
-                border-radius: 1.1rem;
-            }
-
-            .dual-video-grid {
+        @media (max-width: 767.98px) {
+            .current-race-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .theme-floating-bar {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .theme-floating-select {
+                min-width: 0;
+                width: 100%;
+                max-width: 12rem;
             }
         }
 
         @media (max-width: 575.98px) {
-            .mobile-switch-shell {
-                padding: 0.9rem;
-            }
-
-            .mobile-switch-row {
-                gap: 0.6rem;
-            }
-
-            .mobile-switch-btn,
-            .venue-quick-btn,
-            .social-btn,
-            .official-link-card {
-                min-height: 3.5rem;
+            .mobile-switch-row,
+            .venue-quick-grid {
+                grid-template-columns: 1fr;
             }
 
             .video-card,
             .link-card,
-            .timer-card {
-                padding: 1.1rem !important;
+            .timer-card,
+            .note-card,
+            .mobile-video-panel,
+            .mobile-link-panel {
+                padding: 1rem !important;
             }
         }
     </style>
@@ -381,253 +388,234 @@
         <div th:replace="~{layout/header :: siteHeader}"></div>
 
         <main class="container py-4 py-md-5 flex-grow-1">
+            <div class="theme-floating-wrap">
+                <div class="theme-floating-bar">
+                    <label for="homeThemeSelect" class="theme-floating-label mb-0">テーマ切替</label>
+                    <select id="homeThemeSelect" class="form-select form-select-sm theme-floating-select" aria-label="TOPページのテーマ選択">
+                        <option value="default">デフォルト</option>
+                        <option value="white">1 白</option>
+                        <option value="black">2 黒</option>
+                        <option value="red">3 赤</option>
+                        <option value="blue">4 青</option>
+                        <option value="yellow">5 黄</option>
+                        <option value="green">6 緑</option>
+                        <option value="orange">7 オレンジ</option>
+                        <option value="pink">8 ピンク</option>
+                    </select>
+                </div>
+            </div>
+
             <section class="hero-stage page-card p-4 p-md-5 mb-5">
                 <div class="hero-content">
                     <div class="hero-layout">
                         <div class="hero-panel">
-                            <div class="hero-badge mb-3">サイト案内</div>
-                            <h2 class="page-title mb-3">オートレースの確認と記録を、ひとつの画面から始めやすく。</h2>
-                            <p class="lead-text mb-0">開催情報の確認、動画チェック、外部リンク移動、記録入力までを見通しよく整理したTOPページです。まずは下の基本操作から進めます。</p>
+                            <div class="hero-badge mb-3">TOPページ</div>
+                            <h2 class="page-title mb-3">開催確認、動画確認、記録入力までを一画面で始めやすくしたデモ用トップです。</h2>
+                            <p class="lead-text mb-0">レース場とレース番号を選び、動画や外部リンクを見ながら、そのまま記録と確認へ進める流れに整理しています。PCでは左右2画面で見比べやすく、スマホでは切り替えやすさを優先した構成です。</p>
                         </div>
 
                         <aside class="current-race-panel">
-                            <div class="hero-badge mb-3">現在の確認内容</div>
-                            <div class="current-race-label mb-1">レース場</div>
-                            <div class="current-race-value mb-3" th:text="${selectedVenue} ?: '未選択'">川口</div>
-                            <div class="current-race-label mb-1">レース番号</div>
-                            <div class="current-race-value mb-3" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '未選択'}">8レース</div>
-                            <div class="current-race-help">PCでもスマホでも、いま見たい会場とレース番号を右側ですぐ確認できます。</div>
+                            <div class="hero-badge mb-3">現在開催中の確認枠</div>
+                            <div class="current-race-grid">
+                                <div class="current-race-tile">
+                                    <div class="current-race-label mb-1">レース場</div>
+                                    <div id="currentVenueLabel" class="current-race-value" th:text="${selectedVenue} ?: '川口'">川口</div>
+                                </div>
+                                <div class="current-race-tile">
+                                    <div class="current-race-label mb-1">レース番号</div>
+                                    <div id="currentRaceNumberLabel" class="current-race-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '8レース'}">8レース</div>
+                                </div>
+                            </div>
+                            <div class="current-race-help">いま確認したい会場とレース番号を、PCでもスマホでも右側で迷わず見返せる仮表示枠です。将来は開催中情報と連動しやすい構造にしています。</div>
                         </aside>
                     </div>
                 </div>
             </section>
 
             <section id="basic-actions" class="page-card p-4 p-md-5 mb-5">
-                <div class="row g-4 justify-content-center align-items-center">
-                    <div class="col-lg-5 col-xl-4">
+                <div class="basic-actions-layout">
+                    <div class="section-heading mx-lg-auto">
                         <span class="section-badge mb-2">基本操作</span>
-                        <h2 class="section-title mb-2">レース場とレース番号を選んで確認</h2>
-                        <p class="text-secondary mb-0">見たい会場とレース番号を選ぶと、当日の確認ポイントへ進みやすくなります。</p>
+                        <h2 class="section-title mb-2">レース場とレース番号を選んで確認を始める</h2>
+                        <p class="section-copy mb-0">最初に会場とレース番号を決めると、動画、外部リンク、記録画面への流れが分かりやすくなります。説明文は左に寄りすぎない配置にして、PCでも読みやすく整えています。</p>
                     </div>
-                    <div class="col-lg-7 col-xl-6">
-                        <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
-                            <div class="row g-3 align-items-end">
-                                <div class="col-md-4">
-                                    <label for="venueSelect" class="form-label fw-semibold fs-5">レース場</label>
-                                    <select id="venueSelect" name="venue" class="form-select form-select-lg">
-                                        <option value="">選択してください</option>
-                                        <option th:each="venueName : ${venueNames}" th:value="${venueName}" th:text="${venueName}">川口</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号</label>
-                                    <select id="raceNumberSelect" name="raceNumber" class="form-select form-select-lg">
-                                        <option value="">選択してください</option>
-                                        <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="submit" class="btn btn-primary btn-lg w-100">検索</button>
-                                </div>
-                                <div class="col-12">
-                                    <div id="selectionSummary" class="selector-note p-3">レース場とレース番号を選ぶと、確認したい情報が見やすくなります。</div>
-                                </div>
+                    <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label for="venueSelect" class="form-label fw-semibold fs-5">レース場</label>
+                                <select id="venueSelect" name="venue" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option th:each="venueName : ${venueNames}" th:value="${venueName}" th:text="${venueName}">川口</option>
+                                </select>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <section id="race-info" class="page-card p-4 p-md-5 mb-5">
-                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-                    <div>
-                        <span class="section-badge mb-2">レース情報</span>
-                        <h2 class="section-title mb-2">当日の開催情報プレースホルダー</h2>
-                        <p class="text-secondary mb-0">今後の外部連携で、その日開催中のレース場の情報をタイムリーに表示する想定です。</p>
-                    </div>
-                    <div class="status-chip">選択中の会場: <span th:text="${selectedVenue}">川口</span></div>
-                </div>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-4">
-                        <div class="weather-tile p-4 h-100">
-                            <div class="weather-label mb-2">天気</div>
-                            <div class="weather-value">連携待ち</div>
-                            <div class="helper-text mt-2">晴れ、曇り、雨などを表示予定です。</div>
+                            <div class="col-md-4">
+                                <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号</label>
+                                <select id="raceNumberSelect" name="raceNumber" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">検索</button>
+                            </div>
+                            <div class="col-12">
+                                <div id="selectionSummary" class="selector-note p-3">レース場とレース番号を選ぶと、確認中の内容がここにまとまります。</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="weather-tile p-4 h-100">
-                            <div class="weather-label mb-2">気候</div>
-                            <div class="weather-value">連携待ち</div>
-                            <div class="helper-text mt-2">気温、湿度、風の情報を表示予定です。</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="weather-tile p-4 h-100">
-                            <div class="weather-label mb-2">走路状況</div>
-                            <div class="weather-value">連携待ち</div>
-                            <div class="helper-text mt-2">走路状態や走路温度を表示予定です。</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="info-placeholder">
-                    <div>
-                        <strong>当日開催レース情報エリア</strong>
-                        <div class="mt-2">外部連携後は、この場所に会場ごとの最新コンディションが表示されます。</div>
-                    </div>
+                    </form>
                 </div>
             </section>
 
             <section id="media-area" class="page-card p-4 p-md-5 mb-5">
-                <div class="desktop-media-layout row g-4 align-items-start">
-                    <div class="col-lg-8">
-                        <span class="section-badge mb-2">動画</span>
-                        <h2 class="section-title mb-2">2画面で見比べながら確認</h2>
-                        <p class="text-secondary mb-4">PCでは、公式とレース場の動画を左右に並べて見比べられる構成です。</p>
-
-                        <div class="dual-video-grid mb-4">
-                            <div class="video-card p-4">
-                                <div class="fw-bold mb-2">左: 公式</div>
-                                <div class="video-placeholder">
-                                    <div>
-                                        <strong>公式動画プレースホルダー</strong>
-                                        <div class="mt-2">公式動画や配信案内をここへ表示予定です。</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="video-card p-4">
-                                <div class="fw-bold mb-2">右: レース場</div>
-                                <div class="video-placeholder">
-                                    <div>
-                                        <strong>レース場動画プレースホルダー</strong>
-                                        <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="desktop-media-layout">
+                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+                        <div>
+                            <span class="section-badge mb-2">動画と外部リンク</span>
+                            <h2 class="section-title mb-2">PCでは2画面で見比べながら確認</h2>
+                            <p class="section-copy mb-0">左に公式動画、右にレース場動画を置き、関連リンクとタイマーはその下で整理します。右側には将来メモ切替を足しやすい余地を残しています。</p>
                         </div>
-
-                        <div class="timer-card compact-timer-card p-4">
-                            <span class="section-badge mb-2">タイマー</span>
-                            <h2 class="section-title mb-2">締切タイマー</h2>
-                            <p class="text-secondary mb-3">小さめの表示で、必要なときに見やすく確認できるサイズ感にしています。</p>
-                            <!-- 将来的に締切直前のバイブ通知や注意表示を追加しやすい枠 -->
-                            <div class="compact-timer-display">
-                                <div>
-                                    <strong>00:00:00</strong>
-                                    <div class="mt-2">投票締切までの残り時間を表示予定です。</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="status-chip">選択中: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '川口'">川口</span></div>
                     </div>
 
-                    <div class="col-lg-4">
-                        <div class="link-card p-4 p-md-5 h-100">
-                            <span class="section-badge mb-2">外部リンク</span>
-                            <h2 class="section-title mb-2">すぐ使える外部リンク導線</h2>
-                            <p class="text-secondary mb-4">公式関連とレース場リンクをまとめて見たいときは、一覧ページへそのまま移動できます。</p>
+                    <div class="media-layout">
+                        <div>
+                            <div class="dual-video-grid mb-4">
+                                <div class="video-card p-4">
+                                    <div class="video-panel-title mb-1">左: 公式動画</div>
+                                    <div class="video-panel-subtitle mb-3">公式配信や案内を確認するための表示枠です。</div>
+                                    <div class="video-placeholder">
+                                        <div>
+                                            <strong>公式動画プレースホルダー</strong>
+                                            <div class="mt-2">公式動画や配信案内をここへ表示予定です。</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="d-grid gap-3 mb-4">
-                                <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg social-btn">
-                                    <span class="social-logo">覧</span>
-                                    <span>外部リンク一覧を見る</span>
-                                </a>
-                            </div>
-
-                            <div class="d-grid gap-3 mb-4">
-                                <a th:href="${officialRelatedLinks[0].url}" th:if="${officialRelatedLinks.size() > 0}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">AutoRace.jp</a>
-                                <a th:href="${officialRelatedLinks[1].url}" th:if="${officialRelatedLinks.size() > 1}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn" th:text="${officialRelatedLinks[1].siteName}">ファンクラブ</a>
-                            </div>
-
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-4 col-6" th:each="venueName : ${venueNames}">
-                                    <a th:href="@{/(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
+                                <div class="video-card p-4">
+                                    <div class="video-panel-title mb-1">右: レース場動画</div>
+                                    <div class="video-panel-subtitle mb-3">会場ごとの映像や、将来のメモ切替を追加しやすい側です。</div>
+                                    <div class="video-placeholder mb-3">
+                                        <div>
+                                            <strong>レース場動画プレースホルダー</strong>
+                                            <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
+                                        </div>
+                                    </div>
+                                    <div class="note-card p-3">
+                                        <div class="fw-bold mb-2 soft-strong">将来拡張用メモ枠</div>
+                                        <div class="note-placeholder">今後はここにメモ切替や補助情報を追加できる想定です。</div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="row g-3">
-                                <div class="col-12"><a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg social-btn"><span>公式サイト</span></a></div>
-                                <div class="col-12"><a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn youtube-btn"><span>YouTube</span></a></div>
-                                <div class="col-12"><a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn instagram-btn"><span>Instagram</span></a></div>
-                                <div class="col-12"><a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn facebook-btn"><span>Facebook</span></a></div>
+                            <div class="timer-card compact-timer-card p-4">
+                                <span class="section-badge mb-2">タイマー</span>
+                                <h2 class="section-title mb-2">締切までの残り時間</h2>
+                                <p class="section-copy mb-3">動画エリアの下で見やすい位置を維持しつつ、少し小さめに整理しています。将来は締切直前の通知やバイブ対応を足しやすい前提です。</p>
+                                <!-- 将来的にバイブ通知や締切直前アラートを追加しやすい構造にしている -->
+                                <div class="timer-display">
+                                    <div>
+                                        <div class="timer-clock">00:00:00</div>
+                                        <div class="mt-2">投票締切までの残り時間を表示予定です。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="link-card p-4 p-md-5 h-100">
+                                <span class="section-badge mb-2">外部リンク</span>
+                                <h2 class="section-title mb-2">必要なリンクを文字中心で整理</h2>
+                                <p class="section-copy mb-4">公式とファンクラブは1ボタンずつ、レース場リンクは種類ごとに見分けやすく並べています。</p>
+
+                                <div class="link-stack mb-4">
+                                    <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">公式サイト</a>
+                                    <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</a>
+                                    <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">外部リンク一覧を見る</a>
+                                </div>
+
+                                <div class="fw-bold mb-3 soft-strong">レース場を切り替える</div>
+                                <div class="venue-quick-grid mb-4">
+                                    <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
+                                </div>
+
+                                <div class="mobile-link-stack">
+                                    <a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary link-text-btn">レース場の公式サイト</a>
+                                    <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">レース場のYouTube</a>
+                                    <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">レース場のInstagram</a>
+                                    <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">レース場のFacebook</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="mobile-switch-shell d-lg-none">
-                    <span class="section-badge mb-2">スマホ向け</span>
-                    <h2 class="section-title mb-2">切り替えて見やすく確認</h2>
-                    <p class="text-secondary mb-4">スマホでは二段ボタンで切り替えながら、動画とリンクを押しやすく確認できます。</p>
+                    <span class="section-badge mb-2">スマホ向け動画とリンク</span>
+                    <h2 class="section-title mb-2">二段ボタンで切り替えて確認</h2>
+                    <p class="section-copy mb-4">スライド式ではなく、押しやすい二段ボタンで公式とレース場、動画とリンクを切り替えられるようにしています。</p>
 
-                    <div class="mobile-video-switch mb-4">
-                        <div class="mobile-switch-row" role="group" aria-label="案内元の切り替え">
-                            <button type="button" class="mobile-switch-btn active" data-mobile-source="official">公式</button>
-                            <button type="button" class="mobile-switch-btn" data-mobile-source="venue">レース場</button>
-                        </div>
-                        <div class="mobile-switch-row" role="group" aria-label="表示内容の切り替え">
-                            <button type="button" class="mobile-switch-btn active" data-mobile-content="video">動画</button>
-                            <button type="button" class="mobile-switch-btn" data-mobile-content="link">リンク</button>
-                        </div>
+                    <div class="mobile-switch-row mb-3" role="group" aria-label="案内元の切り替え">
+                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">公式</button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">レース場</button>
+                    </div>
+                    <div class="mobile-switch-row" role="group" aria-label="表示内容の切り替え">
+                        <button type="button" class="mobile-switch-btn active" data-mobile-content="video">動画</button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-content="link">リンク</button>
                     </div>
 
                     <div class="mobile-video-panel active" data-mobile-panel="official-video">
-                        <div class="video-card p-4 mb-4">
-                            <div class="fw-bold mb-2">公式動画</div>
-                            <div class="video-placeholder">
-                                <div>
-                                    <strong>公式動画プレースホルダー</strong>
-                                    <div class="mt-2">公式動画や案内リンクをここへ表示予定です。</div>
-                                </div>
+                        <div class="video-panel-title mb-2">公式動画</div>
+                        <div class="video-placeholder">
+                            <div>
+                                <strong>公式動画プレースホルダー</strong>
+                                <div class="mt-2">公式配信や案内をここへ表示予定です。</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mobile-video-panel" data-mobile-panel="venue-video">
-                        <div class="video-card p-4 mb-4">
-                            <div class="fw-bold mb-2">レース場動画</div>
-                            <div class="video-placeholder">
-                                <div>
-                                    <strong>レース場動画プレースホルダー</strong>
-                                    <div class="mt-2">選択中の会場に合わせた動画案内を表示予定です。</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mobile-video-panel" data-mobile-panel="official-link">
-                        <div class="link-card p-4 mb-4">
-                            <div class="fw-bold mb-3">公式リンク</div>
-                            <div class="d-grid gap-3">
-                                <a th:href="${officialRelatedLinks[0].url}" th:if="${officialRelatedLinks.size() > 0}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">AutoRace.jp</a>
-                                <a th:href="${officialRelatedLinks[1].url}" th:if="${officialRelatedLinks.size() > 1}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn" th:text="${officialRelatedLinks[1].siteName}">ファンクラブ</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mobile-video-panel" data-mobile-panel="venue-link">
-                        <div class="link-card p-4 mb-4">
-                            <div class="fw-bold mb-3">レース場リンク</div>
-                            <div class="venue-quick-grid mb-4">
-                                <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-12"><a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg social-btn"><span>公式サイト</span></a></div>
-                                <div class="col-12"><a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn youtube-btn"><span>YouTube</span></a></div>
-                                <div class="col-12"><a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn instagram-btn"><span>Instagram</span></a></div>
-                                <div class="col-12"><a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg social-btn facebook-btn"><span>Facebook</span></a></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="timer-card p-4">
-                        <span class="section-badge mb-2">タイマー</span>
-                        <h2 class="section-title mb-2">締切タイマー枠</h2>
-                        <p class="text-secondary mb-4">スマホでも押しやすい余白で、締切表示を確認できる位置に置いています。</p>
-                        <!-- 将来的に締切直前のバイブ通知や注意表示を追加しやすい枠 -->
-                        <div class="compact-timer-display">
+                        <div class="video-panel-title mb-2">レース場動画</div>
+                        <div class="video-placeholder mb-3">
                             <div>
-                                <strong>00:00:00</strong>
+                                <strong>レース場動画プレースホルダー</strong>
+                                <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
+                            </div>
+                        </div>
+                        <div class="note-card p-3">
+                            <div class="fw-bold mb-2 soft-strong">将来拡張用メモ枠</div>
+                            <div class="note-placeholder">今後は会場メモや補助情報の切替枠として使える想定です。</div>
+                        </div>
+                    </div>
+
+                    <div class="mobile-link-panel" data-mobile-panel="official-link">
+                        <div class="fw-bold mb-3 soft-strong">公式リンク</div>
+                        <div class="mobile-link-stack">
+                            <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">公式サイト</a>
+                            <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</a>
+                        </div>
+                    </div>
+
+                    <div class="mobile-link-panel" data-mobile-panel="venue-link">
+                        <div class="fw-bold mb-3 soft-strong">レース場リンク</div>
+                        <div class="venue-quick-grid mb-4">
+                            <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
+                        </div>
+                        <div class="mobile-link-stack">
+                            <a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary link-text-btn">レース場の公式サイト</a>
+                            <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">レース場のYouTube</a>
+                            <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">レース場のInstagram</a>
+                            <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">レース場のFacebook</a>
+                        </div>
+                    </div>
+
+                    <div class="timer-card p-4 mt-4">
+                        <span class="section-badge mb-2">タイマー</span>
+                        <h2 class="section-title mb-2">締切までの残り時間</h2>
+                        <p class="section-copy mb-3">スマホでも動画のすぐ下で見返しやすい位置に置いています。将来の通知機能追加を前提にした説明も残しています。</p>
+                        <!-- 将来的にバイブ通知や締切直前アラートを追加しやすい構造にしている -->
+                        <div class="timer-display">
+                            <div>
+                                <div class="timer-clock">00:00:00</div>
                                 <div class="mt-2">投票締切までの残り時間を表示予定です。</div>
                             </div>
                         </div>
@@ -636,9 +624,9 @@
             </section>
 
             <section id="glossary-search" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">用語検索</span>
+                <span class="section-badge mb-2">用語</span>
                 <h2 class="section-title mb-2">わからない言葉をすぐ調べる</h2>
-                <p class="text-secondary mb-4">オートレース用語を検索しながら、自分のメモとして少しずつ残していけます。</p>
+                <p class="section-copy mb-4">オートレース用語を検索しながら、自分のメモとして少しずつ残していけます。</p>
                 <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
                     <div class="col-lg-9">
                         <label for="glossaryQuery" class="form-label fw-semibold">検索キーワード</label>
@@ -652,8 +640,8 @@
 
             <section id="help" class="page-card p-4 p-md-5 mb-5">
                 <span class="section-badge mb-2">ヘルプ</span>
-                <h2 class="section-title mb-2">使い方の目安</h2>
-                <p class="text-secondary mb-0">まずはレース場とレース番号を選び、そのあと当日のレース情報、動画、タイマー、外部リンク、用語検索の順で確認していく流れを想定しています。</p>
+                <h2 class="section-title mb-2">TOPページの使い方</h2>
+                <p class="section-copy mb-0">レース場とレース番号を選んだあと、動画と外部リンクを確認し、必要に応じて新規記録や用語ページへ進む流れを想定しています。デモ用トップとして、PCでもスマホでも迷いにくい順序に整理しています。</p>
             </section>
 
             <div class="home-footer-note pb-2">© Auto Race Support App</div>
@@ -678,7 +666,28 @@
             summary.textContent = venueText + " / " + raceText + " を選択中です。";
         }
 
-        function showMobileVideoPanel() {
+        function updateCurrentRaceDisplay() {
+            const venueSelect = document.getElementById("venueSelect");
+            const raceNumberSelect = document.getElementById("raceNumberSelect");
+            const currentVenueLabel = document.getElementById("currentVenueLabel");
+            const currentRaceNumberLabel = document.getElementById("currentRaceNumberLabel");
+            const selectedVenueChip = document.getElementById("selectedVenueChip");
+
+            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "川口";
+            const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "8レース";
+
+            if (currentVenueLabel) {
+                currentVenueLabel.textContent = venueText;
+            }
+            if (currentRaceNumberLabel) {
+                currentRaceNumberLabel.textContent = raceText;
+            }
+            if (selectedVenueChip) {
+                selectedVenueChip.textContent = venueText;
+            }
+        }
+
+        function showMobilePanel() {
             const sourceButton = document.querySelector("[data-mobile-source].active");
             const contentButton = document.querySelector("[data-mobile-content].active");
             if (!sourceButton || !contentButton) {
@@ -688,6 +697,25 @@
             const panelKey = sourceButton.dataset.mobileSource + "-" + contentButton.dataset.mobileContent;
             document.querySelectorAll("[data-mobile-panel]").forEach(function (panel) {
                 panel.classList.toggle("active", panel.dataset.mobilePanel === panelKey);
+            });
+        }
+
+        function syncHomeThemeSelect() {
+            const homeSelect = document.getElementById("homeThemeSelect");
+            const headerSelect = document.getElementById("appThemeSelect");
+            if (!homeSelect || !headerSelect) {
+                return;
+            }
+
+            homeSelect.value = headerSelect.value;
+
+            homeSelect.addEventListener("change", function () {
+                headerSelect.value = homeSelect.value;
+                headerSelect.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+
+            headerSelect.addEventListener("change", function () {
+                homeSelect.value = headerSelect.value;
             });
         }
 
@@ -704,12 +732,16 @@
             }
 
             updateSelectionSummary();
+            updateCurrentRaceDisplay();
+            syncHomeThemeSelect();
 
             if (venueSelect) {
                 venueSelect.addEventListener("change", updateSelectionSummary);
+                venueSelect.addEventListener("change", updateCurrentRaceDisplay);
             }
             if (raceNumberSelect) {
                 raceNumberSelect.addEventListener("change", updateSelectionSummary);
+                raceNumberSelect.addEventListener("change", updateCurrentRaceDisplay);
             }
 
             document.querySelectorAll("[data-mobile-source], [data-mobile-content]").forEach(function (button) {
@@ -719,7 +751,7 @@
                         peer.classList.remove("active");
                     });
                     button.classList.add("active");
-                    showMobileVideoPanel();
+                    showMobilePanel();
                 });
             });
 
@@ -735,10 +767,13 @@
                 window.scrollTo(0, Number(savedScroll));
             }
 
-            showMobileVideoPanel();
+            showMobilePanel();
         });
     </script>
 </body>
 </html>
+
+
+
 
 
