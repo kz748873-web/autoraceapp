@@ -1,4 +1,4 @@
-﻿package com.example.autoraceapp.entity;
+package com.example.autoraceapp.entity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
