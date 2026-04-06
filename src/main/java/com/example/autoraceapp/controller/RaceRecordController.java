@@ -42,9 +42,25 @@ public class RaceRecordController {
         return "records/form";
     }
 
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        RaceRecord record = raceRecordService.findById(id);
+        if (record == null) {
+            return "redirect:/records";
+        }
+        model.addAttribute("record", record);
+        return "records/form";
+    }
+
     @PostMapping
     public String saveRecord(@ModelAttribute RaceRecord record) {
         raceRecordService.save(record);
+        return "redirect:/records";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteRecord(@PathVariable Long id) {
+        raceRecordService.deleteById(id);
         return "redirect:/records";
     }
 

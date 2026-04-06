@@ -89,7 +89,9 @@ public class RaceRecordService {
 
         record.setFeaturedTrialTimeNote("");
         record.setRaceOverallNote("");
-        record.setBetType("");
+        record.setBetLine1Type("");
+        record.setBetLine2Type("");
+        record.setBetLine3Type("");
         record.setFinalPrediction("");
         record.setPredictionNote("");
         record.setRaceResult("");
@@ -153,6 +155,9 @@ public class RaceRecordService {
 
         record.setFeaturedTrialTimeNote(trimToEmpty(record.getFeaturedTrialTimeNote()));
         record.setRaceOverallNote(trimToEmpty(record.getRaceOverallNote()));
+        record.setBetLine1Type(trimToEmpty(record.getBetLine1Type()));
+        record.setBetLine2Type(trimToEmpty(record.getBetLine2Type()));
+        record.setBetLine3Type(trimToEmpty(record.getBetLine3Type()));
         record.setBetType(trimToEmpty(record.getBetType()));
         record.setFinalPrediction(trimToEmpty(record.getFinalPrediction()));
         record.setPredictionNote(trimToEmpty(record.getPredictionNote()));
@@ -163,19 +168,32 @@ public class RaceRecordService {
     }
 
     private void calculateBetAmounts(RaceRecord record) {
-        Integer betCount = record.getBetCount();
-        Integer unitBetAmount = record.getUnitBetAmount();
+        int total = safeInt(record.getBetLine1Amount())
+                + safeInt(record.getBetLine2Amount())
+                + safeInt(record.getBetLine3Amount());
 
-        if (betCount != null && unitBetAmount != null) {
-            int calculatedTotal = betCount * unitBetAmount;
-            record.setTotalBetAmount(calculatedTotal);
-
-            if (record.getPurchaseAmount() == null) {
-                record.setPurchaseAmount(calculatedTotal);
-            }
+        if (total > 0) {
+            record.setTotalBetAmount(total);
+            record.setPurchaseAmount(total);
         } else if (record.getPurchaseAmount() != null) {
             record.setTotalBetAmount(record.getPurchaseAmount());
         }
+
+        if (record.getPayoutAmount() != null) {
+            record.setProfitLoss(record.getPayoutAmount() - safeInt(record.getTotalBetAmount()));
+        } else {
+            record.setProfitLoss(null);
+        }
+
+        if (!record.getBetLine1Type().isBlank()) {
+            record.setBetType(record.getBetLine1Type());
+            record.setBetCount(record.getBetLine1Count());
+            record.setUnitBetAmount(record.getBetLine1Amount());
+        }
+    }
+
+    private int safeInt(Integer value) {
+        return value == null ? 0 : value;
     }
 
     private void setLegacyFeaturedRider(RaceRecord record) {
@@ -202,30 +220,16 @@ public class RaceRecordService {
     private List<RaceRecord> createDummyRecords() {
         List<RaceRecord> dummyRecords = new ArrayList<>();
 
-        RaceRecord first = new RaceRecord(
-                1L,
-                "2026-03-31",
-                "川口",
-                8,
-                "晴れ",
-                "22",
-                "48",
-                "31",
-                "良走路",
-                "◎ 青山周平 / ○ 鈴木圭一郎 / △ 佐藤摩弥",
-                "3連単",
-                "1-3-5 / 1-5-3",
-                "スタート力を重視したレースだった。"
-        );
-        first.setRaceScheduleType("普通開催");
+        RaceRecord first = new RaceRecord(1L, "2026-03-31", "川口", 8, "晴れ", "22", "48", "31", "良走路", "◎ 山田太郎 / ○ 鈴木一郎 / △ 佐藤花子", "3連単", "1-3-5 / 1-5-3", "スタート力を重視したレースだった。");
+        first.setRaceScheduleType("デイレース");
         first.setHandicapInfo("0m / 10m / 20m");
-        first.setFeaturedRider1Name("青山周平");
+        first.setFeaturedRider1Name("山田太郎");
         first.setFeaturedRider1Number(1);
         first.setFeaturedRider1Mark("◎");
-        first.setFeaturedRider2Name("鈴木圭一郎");
+        first.setFeaturedRider2Name("鈴木一郎");
         first.setFeaturedRider2Number(3);
         first.setFeaturedRider2Mark("○");
-        first.setFeaturedRider3Name("佐藤摩弥");
+        first.setFeaturedRider3Name("佐藤花子");
         first.setFeaturedRider3Number(5);
         first.setFeaturedRider3Mark("△");
         first.setPreRacePrediction("内枠中心で組み立てたい。スタート力を重視。");
@@ -241,39 +245,27 @@ public class RaceRecordService {
         first.setTrialTime8("3.38");
         first.setFeaturedTrialTimeNote("1号車と5号車の試走が良く、上積みを感じた。");
         first.setRaceOverallNote("スタートで主導権を取れるかがポイント。");
-        first.setBetCount(6);
-        first.setUnitBetAmount(100);
-        first.setPurchaseAmount(600);
-        first.setTotalBetAmount(600);
+        first.setBetLine1Type("3連単");
+        first.setBetLine1Count(6);
+        first.setBetLine1Amount(600);
+        first.setPayoutAmount(1240);
         first.setPredictionNote("試走後に1号車中心へ寄せた。");
         first.setRaceResult("結果は1-3-5。");
         first.setResultComparison("本命からの組み立ては合っていた。");
         first.setReviewNote("試走上位の車を素直に評価できた。");
+        calculateBetAmounts(first);
+        setLegacyFeaturedRider(first);
 
-        RaceRecord second = new RaceRecord(
-                2L,
-                "2026-03-30",
-                "伊勢崎",
-                10,
-                "曇り",
-                "18",
-                "62",
-                "24",
-                "湿走路",
-                "◎ 高橋貢 / ▲ 中村雅人 / ○ 金子大輔",
-                "2連単",
-                "2-6 / 2-1",
-                "試走気配を見て軸を絞った。"
-        );
+        RaceRecord second = new RaceRecord(2L, "2026-03-30", "伊勢崎", 10, "曇り", "18", "62", "24", "湿走路", "◎ 田中次郎 / ▲ 高橋未来 / ○ 小林優子", "2連単", "2-6 / 2-1", "試走気配を見て軸を絞った。");
         second.setRaceScheduleType("ナイター");
         second.setHandicapInfo("0m / 10m / 10m");
-        second.setFeaturedRider1Name("高橋貢");
+        second.setFeaturedRider1Name("田中次郎");
         second.setFeaturedRider1Number(2);
         second.setFeaturedRider1Mark("◎");
-        second.setFeaturedRider2Name("中村雅人");
+        second.setFeaturedRider2Name("高橋未来");
         second.setFeaturedRider2Number(6);
         second.setFeaturedRider2Mark("▲");
-        second.setFeaturedRider3Name("金子大輔");
+        second.setFeaturedRider3Name("小林優子");
         second.setFeaturedRider3Number(1);
         second.setFeaturedRider3Mark("○");
         second.setPreRacePrediction("2号車の試走とスタートを軸に考える。");
@@ -289,14 +281,16 @@ public class RaceRecordService {
         second.setTrialTime8("3.43");
         second.setFeaturedTrialTimeNote("2号車が最上位の試走で気配良好。");
         second.setRaceOverallNote("湿走路なので無理な捲りは届きにくい想定。");
-        second.setBetCount(3);
-        second.setUnitBetAmount(200);
-        second.setPurchaseAmount(600);
-        second.setTotalBetAmount(600);
+        second.setBetLine1Type("2連単");
+        second.setBetLine1Count(3);
+        second.setBetLine1Amount(600);
+        second.setPayoutAmount(0);
         second.setPredictionNote("点数を絞って回収重視にした。");
         second.setRaceResult("結果は2-6。");
         second.setResultComparison("軸選びは良かったが相手評価に課題あり。");
         second.setReviewNote("湿走路の時は先行力をさらに重視したい。");
+        calculateBetAmounts(second);
+        setLegacyFeaturedRider(second);
 
         dummyRecords.add(first);
         dummyRecords.add(second);
@@ -314,13 +308,11 @@ public class RaceRecordService {
     }
 
     private boolean contains(String value, String keyword) {
-        if (value == null) {
-            return false;
-        }
-        return value.contains(keyword);
+        return value != null && value.contains(keyword);
     }
 
     private String trimToEmpty(String value) {
         return value == null ? "" : value.trim();
     }
 }
+

@@ -35,7 +35,8 @@
             top: 1.5rem;
         }
 
-        .glossary-summary {
+        .glossary-summary,
+        .glossary-search-panel {
             border: 1px solid var(--card);
             border-radius: 1rem;
             background: var(--soft-surface);
@@ -84,9 +85,38 @@
             text-align: center;
         }
 
+        .glossary-panel {
+            max-width: 34rem;
+        }
+
+        .glossary-results-wrap {
+            max-width: 56rem;
+        }
+
+        @media (min-width: 992px) {
+            .glossary-layout {
+                grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr);
+                align-items: start;
+            }
+
+            .glossary-panel {
+                width: min(100%, 24rem);
+            }
+
+            .glossary-results-wrap {
+                width: min(100%, 56rem);
+            }
+        }
+
         @media (max-width: 991.98px) {
             .glossary-sticky {
                 position: static;
+            }
+
+            .glossary-panel,
+            .glossary-results-wrap {
+                max-width: none;
+                width: 100%;
             }
         }
     </style>
@@ -95,8 +125,8 @@
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
         <main class="container py-4 py-md-5 flex-grow-1">
-            <div class="glossary-layout row g-4 align-items-start">
-                <div class="col-lg-4">
+            <div class="glossary-layout justify-content-center">
+                <div class="glossary-panel">
                     <div class="page-card p-4 p-md-5 glossary-sticky">
                         <span class="section-badge mb-2">用語追加</span>
                         <h1 class="section-title mb-2">自分の用語メモを増やす</h1>
@@ -125,8 +155,8 @@
                     </div>
                 </div>
 
-                <div class="col-lg-8">
-                    <section class="page-card p-4 p-md-5 mb-4">
+                <div class="glossary-results-wrap">
+                    <section class="page-card p-4 p-md-5 mb-4 glossary-search-panel">
                         <span class="section-badge mb-2">用語検索</span>
                         <h2 class="section-title mb-2">知りたい言葉をすぐ探す</h2>
                         <p class="glossary-help mb-4">用語、意味、自分のメモをまとめて検索できます。検索しながら、そのままカードを更新できます。</p>

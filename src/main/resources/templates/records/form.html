@@ -3,9 +3,54 @@
 <head>
     <th:block th:replace="~{layout/base :: commonHead('レース記録登録 | オートレース予想補助アプリ')}"></th:block>
     <style>
+        .section-shell {
+            border: 1px solid var(--card);
+            border-radius: 1.5rem;
+            background: #ffffff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.06);
+        }
+
+        .section-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid var(--card);
+        }
+
         .section-subtitle {
             color: var(--sub);
             line-height: 1.8;
+        }
+
+        .section-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            background: var(--soft-surface);
+            color: var(--deep);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .section-pill.is-saved {
+            background: color-mix(in srgb, var(--accent) 14%, white);
+            color: var(--accent-strong);
+        }
+
+        .section-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding: 0 1.5rem 1.25rem;
+        }
+
+        .section-body {
+            padding: 0 1.5rem 1.5rem;
         }
 
         .sub-block {
@@ -14,236 +59,95 @@
             background: var(--soft-surface);
         }
 
-        .todo-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .todo-item {
-            border: 1px solid var(--card);
-            border-radius: 1rem;
-            background: #ffffff;
-        }
-
-        .todo-check {
-            width: 1.2rem;
-            height: 1.2rem;
-        }
-
-        .todo-label {
-            font-weight: 700;
-            color: var(--deep);
-        }
-
-        .sticky-bottom-actions {
-            position: sticky;
-            bottom: 1rem;
-            z-index: 10;
-        }
-
-        .unit-input .form-control {
-            border-right: 0;
-        }
-
-        .unit-input .input-group-text {
-            min-width: 4.25rem;
-            justify-content: center;
-            font-weight: 700;
+        .field-caption {
+            font-size: 0.85rem;
             color: var(--sub);
-            background: #ffffff;
-            border-left: 0;
+            margin-top: 0.35rem;
         }
 
         .start-diagram-shell {
             border: 1px solid var(--card);
             border-radius: 1.25rem;
-            background: var(--soft-surface);
-        }
-
-        .start-diagram-note {
-            color: var(--sub);
-            line-height: 1.75;
-        }
-
-        .start-diagram-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-        }
-
-        .start-diagram-stage {
-            border: 1px solid var(--card);
-            border-radius: 1.2rem;
-            background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
-            padding: 1rem;
+            background: linear-gradient(180deg, #fef7e8 0%, #fffdf8 100%);
+            overflow: hidden;
         }
 
         .start-diagram-board {
             position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            overflow: hidden;
-            border-radius: 1rem;
-            border: 2px solid #c8d9eb;
+            min-height: 26rem;
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 253, 0.92)),
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(31, 77, 130, 0.05) 0,
-                    rgba(31, 77, 130, 0.05) 12.5%,
-                    rgba(255, 255, 255, 0.96) 12.5%,
-                    rgba(255, 255, 255, 0.96) 25%
-                );
-            touch-action: none;
-            user-select: none;
+                linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0, rgba(255, 255, 255, 0.6) 1px, transparent 1px, transparent 12.5%),
+                linear-gradient(180deg, #efe2bd 0%, #e7d4a2 100%);
         }
 
-        .start-diagram-board::before {
-            content: "";
+        .start-diagram-guide {
             position: absolute;
-            left: 8%;
-            right: 8%;
-            top: 18%;
-            bottom: 18%;
-            border: 2px dashed rgba(31, 77, 130, 0.18);
-            border-radius: 1rem;
+            inset: 0;
             pointer-events: none;
         }
 
-        .start-diagram-board::after {
-            content: "スタートライン";
+        .start-lane-line {
             position: absolute;
-            left: 50%;
-            bottom: 0.9rem;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(92, 67, 22, 0.16);
+        }
+
+        .start-lane-label {
+            position: absolute;
+            top: 0.8rem;
             transform: translateX(-50%);
-            padding: 0.35rem 0.75rem;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(31, 77, 130, 0.18);
-            color: var(--deep);
-            font-size: 0.9rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            pointer-events: none;
+            color: rgba(92, 67, 22, 0.72);
         }
 
-        .start-guide-line {
+        .start-line {
             position: absolute;
-            left: 10%;
-            right: 10%;
-            height: 1px;
-            border-top: 1px dashed rgba(31, 77, 130, 0.18);
-            pointer-events: none;
+            left: 0;
+            right: 0;
+            top: 70%;
+            border-top: 4px dashed rgba(156, 67, 32, 0.5);
         }
-
-        .start-guide-line.line-1 { top: 22%; }
-        .start-guide-line.line-2 { top: 38%; }
-        .start-guide-line.line-3 { top: 54%; }
-        .start-guide-line.line-4 { top: 70%; }
 
         .start-token {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 3.2rem;
-            height: 3.2rem;
-            border-radius: 999px;
-            border: 2px solid rgba(31, 45, 61, 0.12);
-            box-shadow: 0 0.65rem 1rem rgba(15, 47, 79, 0.18);
-            display: inline-flex;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 1rem;
-            cursor: grab;
-            touch-action: none;
+            color: #ffffff;
+            box-shadow: 0 0.8rem 1.4rem rgba(15, 23, 42, 0.18);
             transform: translate(-50%, -50%);
+            touch-action: none;
+            user-select: none;
+            cursor: grab;
         }
 
         .start-token.is-dragging {
             cursor: grabbing;
-            box-shadow: 0 0.9rem 1.2rem rgba(15, 47, 79, 0.24);
-            z-index: 2;
+            box-shadow: 0 1rem 1.8rem rgba(15, 23, 42, 0.26);
+            z-index: 3;
         }
 
-        .start-token.token-1 {
-            background: #ffffff;
-            color: #243240;
-            border-color: #cfd8e3;
-        }
+        .lane-1 { background: #64748b; }
+        .lane-2 { background: #2563eb; }
+        .lane-3 { background: #dc2626; }
+        .lane-4 { background: #f97316; }
+        .lane-5 { background: #16a34a; }
+        .lane-6 { background: #7c3aed; }
+        .lane-7 { background: #0f766e; }
+        .lane-8 { background: #475569; }
 
-        .start-token.token-2 {
-            background: #1f1f1f;
-            color: #ffffff;
-        }
-
-        .start-token.token-3 {
-            background: #d64545;
-            color: #ffffff;
-        }
-
-        .start-token.token-4 {
-            background: #2f77d8;
-            color: #ffffff;
-        }
-
-        .start-token.token-5 {
-            background: #f2cc3d;
-            color: #3f3200;
-        }
-
-        .start-token.token-6 {
-            background: #3fa968;
-            color: #ffffff;
-        }
-
-        .start-token.token-7 {
-            background: #f08a32;
-            color: #ffffff;
-        }
-
-        .start-token.token-8 {
-            background: #d96ba5;
-            color: #ffffff;
-        }
-
-        .start-token-legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .start-token-chip {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.75rem 0.9rem;
-            border-radius: 1rem;
-            border: 1px solid var(--card);
-            background: #ffffff;
-            font-weight: 700;
-            color: var(--main);
-        }
-
-        .start-token-chip-dot {
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 999px;
-            border: 1px solid rgba(31, 45, 61, 0.14);
-            flex: 0 0 auto;
-        }
-
-        .start-token-chip-dot.token-1 { background: #ffffff; }
-        .start-token-chip-dot.token-2 { background: #1f1f1f; }
-        .start-token-chip-dot.token-3 { background: #d64545; }
-        .start-token-chip-dot.token-4 { background: #2f77d8; }
-        .start-token-chip-dot.token-5 { background: #f2cc3d; }
-        .start-token-chip-dot.token-6 { background: #3fa968; }
-        .start-token-chip-dot.token-7 { background: #f08a32; }
-        .start-token-chip-dot.token-8 { background: #d96ba5; }
-
-        .trial-input-card {
+        .trial-input-card,
+        .bet-line-card,
+        .summary-card {
             border: 1px solid var(--card);
             border-radius: 1rem;
             background: #ffffff;
@@ -257,139 +161,215 @@
             margin-top: 0.75rem;
         }
 
-        .trial-mark-badge {
+        .trial-mark-badge,
+        .trial-rank-badge,
+        .summary-pill {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 2.4rem;
-            padding: 0.35rem 0.65rem;
+            min-height: 2rem;
+            padding: 0.35rem 0.8rem;
             border-radius: 999px;
-            background: var(--section-badge-bg);
-            border: 1px solid color-mix(in srgb, var(--brand-strong) 55%, white);
-            color: var(--deep);
+            font-size: 0.9rem;
             font-weight: 700;
         }
 
-        .trial-rank-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 3rem;
-            padding: 0.35rem 0.65rem;
-            border-radius: 999px;
+        .trial-mark-badge {
+            background: color-mix(in srgb, var(--accent) 16%, white);
+            color: var(--accent-strong);
+        }
+
+        .trial-rank-badge,
+        .summary-pill {
             background: var(--soft-surface);
+            color: var(--deep);
             border: 1px solid var(--card);
-            color: var(--theme-text);
-            font-weight: 700;
+        }
+
+        .bet-line-card .form-label {
+            margin-bottom: 0.4rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-label {
+            font-size: 0.85rem;
+            color: var(--sub);
+            margin-bottom: 0.35rem;
+        }
+
+        .summary-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--deep);
+        }
+
+        .summary-value.is-positive {
+            color: #166534;
+        }
+
+        .summary-value.is-negative {
+            color: #b91c1c;
         }
 
         @media (max-width: 991.98px) {
-            .sticky-bottom-actions {
-                position: static;
-            }
-
-            .start-token {
-                width: 2.9rem;
-                height: 2.9rem;
+            .start-diagram-board {
+                min-height: 22rem;
             }
         }
 
-        @media (max-width: 575.98px) {
-            .start-diagram-stage {
-                padding: 0.8rem;
+        @media (max-width: 767.98px) {
+            .section-header,
+            .section-actions,
+            .section-body {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .section-actions .btn {
+                flex: 1 1 calc(33.333% - 0.5rem);
+                min-width: 0;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
             }
 
             .start-token {
-                width: 2.7rem;
-                height: 2.7rem;
-                font-size: 0.95rem;
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-shell d-flex flex-column">
-        <div th:replace="~{layout/header :: siteHeader}"></div>
-        <main class="container py-4 py-md-5 flex-grow-1">
-            <div class="mb-4">
-                <h1 class="h2 fw-bold mb-2">レース記録登録</h1>
-                <p class="text-secondary mb-0">前日予想、当日予想、レース後の振り返りを一つの画面でまとめて記録できます。</p>
+<div class="app-shell d-flex flex-column">
+    <div th:replace="~{layout/header :: siteHeader}"></div>
+
+    <main class="container py-4 py-md-5 flex-grow-1">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+            <div>
+                <h1 class="fw-bold mb-2">レース記録を登録する</h1>
+                <p class="section-subtitle mb-0">
+                    前日予想から当日予想、結果と考察までを順番に入力できます。<br>
+                    入力しやすさを優先し、スマホでもPCでも迷いにくい構成にしています。
+                </p>
             </div>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <button type="submit" form="raceRecordForm" class="btn btn-primary btn-lg">この内容で登録する</button>
+                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">一覧へ戻る</a>
+            </div>
+        </div>
 
-            <form th:action="@{/records}" th:object="${record}" method="post" class="vstack gap-4">
-                <div class="card border-0 section-card">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+        <form id="raceRecordForm" th:action="@{/records}" th:object="${record}" method="post" class="d-grid gap-4" novalidate>
+            <input type="hidden" th:field="*{id}">
+            <section class="section-shell" data-section-id="pre-race">
+                <div class="section-header">
+                    <div>
+                        <div class="section-badge mb-2">1. 前日予想</div>
+                        <h2 class="h4 fw-bold mb-2">レース情報と注目選手を先に整理する</h2>
+                        <p class="section-subtitle mb-0">開催情報、前日段階の予想、注目選手をまとめて入力します。</p>
+                    </div>
+                    <div class="section-pill js-section-status">編集中</div>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn btn-primary js-section-save">保存</button>
+                    <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
+                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
+                </div>
+                <div class="section-body">
+                    <div class="row g-4">
+                        <div class="col-lg-7">
+                            <div class="sub-block p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">基本情報</h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="raceDate" class="form-label fw-semibold">レース日</label>
+                                        <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="venue" class="form-label fw-semibold">レース場</label>
+                                        <select id="venue" th:field="*{venue}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="川口">川口</option>
+                                            <option value="伊勢崎">伊勢崎</option>
+                                            <option value="浜松">浜松</option>
+                                            <option value="飯塚">飯塚</option>
+                                            <option value="山陽">山陽</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="raceNumber" class="form-label fw-semibold">レース番号</label>
+                                        <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="raceScheduleType" class="form-label fw-semibold">開催区分</label>
+                                        <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="デイレース">デイレース</option>
+                                            <option value="ナイター">ナイター</option>
+                                            <option value="ミッドナイト">ミッドナイト</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="handicapInfo" class="form-label fw-semibold">ハンデ情報</label>
+                                        <input type="text" id="handicapInfo" th:field="*{handicapInfo}" class="form-control form-control-lg" placeholder="例: 0mオープン">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="sub-block p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">前日予想メモ</h3>
+                                <div class="mb-3">
+                                    <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
+                                    <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control" rows="5" placeholder="例: 山田太郎のスタート先行を本線に考える"></textarea>
+                                </div>
+                                <div>
+                                    <label for="preRaceNote" class="form-label fw-semibold">前日メモ</label>
+                                    <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 鈴木一郎は気配が良く、佐藤花子は展開待ち。"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sub-block p-4 mt-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                             <div>
-                                <h2 class="section-title mb-2">1. 前日予想</h2>
-                                <p class="section-subtitle mb-0">レース前日に、開催時間帯やハンデ、注目選手などの見立てを整理しておくための入力エリアです。</p>
+                                <h3 class="h5 fw-bold mb-1">注目選手</h3>
+                                <p class="section-subtitle mb-0">印と号車を先に入れておくと、当日予想の試走タイム表示にも連動します。</p>
                             </div>
-                            <div class="text-danger fw-semibold align-self-lg-center">必須項目あり</div>
+                            <div class="summary-pill">印は ◎ / ○ / △ / 穴</div>
                         </div>
-
-                        <div class="row g-4">
-                            <div class="col-md-4">
-                                <label for="raceDate" class="form-label fw-semibold">開催日 <span class="text-danger">*</span></label>
-                                <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="venue" class="form-label fw-semibold">レース場 <span class="text-danger">*</span></label>
-                                <select id="venue" th:field="*{venue}" class="form-select form-select-lg" required>
-                                    <option value="">選択してください</option>
-                                    <option value="川口">川口</option>
-                                    <option value="伊勢崎">伊勢崎</option>
-                                    <option value="浜松">浜松</option>
-                                    <option value="飯塚">飯塚</option>
-                                    <option value="山陽">山陽</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="raceNumber" class="form-label fw-semibold">レース番号 <span class="text-danger">*</span></label>
-                                <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg" required>
-                                    <option value="">選択してください</option>
-                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="raceScheduleType" class="form-label fw-semibold">開催時間帯</label>
-                                <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
-                                    <option value="">選択してください</option>
-                                    <option value="アーリー">アーリー</option>
-                                    <option value="普通開催">普通開催</option>
-                                    <option value="ナイター">ナイター</option>
-                                    <option value="ミッドナイト">ミッドナイト</option>
-                                    <option value="オーバーミッドナイト">オーバーミッドナイト</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="handicapInfo" class="form-label fw-semibold">ハンデ情報</label>
-                                <input type="text" id="handicapInfo" th:field="*{handicapInfo}" class="form-control form-control-lg" placeholder="例: 0m / 10m / 最重ハンデ20m">
-                            </div>
-                        </div>
-
-                        <hr class="my-4">
-
-                        <h3 class="h4 fw-bold mb-3">注目選手</h3>
-                        <div class="row g-4">
-                            <div class="col-12">
-                                <div class="sub-block p-3 p-md-4">
-                                    <h4 class="h5 fw-bold mb-3">注目選手1</h4>
+                        <div class="row g-3">
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="featuredRider1Name" class="form-label fw-semibold">選手名</label>
-                                            <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 青山周平">
+                                        <div class="col-12">
+                                            <label for="featuredRider1Name" class="form-label fw-semibold">注目選手 1</label>
+                                            <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 山田太郎">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6">
                                             <label for="featuredRider1Number" class="form-label fw-semibold">号車</label>
-                                            <input type="number" id="featuredRider1Number" th:field="*{featuredRider1Number}" class="form-control form-control-lg" min="1" max="8" placeholder="1">
+                                            <select id="featuredRider1Number" th:field="*{featuredRider1Number}" class="form-select form-select-lg">
+                                                <option value="">選択</option>
+                                                <option th:each="num : ${#numbers.sequence(1, 8)}" th:value="${num}" th:text="${num + '号車'}">1号車</option>
+                                            </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6">
                                             <label for="featuredRider1Mark" class="form-label fw-semibold">印</label>
                                             <select id="featuredRider1Mark" th:field="*{featuredRider1Mark}" class="form-select form-select-lg">
-                                                <option value="">選択してください</option>
+                                                <option value="">選択</option>
                                                 <option value="◎">◎</option>
                                                 <option value="○">○</option>
-                                                <option value="▲">▲</option>
                                                 <option value="△">△</option>
                                                 <option value="穴">穴</option>
                                             </select>
@@ -397,26 +377,26 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-12">
-                                <div class="sub-block p-3 p-md-4">
-                                    <h4 class="h5 fw-bold mb-3">注目選手2</h4>
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="featuredRider2Name" class="form-label fw-semibold">選手名</label>
-                                            <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 鈴木圭一郎">
+                                        <div class="col-12">
+                                            <label for="featuredRider2Name" class="form-label fw-semibold">注目選手 2</label>
+                                            <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 鈴木一郎">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6">
                                             <label for="featuredRider2Number" class="form-label fw-semibold">号車</label>
-                                            <input type="number" id="featuredRider2Number" th:field="*{featuredRider2Number}" class="form-control form-control-lg" min="1" max="8" placeholder="2">
+                                            <select id="featuredRider2Number" th:field="*{featuredRider2Number}" class="form-select form-select-lg">
+                                                <option value="">選択</option>
+                                                <option th:each="num : ${#numbers.sequence(1, 8)}" th:value="${num}" th:text="${num + '号車'}">1号車</option>
+                                            </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6">
                                             <label for="featuredRider2Mark" class="form-label fw-semibold">印</label>
                                             <select id="featuredRider2Mark" th:field="*{featuredRider2Mark}" class="form-select form-select-lg">
-                                                <option value="">選択してください</option>
+                                                <option value="">選択</option>
                                                 <option value="◎">◎</option>
                                                 <option value="○">○</option>
-                                                <option value="▲">▲</option>
                                                 <option value="△">△</option>
                                                 <option value="穴">穴</option>
                                             </select>
@@ -424,26 +404,26 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-12">
-                                <div class="sub-block p-3 p-md-4">
-                                    <h4 class="h5 fw-bold mb-3">注目選手3</h4>
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="featuredRider3Name" class="form-label fw-semibold">選手名</label>
-                                            <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 佐藤摩弥">
+                                        <div class="col-12">
+                                            <label for="featuredRider3Name" class="form-label fw-semibold">注目選手 3</label>
+                                            <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 佐藤花子">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6">
                                             <label for="featuredRider3Number" class="form-label fw-semibold">号車</label>
-                                            <input type="number" id="featuredRider3Number" th:field="*{featuredRider3Number}" class="form-control form-control-lg" min="1" max="8" placeholder="3">
+                                            <select id="featuredRider3Number" th:field="*{featuredRider3Number}" class="form-select form-select-lg">
+                                                <option value="">選択</option>
+                                                <option th:each="num : ${#numbers.sequence(1, 8)}" th:value="${num}" th:text="${num + '号車'}">1号車</option>
+                                            </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6">
                                             <label for="featuredRider3Mark" class="form-label fw-semibold">印</label>
                                             <select id="featuredRider3Mark" th:field="*{featuredRider3Mark}" class="form-select form-select-lg">
-                                                <option value="">選択してください</option>
+                                                <option value="">選択</option>
                                                 <option value="◎">◎</option>
                                                 <option value="○">○</option>
-                                                <option value="▲">▲</option>
                                                 <option value="△">△</option>
                                                 <option value="穴">穴</option>
                                             </select>
@@ -451,481 +431,743 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-12">
-                                <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
-                                <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control form-control-lg" rows="4" placeholder="例: 内枠中心で組み立てたい。スタート力と近況を重視。"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label for="preRaceNote" class="form-label fw-semibold">補足メモ</label>
-                                <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control form-control-lg" rows="4" placeholder="例: 前日オッズ、気になる選手コメント、走路傾向など。"></textarea>
-                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="card border-0 section-card">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="mb-4">
-                            <h2 class="section-title mb-2">2. 当日予想</h2>
-                            <p class="section-subtitle mb-0">当日の天候や走路コンディション、試走タイム、購入内容を整理して最終予想まで記録できます。</p>
+            <section class="section-shell" data-section-id="start-diagram">
+                <div class="section-header">
+                    <div>
+                        <div class="section-badge mb-2">2. スタート展開図</div>
+                        <h2 class="h4 fw-bold mb-2">並びとスタート想定を見える化する</h2>
+                        <p class="section-subtitle mb-0">号車をドラッグして、想定する位置関係をざっくり残せます。</p>
+                    </div>
+                    <div class="section-pill js-section-status">編集中</div>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn btn-primary js-section-save">保存</button>
+                    <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
+                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
+                </div>
+                <div class="section-body">
+                    <div class="sub-block p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                            <div>
+                                <h3 class="h5 fw-bold mb-1">スタート展開図</h3>
+                                <p class="section-subtitle mb-0">ドラッグで位置を調整できます。厳密な保存ではなく、考えを整理するための補助表示です。</p>
+                            </div>
+                            <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
                         </div>
-
-                        <h3 class="h4 fw-bold mb-3">当日コンディション</h3>
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-4">
-                                <label for="weatherCondition" class="form-label fw-semibold">天気</label>
-                                <select id="weatherCondition" th:field="*{weatherCondition}" class="form-select form-select-lg">
-                                    <option value="">選択してください</option>
-                                    <option value="晴れ">晴れ</option>
-                                    <option value="曇り">曇り</option>
-                                    <option value="小雨">小雨</option>
-                                    <option value="雨">雨</option>
-                                    <option value="雪">雪</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="temperature" class="form-label fw-semibold">気温</label>
-                                <div class="input-group input-group-lg unit-input">
-                                    <input type="number" id="temperature" th:field="*{temperature}" class="form-control" step="0.1" placeholder="例: 20">
-                                    <span class="input-group-text">℃</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="humidity" class="form-label fw-semibold">湿度</label>
-                                <div class="input-group input-group-lg unit-input">
-                                    <input type="number" id="humidity" th:field="*{humidity}" class="form-control" step="1" placeholder="例: 60">
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="windSpeed" class="form-label fw-semibold">風速</label>
-                                <div class="input-group input-group-lg unit-input">
-                                    <input type="number" id="windSpeed" th:field="*{windSpeed}" class="form-control" step="0.1" placeholder="例: 3">
-                                    <span class="input-group-text">m/s</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="trackTemperature" class="form-label fw-semibold">走路温度</label>
-                                <div class="input-group input-group-lg unit-input">
-                                    <input type="number" id="trackTemperature" th:field="*{trackTemperature}" class="form-control" step="0.1" placeholder="例: 26">
-                                    <span class="input-group-text">℃</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="trackCondition" class="form-label fw-semibold">走路状況</label>
-                                <input type="text" id="trackCondition" th:field="*{trackCondition}" class="form-control form-control-lg" placeholder="例: 良走路 / 湿走路">
-                            </div>
-                        </div>
-
-                        <h3 class="h4 fw-bold mb-3">全車試走タイム</h3>
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-3 col-sm-6" th:each="entry : ${record.trialTimeEntries}">
-                                <div class="trial-input-card p-3 h-100">
-                                    <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber + '号車'}">1号車</label>
-                                    <input type="text" th:id="${entry.fieldName}" th:field="*{__${entry.fieldName}__}" class="form-control form-control-lg js-trial-time" placeholder="3.34" th:attr="data-lane=${entry.laneNumber}">
-                                    <div class="trial-input-meta">
-                                        <span class="trial-mark-badge d-none js-trial-mark"></span>
-                                        <span class="small text-secondary d-none js-trial-rider-name"></span>
-                                        <span class="trial-rank-badge d-none js-trial-rank"></span>
+                        <div class="start-diagram-shell">
+                            <div id="startDiagramBoard" class="start-diagram-board">
+                                <div class="start-diagram-guide">
+                                    <div th:each="num : ${#numbers.sequence(1, 8)}">
+                                        <div class="start-lane-line" th:style="'left:' + (${num} * 12.5) + '%'"></div>
+                                        <div class="start-lane-label" th:style="'left:' + (${num} * 12.5 - 6.25) + '%'" th:text="${num + '号車'}">1号車</div>
                                     </div>
+                                    <div class="start-line"></div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="row g-4 mb-4">
-                            <div class="col-12">
-                                <label for="featuredTrialTimeNote" class="form-label fw-semibold">気になる選手の試走タイムメモ</label>
-                                <textarea id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" rows="3" placeholder="例: 5号車の試走タイムが良く、上積みがありそう。"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label for="raceOverallNote" class="form-label fw-semibold">レース全体メモ</label>
-                                <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control form-control-lg" rows="3" placeholder="例: 外枠勢の進み方次第で展開が変わりそう。"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
-                                <div>
-                                    <h3 class="todo-title mb-2">購入内容と最終予想</h3>
-                                    <p class="text-secondary mb-0">やることを順番に埋めていける ToDo リスト風の入力エリアです。</p>
-                                </div>
-                            </div>
-
-                            <div class="vstack gap-3">
-                                <div class="todo-item p-3 p-md-4">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
-                                        <div class="col-md-3 col-10 todo-label">1. 賭け式を決める</div>
-                                        <div class="col-md-8">
-                                            <select id="betType" th:field="*{betType}" class="form-select form-select-lg">
-                                                <option value="">選択してください</option>
-                                                <option value="単勝">単勝</option>
-                                                <option value="複勝">複勝</option>
-                                                <option value="ワイド">ワイド</option>
-                                                <option value="2連単">2連単</option>
-                                                <option value="2連複">2連複</option>
-                                                <option value="3連単">3連単</option>
-                                                <option value="3連複">3連複</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="todo-item p-3 p-md-4">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
-                                        <div class="col-md-3 col-10 todo-label">2. 買い目数を決める</div>
-                                        <div class="col-md-8">
-                                            <input type="number" id="betCount" th:field="*{betCount}" class="form-control form-control-lg" min="0" placeholder="例: 6">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="todo-item p-3 p-md-4">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
-                                        <div class="col-md-3 col-10 todo-label">3. 1点あたり金額を決める</div>
-                                        <div class="col-md-8">
-                                            <input type="number" id="unitBetAmount" th:field="*{unitBetAmount}" class="form-control form-control-lg" min="0" placeholder="例: 100">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="todo-item p-3 p-md-4">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
-                                        <div class="col-md-3 col-10 todo-label">4. 購入金額を確認する</div>
-                                        <div class="col-md-8">
-                                            <input type="number" id="purchaseAmount" th:field="*{purchaseAmount}" class="form-control form-control-lg" min="0" placeholder="例: 600">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="todo-item p-3 p-md-4">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-1 col-2 text-center"><input class="todo-check" type="checkbox" disabled></div>
-                                        <div class="col-md-3 col-10 todo-label">5. 最終予想を書く</div>
-                                        <div class="col-md-8">
-                                            <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 1-3-5 / 5-1-3">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="todo-item p-3 p-md-4">
-                                    <div class="row align-items-start g-3">
-                                        <div class="col-md-1 col-2 text-center pt-2"><input class="todo-check" type="checkbox" disabled></div>
-                                        <div class="col-md-3 col-10 todo-label pt-2">6. 予想追加メモを残す</div>
-                                        <div class="col-md-8">
-                                            <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control form-control-lg" rows="4" placeholder="例: 試走後に5号車本命へ変更。迷いがあった点も含めて記録する。"></textarea>
-                                        </div>
-                                    </div>
+                                <div th:each="num : ${#numbers.sequence(1, 8)}"
+                                     th:class="'start-token lane-' + ${num}"
+                                     th:attr="data-default-x=${6.25 + (num - 1) * 12.5},data-default-y=78"
+                                     th:style="'left:' + (${6.25 + (num - 1) * 12.5}) + '%; top:78%;'">
+                                    <span th:text="${num}">1</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="card border-0 section-card">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="mb-4">
-                            <h2 class="section-title mb-2">3. スタート展開図</h2>
-                            <p class="section-subtitle mb-0">スタート直後の並びや気になる位置取りを、丸を動かしながら視覚的にメモできるデモ用UIです。</p>
+            <section class="section-shell" data-section-id="same-day">
+                <div class="section-header">
+                    <div>
+                        <div class="section-badge mb-2">3. 当日予想</div>
+                        <h2 class="h4 fw-bold mb-2">天候・試走・購入内容を入力する</h2>
+                        <p class="section-subtitle mb-0">当日の見立てを入力しながら、試走タイム順位と購入合計をその場で確認できます。</p>
+                    </div>
+                    <div class="section-pill js-section-status">編集中</div>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn btn-primary js-section-save">保存</button>
+                    <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
+                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
+                </div>
+                <div class="section-body">
+                    <div class="row g-4">
+                        <div class="col-xl-5">
+                            <div class="sub-block p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">当日の気象と走路</h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="weatherCondition" class="form-label fw-semibold">天気</label>
+                                        <select id="weatherCondition" th:field="*{weatherCondition}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="晴れ">晴れ</option>
+                                            <option value="曇り">曇り</option>
+                                            <option value="小雨">小雨</option>
+                                            <option value="雨">雨</option>
+                                            <option value="雪">雪</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="trackCondition" class="form-label fw-semibold">走路状況</label>
+                                        <select id="trackCondition" th:field="*{trackCondition}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="良走路">良走路</option>
+                                            <option value="湿走路">湿走路</option>
+                                            <option value="斑走路">斑走路</option>
+                                            <option value="風">風</option>
+                                            <option value="荒">荒</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="temperature" class="form-label fw-semibold">気温</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" id="temperature" th:field="*{temperature}" class="form-control" placeholder="22">
+                                            <span class="input-group-text">℃</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="humidity" class="form-label fw-semibold">湿度</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" id="humidity" th:field="*{humidity}" class="form-control" placeholder="48">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="windSpeed" class="form-label fw-semibold">風速</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" id="windSpeed" th:field="*{windSpeed}" class="form-control" placeholder="3">
+                                            <span class="input-group-text">m</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="trackTemperature" class="form-label fw-semibold">走路温度</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" id="trackTemperature" th:field="*{trackTemperature}" class="form-control" placeholder="31">
+                                            <span class="input-group-text">℃</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="featuredTrialTimeNote" class="form-label fw-semibold">当日の気配メモ</label>
+                                        <input type="text" id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" placeholder="例: 鈴木一郎は試走の伸びが良い">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-7">
+                            <div class="sub-block p-4 h-100">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                                    <div>
+                                        <h3 class="h5 fw-bold mb-1">全車試走タイム</h3>
+                                        <p class="section-subtitle mb-0">印と順位が自動で表示されます。将来はここに補正前 / 補正後の切替を追加しやすい構造です。</p>
+                                    </div>
+                                    <div class="summary-pill">速い順に自動順位</div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-xl-3" th:each="entry : ${record.trialTimeEntries}">
+                                        <div class="trial-input-card p-3 h-100">
+                                            <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber + '号車'}">1号車</label>
+                                            <input type="text"
+                                                   th:id="${entry.fieldName}"
+                                                   th:field="*{__${entry.fieldName}__}"
+                                                   class="form-control form-control-lg js-trial-time"
+                                                   placeholder="3.34"
+                                                   th:attr="data-lane=${entry.laneNumber}">
+                                            <div class="trial-input-meta">
+                                                <span class="trial-mark-badge d-none js-trial-mark"></span>
+                                                <span class="small text-secondary d-none js-trial-rider-name"></span>
+                                                <span class="trial-rank-badge d-none js-trial-rank"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label for="raceOverallNote" class="form-label fw-semibold">試走から見た全体メモ</label>
+                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control" rows="4" placeholder="例: 山田太郎が先手なら押し切り、佐藤花子は後半追い込み。"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sub-block p-4 mt-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                            <div>
+                                <h3 class="h5 fw-bold mb-1">購入内容と最終予想</h3>
+                                <p class="section-subtitle mb-0">複数の賭け式を行ごとに入力し、合計金額と収支見込みを確認できます。</p>
+                            </div>
+                            <div class="summary-pill">入力中心で管理</div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
+                                    <div class="fw-bold mb-3">購入行 1</div>
+                                    <div class="mb-3">
+                                        <label for="betLine1Type" class="form-label fw-semibold">賭け式</label>
+                                        <select id="betLine1Type" th:field="*{betLine1Type}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="単勝">単勝</option>
+                                            <option value="複勝">複勝</option>
+                                            <option value="2連単">2連単</option>
+                                            <option value="2連複">2連複</option>
+                                            <option value="ワイド">ワイド</option>
+                                            <option value="3連単">3連単</option>
+                                            <option value="3連複">3連複</option>
+                                        </select>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-6">
+                                            <label for="betLine1Count" class="form-label fw-semibold">点数</label>
+                                            <input type="number" min="0" id="betLine1Count" th:field="*{betLine1Count}" class="form-control form-control-lg" placeholder="6">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="betLine1Amount" class="form-label fw-semibold">金額</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="number" min="0" id="betLine1Amount" th:field="*{betLine1Amount}" class="form-control js-bet-amount" placeholder="600">
+                                                <span class="input-group-text">円</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
+                                    <div class="fw-bold mb-3">購入行 2</div>
+                                    <div class="mb-3">
+                                        <label for="betLine2Type" class="form-label fw-semibold">賭け式</label>
+                                        <select id="betLine2Type" th:field="*{betLine2Type}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="単勝">単勝</option>
+                                            <option value="複勝">複勝</option>
+                                            <option value="2連単">2連単</option>
+                                            <option value="2連複">2連複</option>
+                                            <option value="ワイド">ワイド</option>
+                                            <option value="3連単">3連単</option>
+                                            <option value="3連複">3連複</option>
+                                        </select>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-6">
+                                            <label for="betLine2Count" class="form-label fw-semibold">点数</label>
+                                            <input type="number" min="0" id="betLine2Count" th:field="*{betLine2Count}" class="form-control form-control-lg" placeholder="3">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="betLine2Amount" class="form-label fw-semibold">金額</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="number" min="0" id="betLine2Amount" th:field="*{betLine2Amount}" class="form-control js-bet-amount" placeholder="300">
+                                                <span class="input-group-text">円</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
+                                    <div class="fw-bold mb-3">購入行 3</div>
+                                    <div class="mb-3">
+                                        <label for="betLine3Type" class="form-label fw-semibold">賭け式</label>
+                                        <select id="betLine3Type" th:field="*{betLine3Type}" class="form-select form-select-lg">
+                                            <option value="">選択してください</option>
+                                            <option value="単勝">単勝</option>
+                                            <option value="複勝">複勝</option>
+                                            <option value="2連単">2連単</option>
+                                            <option value="2連複">2連複</option>
+                                            <option value="ワイド">ワイド</option>
+                                            <option value="3連単">3連単</option>
+                                            <option value="3連複">3連複</option>
+                                        </select>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-6">
+                                            <label for="betLine3Count" class="form-label fw-semibold">点数</label>
+                                            <input type="number" min="0" id="betLine3Count" th:field="*{betLine3Count}" class="form-control form-control-lg" placeholder="2">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="betLine3Amount" class="form-label fw-semibold">金額</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="number" min="0" id="betLine3Amount" th:field="*{betLine3Amount}" class="form-control js-bet-amount" placeholder="200">
+                                                <span class="input-group-text">円</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="start-diagram-shell p-3 p-md-4">
-                            <div class="start-diagram-toolbar mb-3">
-                                <div>
-                                    <div class="fw-bold">固定スタート図面プレースホルダー</div>
-                                    <div class="start-diagram-note">PCではマウス、スマホではスライド操作を想定した構造です。将来的にこのエリア全体を画像化しやすいよう、ひとつのステージにまとめています。</div>
-                                </div>
-                                <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
-                            </div>
-
-                            <div id="startDiagramStage" class="start-diagram-stage">
-                                <div id="startDiagramBoard" class="start-diagram-board" aria-label="スタート展開図">
-                                    <span class="start-guide-line line-1" aria-hidden="true"></span>
-                                    <span class="start-guide-line line-2" aria-hidden="true"></span>
-                                    <span class="start-guide-line line-3" aria-hidden="true"></span>
-                                    <span class="start-guide-line line-4" aria-hidden="true"></span>
-
-                                    <button type="button" class="start-token token-1" data-token="1" data-default-x="16" data-default-y="66" aria-label="1 白">1</button>
-                                    <button type="button" class="start-token token-2" data-token="2" data-default-x="25" data-default-y="60" aria-label="2 黒">2</button>
-                                    <button type="button" class="start-token token-3" data-token="3" data-default-x="34" data-default-y="54" aria-label="3 赤">3</button>
-                                    <button type="button" class="start-token token-4" data-token="4" data-default-x="43" data-default-y="48" aria-label="4 青">4</button>
-                                    <button type="button" class="start-token token-5" data-token="5" data-default-x="56" data-default-y="43" aria-label="5 黄">5</button>
-                                    <button type="button" class="start-token token-6" data-token="6" data-default-x="67" data-default-y="38" aria-label="6 緑">6</button>
-                                    <button type="button" class="start-token token-7" data-token="7" data-default-x="78" data-default-y="34" aria-label="7 オレンジ">7</button>
-                                    <button type="button" class="start-token token-8" data-token="8" data-default-x="88" data-default-y="30" aria-label="8 ピンク">8</button>
+                        <div class="row g-3 mt-1">
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
+                                    <label for="finalPrediction" class="form-label fw-semibold">最終予想</label>
+                                    <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 山田太郎の押し切り本線">
+                                    <p class="field-caption mb-0">最終的な軸や買い方の結論を短くまとめます。</p>
                                 </div>
                             </div>
-
-                            <div class="start-token-legend mt-3">
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-1"></span><span>1 白</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-2"></span><span>2 黒</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-3"></span><span>3 赤</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-4"></span><span>4 青</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-5"></span><span>5 黄</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-6"></span><span>6 緑</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-7"></span><span>7 オレンジ</span></div>
-                                <div class="start-token-chip"><span class="start-token-chip-dot token-8"></span><span>8 ピンク</span></div>
+                            <div class="col-lg-4">
+                                <div class="bet-line-card p-3 h-100">
+                                    <label for="payoutAmount" class="form-label fw-semibold">払戻金額</label>
+                                    <div class="input-group input-group-lg">
+                                        <input type="number" min="0" id="payoutAmount" th:field="*{payoutAmount}" class="form-control js-payout-amount" placeholder="0">
+                                        <span class="input-group-text">円</span>
+                                    </div>
+                                    <p class="field-caption mb-0">レース後に入力すると収支が自動で反映されます。</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="summary-card p-3 h-100">
+                                    <div class="summary-grid">
+                                        <div>
+                                            <div class="summary-label">合計金額</div>
+                                            <div id="totalBetAmountPreview" class="summary-value">0円</div>
+                                        </div>
+                                        <div>
+                                            <div class="summary-label">払戻</div>
+                                            <div id="payoutAmountPreview" class="summary-value">0円</div>
+                                        </div>
+                                        <div>
+                                            <div class="summary-label">収支</div>
+                                            <div id="profitLossPreview" class="summary-value">0円</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="purchaseAmount" th:field="*{purchaseAmount}">
+                                    <input type="hidden" id="profitLoss" th:field="*{profitLoss}">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bet-line-card p-3">
+                                    <label for="predictionNote" class="form-label fw-semibold">購入理由・最終メモ</label>
+                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: ワイドは押さえ、3連単は山田太郎の先行パターン中心。"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="card border-0 section-card">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="mb-4">
-                            <h2 class="section-title mb-2">4. レース結果・比較・考察</h2>
-                            <p class="section-subtitle mb-0">レース後に結果を記録し、予想との差や次回に活かしたい点を残すエリアです。</p>
-                        </div>
-
-                        <div class="row g-4">
-                            <div class="col-12">
+            <section class="section-shell" data-section-id="result-review">
+                <div class="section-header">
+                    <div>
+                        <div class="section-badge mb-2">4. 結果・考察</div>
+                        <h2 class="h4 fw-bold mb-2">結果を残して次回の判断材料にする</h2>
+                        <p class="section-subtitle mb-0">実際の結果、予想との比較、振り返りを簡潔に残せます。</p>
+                    </div>
+                    <div class="section-pill js-section-status">編集中</div>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn btn-primary js-section-save">保存</button>
+                    <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
+                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
+                </div>
+                <div class="section-body">
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <div class="sub-block p-4 h-100">
                                 <label for="raceResult" class="form-label fw-semibold">レース結果</label>
-                                <textarea id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg" rows="3" placeholder="例: 結果は 5-1-3。スタートで5号車が主導権。"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label for="resultComparison" class="form-label fw-semibold">比較</label>
-                                <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control form-control-lg" rows="3" placeholder="例: 本命は合っていたが、2着評価がずれていた。"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label for="reviewNote" class="form-label fw-semibold">考察</label>
-                                <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control form-control-lg" rows="4" placeholder="例: 走路変化をもう少し重く見るべきだった。"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label for="note" class="form-label fw-semibold">備考</label>
-                                <textarea id="note" th:field="*{note}" class="form-control form-control-lg" rows="3" placeholder="例: 次回は風向きと試走の関係も確認したい。"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <input type="text" id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg mb-3" placeholder="例: 1着 山田太郎 / 2着 鈴木一郎 / 3着 佐藤花子">
 
-                <div class="sticky-bottom-actions">
-                    <div class="card border-0 section-card">
-                        <div class="card-body p-4">
-                            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
-                                <div>
-                                    <h2 class="h4 fw-bold mb-1">まとめて保存</h2>
-                                    <p class="text-secondary mb-0">最後に内容を確認して、そのまま登録できます。</p>
-                                </div>
-                                <div class="d-flex flex-column flex-md-row flex-wrap gap-3">
-                                    <button type="submit" class="btn btn-primary btn-lg px-4 py-3">登録する</button>
-                                    <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4 py-3">一覧へ戻る</a>
+                                <label for="resultComparison" class="form-label fw-semibold">予想との比較</label>
+                                <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control" rows="6" placeholder="例: 本線は的中、押さえは不要だった。"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="sub-block p-4 h-100">
+                                <label for="reviewNote" class="form-label fw-semibold">振り返りメモ</label>
+                                <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control mb-3" rows="8" placeholder="例: 試走順位と実戦結果の差が大きく、展開読みをもっと重視したい。"></textarea>
+
+                                <label for="featuredRider" class="form-label fw-semibold">今回の中心選手まとめ</label>
+                                <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control form-control-lg" placeholder="例: 山田太郎">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="sub-block p-4 h-100">
+                                <label for="note" class="form-label fw-semibold">次回につなげるメモ</label>
+                                <textarea id="note" th:field="*{note}" class="form-control mb-3" rows="5" placeholder="例: 湿走路では鈴木一郎の評価を上げる。"></textarea>
+
+                                <div class="summary-card p-3">
+                                    <div class="summary-label">記録の最後に確認したいこと</div>
+                                    <ul class="mb-0 ps-3">
+                                        <li>収支が入力済みか</li>
+                                        <li>次回に活かす気づきが残っているか</li>
+                                        <li>選手名表記が統一されているか</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </main>
-        <div th:replace="~{layout/footer :: siteFooter}"></div>
-        <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
-    </div>
-    <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
-    <script>
-        function clampStartTokenValue(value, min, max) {
-            return Math.min(Math.max(value, min), max);
+            </section>
+        </form>
+    </main>
+
+    <div th:replace="~{layout/footer :: siteFooter}"></div>
+    <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
+</div>
+
+<th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+<script>
+    function parseTrialTimeValue(value) {
+        if (!value) {
+            return null;
         }
+        const normalized = Number.parseFloat(String(value).trim());
+        return Number.isFinite(normalized) ? normalized : null;
+    }
 
-        function parseTrialTimeValue(value) {
-            if (!value) {
-                return null;
+    function buildFeaturedRiderMap() {
+        const riderMap = new Map();
+
+        [1, 2, 3].forEach(function (index) {
+            const numberField = document.getElementById("featuredRider" + index + "Number");
+            const markField = document.getElementById("featuredRider" + index + "Mark");
+            const nameField = document.getElementById("featuredRider" + index + "Name");
+
+            if (!numberField || !markField || !nameField) {
+                return;
             }
 
-            const normalized = Number.parseFloat(String(value).trim());
-            return Number.isFinite(normalized) ? normalized : null;
-        }
+            const lane = Number.parseInt(numberField.value, 10);
+            if (!Number.isInteger(lane) || lane < 1 || lane > 8) {
+                return;
+            }
 
-        function buildFeaturedRiderMap() {
-            const riderMap = new Map();
+            riderMap.set(lane, {
+                mark: markField.value.trim(),
+                name: nameField.value.trim()
+            });
+        });
 
-            [1, 2, 3].forEach(function (index) {
-                const numberField = document.getElementById("featuredRider" + index + "Number");
-                const markField = document.getElementById("featuredRider" + index + "Mark");
-                const nameField = document.getElementById("featuredRider" + index + "Name");
+        return riderMap;
+    }
 
-                if (!numberField || !markField || !nameField) {
-                    return;
-                }
+    function updateTrialTimeAssist() {
+        const riderMap = buildFeaturedRiderMap();
+        const cards = Array.from(document.querySelectorAll(".trial-input-card"));
+        const rankedItems = [];
 
-                const lane = Number.parseInt(numberField.value, 10);
-                if (!Number.isInteger(lane) || lane < 1 || lane > 8) {
-                    return;
-                }
+        cards.forEach(function (card) {
+            const input = card.querySelector(".js-trial-time");
+            const lane = Number.parseInt(input.dataset.lane, 10);
+            const parsedTime = parseTrialTimeValue(input.value);
 
-                riderMap.set(lane, {
-                    mark: markField.value.trim(),
-                    name: nameField.value.trim()
+            if (parsedTime !== null) {
+                rankedItems.push({
+                    lane: lane,
+                    value: parsedTime
                 });
+            }
+
+            const riderInfo = riderMap.get(lane);
+            const markBadge = card.querySelector(".js-trial-mark");
+            const riderName = card.querySelector(".js-trial-rider-name");
+
+            if (riderInfo && riderInfo.mark) {
+                markBadge.textContent = riderInfo.mark;
+                markBadge.classList.remove("d-none");
+            } else {
+                markBadge.textContent = "";
+                markBadge.classList.add("d-none");
+            }
+
+            if (riderInfo && riderInfo.mark && riderInfo.name) {
+                riderName.textContent = riderInfo.name;
+                riderName.classList.remove("d-none");
+            } else {
+                riderName.textContent = "";
+                riderName.classList.add("d-none");
+            }
+        });
+
+        rankedItems.sort(function (left, right) {
+            return left.value - right.value;
+        });
+
+        const rankMap = new Map();
+        let currentRank = 0;
+        let previousValue = null;
+
+        // 将来ここに補正前 / 補正後の切替ロジックを追加しやすいように、順位計算を独立させている。
+        rankedItems.forEach(function (item, index) {
+            if (previousValue === null || item.value !== previousValue) {
+                currentRank = index + 1;
+                previousValue = item.value;
+            }
+            rankMap.set(item.lane, currentRank);
+        });
+
+        cards.forEach(function (card) {
+            const input = card.querySelector(".js-trial-time");
+            const lane = Number.parseInt(input.dataset.lane, 10);
+            const rankBadge = card.querySelector(".js-trial-rank");
+            const rank = rankMap.get(lane);
+
+            if (rank) {
+                rankBadge.textContent = rank + "位";
+                rankBadge.classList.remove("d-none");
+            } else {
+                rankBadge.textContent = "";
+                rankBadge.classList.add("d-none");
+            }
+        });
+    }
+
+    function parseIntegerValue(value) {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function updateBetSummary() {
+        const total = Array.from(document.querySelectorAll(".js-bet-amount")).reduce(function (sum, input) {
+            return sum + parseIntegerValue(input.value);
+        }, 0);
+        const payout = parseIntegerValue(document.querySelector(".js-payout-amount")?.value || 0);
+        const profit = payout - total;
+
+        const totalNode = document.getElementById("totalBetAmountPreview");
+        const payoutNode = document.getElementById("payoutAmountPreview");
+        const profitNode = document.getElementById("profitLossPreview");
+        const purchaseAmount = document.getElementById("purchaseAmount");
+        const profitLoss = document.getElementById("profitLoss");
+
+        if (totalNode) {
+            totalNode.textContent = total.toLocaleString("ja-JP") + "円";
+        }
+        if (payoutNode) {
+            payoutNode.textContent = payout.toLocaleString("ja-JP") + "円";
+        }
+        if (profitNode) {
+            profitNode.textContent = profit.toLocaleString("ja-JP") + "円";
+            profitNode.classList.toggle("is-positive", profit > 0);
+            profitNode.classList.toggle("is-negative", profit < 0);
+        }
+        if (purchaseAmount) {
+            purchaseAmount.value = total;
+        }
+        if (profitLoss) {
+            profitLoss.value = profit;
+        }
+    }
+
+    function setStartTokenPosition(token, xPercent, yPercent) {
+        token.dataset.x = xPercent.toFixed(2);
+        token.dataset.y = yPercent.toFixed(2);
+        token.style.left = xPercent + "%";
+        token.style.top = yPercent + "%";
+    }
+
+    function clampStartTokenValue(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    function resetStartDiagramTokens() {
+        document.querySelectorAll(".start-token").forEach(function (token) {
+            const defaultX = Number(token.dataset.defaultX);
+            const defaultY = Number(token.dataset.defaultY);
+            setStartTokenPosition(token, defaultX, defaultY);
+        });
+    }
+
+    function setSectionDisabled(section, disabled) {
+        section.querySelectorAll("input, select, textarea").forEach(function (field) {
+            if (field.type === "hidden") {
+                return;
+            }
+            field.disabled = disabled;
+        });
+        const resetButton = section.querySelector("#resetStartDiagram");
+        if (resetButton) {
+            resetButton.disabled = disabled;
+        }
+        section.querySelectorAll(".start-token").forEach(function (token) {
+            token.style.pointerEvents = disabled ? "none" : "auto";
+            token.classList.remove("is-dragging");
+        });
+    }
+
+    function serializeSection(section) {
+        const payload = {};
+        section.querySelectorAll("input, select, textarea").forEach(function (field) {
+            if (!field.name) {
+                return;
+            }
+            payload[field.name] = field.value;
+        });
+        return payload;
+    }
+
+    function clearSection(section) {
+        section.querySelectorAll("input, select, textarea").forEach(function (field) {
+            if (field.type === "hidden") {
+                return;
+            }
+            if (field.tagName === "SELECT") {
+                field.selectedIndex = 0;
+            } else if (field.type === "date" || field.type === "text" || field.type === "number" || field.tagName === "TEXTAREA") {
+                field.value = "";
+            }
+        });
+
+        if (section.dataset.sectionId === "start-diagram") {
+            resetStartDiagramTokens();
+        }
+    }
+
+    function updateSectionStatus(section, saved) {
+        const status = section.querySelector(".js-section-status");
+        if (!status) {
+            return;
+        }
+        status.textContent = saved ? "保存済み" : "編集中";
+        status.classList.toggle("is-saved", saved);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("raceRecordForm");
+        const board = document.getElementById("startDiagramBoard");
+        const resetButton = document.getElementById("resetStartDiagram");
+        const trialInputs = document.querySelectorAll(".js-trial-time");
+        const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
+        const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
+        const sectionStoragePrefix = "autoraceapp-record-section-";
+
+        if (form) {
+            form.addEventListener("keydown", function (event) {
+                if (event.key === "Enter" && event.target.tagName !== "TEXTAREA") {
+                    event.preventDefault();
+                }
             });
 
-            return riderMap;
+            form.addEventListener("submit", function (event) {
+                if (!window.confirm("この内容で登録しますか？")) {
+                    event.preventDefault();
+                }
+            });
         }
 
-        function updateTrialTimeAssist() {
-            const riderMap = buildFeaturedRiderMap();
-            const cards = Array.from(document.querySelectorAll(".trial-input-card"));
-            const rankedItems = [];
+        document.querySelectorAll("[data-section-id]").forEach(function (section) {
+            const sectionId = section.dataset.sectionId;
+            const storageKey = sectionStoragePrefix + sectionId;
+            const saveButton = section.querySelector(".js-section-save");
+            const editButton = section.querySelector(".js-section-edit");
+            const deleteButton = section.querySelector(".js-section-delete");
 
-            cards.forEach(function (card) {
-                const input = card.querySelector(".js-trial-time");
-                const lane = Number.parseInt(input.dataset.lane, 10);
-                const parsedTime = parseTrialTimeValue(input.value);
+            if (localStorage.getItem(storageKey)) {
+                updateSectionStatus(section, true);
+                setSectionDisabled(section, true);
+            }
 
-                if (parsedTime !== null) {
-                    rankedItems.push({
-                        lane: lane,
-                        value: parsedTime
-                    });
-                }
-
-                const riderInfo = riderMap.get(lane);
-                const markBadge = card.querySelector(".js-trial-mark");
-                const riderName = card.querySelector(".js-trial-rider-name");
-
-                if (riderInfo && riderInfo.mark) {
-                    markBadge.textContent = riderInfo.mark;
-                    markBadge.classList.remove("d-none");
-                } else {
-                    markBadge.textContent = "";
-                    markBadge.classList.add("d-none");
-                }
-
-                if (riderInfo && riderInfo.mark && riderInfo.name) {
-                    riderName.textContent = riderInfo.name;
-                    riderName.classList.remove("d-none");
-                } else {
-                    riderName.textContent = "";
-                    riderName.classList.add("d-none");
-                }
-            });
-
-            rankedItems.sort(function (left, right) {
-                return left.value - right.value;
-            });
-
-            const rankMap = new Map();
-            let currentRank = 0;
-            let previousValue = null;
-
-            rankedItems.forEach(function (item, index) {
-                if (previousValue === null || item.value !== previousValue) {
-                    currentRank = index + 1;
-                    previousValue = item.value;
-                }
-                rankMap.set(item.lane, currentRank);
-            });
-
-            cards.forEach(function (card) {
-                const input = card.querySelector(".js-trial-time");
-                const lane = Number.parseInt(input.dataset.lane, 10);
-                const rankBadge = card.querySelector(".js-trial-rank");
-                const rank = rankMap.get(lane);
-
-                if (rank) {
-                    rankBadge.textContent = rank + "位";
-                    rankBadge.classList.remove("d-none");
-                } else {
-                    rankBadge.textContent = "";
-                    rankBadge.classList.add("d-none");
-                }
-            });
-        }
-
-        function setStartTokenPosition(token, xPercent, yPercent) {
-            token.dataset.x = xPercent.toFixed(2);
-            token.dataset.y = yPercent.toFixed(2);
-            token.style.left = xPercent + "%";
-            token.style.top = yPercent + "%";
-        }
-
-        function resetStartDiagramTokens() {
-            document.querySelectorAll(".start-token").forEach(function (token) {
-                const defaultX = Number(token.dataset.defaultX);
-                const defaultY = Number(token.dataset.defaultY);
-                setStartTokenPosition(token, defaultX, defaultY);
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const board = document.getElementById("startDiagramBoard");
-            const resetButton = document.getElementById("resetStartDiagram");
-            const trialInputs = document.querySelectorAll(".js-trial-time");
-            const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
-
-            if (board) {
-                let activeToken = null;
-                let activePointerId = null;
-
-                resetStartDiagramTokens();
-
-                function moveActiveToken(clientX, clientY) {
-                    if (!activeToken) {
+            if (saveButton) {
+                saveButton.addEventListener("click", function () {
+                    if (!window.confirm("このセクションを保存状態にしますか？")) {
                         return;
                     }
-
-                    const rect = board.getBoundingClientRect();
-                    const tokenHalfWidth = activeToken.offsetWidth / 2;
-                    const tokenHalfHeight = activeToken.offsetHeight / 2;
-                    const rawX = clientX - rect.left;
-                    const rawY = clientY - rect.top;
-                    const clampedX = clampStartTokenValue(rawX, tokenHalfWidth, rect.width - tokenHalfWidth);
-                    const clampedY = clampStartTokenValue(rawY, tokenHalfHeight, rect.height - tokenHalfHeight);
-                    const xPercent = (clampedX / rect.width) * 100;
-                    const yPercent = (clampedY / rect.height) * 100;
-
-                    setStartTokenPosition(activeToken, xPercent, yPercent);
-                }
-
-                document.querySelectorAll(".start-token").forEach(function (token) {
-                    token.addEventListener("pointerdown", function (event) {
-                        activeToken = token;
-                        activePointerId = event.pointerId;
-                        token.classList.add("is-dragging");
-                        token.setPointerCapture(event.pointerId);
-                        moveActiveToken(event.clientX, event.clientY);
-                    });
-
-                    token.addEventListener("pointermove", function (event) {
-                        if (activeToken !== token || activePointerId !== event.pointerId) {
-                            return;
-                        }
-                        moveActiveToken(event.clientX, event.clientY);
-                    });
-
-                    function finishDrag(event) {
-                        if (activeToken !== token || activePointerId !== event.pointerId) {
-                            return;
-                        }
-                        token.classList.remove("is-dragging");
-                        activeToken = null;
-                        activePointerId = null;
-                    }
-
-                    token.addEventListener("pointerup", finishDrag);
-                    token.addEventListener("pointercancel", finishDrag);
+                    localStorage.setItem(storageKey, JSON.stringify(serializeSection(section)));
+                    updateSectionStatus(section, true);
+                    setSectionDisabled(section, true);
                 });
-
-                if (resetButton) {
-                    resetButton.addEventListener("click", function () {
-                        resetStartDiagramTokens();
-                    });
-                }
             }
 
-            trialInputs.forEach(function (input) {
-                input.addEventListener("input", updateTrialTimeAssist);
-            });
+            if (editButton) {
+                editButton.addEventListener("click", function () {
+                    localStorage.removeItem(storageKey);
+                    updateSectionStatus(section, false);
+                    setSectionDisabled(section, false);
+                });
+            }
 
-            featuredFields.forEach(function (field) {
-                field.addEventListener("input", updateTrialTimeAssist);
-                field.addEventListener("change", updateTrialTimeAssist);
-            });
-
-            updateTrialTimeAssist();
+            if (deleteButton) {
+                deleteButton.addEventListener("click", function () {
+                    if (!window.confirm("このセクションの入力内容を削除しますか？")) {
+                        return;
+                    }
+                    localStorage.removeItem(storageKey);
+                    clearSection(section);
+                    updateSectionStatus(section, false);
+                    setSectionDisabled(section, false);
+                    updateTrialTimeAssist();
+                    updateBetSummary();
+                });
+            }
         });
-    </script>
+
+        if (board) {
+            let activeToken = null;
+            let activePointerId = null;
+
+            resetStartDiagramTokens();
+
+            function moveActiveToken(clientX, clientY) {
+                if (!activeToken) {
+                    return;
+                }
+
+                const rect = board.getBoundingClientRect();
+                const tokenHalfWidth = activeToken.offsetWidth / 2;
+                const tokenHalfHeight = activeToken.offsetHeight / 2;
+                const rawX = clientX - rect.left;
+                const rawY = clientY - rect.top;
+                const clampedX = clampStartTokenValue(rawX, tokenHalfWidth, rect.width - tokenHalfWidth);
+                const clampedY = clampStartTokenValue(rawY, tokenHalfHeight, rect.height - tokenHalfHeight);
+                const xPercent = (clampedX / rect.width) * 100;
+                const yPercent = (clampedY / rect.height) * 100;
+
+                setStartTokenPosition(activeToken, xPercent, yPercent);
+            }
+
+            document.querySelectorAll(".start-token").forEach(function (token) {
+                token.addEventListener("pointerdown", function (event) {
+                    activeToken = token;
+                    activePointerId = event.pointerId;
+                    token.classList.add("is-dragging");
+                    token.setPointerCapture(event.pointerId);
+                    moveActiveToken(event.clientX, event.clientY);
+                });
+
+                token.addEventListener("pointermove", function (event) {
+                    if (activeToken !== token || activePointerId !== event.pointerId) {
+                        return;
+                    }
+                    moveActiveToken(event.clientX, event.clientY);
+                });
+
+                function finishDrag(event) {
+                    if (activeToken !== token || activePointerId !== event.pointerId) {
+                        return;
+                    }
+                    token.classList.remove("is-dragging");
+                    activeToken = null;
+                    activePointerId = null;
+                }
+
+                token.addEventListener("pointerup", finishDrag);
+                token.addEventListener("pointercancel", finishDrag);
+            });
+
+            if (resetButton) {
+                resetButton.addEventListener("click", function () {
+                    resetStartDiagramTokens();
+                });
+            }
+        }
+
+        trialInputs.forEach(function (input) {
+            input.addEventListener("input", updateTrialTimeAssist);
+        });
+
+        featuredFields.forEach(function (field) {
+            field.addEventListener("input", updateTrialTimeAssist);
+            field.addEventListener("change", updateTrialTimeAssist);
+        });
+
+        betInputs.forEach(function (field) {
+            field.addEventListener("input", updateBetSummary);
+            field.addEventListener("change", updateBetSummary);
+        });
+
+        updateTrialTimeAssist();
+        updateBetSummary();
+    });
+</script>
 </body>
 </html>
+
