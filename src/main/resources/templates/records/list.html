@@ -43,6 +43,17 @@
             gap: 0.5rem;
         }
 
+        .record-search-toggle {
+            min-height: 3rem;
+            border-radius: 1rem;
+            font-weight: 700;
+        }
+
+        .record-search-summary {
+            color: var(--sub);
+            line-height: 1.75;
+        }
+
         .record-mobile-actions {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -75,7 +86,23 @@
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
                     <div class="card-body p-4">
-                        <h2 class="h5 fw-bold mb-3">検索</h2>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+                            <div>
+                                <h2 class="h5 fw-bold mb-1">検索</h2>
+                                <p class="record-search-summary mb-0">スマホでは必要なときだけ検索条件を開けるようにしています。</p>
+                            </div>
+                            <button class="btn btn-outline-secondary record-search-toggle d-lg-none"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#recordSearchCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="recordSearchCollapse">
+                                検索条件を開く
+                            </button>
+                        </div>
+                        <div id="recordSearchCollapse"
+                             class="collapse d-lg-block"
+                             th:classappend="${!#strings.isEmpty(selectedVenue) or !#strings.isEmpty(weatherCondition) or !#strings.isEmpty(featuredRider)} ? ' show' : ''">
                         <form method="get" th:action="@{/records}">
                             <div class="row g-3 align-items-end">
                                 <div class="col-md-4">
@@ -113,6 +140,7 @@
                                 </div>
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
             </div>
