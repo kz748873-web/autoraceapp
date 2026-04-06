@@ -257,6 +257,32 @@
             margin-top: 0.75rem;
         }
 
+        .trial-mark-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.4rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            background: var(--section-badge-bg);
+            border: 1px solid color-mix(in srgb, var(--brand-strong) 55%, white);
+            color: var(--deep);
+            font-weight: 700;
+        }
+
+        .trial-rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 3rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            background: var(--soft-surface);
+            border: 1px solid var(--card);
+            color: var(--theme-text);
+            font-weight: 700;
+        }
+
         @media (max-width: 991.98px) {
             .sticky-bottom-actions {
                 position: static;
@@ -365,7 +391,7 @@
                                                 <option value="○">○</option>
                                                 <option value="▲">▲</option>
                                                 <option value="△">△</option>
-                                                <option value="×">×</option>
+                                                <option value="穴">穴</option>
                                             </select>
                                         </div>
                                     </div>
@@ -392,7 +418,7 @@
                                                 <option value="○">○</option>
                                                 <option value="▲">▲</option>
                                                 <option value="△">△</option>
-                                                <option value="×">×</option>
+                                                <option value="穴">穴</option>
                                             </select>
                                         </div>
                                     </div>
@@ -419,7 +445,7 @@
                                                 <option value="○">○</option>
                                                 <option value="▲">▲</option>
                                                 <option value="△">△</option>
-                                                <option value="×">×</option>
+                                                <option value="穴">穴</option>
                                             </select>
                                         </div>
                                     </div>
@@ -499,9 +525,9 @@
                                     <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber + '号車'}">1号車</label>
                                     <input type="text" th:id="${entry.fieldName}" th:field="*{__${entry.fieldName}__}" class="form-control form-control-lg js-trial-time" placeholder="3.34" th:attr="data-lane=${entry.laneNumber}">
                                     <div class="trial-input-meta">
-                                        <span class="badge text-bg-primary d-none js-trial-mark"></span>
+                                        <span class="trial-mark-badge d-none js-trial-mark"></span>
                                         <span class="small text-secondary d-none js-trial-rider-name"></span>
-                                        <span class="badge text-bg-light border d-none js-trial-rank"></span>
+                                        <span class="trial-rank-badge d-none js-trial-rank"></span>
                                     </div>
                                 </div>
                             </div>
@@ -686,7 +712,7 @@
                                 </div>
                                 <div class="d-flex flex-column flex-md-row flex-wrap gap-3">
                                     <button type="submit" class="btn btn-primary btn-lg px-4 py-3">登録する</button>
-                                    <a th:href="@{/records}" class="btn btn-outline-dark btn-lg px-4 py-3">一覧へ戻る</a>
+                                    <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4 py-3">一覧へ戻る</a>
                                 </div>
                             </div>
                         </div>

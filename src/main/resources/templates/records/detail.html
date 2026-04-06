@@ -15,6 +15,32 @@
             gap: 0.5rem;
             margin-top: 0.75rem;
         }
+
+        .trial-mark-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.4rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            background: var(--section-badge-bg);
+            border: 1px solid color-mix(in srgb, var(--brand-strong) 55%, white);
+            color: var(--deep);
+            font-weight: 700;
+        }
+
+        .trial-rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 3rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            background: var(--soft-surface);
+            border: 1px solid var(--card);
+            color: var(--theme-text);
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -84,9 +110,9 @@
                             <div class="text-secondary small mb-1" th:text="${entry.laneNumber + '号車'}">1号車</div>
                             <div class="fw-semibold fs-5" th:text="${#strings.isEmpty(entry.time) ? '未入力' : entry.time}">3.34</div>
                             <div class="trial-time-meta">
-                                <span th:if="${entry.hasFeaturedMark}" class="badge text-bg-primary" th:text="${entry.featuredMark}">◎</span>
+                                <span th:if="${entry.hasFeaturedMark}" class="trial-mark-badge" th:text="${entry.featuredMark}">◎</span>
                                 <span th:if="${entry.hasFeaturedMark and !#strings.isEmpty(entry.featuredRiderName)}" class="small text-secondary" th:text="${entry.featuredRiderName}">青山周平</span>
-                                <span th:if="${entry.hasRank}" class="badge text-bg-light border" th:text="${entry.rank + '位'}">1位</span>
+                                <span th:if="${entry.hasRank}" class="trial-rank-badge" th:text="${entry.rank + '位'}">1位</span>
                             </div>
                         </div>
                     </div>
