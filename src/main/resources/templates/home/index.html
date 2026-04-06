@@ -60,6 +60,7 @@
         .theme-floating-wrap {
             display: flex;
             justify-content: flex-end;
+            margin-top: -0.4rem;
             margin-bottom: 1rem;
         }
 
@@ -128,6 +129,18 @@
         .home-footer-note {
             color: var(--sub);
             line-height: 1.75;
+        }
+
+        .current-race-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--accent) 12%, white);
+            color: var(--accent-strong);
+            font-size: 0.88rem;
+            font-weight: 700;
         }
 
         .current-race-grid {
@@ -205,26 +218,26 @@
         }
 
         .section-heading {
-            max-width: 40rem;
+            max-width: 34rem;
         }
 
         .basic-actions-layout {
             display: grid;
-            grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.3fr);
-            gap: 1.4rem;
+            grid-template-columns: minmax(280px, 1fr) minmax(0, 1.2fr);
+            gap: 1.6rem;
             align-items: center;
         }
 
-        .media-layout {
+        .support-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
+            grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
             gap: 1.25rem;
             align-items: start;
         }
 
         .dual-video-grid {
             display: grid;
-            grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 1rem;
         }
 
@@ -317,7 +330,48 @@
         }
 
         .compact-timer-card {
-            max-width: 420px;
+            max-width: 360px;
+        }
+
+        .timer-card.is-compact {
+            padding: 1rem 1.15rem !important;
+        }
+
+        .timer-card.is-compact .section-title {
+            font-size: 1.05rem;
+            margin-bottom: 0.35rem !important;
+        }
+
+        .timer-card.is-compact .section-copy {
+            font-size: 0.92rem;
+            margin-bottom: 0.75rem !important;
+        }
+
+        .timer-card.is-compact .timer-display {
+            min-height: 74px;
+            padding: 0.85rem;
+        }
+
+        .timer-card.is-compact .timer-clock {
+            font-size: 1.3rem;
+        }
+
+        .timer-setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border: 1px dashed var(--card);
+            border-radius: 0.9rem;
+            background: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+
+        .timer-setting-label {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--deep);
         }
 
         .soft-strong {
@@ -327,7 +381,7 @@
         @media (max-width: 991.98px) {
             .hero-layout,
             .basic-actions-layout,
-            .media-layout,
+            .support-layout,
             .dual-video-grid {
                 grid-template-columns: 1fr;
             }
@@ -415,7 +469,10 @@
                         </div>
 
                         <aside class="current-race-panel">
-                            <div class="hero-badge mb-3">現在開催中の確認枠</div>
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+                                <div class="hero-badge mb-0">現在開催中の確認枠</div>
+                                <div class="current-race-live">更新時刻 <span id="currentRaceNow">--:--:--</span></div>
+                            </div>
                             <div class="current-race-grid">
                                 <div class="current-race-tile">
                                     <div class="current-race-label mb-1">レース場</div>
@@ -471,51 +528,58 @@
                     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                         <div>
                             <span class="section-badge mb-2">動画と外部リンク</span>
-                            <h2 class="section-title mb-2">PCでは2画面で見比べながら確認</h2>
-                            <p class="section-copy mb-0">左に公式動画、右にレース場動画を置き、関連リンクとタイマーはその下で整理します。右側には将来メモ切替を足しやすい余地を残しています。</p>
+                            <h2 class="section-title mb-2">PCでは2画面を同時に見比べやすくする</h2>
+                            <p class="section-copy mb-0">左に公式動画、右にレース場動画を同じ横幅で置き、同時視聴しやすさを優先しています。外部リンクとタイマーは下段へ分けて、動画の見える面積を確保しています。</p>
                         </div>
                         <div class="status-chip">選択中: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '川口'">川口</span></div>
                     </div>
 
-                    <div class="media-layout">
-                        <div>
-                            <div class="dual-video-grid mb-4">
-                                <div class="video-card p-4">
-                                    <div class="video-panel-title mb-1">左: 公式動画</div>
-                                    <div class="video-panel-subtitle mb-3">公式配信や案内を確認するための表示枠です。</div>
-                                    <div class="video-placeholder">
-                                        <div>
-                                            <strong>公式動画プレースホルダー</strong>
-                                            <div class="mt-2">公式動画や配信案内をここへ表示予定です。</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="video-card p-4">
-                                    <div class="video-panel-title mb-1">右: レース場動画</div>
-                                    <div class="video-panel-subtitle mb-3">会場ごとの映像や、将来のメモ切替を追加しやすい側です。</div>
-                                    <div class="video-placeholder mb-3">
-                                        <div>
-                                            <strong>レース場動画プレースホルダー</strong>
-                                            <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
-                                        </div>
-                                    </div>
-                                    <div class="note-card p-3">
-                                        <div class="fw-bold mb-2 soft-strong">将来拡張用メモ枠</div>
-                                        <div class="note-placeholder">今後はここにメモ切替や補助情報を追加できる想定です。</div>
-                                    </div>
+                    <div class="dual-video-grid mb-4">
+                        <div class="video-card p-4">
+                            <div class="video-panel-title mb-1">左: 公式動画</div>
+                            <div class="video-panel-subtitle mb-3">公式配信や案内を確認するための表示枠です。</div>
+                            <div class="video-placeholder">
+                                <div>
+                                    <strong>公式動画プレースホルダー</strong>
+                                    <div class="mt-2">公式動画や配信案内をここへ表示予定です。</div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="timer-card compact-timer-card p-4">
+                        <div class="video-card p-4">
+                            <div class="video-panel-title mb-1">右: レース場動画</div>
+                            <div class="video-panel-subtitle mb-3">会場ごとの映像や、将来のメモ切替を追加しやすい側です。</div>
+                            <div class="video-placeholder mb-3">
+                                <div>
+                                    <strong>レース場動画プレースホルダー</strong>
+                                    <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
+                                </div>
+                            </div>
+                            <div class="note-card p-3">
+                                <div class="fw-bold mb-2 soft-strong">将来拡張用メモ枠</div>
+                                <div class="note-placeholder">今後はここにメモ切替や補助情報を追加できる想定です。</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="support-layout">
+                        <div>
+                            <div class="timer-card compact-timer-card is-compact">
                                 <span class="section-badge mb-2">タイマー</span>
-                                <h2 class="section-title mb-2">締切までの残り時間</h2>
-                                <p class="section-copy mb-3">動画エリアの下で見やすい位置を維持しつつ、少し小さめに整理しています。将来は締切直前の通知やバイブ対応を足しやすい前提です。</p>
-                                <!-- 将来的にバイブ通知や締切直前アラートを追加しやすい構造にしている -->
+                                <h2 class="section-title">締切までの残り時間</h2>
+                                <div class="timer-setting-row">
+                                    <span class="timer-setting-label">バイブ通知の準備</span>
+                                    <div class="form-check form-switch mb-0">
+                                        <input id="vibrationReadySwitch" class="form-check-input" type="checkbox" disabled>
+                                        <label class="form-check-label small text-secondary" for="vibrationReadySwitch">準備中</label>
+                                    </div>
+                                </div>
+                                <p class="section-copy">将来は締切直前にバイブ通知を追加しやすい前提です。</p>
+                                <!-- 将来的に vibration API や締切直前アラートを追加しやすい構造にしている -->
                                 <div class="timer-display">
                                     <div>
                                         <div class="timer-clock">00:00:00</div>
-                                        <div class="mt-2">投票締切までの残り時間を表示予定です。</div>
+                                        <div class="mt-2 small">投票締切までの残り時間を表示予定です。</div>
                                     </div>
                                 </div>
                             </div>
@@ -525,7 +589,7 @@
                             <div class="link-card p-4 p-md-5 h-100">
                                 <span class="section-badge mb-2">外部リンク</span>
                                 <h2 class="section-title mb-2">必要なリンクを文字中心で整理</h2>
-                                <p class="section-copy mb-4">公式とファンクラブは1ボタンずつ、レース場リンクは種類ごとに見分けやすく並べています。</p>
+                                <p class="section-copy mb-4">公式サイトと公式FANCLUBは1ボタンずつに絞り、レース場ごとの外部リンクも文字だけで見やすく並べています。</p>
 
                                 <div class="link-stack mb-4">
                                     <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">公式サイト</a>
@@ -611,8 +675,15 @@
                     <div class="timer-card p-4 mt-4">
                         <span class="section-badge mb-2">タイマー</span>
                         <h2 class="section-title mb-2">締切までの残り時間</h2>
+                        <div class="timer-setting-row">
+                            <span class="timer-setting-label">バイブ通知の準備</span>
+                            <div class="form-check form-switch mb-0">
+                                <input id="mobileVibrationReadySwitch" class="form-check-input" type="checkbox" disabled>
+                                <label class="form-check-label small text-secondary" for="mobileVibrationReadySwitch">準備中</label>
+                            </div>
+                        </div>
                         <p class="section-copy mb-3">スマホでも動画のすぐ下で見返しやすい位置に置いています。将来の通知機能追加を前提にした説明も残しています。</p>
-                        <!-- 将来的にバイブ通知や締切直前アラートを追加しやすい構造にしている -->
+                        <!-- 将来的に vibration API や締切直前アラートを追加しやすい構造にしている -->
                         <div class="timer-display">
                             <div>
                                 <div class="timer-clock">00:00:00</div>
@@ -687,6 +758,20 @@
             }
         }
 
+        function updateCurrentClock() {
+            const nowTarget = document.getElementById("currentRaceNow");
+            if (!nowTarget) {
+                return;
+            }
+
+            const now = new Date();
+            nowTarget.textContent = now.toLocaleTimeString("ja-JP", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
+        }
+
         function showMobilePanel() {
             const sourceButton = document.querySelector("[data-mobile-source].active");
             const contentButton = document.querySelector("[data-mobile-content].active");
@@ -733,6 +818,7 @@
 
             updateSelectionSummary();
             updateCurrentRaceDisplay();
+            updateCurrentClock();
             syncHomeThemeSelect();
 
             if (venueSelect) {
@@ -768,6 +854,7 @@
             }
 
             showMobilePanel();
+            window.setInterval(updateCurrentClock, 1000);
         });
     </script>
 </body>
