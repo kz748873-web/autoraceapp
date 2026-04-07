@@ -530,37 +530,37 @@
                                         <ellipse cx="500" cy="320" rx="376" ry="170" fill="none" stroke="#ffffff" stroke-opacity="0.84" stroke-width="5" stroke-dasharray="14 12"></ellipse>
                                         <ellipse cx="500" cy="320" rx="350" ry="156" fill="none" stroke="#5f768d" stroke-opacity="0.42" stroke-width="2"></ellipse>
 
-                                        <!-- ライン表示 -->
-                                        <line x1="322" y1="142" x2="322" y2="258" stroke="#ffffff" stroke-opacity="0.9" stroke-width="4.5"></line>
-                                        <line x1="562" y1="142" x2="562" y2="258" stroke="#ffffff" stroke-opacity="0.9" stroke-width="4.5"></line>
-                                        <line x1="772" y1="136" x2="772" y2="206" stroke="#ffffff" stroke-opacity="0.92" stroke-width="4.5"></line>
+                                        <!-- ライン表示（スタート=4コーナー側ハンデ基準） -->
+                                        <line x1="236" y1="350" x2="236" y2="474" stroke="#ffffff" stroke-opacity="0.92" stroke-width="4.5"></line>
+                                        <line x1="202" y1="336" x2="202" y2="460" stroke="#ffffff" stroke-opacity="0.88" stroke-width="4"></line>
+                                        <line x1="606" y1="418" x2="606" y2="522" stroke="#ffffff" stroke-opacity="0.9" stroke-width="4.5"></line>
 
-                                        <!-- 10mハンデ周辺の扇状目盛り -->
-                                        <g stroke="#ffffff" stroke-opacity="0.9" stroke-width="3.6" stroke-linecap="round">
-                                            <line x1="790" y1="156" x2="824" y2="126"></line>
-                                            <line x1="808" y1="180" x2="852" y2="162"></line>
-                                            <line x1="818" y1="210" x2="866" y2="204"></line>
-                                            <line x1="818" y1="242" x2="866" y2="250"></line>
-                                            <line x1="810" y1="272" x2="852" y2="292"></line>
-                                            <line x1="794" y1="298" x2="828" y2="327"></line>
-                                            <line x1="772" y1="320" x2="796" y2="357"></line>
+                                        <!-- 左外周のハンデ目盛り（カーブ沿い） -->
+                                        <g stroke="#ffffff" stroke-opacity="0.9" stroke-width="3.4" stroke-linecap="round">
+                                            <line x1="128" y1="266" x2="172" y2="278"></line>
+                                            <line x1="112" y1="302" x2="160" y2="308"></line>
+                                            <line x1="104" y1="340" x2="154" y2="340"></line>
+                                            <line x1="110" y1="378" x2="158" y2="370"></line>
+                                            <line x1="126" y1="414" x2="170" y2="396"></line>
+                                            <line x1="148" y1="446" x2="186" y2="420"></line>
                                         </g>
 
                                         <!-- ラベル -->
                                         <g fill="#1f2f44" font-size="18" font-weight="700"
                                            stroke="#ffffff" stroke-opacity="0.9" stroke-width="3.4" paint-order="stroke fill">
-                                            <text x="240" y="130">ゴールライン</text>
-                                            <text x="478" y="130">スタートライン</text>
-                                            <text x="734" y="114">10mハンデライン</text>
+                                            <text x="186" y="332">スタートライン</text>
+                                            <text x="150" y="318">10mハンデライン</text>
+                                            <text x="548" y="408">ゴールライン</text>
+                                            <text x="168" y="542">スタート</text>
                                         </g>
 
                                         <!-- コーナー名（指定位置） -->
                                         <g fill="#2f4158" fill-opacity="0.92" font-size="23" font-weight="700"
                                            stroke="#ffffff" stroke-opacity="0.86" stroke-width="3.6" paint-order="stroke fill">
-                                            <text x="258" y="250">1コーナー</text>
-                                            <text x="258" y="338">2コーナー</text>
-                                            <text x="638" y="338">3コーナー</text>
-                                            <text x="638" y="250">4コーナー</text>
+                                            <text x="650" y="360">1コーナー</text>
+                                            <text x="650" y="228">2コーナー</text>
+                                            <text x="262" y="228">3コーナー</text>
+                                            <text x="262" y="360">4コーナー</text>
                                         </g>
 
                                         <g fill="#1f2f44" fill-opacity="0.9" font-size="22" font-weight="700"
@@ -571,11 +571,11 @@
                                     </svg>
                                 </div>
 
-                                <div class="start-diagram-token-layer">
+                                 <div class="start-diagram-token-layer">
                                     <div th:each="num : ${#numbers.sequence(1, 8)}"
                                          th:class="'start-token car-' + ${num}"
-                                         th:attr="data-default-x=${56 + (num - 1) * 1.2},data-default-y=${37 + (num - 1) * 1.8}"
-                                         th:style="'left:' + (${56 + (num - 1) * 1.2}) + '%; top:' + (${37 + (num - 1) * 1.8}) + '%;'">
+                                         th:attr="data-default-x=${24 + (num - 1) * 1.15},data-default-y=${68 + (num - 1) * 1.2}"
+                                         th:style="'left:' + (${24 + (num - 1) * 1.15}) + '%; top:' + (${68 + (num - 1) * 1.2}) + '%;'">
                                         <span th:text="${num}">1</span>
                                     </div>
                                 </div>
