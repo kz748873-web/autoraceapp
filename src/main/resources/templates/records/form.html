@@ -68,47 +68,63 @@
         .start-diagram-shell {
             border: 1px solid var(--card);
             border-radius: 1.25rem;
-            background: linear-gradient(180deg, #fef7e8 0%, #fffdf8 100%);
+            background: #f7f9fc;
             overflow: hidden;
         }
 
         .start-diagram-board {
             position: relative;
-            min-height: 26rem;
-            background:
-                linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0, rgba(255, 255, 255, 0.6) 1px, transparent 1px, transparent 12.5%),
-                linear-gradient(180deg, #efe2bd 0%, #e7d4a2 100%);
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            min-height: 22rem;
+            background: linear-gradient(180deg, #f9fbff 0%, #eef4fb 100%);
         }
 
-        .start-diagram-guide {
+        .start-diagram-bg-layer,
+        .start-diagram-token-layer,
+        .start-diagram-overlay {
             position: absolute;
             inset: 0;
+        }
+
+        .start-diagram-bg-layer {
             pointer-events: none;
         }
 
-        .start-lane-line {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background: rgba(92, 67, 22, 0.16);
+        .start-diagram-track {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
-        .start-lane-label {
+        .start-diagram-token-layer {
+            z-index: 2;
+        }
+
+        .start-diagram-overlay {
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .start-diagram-label {
             position: absolute;
-            top: 0.8rem;
-            transform: translateX(-50%);
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            color: rgba(92, 67, 22, 0.72);
+            color: #355472;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(53, 84, 114, 0.22);
+            border-radius: 999px;
+            padding: 0.2rem 0.6rem;
         }
 
-        .start-line {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 70%;
-            border-top: 4px dashed rgba(156, 67, 32, 0.5);
+        .start-diagram-label.start {
+            left: 8%;
+            top: 78%;
+        }
+
+        .start-diagram-label.corner {
+            right: 8%;
+            top: 15%;
         }
 
         .start-token {
@@ -116,14 +132,14 @@
             width: 3rem;
             height: 3rem;
             border-radius: 50%;
-            border: 3px solid #ffffff;
+            border: 2px solid #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 1rem;
             color: #ffffff;
-            box-shadow: 0 0.8rem 1.4rem rgba(15, 23, 42, 0.18);
+            box-shadow: 0 0.65rem 1.2rem rgba(15, 23, 42, 0.22);
             transform: translate(-50%, -50%);
             touch-action: none;
             user-select: none;
@@ -136,14 +152,14 @@
             z-index: 3;
         }
 
-        .lane-1 { background: #64748b; }
-        .lane-2 { background: #2563eb; }
-        .lane-3 { background: #dc2626; }
-        .lane-4 { background: #f97316; }
-        .lane-5 { background: #16a34a; }
-        .lane-6 { background: #7c3aed; }
-        .lane-7 { background: #0f766e; }
-        .lane-8 { background: #475569; }
+        .car-1 { background: #ffffff; color: #0f172a; border-color: #334155; }
+        .car-2 { background: #111111; color: #ffffff; }
+        .car-3 { background: #e11d2f; color: #ffffff; }
+        .car-4 { background: #1d4ed8; color: #ffffff; }
+        .car-5 { background: #facc15; color: #111111; }
+        .car-6 { background: #16a34a; color: #ffffff; }
+        .car-7 { background: #f97316; color: #ffffff; }
+        .car-8 { background: #ec4899; color: #111111; }
 
         .trial-input-card,
         .bet-line-card,
@@ -218,7 +234,7 @@
 
         @media (max-width: 991.98px) {
             .start-diagram-board {
-                min-height: 22rem;
+                min-height: 19rem;
             }
         }
 
@@ -243,6 +259,11 @@
                 width: 2.5rem;
                 height: 2.5rem;
                 font-size: 0.9rem;
+            }
+
+            .start-diagram-label {
+                font-size: 0.76rem;
+                padding: 0.2rem 0.5rem;
             }
         }
     </style>
@@ -345,7 +366,7 @@
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                             <div>
                                 <h3 class="h5 fw-bold mb-1">注目選手</h3>
-                                <p class="section-subtitle mb-0">印と号車を先に入れておくと、当日予想の試走タイム表示にも連動します。</p>
+                                <p class="section-subtitle mb-0">印と車番を先に入れておくと、当日予想の試走タイム表示にも連動します。</p>
                             </div>
                             <div class="summary-pill">印は ◎ / ○ / △ / 穴</div>
                         </div>
@@ -358,10 +379,17 @@
                                             <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト">
                                         </div>
                                         <div class="col-6">
-                                            <label for="featuredRider1Number" class="form-label fw-semibold">号車</label>
+                                            <label for="featuredRider1Number" class="form-label fw-semibold">車番（1 白〜8 ピンク）</label>
                                             <select id="featuredRider1Number" th:field="*{featuredRider1Number}" class="form-select form-select-lg">
                                                 <option value="">選択</option>
-                                                <option th:each="num : ${#numbers.sequence(1, 8)}" th:value="${num}" th:text="${num + '号車'}">1号車</option>
+                                                <option value="1">1 白</option>
+                                                <option value="2">2 黒</option>
+                                                <option value="3">3 赤</option>
+                                                <option value="4">4 青</option>
+                                                <option value="5">5 黄</option>
+                                                <option value="6">6 緑</option>
+                                                <option value="7">7 オレンジ</option>
+                                                <option value="8">8 ピンク</option>
                                             </select>
                                         </div>
                                         <div class="col-6">
@@ -385,10 +413,17 @@
                                             <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 橘ミナト">
                                         </div>
                                         <div class="col-6">
-                                            <label for="featuredRider2Number" class="form-label fw-semibold">号車</label>
+                                            <label for="featuredRider2Number" class="form-label fw-semibold">車番（1 白〜8 ピンク）</label>
                                             <select id="featuredRider2Number" th:field="*{featuredRider2Number}" class="form-select form-select-lg">
                                                 <option value="">選択</option>
-                                                <option th:each="num : ${#numbers.sequence(1, 8)}" th:value="${num}" th:text="${num + '号車'}">1号車</option>
+                                                <option value="1">1 白</option>
+                                                <option value="2">2 黒</option>
+                                                <option value="3">3 赤</option>
+                                                <option value="4">4 青</option>
+                                                <option value="5">5 黄</option>
+                                                <option value="6">6 緑</option>
+                                                <option value="7">7 オレンジ</option>
+                                                <option value="8">8 ピンク</option>
                                             </select>
                                         </div>
                                         <div class="col-6">
@@ -412,10 +447,17 @@
                                             <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 白石ルイ">
                                         </div>
                                         <div class="col-6">
-                                            <label for="featuredRider3Number" class="form-label fw-semibold">号車</label>
+                                            <label for="featuredRider3Number" class="form-label fw-semibold">車番（1 白〜8 ピンク）</label>
                                             <select id="featuredRider3Number" th:field="*{featuredRider3Number}" class="form-select form-select-lg">
                                                 <option value="">選択</option>
-                                                <option th:each="num : ${#numbers.sequence(1, 8)}" th:value="${num}" th:text="${num + '号車'}">1号車</option>
+                                                <option value="1">1 白</option>
+                                                <option value="2">2 黒</option>
+                                                <option value="3">3 赤</option>
+                                                <option value="4">4 青</option>
+                                                <option value="5">5 黄</option>
+                                                <option value="6">6 緑</option>
+                                                <option value="7">7 オレンジ</option>
+                                                <option value="8">8 ピンク</option>
                                             </select>
                                         </div>
                                         <div class="col-6">
@@ -441,7 +483,7 @@
                     <div>
                         <div class="section-badge mb-2">2. スタート展開図</div>
                         <h2 class="h4 fw-bold mb-2">並びとスタート想定を見える化する</h2>
-                        <p class="section-subtitle mb-0">号車をドラッグして、想定する位置関係をざっくり残せます。</p>
+                        <p class="section-subtitle mb-0">車番をドラッグして、想定する位置関係をざっくり残せます。</p>
                     </div>
                     <div class="section-pill js-section-status">編集中</div>
                 </div>
@@ -461,18 +503,40 @@
                         </div>
                         <div class="start-diagram-shell">
                             <div id="startDiagramBoard" class="start-diagram-board">
-                                <div class="start-diagram-guide">
-                                    <div th:each="num : ${#numbers.sequence(1, 8)}">
-                                        <div class="start-lane-line" th:style="'left:' + (${num} * 12.5) + '%'"></div>
-                                        <div class="start-lane-label" th:style="'left:' + (${num} * 12.5 - 6.25) + '%'" th:text="${num + '号車'}">1号車</div>
-                                    </div>
-                                    <div class="start-line"></div>
+                                <div class="start-diagram-bg-layer">
+                                    <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
+                                    <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="スタートから1コーナー進入までの展開図">
+                                        <defs>
+                                            <linearGradient id="trackSurface" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stop-color="#32465e"></stop>
+                                                <stop offset="100%" stop-color="#1e2f43"></stop>
+                                            </linearGradient>
+                                            <linearGradient id="infieldSurface" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stop-color="#dce8d1"></stop>
+                                                <stop offset="100%" stop-color="#b7d0a4"></stop>
+                                            </linearGradient>
+                                        </defs>
+
+                                        <rect x="0" y="0" width="1000" height="560" fill="#f5f8fc"></rect>
+                                        <path d="M60,500 C260,505 380,465 520,385 C660,310 770,225 925,120 L960,170 C810,270 700,355 560,425 C410,500 275,545 60,540 Z" fill="url(#trackSurface)"></path>
+                                        <path d="M120,500 C295,504 405,473 540,397 C675,322 780,241 915,148 L930,176 C800,266 696,344 560,420 C420,500 305,532 120,528 Z" fill="url(#infieldSurface)"></path>
+                                        <path d="M140,505 C315,506 420,476 552,402 C687,327 786,250 903,168" fill="none" stroke="#ffffff" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="14 12"></path>
+                                        <path d="M138,470 C294,468 390,438 510,370 C618,307 700,248 802,172" fill="none" stroke="#5f768d" stroke-opacity="0.42" stroke-width="2"></path>
+                                    </svg>
                                 </div>
-                                <div th:each="num : ${#numbers.sequence(1, 8)}"
-                                     th:class="'start-token lane-' + ${num}"
-                                     th:attr="data-default-x=${6.25 + (num - 1) * 12.5},data-default-y=78"
-                                     th:style="'left:' + (${6.25 + (num - 1) * 12.5}) + '%; top:78%;'">
-                                    <span th:text="${num}">1</span>
+
+                                <div class="start-diagram-token-layer">
+                                    <div th:each="num : ${#numbers.sequence(1, 8)}"
+                                         th:class="'start-token car-' + ${num}"
+                                         th:attr="data-default-x=${14 + (num - 1) * 2.8},data-default-y=${78 - (num - 1) * 1.35}"
+                                         th:style="'left:' + (${14 + (num - 1) * 2.8}) + '%; top:' + (${78 - (num - 1) * 1.35}) + '%;'">
+                                        <span th:text="${num}">1</span>
+                                    </div>
+                                </div>
+
+                                <div class="start-diagram-overlay">
+                                    <div class="start-diagram-label start">スタート</div>
+                                    <div class="start-diagram-label corner">1コーナー</div>
                                 </div>
                             </div>
                         </div>
@@ -569,7 +633,7 @@
                                 <div class="row g-3">
                                     <div class="col-md-6 col-xl-3" th:each="entry : ${record.trialTimeEntries}">
                                         <div class="trial-input-card p-3 h-100">
-                                            <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber + '号車'}">1号車</label>
+                                            <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber == 1 ? '1 白' : (entry.laneNumber == 2 ? '2 黒' : (entry.laneNumber == 3 ? '3 赤' : (entry.laneNumber == 4 ? '4 青' : (entry.laneNumber == 5 ? '5 黄' : (entry.laneNumber == 6 ? '6 緑' : (entry.laneNumber == 7 ? '7 オレンジ' : '8 ピンク'))))))}">1 白</label>
                                             <input type="text"
                                                    th:id="${entry.fieldName}"
                                                    th:field="*{__${entry.fieldName}__}"
@@ -612,7 +676,7 @@
                                             <option value="複勝">複勝</option>
                                             <option value="2連単">2連単</option>
                                             <option value="2連複">2連複</option>
-                                            <option value="ワイド">ワイド</option>
+                                            <option value="拡連複">拡連複</option>
                                             <option value="3連単">3連単</option>
                                             <option value="3連複">3連複</option>
                                         </select>
@@ -643,7 +707,7 @@
                                             <option value="複勝">複勝</option>
                                             <option value="2連単">2連単</option>
                                             <option value="2連複">2連複</option>
-                                            <option value="ワイド">ワイド</option>
+                                            <option value="拡連複">拡連複</option>
                                             <option value="3連単">3連単</option>
                                             <option value="3連複">3連複</option>
                                         </select>
@@ -674,7 +738,7 @@
                                             <option value="複勝">複勝</option>
                                             <option value="2連単">2連単</option>
                                             <option value="2連複">2連複</option>
-                                            <option value="ワイド">ワイド</option>
+                                            <option value="拡連複">拡連複</option>
                                             <option value="3連単">3連単</option>
                                             <option value="3連複">3連複</option>
                                         </select>
@@ -737,7 +801,7 @@
                             <div class="col-12">
                                 <div class="bet-line-card p-3">
                                     <label for="predictionNote" class="form-label fw-semibold">購入理由・最終メモ</label>
-                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: ワイドは押さえ、3連単は蒼井ハヤトの先行パターン中心。"></textarea>
+                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: 拡連複は押さえ、3連単は蒼井ハヤトの先行パターン中心。"></textarea>
                                 </div>
                             </div>
                         </div>

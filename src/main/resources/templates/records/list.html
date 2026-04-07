@@ -163,7 +163,7 @@
 
                                 <div class="col-md-4">
                                     <label for="featuredRider" class="form-label fw-semibold">注目選手</label>
-                                    <input type="text" id="featuredRider" name="featuredRider" class="form-control form-control-lg" placeholder="例: 山田太郎" th:value="${featuredRider}">
+                                    <input type="text" id="featuredRider" name="featuredRider" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト" th:value="${featuredRider}">
                                 </div>
 
                                 <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-2">
@@ -201,7 +201,7 @@
                                     <th scope="col">レース番号</th>
                                     <th scope="col">天気</th>
                                     <th scope="col">走路状況</th>
-                                    <th scope="col">本命印の選手</th>
+                                    <th scope="col">注目選手（本命印）</th>
                                     <th scope="col">賭け式</th>
                                     <th scope="col">購入金額</th>
                                     <th scope="col">操作</th>
@@ -217,7 +217,7 @@
                                     <td th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</td>
                                     <td th:text="${#strings.isEmpty(record.weatherCondition) ? '未入力' : record.weatherCondition}">晴れ</td>
                                     <td th:text="${#strings.isEmpty(record.trackCondition) ? '未入力' : record.trackCondition}">良走路</td>
-                                    <td th:text="${#strings.isEmpty(record.primaryFeaturedRiderName) ? '未設定' : record.primaryFeaturedRiderName}">山田太郎</td>
+                                    <td th:text="${#strings.isEmpty(record.primaryFeaturedRiderName) ? '未設定' : record.primaryFeaturedRiderName}">蒼井ハヤト</td>
                                     <td th:text="${#strings.isEmpty(record.betType) ? '未入力' : record.betType}">3連単</td>
                                     <td th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</td>
                                     <td>

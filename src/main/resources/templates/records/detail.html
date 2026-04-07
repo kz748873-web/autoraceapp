@@ -74,14 +74,14 @@
 
                 <h3 class="h4 fw-bold mb-3">注目選手</h3>
                 <div class="row g-4 mb-4">
-                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手1</div><div class="fw-semibold mb-2" th:text="${record.featuredRider1Name} ?: '未入力'">青山周平</div><div class="small mb-1"><span class="text-secondary">号車:</span> <span class="fw-semibold" th:text="${record.featuredRider1Number} ?: '未入力'">1</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider1Mark} ?: '未入力'">◎</span></div></div></div>
-                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手2</div><div class="fw-semibold mb-2" th:text="${record.featuredRider2Name} ?: '未入力'">鈴木圭一郎</div><div class="small mb-1"><span class="text-secondary">号車:</span> <span class="fw-semibold" th:text="${record.featuredRider2Number} ?: '未入力'">3</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider2Mark} ?: '未入力'">○</span></div></div></div>
-                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手3</div><div class="fw-semibold mb-2" th:text="${record.featuredRider3Name} ?: '未入力'">佐藤摩弥</div><div class="small mb-1"><span class="text-secondary">号車:</span> <span class="fw-semibold" th:text="${record.featuredRider3Number} ?: '未入力'">5</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider3Mark} ?: '未入力'">△</span></div></div></div>
+                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手1</div><div class="fw-semibold mb-2" th:text="${record.featuredRider1Name} ?: '未入力'">蒼井ハヤト</div><div class="small mb-1"><span class="text-secondary">車番:</span> <span class="fw-semibold" th:text="${record.featuredRider1Number == null ? '未入力' : (record.featuredRider1Number == 1 ? '1 白' : (record.featuredRider1Number == 2 ? '2 黒' : (record.featuredRider1Number == 3 ? '3 赤' : (record.featuredRider1Number == 4 ? '4 青' : (record.featuredRider1Number == 5 ? '5 黄' : (record.featuredRider1Number == 6 ? '6 緑' : (record.featuredRider1Number == 7 ? '7 オレンジ' : '8 ピンク')))))))}">1 白</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider1Mark} ?: '未入力'">◎</span></div></div></div>
+                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手2</div><div class="fw-semibold mb-2" th:text="${record.featuredRider2Name} ?: '未入力'">橘ミナト</div><div class="small mb-1"><span class="text-secondary">車番:</span> <span class="fw-semibold" th:text="${record.featuredRider2Number == null ? '未入力' : (record.featuredRider2Number == 1 ? '1 白' : (record.featuredRider2Number == 2 ? '2 黒' : (record.featuredRider2Number == 3 ? '3 赤' : (record.featuredRider2Number == 4 ? '4 青' : (record.featuredRider2Number == 5 ? '5 黄' : (record.featuredRider2Number == 6 ? '6 緑' : (record.featuredRider2Number == 7 ? '7 オレンジ' : '8 ピンク')))))))}">3 赤</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider2Mark} ?: '未入力'">○</span></div></div></div>
+                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手3</div><div class="fw-semibold mb-2" th:text="${record.featuredRider3Name} ?: '未入力'">白石ルイ</div><div class="small mb-1"><span class="text-secondary">車番:</span> <span class="fw-semibold" th:text="${record.featuredRider3Number == null ? '未入力' : (record.featuredRider3Number == 1 ? '1 白' : (record.featuredRider3Number == 2 ? '2 黒' : (record.featuredRider3Number == 3 ? '3 赤' : (record.featuredRider3Number == 4 ? '4 青' : (record.featuredRider3Number == 5 ? '5 黄' : (record.featuredRider3Number == 6 ? '6 緑' : (record.featuredRider3Number == 7 ? '7 オレンジ' : '8 ピンク')))))))}">5 黄</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider3Mark} ?: '未入力'">△</span></div></div></div>
                 </div>
 
                 <div class="row g-4">
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">前日予想メモ</div><div class="fw-semibold" th:text="${record.preRacePrediction} ?: '未入力'">枠順や近況から内枠中心で組み立てたい。</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">補足メモ</div><div class="fw-semibold" th:text="${record.preRaceNote} ?: '未入力'">前日オッズや気になる点をメモ。</div></div></div>
+                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">前日予想メモ</div><div class="fw-semibold" th:text="${record.preRacePrediction} ?: '未入力'">ハンデと試走気配から内線中心で組み立てたい。</div></div></div>
+                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">補足メモ</div><div class="fw-semibold" th:text="${record.preRaceNote} ?: '未入力'">前日の気配や気になる点をメモ。</div></div></div>
                 </div>
             </div>
         </div>
@@ -107,11 +107,11 @@
                 <div class="row g-4 mb-4">
                     <div class="col-md-3 col-sm-6" th:each="entry : ${record.trialTimeEntries}">
                         <div class="trial-time-card p-3 h-100">
-                            <div class="text-secondary small mb-1" th:text="${entry.laneNumber + '号車'}">1号車</div>
+                            <div class="text-secondary small mb-1" th:text="${entry.laneNumber == 1 ? '1 白' : (entry.laneNumber == 2 ? '2 黒' : (entry.laneNumber == 3 ? '3 赤' : (entry.laneNumber == 4 ? '4 青' : (entry.laneNumber == 5 ? '5 黄' : (entry.laneNumber == 6 ? '6 緑' : (entry.laneNumber == 7 ? '7 オレンジ' : '8 ピンク'))))))}">1 白</div>
                             <div class="fw-semibold fs-5" th:text="${#strings.isEmpty(entry.time) ? '未入力' : entry.time}">3.34</div>
                             <div class="trial-time-meta">
                                 <span th:if="${entry.hasFeaturedMark}" class="trial-mark-badge" th:text="${entry.featuredMark}">◎</span>
-                                <span th:if="${entry.hasFeaturedMark and !#strings.isEmpty(entry.featuredRiderName)}" class="small text-secondary" th:text="${entry.featuredRiderName}">青山周平</span>
+                                <span th:if="${entry.hasFeaturedMark and !#strings.isEmpty(entry.featuredRiderName)}" class="small text-secondary" th:text="${entry.featuredRiderName}">蒼井ハヤト</span>
                                 <span th:if="${entry.hasRank}" class="trial-rank-badge" th:text="${entry.rank + '位'}">1位</span>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="row g-4 mb-4">
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">気になる選手の試走タイムメモ</div><div class="fw-semibold" th:text="${record.featuredTrialTimeNote} ?: '未入力'">5号車の試走タイムが良く、上積みがありそう。</div></div></div>
+                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">気になる選手の試走タイムメモ</div><div class="fw-semibold" th:text="${record.featuredTrialTimeNote} ?: '未入力'">5 黄の試走タイムが良く、上積みがありそう。</div></div></div>
                     <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">レース全体メモ</div><div class="fw-semibold" th:text="${record.raceOverallNote} ?: '未入力'">外枠勢の進み方次第で展開が変わりそう。</div></div></div>
                 </div>
 
@@ -130,7 +130,7 @@
                     <div class="col-md-3"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">1点あたり金額</div><div class="fw-semibold" th:text="${record.unitBetAmount != null ? record.unitBetAmount + '円' : '未入力'}">100円</div></div></div>
                     <div class="col-md-3"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">購入金額</div><div class="fw-semibold" th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</div></div></div>
                     <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">最終予想</div><div class="fw-semibold fs-5" th:text="${record.finalPrediction} ?: '未入力'">1-3-5 / 5-1-3</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">予想追加メモ</div><div class="fw-semibold" th:text="${record.predictionNote} ?: '未入力'">試走後に5号車本命へ変更した。</div></div></div>
+                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">予想追加メモ</div><div class="fw-semibold" th:text="${record.predictionNote} ?: '未入力'">試走後に5 黄中心へ変更した。</div></div></div>
                 </div>
             </div>
         </div>
@@ -157,3 +157,4 @@
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
 </body>
 </html>
+
