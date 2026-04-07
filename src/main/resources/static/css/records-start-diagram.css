@@ -1,0 +1,114 @@
+﻿.start-diagram-shell {
+    border: 1px solid var(--card);
+    border-radius: 1.25rem;
+    background: #f7f9fc;
+    overflow: hidden;
+}
+
+.start-diagram-board {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 22rem;
+    background: linear-gradient(180deg, #f9fbff 0%, #eef4fb 100%);
+}
+
+.start-diagram-bg-layer,
+.start-diagram-token-layer,
+.start-diagram-overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.start-diagram-bg-layer {
+    pointer-events: none;
+}
+
+.start-diagram-track {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.start-diagram-token-layer {
+    z-index: 2;
+}
+
+.start-diagram-overlay {
+    z-index: 3;
+    pointer-events: none;
+}
+
+.start-diagram-label {
+    position: absolute;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #355472;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(53, 84, 114, 0.22);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+}
+
+.start-diagram-label.start {
+    left: 9%;
+    top: 82%;
+}
+
+.start-diagram-label.corner {
+    right: 8%;
+    top: 58%;
+}
+
+.start-token {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #ffffff;
+    box-shadow: 0 0.65rem 1.2rem rgba(15, 23, 42, 0.22);
+    transform: translate(-50%, -50%);
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+}
+
+.start-token.is-dragging {
+    cursor: grabbing;
+    box-shadow: 0 1rem 1.8rem rgba(15, 23, 42, 0.26);
+    z-index: 3;
+}
+
+.car-1 { background: #ffffff; color: #0f172a; border-color: #334155; }
+.car-2 { background: #111111; color: #ffffff; }
+.car-3 { background: #e11d2f; color: #ffffff; }
+.car-4 { background: #1d4ed8; color: #ffffff; }
+.car-5 { background: #facc15; color: #111111; }
+.car-6 { background: #16a34a; color: #ffffff; }
+.car-7 { background: #f97316; color: #ffffff; }
+.car-8 { background: #ec4899; color: #111111; }
+
+@media (max-width: 991.98px) {
+    .start-diagram-board {
+        min-height: 19rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .start-token {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 0.9rem;
+    }
+
+    .start-diagram-label {
+        font-size: 0.76rem;
+        padding: 0.2rem 0.5rem;
+    }
+}

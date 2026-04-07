@@ -2,6 +2,7 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout/base :: commonHead('レース記録登録 | オートレース予想補助アプリ')}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/records-start-diagram.css}">
     <style>
         .section-shell {
             border: 1px solid var(--card);
@@ -118,13 +119,13 @@
         }
 
         .start-diagram-label.start {
-            left: 8%;
-            top: 78%;
+            left: 9%;
+            top: 82%;
         }
 
         .start-diagram-label.corner {
             right: 8%;
-            top: 15%;
+            top: 58%;
         }
 
         .start-token {
@@ -518,10 +519,11 @@
                                         </defs>
 
                                         <rect x="0" y="0" width="1000" height="560" fill="#f5f8fc"></rect>
-                                        <path d="M60,500 C260,505 380,465 520,385 C660,310 770,225 925,120 L960,170 C810,270 700,355 560,425 C410,500 275,545 60,540 Z" fill="url(#trackSurface)"></path>
-                                        <path d="M120,500 C295,504 405,473 540,397 C675,322 780,241 915,148 L930,176 C800,266 696,344 560,420 C420,500 305,532 120,528 Z" fill="url(#infieldSurface)"></path>
-                                        <path d="M140,505 C315,506 420,476 552,402 C687,327 786,250 903,168" fill="none" stroke="#ffffff" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="14 12"></path>
-                                        <path d="M138,470 C294,468 390,438 510,370 C618,307 700,248 802,172" fill="none" stroke="#5f768d" stroke-opacity="0.42" stroke-width="2"></path>
+                                        <ellipse cx="500" cy="320" rx="430" ry="205" fill="url(#trackSurface)"></ellipse>
+                                        <ellipse cx="500" cy="320" rx="335" ry="145" fill="url(#infieldSurface)"></ellipse>
+                                        <ellipse cx="500" cy="320" rx="380" ry="176" fill="none" stroke="#ffffff" stroke-opacity="0.84" stroke-width="5" stroke-dasharray="14 12"></ellipse>
+                                        <ellipse cx="500" cy="320" rx="355" ry="160" fill="none" stroke="#5f768d" stroke-opacity="0.42" stroke-width="2"></ellipse>
+                                        <line x1="118" y1="430" x2="118" y2="248" stroke="#ffffff" stroke-opacity="0.72" stroke-width="4"></line>
                                     </svg>
                                 </div>
 
@@ -869,6 +871,7 @@
 </div>
 
 <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+<script th:src="@{/js/records-start-diagram.js}"></script>
 <script>
     function parseTrialTimeValue(value) {
         if (!value) {
@@ -1012,22 +1015,14 @@
         }
     }
 
-    function setStartTokenPosition(token, xPercent, yPercent) {
-        token.dataset.x = xPercent.toFixed(2);
-        token.dataset.y = yPercent.toFixed(2);
-        token.style.left = xPercent + "%";
-        token.style.top = yPercent + "%";
-    }
-
-    function clampStartTokenValue(value, min, max) {
-        return Math.min(Math.max(value, min), max);
-    }
-
     function resetStartDiagramTokens() {
-        document.querySelectorAll(".start-token").forEach(function (token) {
-            const defaultX = Number(token.dataset.defaultX);
-            const defaultY = Number(token.dataset.defaultY);
-            setStartTokenPosition(token, defaultX, defaultY);
+        if (window.AutoRaceStartDiagram) {
+            window.AutoRaceStartDiagram.reset("startDiagramBoard");
+            return;
+        }
+        document.querySelectorAll("#startDiagramBoard .start-token").forEach(function (token) {
+            token.style.left = token.dataset.defaultX + "%";
+            token.style.top = token.dataset.defaultY + "%";
         });
     }
 
@@ -1042,10 +1037,14 @@
         if (resetButton) {
             resetButton.disabled = disabled;
         }
-        section.querySelectorAll(".start-token").forEach(function (token) {
-            token.style.pointerEvents = disabled ? "none" : "auto";
-            token.classList.remove("is-dragging");
-        });
+        if (window.AutoRaceStartDiagram) {
+            window.AutoRaceStartDiagram.setEnabled("startDiagramBoard", !disabled);
+        } else {
+            section.querySelectorAll(".start-token").forEach(function (token) {
+                token.style.pointerEvents = disabled ? "none" : "auto";
+                token.classList.remove("is-dragging");
+            });
+        }
     }
 
     function serializeSection(section) {
@@ -1087,8 +1086,6 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("raceRecordForm");
-        const board = document.getElementById("startDiagramBoard");
-        const resetButton = document.getElementById("resetStartDiagram");
         const trialInputs = document.querySelectorAll(".js-trial-time");
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
@@ -1157,64 +1154,11 @@
             }
         });
 
-        if (board) {
-            let activeToken = null;
-            let activePointerId = null;
-
-            resetStartDiagramTokens();
-
-            function moveActiveToken(clientX, clientY) {
-                if (!activeToken) {
-                    return;
-                }
-
-                const rect = board.getBoundingClientRect();
-                const tokenHalfWidth = activeToken.offsetWidth / 2;
-                const tokenHalfHeight = activeToken.offsetHeight / 2;
-                const rawX = clientX - rect.left;
-                const rawY = clientY - rect.top;
-                const clampedX = clampStartTokenValue(rawX, tokenHalfWidth, rect.width - tokenHalfWidth);
-                const clampedY = clampStartTokenValue(rawY, tokenHalfHeight, rect.height - tokenHalfHeight);
-                const xPercent = (clampedX / rect.width) * 100;
-                const yPercent = (clampedY / rect.height) * 100;
-
-                setStartTokenPosition(activeToken, xPercent, yPercent);
-            }
-
-            document.querySelectorAll(".start-token").forEach(function (token) {
-                token.addEventListener("pointerdown", function (event) {
-                    activeToken = token;
-                    activePointerId = event.pointerId;
-                    token.classList.add("is-dragging");
-                    token.setPointerCapture(event.pointerId);
-                    moveActiveToken(event.clientX, event.clientY);
-                });
-
-                token.addEventListener("pointermove", function (event) {
-                    if (activeToken !== token || activePointerId !== event.pointerId) {
-                        return;
-                    }
-                    moveActiveToken(event.clientX, event.clientY);
-                });
-
-                function finishDrag(event) {
-                    if (activeToken !== token || activePointerId !== event.pointerId) {
-                        return;
-                    }
-                    token.classList.remove("is-dragging");
-                    activeToken = null;
-                    activePointerId = null;
-                }
-
-                token.addEventListener("pointerup", finishDrag);
-                token.addEventListener("pointercancel", finishDrag);
+        if (window.AutoRaceStartDiagram) {
+            window.AutoRaceStartDiagram.init({
+                boardId: "startDiagramBoard",
+                resetButtonId: "resetStartDiagram"
             });
-
-            if (resetButton) {
-                resetButton.addEventListener("click", function () {
-                    resetStartDiagramTokens();
-                });
-            }
         }
 
         trialInputs.forEach(function (input) {
