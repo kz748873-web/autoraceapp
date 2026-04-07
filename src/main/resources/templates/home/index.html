@@ -57,11 +57,16 @@
             padding: 1.45rem;
         }
 
+        .top-theme-strip {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.45rem 0.9rem 0;
+        }
+
         .theme-floating-wrap {
             display: flex;
             justify-content: flex-end;
-            margin-top: -0.4rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.85rem;
         }
 
         .theme-floating-bar {
@@ -386,6 +391,11 @@
                 grid-template-columns: 1fr;
             }
 
+            .top-theme-strip {
+                justify-content: flex-start;
+                padding: 0.45rem 0.9rem 0;
+            }
+
             .theme-floating-wrap {
                 justify-content: flex-start;
             }
@@ -439,26 +449,25 @@
 </head>
 <body>
     <div class="app-shell d-flex flex-column">
+        <div class="top-theme-strip">
+            <div class="theme-floating-bar">
+                <label for="homeThemeSelect" class="theme-floating-label mb-0">テーマ切替</label>
+                <select id="homeThemeSelect" class="form-select form-select-sm theme-floating-select" aria-label="TOPページのテーマ選択">
+                    <option value="default">デフォルト</option>
+                    <option value="white">1 白</option>
+                    <option value="black">2 黒</option>
+                    <option value="red">3 赤</option>
+                    <option value="blue">4 青</option>
+                    <option value="yellow">5 黄</option>
+                    <option value="green">6 緑</option>
+                    <option value="orange">7 オレンジ</option>
+                    <option value="pink">8 ピンク</option>
+                </select>
+            </div>
+        </div>
         <div th:replace="~{layout/header :: siteHeader}"></div>
 
         <main class="container py-4 py-md-5 flex-grow-1">
-            <div class="theme-floating-wrap">
-                <div class="theme-floating-bar">
-                    <label for="homeThemeSelect" class="theme-floating-label mb-0">テーマ切替</label>
-                    <select id="homeThemeSelect" class="form-select form-select-sm theme-floating-select" aria-label="TOPページのテーマ選択">
-                        <option value="default">デフォルト</option>
-                        <option value="white">1 白</option>
-                        <option value="black">2 黒</option>
-                        <option value="red">3 赤</option>
-                        <option value="blue">4 青</option>
-                        <option value="yellow">5 黄</option>
-                        <option value="green">6 緑</option>
-                        <option value="orange">7 オレンジ</option>
-                        <option value="pink">8 ピンク</option>
-                    </select>
-                </div>
-            </div>
-
             <section class="hero-stage page-card p-4 p-md-5 mb-5">
                 <div class="hero-content">
                     <div class="hero-layout">

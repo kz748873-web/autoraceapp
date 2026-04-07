@@ -331,11 +331,11 @@
                                 <h3 class="h5 fw-bold mb-3">前日予想メモ</h3>
                                 <div class="mb-3">
                                     <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
-                                    <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control" rows="5" placeholder="例: 山田太郎のスタート先行を本線に考える"></textarea>
+                                    <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control" rows="5" placeholder="例: 蒼井ハヤトのスタート先行を本線に考える"></textarea>
                                 </div>
                                 <div>
                                     <label for="preRaceNote" class="form-label fw-semibold">前日メモ</label>
-                                    <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 鈴木一郎は気配が良く、佐藤花子は展開待ち。"></textarea>
+                                    <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 橘ミナトは気配が良く、白石ルイは展開待ち。"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +355,7 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label for="featuredRider1Name" class="form-label fw-semibold">注目選手 1</label>
-                                            <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 山田太郎">
+                                            <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト">
                                         </div>
                                         <div class="col-6">
                                             <label for="featuredRider1Number" class="form-label fw-semibold">号車</label>
@@ -382,7 +382,7 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label for="featuredRider2Name" class="form-label fw-semibold">注目選手 2</label>
-                                            <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 鈴木一郎">
+                                            <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 橘ミナト">
                                         </div>
                                         <div class="col-6">
                                             <label for="featuredRider2Number" class="form-label fw-semibold">号車</label>
@@ -409,7 +409,7 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label for="featuredRider3Name" class="form-label fw-semibold">注目選手 3</label>
-                                            <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 佐藤花子">
+                                            <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 白石ルイ">
                                         </div>
                                         <div class="col-6">
                                             <label for="featuredRider3Number" class="form-label fw-semibold">号車</label>
@@ -552,7 +552,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="featuredTrialTimeNote" class="form-label fw-semibold">当日の気配メモ</label>
-                                        <input type="text" id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" placeholder="例: 鈴木一郎は試走の伸びが良い">
+                                        <input type="text" id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" placeholder="例: 橘ミナトは試走の伸びが良い">
                                     </div>
                                 </div>
                             </div>
@@ -586,7 +586,7 @@
                                 </div>
                                 <div class="mt-3">
                                     <label for="raceOverallNote" class="form-label fw-semibold">試走から見た全体メモ</label>
-                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control" rows="4" placeholder="例: 山田太郎が先手なら押し切り、佐藤花子は後半追い込み。"></textarea>
+                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control" rows="4" placeholder="例: 蒼井ハヤトが先手なら押し切り、白石ルイは後半追い込み。"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -596,7 +596,7 @@
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                             <div>
                                 <h3 class="h5 fw-bold mb-1">購入内容と最終予想</h3>
-                                <p class="section-subtitle mb-0">複数の賭け式を行ごとに入力し、合計金額と収支見込みを確認できます。</p>
+                                <p class="section-subtitle mb-0">賭け式を複数行で入力できます。点数・金額・合計金額を見比べながら入力してください。</p>
                             </div>
                             <div class="summary-pill">入力中心で管理</div>
                         </div>
@@ -700,7 +700,7 @@
                             <div class="col-lg-4">
                                 <div class="bet-line-card p-3 h-100">
                                     <label for="finalPrediction" class="form-label fw-semibold">最終予想</label>
-                                    <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 山田太郎の押し切り本線">
+                                    <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤトの押し切り本線">
                                     <p class="field-caption mb-0">最終的な軸や買い方の結論を短くまとめます。</p>
                                 </div>
                             </div>
@@ -737,7 +737,7 @@
                             <div class="col-12">
                                 <div class="bet-line-card p-3">
                                     <label for="predictionNote" class="form-label fw-semibold">購入理由・最終メモ</label>
-                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: ワイドは押さえ、3連単は山田太郎の先行パターン中心。"></textarea>
+                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: ワイドは押さえ、3連単は蒼井ハヤトの先行パターン中心。"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -764,7 +764,7 @@
                         <div class="col-lg-4">
                             <div class="sub-block p-4 h-100">
                                 <label for="raceResult" class="form-label fw-semibold">レース結果</label>
-                                <input type="text" id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg mb-3" placeholder="例: 1着 山田太郎 / 2着 鈴木一郎 / 3着 佐藤花子">
+                                <input type="text" id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg mb-3" placeholder="例: 1着 蒼井ハヤト / 2着 橘ミナト / 3着 白石ルイ">
 
                                 <label for="resultComparison" class="form-label fw-semibold">予想との比較</label>
                                 <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control" rows="6" placeholder="例: 本線は的中、押さえは不要だった。"></textarea>
@@ -776,13 +776,13 @@
                                 <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control mb-3" rows="8" placeholder="例: 試走順位と実戦結果の差が大きく、展開読みをもっと重視したい。"></textarea>
 
                                 <label for="featuredRider" class="form-label fw-semibold">今回の中心選手まとめ</label>
-                                <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control form-control-lg" placeholder="例: 山田太郎">
+                                <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="sub-block p-4 h-100">
                                 <label for="note" class="form-label fw-semibold">次回につなげるメモ</label>
-                                <textarea id="note" th:field="*{note}" class="form-control mb-3" rows="5" placeholder="例: 湿走路では鈴木一郎の評価を上げる。"></textarea>
+                                <textarea id="note" th:field="*{note}" class="form-control mb-3" rows="5" placeholder="例: 湿走路では橘ミナトの評価を上げる。"></textarea>
 
                                 <div class="summary-card p-3">
                                     <div class="summary-label">記録の最後に確認したいこと</div>

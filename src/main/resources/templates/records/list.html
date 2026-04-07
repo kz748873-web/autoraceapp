@@ -60,9 +60,41 @@
             gap: 0.5rem;
         }
 
+        .record-mobile-field {
+            border: 1px solid var(--card);
+            border-radius: 0.85rem;
+            padding: 0.75rem;
+            background: #ffffff;
+        }
+
+        .record-mobile-field-label {
+            font-size: 0.8rem;
+            color: var(--sub);
+            margin-bottom: 0.2rem;
+        }
+
+        .record-mobile-field-value {
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        .record-mobile-action-btn {
+            min-height: 2.75rem;
+            font-weight: 700;
+            border-radius: 0.75rem;
+        }
+
         @media (max-width: 575.98px) {
+            .record-mobile-card {
+                border-radius: 1rem;
+            }
+
             .record-mobile-actions {
                 grid-template-columns: 1fr;
+            }
+
+            .record-mobile-action-btn {
+                min-height: 3rem;
             }
         }
     </style>
@@ -212,17 +244,25 @@
                             <div class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '入力済み'">入力済み</div>
                             <div class="small text-secondary">あとから編集できます</div>
                         </div>
-                        <div class="small text-secondary mb-1">開催日</div>
-                        <div class="fw-semibold mb-3" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</div>
-                        <div class="small text-secondary mb-1">レース場</div>
-                        <div class="fw-semibold mb-3" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</div>
-                        <div class="small text-secondary mb-1">レース番号</div>
-                        <div class="fw-semibold mb-3" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</div>
+                        <div class="d-grid gap-2 mb-3">
+                            <div class="record-mobile-field">
+                                <div class="record-mobile-field-label">開催日</div>
+                                <div class="record-mobile-field-value" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</div>
+                            </div>
+                            <div class="record-mobile-field">
+                                <div class="record-mobile-field-label">レース場</div>
+                                <div class="record-mobile-field-value" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</div>
+                            </div>
+                            <div class="record-mobile-field">
+                                <div class="record-mobile-field-label">レース番号</div>
+                                <div class="record-mobile-field-value" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</div>
+                            </div>
+                        </div>
                         <div class="record-mobile-actions">
-                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">内容を見る</a>
-                            <a th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-outline-secondary btn-sm">編集</a>
+                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary record-mobile-action-btn">内容を見る</a>
+                            <a th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-outline-secondary record-mobile-action-btn">編集</a>
                             <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この記録を削除しますか？');" class="d-grid">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">削除</button>
+                                <button type="submit" class="btn btn-outline-danger record-mobile-action-btn">削除</button>
                             </form>
                         </div>
                     </article>
