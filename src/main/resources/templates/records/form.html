@@ -579,8 +579,8 @@
                                  <div class="start-diagram-token-layer">
                                     <div th:each="num : ${#numbers.sequence(1, 8)}"
                                          th:class="'start-token car-' + ${num}"
-                                         th:attr="data-default-handicap=0,data-default-x=23.6,data-default-y=${61 + (num - 1) * 1.95},data-handicap-options='0,10,20'"
-                                         th:style="'left:23.6%; top:' + (${61 + (num - 1) * 1.95}) + '%;'">
+                                         th:attr="data-default-x=${8 + (num - 1) * 12},data-default-y=16"
+                                         th:style="'left:' + (${8 + (num - 1) * 12}) + '%; top:16%;'">
                                         <span th:text="${num}">1</span>
                                     </div>
                                 </div>
