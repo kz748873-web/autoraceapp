@@ -2,6 +2,11 @@
     "use strict";
 
     const states = new Map();
+    const HANDICAP_X_MAP = {
+        0: 23.6,
+        10: 20.2,
+        20: 16.8
+    };
 
     function clamp(value, min, max) {
         return Math.min(Math.max(value, min), max);
@@ -14,6 +19,19 @@
         token.style.top = yPercent + "%";
     }
 
+    function resolveDefaultPosition(token) {
+        const handicap = Number(token.dataset.defaultHandicap);
+        const mappedX = HANDICAP_X_MAP[handicap];
+        const fallbackX = Number(token.dataset.defaultX);
+        const defaultX = Number.isFinite(mappedX) ? mappedX : fallbackX;
+        const defaultY = Number(token.dataset.defaultY);
+
+        return {
+            x: Number.isFinite(defaultX) ? defaultX : HANDICAP_X_MAP[0],
+            y: Number.isFinite(defaultY) ? defaultY : 61
+        };
+    }
+
     function reset(boardId) {
         const state = states.get(boardId);
         if (!state) {
@@ -21,9 +39,8 @@
         }
 
         state.tokens.forEach(function (token) {
-            const defaultX = Number(token.dataset.defaultX);
-            const defaultY = Number(token.dataset.defaultY);
-            setTokenPosition(token, defaultX, defaultY);
+            const position = resolveDefaultPosition(token);
+            setTokenPosition(token, position.x, position.y);
             token.classList.remove("is-dragging");
         });
         state.activeToken = null;
