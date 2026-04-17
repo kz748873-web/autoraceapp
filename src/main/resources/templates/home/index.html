@@ -741,7 +741,6 @@
                                 </div>
 
                                 <div class="mobile-link-stack">
-                                    <a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary link-text-btn">レース場の公式サイト</a>
                                     <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">レース場のYouTube</a>
                                     <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">レース場のInstagram</a>
                                     <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">レース場のFacebook</a>
@@ -804,7 +803,6 @@
                             <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
                         </div>
                         <div class="mobile-link-stack">
-                            <a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary link-text-btn">レース場の公式サイト</a>
                             <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">レース場のYouTube</a>
                             <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">レース場のInstagram</a>
                             <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">レース場のFacebook</a>
