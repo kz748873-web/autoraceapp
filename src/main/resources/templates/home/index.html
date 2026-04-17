@@ -731,7 +731,7 @@
 
                                 <div class="link-stack mb-4">
                                     <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">公式サイト</a>
-                                    <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</a>
+                                    <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
                                     <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">外部リンク一覧を見る</a>
                                 </div>
 
@@ -793,7 +793,7 @@
                         <div class="fw-bold mb-3 soft-strong">公式リンク</div>
                         <div class="mobile-link-stack">
                             <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn" th:text="${officialRelatedLinks[0].siteName}">公式サイト</a>
-                            <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</a>
+                            <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
                         </div>
                     </div>
 
