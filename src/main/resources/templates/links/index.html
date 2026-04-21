@@ -3,6 +3,54 @@
 <head>
     <th:block th:replace="~{layout/base :: commonHead('外部リンク一覧 | オートレース予想補助アプリ')}"></th:block>
     <style>
+        body {
+            --main-color: var(--brand-strong);
+            --accent-color: var(--deep);
+            --border-color: color-mix(in srgb, var(--main-color) 30%, white);
+            --surface-tint: color-mix(in srgb, var(--main-color) 12%, white);
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-kawaguchi {
+            --main-color: #d96aa0;
+            --accent-color: #8b2c5b;
+            --border-color: #e9b5cf;
+            --surface-tint: #f9e1eb;
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-isesaki {
+            --main-color: #49515c;
+            --accent-color: #2f3640;
+            --border-color: #c4cad2;
+            --surface-tint: #e5e9ee;
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-hamamatsu {
+            --main-color: #4d8fd6;
+            --accent-color: #21558b;
+            --border-color: #c5dbf4;
+            --surface-tint: #e3eefb;
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-iizuka {
+            --main-color: #d4ad2d;
+            --accent-color: #6f5600;
+            --border-color: #ead48b;
+            --surface-tint: #fff6d6;
+            --main-color-text: #3f3200;
+        }
+
+        body.theme-sanyo {
+            --main-color: #d88949;
+            --accent-color: #8f5728;
+            --border-color: #ecc5a6;
+            --surface-tint: #fcebdd;
+            --main-color-text: #ffffff;
+        }
+
         .page-card {
             border: 1px solid var(--card);
             border-radius: 1.25rem;
@@ -23,6 +71,15 @@
             font-weight: 700;
         }
 
+        .page-card,
+        .official-link-card,
+        .venue-summary-card,
+        .detail-tile,
+        .venue-link-section,
+        .live-link-item {
+            border-color: var(--border-color);
+        }
+
         .official-link-card {
             display: flex;
             align-items: center;
@@ -37,8 +94,8 @@
         }
 
         .official-link-card:hover {
-            border-color: var(--brand-strong);
-            background: var(--soft-surface);
+            border-color: color-mix(in srgb, var(--main-color) 70%, white);
+            background: var(--surface-tint);
             color: var(--deep);
         }
 
@@ -70,9 +127,8 @@
         }
 
         .venue-summary-card {
-            border: 1px solid var(--card);
             border-radius: 1.1rem;
-            background: var(--soft-surface);
+            background: color-mix(in srgb, var(--surface-tint) 70%, white);
         }
 
         .top-link-btn {
@@ -134,33 +190,30 @@
             display: inline-block;
             padding: 0.45rem 0.8rem;
             border-radius: 999px;
-            background: var(--section-badge-bg);
-            color: var(--deep);
+            background: var(--surface-tint);
+            color: var(--accent-color);
             font-size: 0.9rem;
             font-weight: 700;
         }
 
         .detail-tile {
-            border: 1px solid var(--card);
             border-radius: 1rem;
             background: #ffffff;
         }
 
         .venue-link-section {
-            border: 1px solid var(--card);
             border-radius: 1.1rem;
             background: #ffffff;
         }
 
         .live-link-section {
-            border-color: #f0c9c9;
-            background: linear-gradient(180deg, #fffafa, #ffffff);
+            background: linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 85%, white), #ffffff);
         }
 
         .venue-link-section-title {
             font-size: 1rem;
             font-weight: 700;
-            color: var(--deep);
+            color: var(--accent-color);
         }
 
         .live-link-list {
@@ -189,7 +242,7 @@
         .live-link-label {
             font-size: 1rem;
             font-weight: 700;
-            color: var(--deep);
+            color: var(--accent-color);
         }
 
         .live-link-url {
@@ -212,6 +265,65 @@
             color: var(--sub);
         }
 
+        .utility-entry-btn {
+            position: fixed;
+            top: 5.4rem;
+            right: 1rem;
+            z-index: 1035;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            min-height: 2.8rem;
+            padding: 0.6rem 0.9rem;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0.65rem 1.4rem rgba(15, 23, 42, 0.12);
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+            backdrop-filter: blur(6px);
+        }
+
+        .utility-entry-btn:hover,
+        .utility-entry-btn:focus {
+            background: var(--surface-tint);
+            color: var(--accent-color);
+            border-color: color-mix(in srgb, var(--main-color) 70%, white);
+        }
+
+        .utility-entry-icon {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        body .btn-primary {
+            background-color: var(--main-color) !important;
+            border-color: color-mix(in srgb, var(--main-color) 82%, black) !important;
+            color: var(--main-color-text) !important;
+        }
+
+        body .btn-primary:hover,
+        body .btn-primary:focus {
+            background-color: color-mix(in srgb, var(--main-color) 88%, black) !important;
+            border-color: color-mix(in srgb, var(--main-color) 78%, black) !important;
+            color: var(--main-color-text) !important;
+        }
+
+        body .btn-outline-primary {
+            color: var(--accent-color) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        body .btn-outline-primary:hover,
+        body .btn-outline-primary:focus {
+            background-color: var(--surface-tint) !important;
+            color: var(--accent-color) !important;
+            border-color: color-mix(in srgb, var(--main-color) 70%, white) !important;
+        }
+
         @media (max-width: 991.98px) {
             .social-link-btn,
             .top-link-btn,
@@ -219,12 +331,23 @@
             .live-link-btn {
                 min-height: 3.8rem;
             }
+
+            .utility-entry-btn {
+                top: 4.9rem;
+                right: 0.75rem;
+                min-height: 3rem;
+                padding-inline: 0.85rem;
+            }
         }
     </style>
 </head>
-<body>
+<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : ${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : ${selectedVenue == '浜松'} ? ' theme-hamamatsu' : ${selectedVenue == '飯塚'} ? ' theme-iizuka' : ${selectedVenue == '山陽'} ? ' theme-sanyo' : ''">
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
+        <a href="#image-switch-entry" class="utility-entry-btn image-switch-entry-btn" aria-label="画像切り替え">
+            <span class="utility-entry-icon" aria-hidden="true">🖼</span>
+            <span>画像切替</span>
+        </a>
         <main class="container py-4 py-md-5 flex-grow-1">
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                 <div>
@@ -265,9 +388,9 @@
                         <section class="page-card p-4">
                             <span class="mini-badge mb-2">レース場カテゴリ</span>
                             <h2 class="h4 fw-bold mb-2">会場を選んで確認</h2>
-                            <p class="section-note mb-3">川口、伊勢崎、浜松、飯塚、山陽から選ぶと、右側にその会場の公式サイトとSNSを表示します。</p>
+                            <p class="section-note mb-3">川口、伊勢崎、浜松、飯塚、山陽から選ぶと、右側の内容がその会場に合わせて切り替わります。</p>
                             <div class="venue-select-grid">
-                                <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn">川口</a>
+                                <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:attr="data-theme-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn">川口</a>
                             </div>
                         </section>
                     </div>
