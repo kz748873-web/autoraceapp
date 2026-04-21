@@ -524,6 +524,22 @@
             color: var(--accent-color);
         }
 
+        .hero-panel,
+        .current-race-panel,
+        .flow-card,
+        .selector-card,
+        .video-card,
+        .link-card,
+        .timer-card,
+        .note-card,
+        .mobile-switch-shell,
+        .mobile-link-panel,
+        .mobile-video-panel,
+        .current-race-tile,
+        .venue-live-block {
+            border-color: var(--border-color);
+        }
+
         .selector-summary-card,
         .selector-note,
         .video-placeholder,
@@ -679,6 +695,40 @@
             font-weight: 700;
         }
 
+        .utility-entry-btn {
+            position: fixed;
+            top: 5.4rem;
+            right: 1rem;
+            z-index: 1035;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            min-height: 2.8rem;
+            padding: 0.6rem 0.9rem;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0.65rem 1.4rem rgba(15, 23, 42, 0.12);
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+            backdrop-filter: blur(6px);
+        }
+
+        .utility-entry-btn:hover,
+        .utility-entry-btn:focus {
+            background: var(--surface-tint);
+            color: var(--accent-color);
+            border-color: color-mix(in srgb, var(--main-color) 70%, white);
+        }
+
+        .utility-entry-icon {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
         .soft-strong {
             color: color-mix(in srgb, var(--deep) 80%, black);
         }
@@ -718,6 +768,13 @@
                 right: 0.75rem;
                 bottom: calc(0.75rem + env(safe-area-inset-bottom));
                 width: auto;
+            }
+
+            .utility-entry-btn {
+                top: 4.9rem;
+                right: 0.75rem;
+                min-height: 3rem;
+                padding-inline: 0.85rem;
             }
         }
 
@@ -769,6 +826,10 @@
 <body>
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
+        <a href="#image-switch-entry" class="utility-entry-btn image-switch-entry-btn" aria-label="画像切り替え">
+            <span class="utility-entry-icon" aria-hidden="true">🖼</span>
+            <span>画像切替</span>
+        </a>
 
         <main class="container py-4 py-md-5 flex-grow-1">
             <section class="hero-stage page-card p-4 p-md-5 mb-5">
@@ -860,7 +921,7 @@
                                         th:each="venueName : ${venueNames}"
                                         th:value="${venueName}"
                                         th:text="${venueName}"
-                                        th:attr="data-video-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}">川口</option>
+                                        th:attr="data-theme-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}">川口</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -1193,73 +1254,82 @@
             return venueSelect.value;
         }
 
-        function getSelectedVenueVideoKey() {
+        function getSelectedVenueContext() {
             const venueSelect = document.getElementById("venueSelect");
             if (!venueSelect) {
-                return "";
+                return {
+                    name: "",
+                    videoKey: "",
+                    themeKey: ""
+                };
             }
 
             const selectedOption = venueSelect.options[venueSelect.selectedIndex];
-            return selectedOption && selectedOption.dataset.videoKey ? selectedOption.dataset.videoKey : "";
+            return {
+                name: venueSelect.value || "",
+                videoKey: venueSelect.value || "",
+                themeKey: selectedOption && selectedOption.dataset.themeKey ? selectedOption.dataset.themeKey : ""
+            };
         }
 
-        function applyVenueTheme(venueName) {
+        function applyVenueTheme(venueContext) {
             const body = document.body;
             const themeMap = {
-                "川口": "theme-kawaguchi",
-                "伊勢崎": "theme-isesaki",
-                "浜松": "theme-hamamatsu",
-                "飯塚": "theme-iizuka",
-                "山陽": "theme-sanyo"
+                kawaguchi: "theme-kawaguchi",
+                isesaki: "theme-isesaki",
+                hamamatsu: "theme-hamamatsu",
+                iizuka: "theme-iizuka",
+                sanyo: "theme-sanyo"
             };
 
             Object.values(themeMap).forEach(function (themeClass) {
                 body.classList.remove(themeClass);
             });
 
-            if (themeMap[venueName]) {
-                body.classList.add(themeMap[venueName]);
+            if (venueContext.themeKey && themeMap[venueContext.themeKey]) {
+                body.classList.add(themeMap[venueContext.themeKey]);
             }
 
-            body.dataset.selectedVenue = venueName || "";
+            body.dataset.selectedVenue = venueContext.name || "";
+            body.dataset.selectedVenueKey = venueContext.videoKey || "";
+            body.dataset.selectedThemeKey = venueContext.themeKey || "";
         }
 
         const defaultVenueLiveUrl = "https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA";
         const racePlaceVideoMap = {
-            kawaguchi: {
+            "川口": {
                 label: "川口オート",
                 youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
                 youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
             },
-            isesaki: {
+            "伊勢崎": {
                 label: "伊勢崎オート",
                 youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
                 youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
             },
-            hamamatsu: {
+            "浜松": {
                 label: "浜松オート",
                 youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
                 youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
             },
-            iizuka: {
+            "飯塚": {
                 label: "飯塚オート",
                 youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
                 youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
             },
-            sanyo: {
+            "山陽": {
                 label: "山陽オート",
                 youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
                 youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
             }
         };
 
-        function updateVenueLinkedPanels(venueName) {
-            const venueVideoKey = getSelectedVenueVideoKey();
-            const venueVideoConfig = venueVideoKey ? racePlaceVideoMap[venueVideoKey] : null;
+        function updateVenueLinkedPanels(venueContext) {
+            const venueVideoConfig = venueContext.videoKey ? racePlaceVideoMap[venueContext.videoKey] : null;
 
             document.querySelectorAll("[data-venue-panel='venue-video']").forEach(function (panel) {
-                panel.dataset.selectedVenue = venueName || "";
-                panel.dataset.selectedVenueKey = venueVideoKey || "";
+                panel.dataset.selectedVenue = venueContext.name || "";
+                panel.dataset.selectedVenueKey = venueContext.videoKey || "";
 
                 const liveFrame = panel.querySelector("[data-venue-live-frame]");
                 const liveNote = panel.querySelector("[data-venue-live-note]");
@@ -1276,10 +1346,10 @@
                 }
 
                 if (liveNote) {
-                    if (venueName && venueVideoConfig && venueLiveUrl && !venueLiveUrl.includes("REPLACE_")) {
+                    if (venueContext.name && venueVideoConfig && venueLiveUrl && !venueLiveUrl.includes("REPLACE_")) {
                         liveNote.textContent = venueVideoConfig.label + "のYouTubeライブを表示しています。";
-                    } else if (venueName) {
-                        liveNote.textContent = venueName + "のYouTube URLはまだテンプレートのままです。`racePlaceVideoMap` を差し替えると会場別ライブへ切り替わります。";
+                    } else if (venueContext.name) {
+                        liveNote.textContent = venueContext.name + "のYouTube URLはまだテンプレートのままです。外部リンクページと同じ想定で、`racePlaceVideoMap` のURLを差し替えると会場別ライブへ切り替わります。";
                     } else {
                         liveNote.textContent = "レース場を選ぶと、各会場のYouTubeライブへ切り替えられます。";
                     }
@@ -1287,15 +1357,16 @@
             });
 
             document.querySelectorAll("[data-venue-panel='official-video']").forEach(function (panel) {
-                panel.dataset.selectedVenue = venueName || "";
+                panel.dataset.selectedVenue = venueContext.name || "";
+                panel.dataset.selectedVenueKey = venueContext.videoKey || "";
             });
         }
 
         function refreshVenueDrivenUi() {
-            const venueName = getSelectedVenueName();
+            const venueContext = getSelectedVenueContext();
             updateCurrentRaceDisplay();
-            applyVenueTheme(venueName);
-            updateVenueLinkedPanels(venueName);
+            applyVenueTheme(venueContext);
+            updateVenueLinkedPanels(venueContext);
         }
 
         function formatCountdownTime(totalSeconds) {
