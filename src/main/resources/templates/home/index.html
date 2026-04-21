@@ -455,8 +455,43 @@
 
         .venue-quick-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
             gap: 0.75rem;
+        }
+
+        .venue-selector-block {
+            margin-bottom: 1rem;
+        }
+
+        .venue-selector-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.35rem;
+        }
+
+        .venue-selector-note {
+            font-size: 0.9rem;
+            color: var(--sub);
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+
+        .venue-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .venue-selector-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.3rem;
+            padding: 0.8rem 0.95rem;
+            text-align: center;
+            background: #ffffff;
+            border-width: 1px;
         }
 
         .mobile-switch-shell {
@@ -806,7 +841,8 @@
 
         @media (max-width: 575.98px) {
             .record-action-grid,
-            .venue-quick-grid {
+            .venue-quick-grid,
+            .venue-selector-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1027,9 +1063,12 @@
                                     <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">関連リンクを一覧で見る</a>
                                 </div>
 
-                                <div class="fw-bold mb-3 soft-strong">レース場を選択する</div>
-                                <div class="venue-quick-grid mb-4">
-                                    <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
+                                <div class="venue-selector-block">
+                                    <div class="venue-selector-title">レース場を選択する</div>
+                                    <p class="venue-selector-note">選んだレース場に合わせて、色やリンク、動画表示が切り替わる共通ボタンです。</p>
+                                    <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="レース場を選択する">
+                                        <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">川口</a>
+                                    </div>
                                 </div>
 
                                 <div class="mobile-link-stack">
@@ -1098,9 +1137,12 @@
                     </div>
 
                     <div class="mobile-link-panel" data-mobile-panel="venue-link">
-                        <div class="fw-bold mb-3 soft-strong">開催場リンク</div>
-                        <div class="venue-quick-grid mb-4">
-                            <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
+                        <div class="venue-selector-block">
+                            <div class="venue-selector-title">レース場を選択する</div>
+                            <p class="venue-selector-note">スマホでも押しやすいように、5場を同じ並びでまとめています。</p>
+                            <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="レース場を選択する">
+                                <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">川口</a>
+                            </div>
                         </div>
                         <div class="mobile-link-stack">
                             <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">開催場のYouTube</a>
