@@ -152,16 +152,71 @@
             background: #ffffff;
         }
 
+        .live-link-section {
+            border-color: #f0c9c9;
+            background: linear-gradient(180deg, #fffafa, #ffffff);
+        }
+
         .venue-link-section-title {
             font-size: 1rem;
             font-weight: 700;
             color: var(--deep);
         }
 
+        .live-link-list {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .live-link-item {
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            background: #ffffff;
+            padding: 1rem 1rem 1.05rem;
+        }
+
+        .live-link-row {
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .live-link-caption {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--sub);
+        }
+
+        .live-link-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        .live-link-url {
+            display: block;
+            margin-top: 0.45rem;
+            color: var(--sub);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+
+        .live-link-btn {
+            margin-top: 0.8rem;
+            min-height: 3.6rem;
+            justify-content: center;
+        }
+
+        .live-link-section-note {
+            font-size: 0.92rem;
+            color: var(--sub);
+        }
+
         @media (max-width: 991.98px) {
             .social-link-btn,
             .top-link-btn,
-            .venue-select-btn {
+            .venue-select-btn,
+            .live-link-btn {
                 min-height: 3.8rem;
             }
         }
@@ -174,7 +229,7 @@
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                 <div>
                     <h1 class="h2 fw-bold mb-2">外部リンク一覧</h1>
-                    <p class="text-secondary mb-0">公式関連とレース場カテゴリを分けて、目的のリンクへ移動しやすく整理しています。</p>
+                    <p class="text-secondary mb-0">公式、FANCLUB、レース場ライブ配信を分けて、必要なリンクを迷わず開けるように整理しています。</p>
                 </div>
                 <div class="d-flex flex-column flex-sm-row gap-2">
                     <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">TOPへ戻る</a>
@@ -210,7 +265,7 @@
                         <section class="page-card p-4">
                             <span class="mini-badge mb-2">レース場カテゴリ</span>
                             <h2 class="h4 fw-bold mb-2">会場を選んで確認</h2>
-                            <p class="section-note mb-3">川口、伊勢崎、浜松、飯塚、山陽から選ぶと、右側にその会場の公式サイトと SNS を表示します。</p>
+                            <p class="section-note mb-3">川口、伊勢崎、浜松、飯塚、山陽から選ぶと、右側にその会場の公式サイトとSNSを表示します。</p>
                             <div class="venue-select-grid">
                                 <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn">川口</a>
                             </div>
@@ -229,11 +284,75 @@
                         </div>
 
                         <div class="venue-summary-card p-4 mb-4">
-                            <h3 class="h5 fw-bold mb-2">右側の表示内容</h3>
-                            <p class="section-note mb-0">選択したレース場の公式サイト、YouTube、Instagram、Facebook をまとめて表示しています。X は使わず、この4種類に整理しています。</p>
+                            <h3 class="h5 fw-bold mb-2">このページで確認できる内容</h3>
+                            <p class="section-note mb-0">レース場ライブ配信は専用一覧でまとめ、選択したレース場の公式サイトやSNSは別の枠で確認できるようにしています。</p>
                         </div>
 
                         <div class="vstack gap-3 mb-4">
+                            <div class="venue-link-section live-link-section p-4">
+                                <span class="mini-badge mb-2">ライブ配信</span>
+                                <div class="venue-link-section-title mb-2">レース場ライブ配信</div>
+                                <p class="section-note mb-2">このページでは watch 形式の YouTube URL をまとめて管理します。後から確認や修正をするときは、下の一覧だけ見直せば大丈夫です。</p>
+                                <p class="live-link-section-note mb-3">会場名とURLの対応が分かるように、同じ並びでそろえています。</p>
+                                <div class="live-link-list">
+                                    <div class="live-link-item" data-race-place="kawaguchi">
+                                        <div class="live-link-row">
+                                            <div class="live-link-caption">レース場名</div>
+                                            <div class="live-link-label">川口オート</div>
+                                        </div>
+                                        <div class="live-link-row mt-2">
+                                            <div class="live-link-caption">YouTube watch URL</div>
+                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                                        </div>
+                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">川口オートのライブを見る</a>
+                                    </div>
+                                    <div class="live-link-item" data-race-place="isesaki">
+                                        <div class="live-link-row">
+                                            <div class="live-link-caption">レース場名</div>
+                                            <div class="live-link-label">伊勢崎オート</div>
+                                        </div>
+                                        <div class="live-link-row mt-2">
+                                            <div class="live-link-caption">YouTube watch URL</div>
+                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                                        </div>
+                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">伊勢崎オートのライブを見る</a>
+                                    </div>
+                                    <div class="live-link-item" data-race-place="hamamatsu">
+                                        <div class="live-link-row">
+                                            <div class="live-link-caption">レース場名</div>
+                                            <div class="live-link-label">浜松オート</div>
+                                        </div>
+                                        <div class="live-link-row mt-2">
+                                            <div class="live-link-caption">YouTube watch URL</div>
+                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                                        </div>
+                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">浜松オートのライブを見る</a>
+                                    </div>
+                                    <div class="live-link-item" data-race-place="iizuka">
+                                        <div class="live-link-row">
+                                            <div class="live-link-caption">レース場名</div>
+                                            <div class="live-link-label">飯塚オート</div>
+                                        </div>
+                                        <div class="live-link-row mt-2">
+                                            <div class="live-link-caption">YouTube watch URL</div>
+                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                                        </div>
+                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">飯塚オートのライブを見る</a>
+                                    </div>
+                                    <div class="live-link-item" data-race-place="sanyo">
+                                        <div class="live-link-row">
+                                            <div class="live-link-caption">レース場名</div>
+                                            <div class="live-link-label">山陽オート</div>
+                                        </div>
+                                        <div class="live-link-row mt-2">
+                                            <div class="live-link-caption">YouTube watch URL</div>
+                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                                        </div>
+                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">山陽オートのライブを見る</a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="venue-link-section p-4">
                                 <div class="venue-link-section-title mb-3">レース場の公式情報</div>
                                 <div class="row g-3">
@@ -268,8 +387,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="detail-tile p-4 h-100">
-                                    <div class="fw-semibold mb-2">SNS・動画案内</div>
-                                    <div class="text-secondary">YouTube、Instagram、Facebook を会場ごとにまとめています。今後リンクを追加するときも同じ並びのまま増やせます。</div>
+                                    <div class="fw-semibold mb-2">SNS・ライブ案内</div>
+                                    <div class="text-secondary">ライブ配信は上の専用一覧で確認し、SNSは会場ごとの案内として下のボタンから開けます。</div>
                                 </div>
                             </div>
                             <div class="col-12">
