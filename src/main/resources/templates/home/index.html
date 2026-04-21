@@ -856,7 +856,11 @@
                                 <label for="venueSelect" class="form-label fw-semibold fs-5">開催場</label>
                                 <select id="venueSelect" name="venue" class="form-select form-select-lg">
                                     <option value="">選択してください</option>
-                                    <option th:each="venueName : ${venueNames}" th:value="${venueName}" th:text="${venueName}">川口</option>
+                                    <option
+                                        th:each="venueName : ${venueNames}"
+                                        th:value="${venueName}"
+                                        th:text="${venueName}"
+                                        th:attr="data-video-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}">川口</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -1189,6 +1193,16 @@
             return venueSelect.value;
         }
 
+        function getSelectedVenueVideoKey() {
+            const venueSelect = document.getElementById("venueSelect");
+            if (!venueSelect) {
+                return "";
+            }
+
+            const selectedOption = venueSelect.options[venueSelect.selectedIndex];
+            return selectedOption && selectedOption.dataset.videoKey ? selectedOption.dataset.videoKey : "";
+        }
+
         function applyVenueTheme(venueName) {
             const body = document.body;
             const themeMap = {
@@ -1211,39 +1225,63 @@
         }
 
         const defaultVenueLiveUrl = "https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA";
-        const venueYoutubeLiveMap = {
-            "川口": "",
-            "伊勢崎": "",
-            "浜松": "",
-            "飯塚": "",
-            "山陽": ""
+        const racePlaceVideoMap = {
+            kawaguchi: {
+                label: "川口オート",
+                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
+                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+            },
+            isesaki: {
+                label: "伊勢崎オート",
+                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
+                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+            },
+            hamamatsu: {
+                label: "浜松オート",
+                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
+                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+            },
+            iizuka: {
+                label: "飯塚オート",
+                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
+                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+            },
+            sanyo: {
+                label: "山陽オート",
+                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
+                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+            }
         };
 
         function updateVenueLinkedPanels(venueName) {
+            const venueVideoKey = getSelectedVenueVideoKey();
+            const venueVideoConfig = venueVideoKey ? racePlaceVideoMap[venueVideoKey] : null;
+
             document.querySelectorAll("[data-venue-panel='venue-video']").forEach(function (panel) {
                 panel.dataset.selectedVenue = venueName || "";
+                panel.dataset.selectedVenueKey = venueVideoKey || "";
 
                 const liveFrame = panel.querySelector("[data-venue-live-frame]");
                 const liveNote = panel.querySelector("[data-venue-live-note]");
-                const venueLiveUrl = venueYoutubeLiveMap[venueName] || "";
-                const resolvedLiveUrl = venueLiveUrl || defaultVenueLiveUrl;
+                const venueLiveUrl = venueVideoConfig && venueVideoConfig.youtubeEmbedUrl ? venueVideoConfig.youtubeEmbedUrl : "";
+                const resolvedLiveUrl = venueLiveUrl && !venueLiveUrl.includes("REPLACE_") ? venueLiveUrl : defaultVenueLiveUrl;
 
                 if (liveFrame) {
                     if (liveFrame.src !== resolvedLiveUrl) {
                         liveFrame.src = resolvedLiveUrl;
                     }
-                    liveFrame.title = venueName
-                        ? venueName + "のYouTubeライブ"
+                    liveFrame.title = venueVideoConfig && venueVideoConfig.label
+                        ? venueVideoConfig.label + "のYouTubeライブ"
                         : "レース場のYouTubeライブ";
                 }
 
                 if (liveNote) {
-                    if (venueName && venueLiveUrl) {
-                        liveNote.textContent = venueName + "のYouTubeライブを表示しています。URLは管理オブジェクトから差し替えできます。";
+                    if (venueName && venueVideoConfig && venueLiveUrl && !venueLiveUrl.includes("REPLACE_")) {
+                        liveNote.textContent = venueVideoConfig.label + "のYouTubeライブを表示しています。";
                     } else if (venueName) {
-                        liveNote.textContent = venueName + "のライブURLはまだ個別設定していません。現在は公式ライブを表示しています。";
+                        liveNote.textContent = venueName + "のYouTube URLはまだテンプレートのままです。`racePlaceVideoMap` を差し替えると会場別ライブへ切り替わります。";
                     } else {
-                        liveNote.textContent = "レース場を選ぶと、その会場向けのライブ表示に切り替えられます。現在は公式ライブを表示しています。";
+                        liveNote.textContent = "レース場を選ぶと、各会場のYouTubeライブへ切り替えられます。";
                     }
                 }
             });
