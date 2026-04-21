@@ -7,13 +7,6 @@
             display: none;
         }
 
-        .top-theme-strip {
-            display: flex;
-            justify-content: flex-end;
-            padding: 0.45rem 0.9rem 0;
-        }
-
-        .theme-floating-bar,
         .hero-panel,
         .current-race-panel,
         .flow-card,
@@ -29,67 +22,51 @@
             border-radius: 1.25rem;
         }
 
-        .theme-floating-bar {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.65rem;
-            padding: 0.45rem 0.7rem;
-            background: rgba(255, 255, 255, 0.94);
-            box-shadow: 0 0.45rem 1rem rgba(15, 23, 42, 0.08);
-        }
-
-        .theme-floating-label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--sub);
-            white-space: nowrap;
-        }
-
-        .theme-floating-select {
-            min-width: 8.5rem;
-            min-height: 2.1rem;
-            font-size: 0.88rem;
-        }
-
         body {
             --main-color: var(--brand-strong);
-            --main-color-deep: var(--deep);
-            --main-color-soft: color-mix(in srgb, var(--main-color) 18%, white);
+            --accent-color: var(--deep);
+            --border-color: color-mix(in srgb, var(--main-color) 30%, white);
+            --surface-tint: color-mix(in srgb, var(--main-color) 14%, white);
             --main-color-text: #ffffff;
         }
 
         body.theme-kawaguchi {
             --main-color: #d96aa0;
-            --main-color-deep: #8b2c5b;
-            --main-color-soft: #f7d9e8;
+            --accent-color: #8b2c5b;
+            --border-color: #e9b5cf;
+            --surface-tint: #f9e1eb;
             --main-color-text: #ffffff;
         }
 
         body.theme-isesaki {
             --main-color: #49515c;
-            --main-color-deep: #2f3640;
-            --main-color-soft: #dde2e8;
+            --accent-color: #2f3640;
+            --border-color: #c4cad2;
+            --surface-tint: #e5e9ee;
             --main-color-text: #ffffff;
         }
 
         body.theme-hamamatsu {
             --main-color: #4d8fd6;
-            --main-color-deep: #21558b;
-            --main-color-soft: #dceaf8;
+            --accent-color: #21558b;
+            --border-color: #c5dbf4;
+            --surface-tint: #e3eefb;
             --main-color-text: #ffffff;
         }
 
         body.theme-iizuka {
             --main-color: #d4ad2d;
-            --main-color-deep: #7a5f00;
-            --main-color-soft: #fff0bd;
+            --accent-color: #6f5600;
+            --border-color: #ead48b;
+            --surface-tint: #fff6d6;
             --main-color-text: #3f3200;
         }
 
         body.theme-sanyo {
             --main-color: #d88949;
-            --main-color-deep: #8f5728;
-            --main-color-soft: #fee7d6;
+            --accent-color: #8f5728;
+            --border-color: #ecc5a6;
+            --surface-tint: #fcebdd;
             --main-color-text: #ffffff;
         }
 
@@ -215,8 +192,8 @@
             min-width: 2rem;
             min-height: 2rem;
             margin-bottom: 0.65rem;
-            background: var(--main-color-soft);
-            color: var(--main-color-deep);
+            background: var(--surface-tint);
+            color: var(--accent-color);
         }
 
         .flow-title {
@@ -238,8 +215,8 @@
             gap: 0.4rem;
             padding: 0.36rem 0.72rem;
             border-radius: 999px;
-            background: color-mix(in srgb, var(--main-color) 16%, white);
-            color: var(--main-color-deep);
+            background: var(--surface-tint);
+            color: var(--accent-color);
             font-size: 0.86rem;
             font-weight: 700;
         }
@@ -255,7 +232,7 @@
             border-radius: 1rem;
             padding: 1rem;
             background: rgba(255, 255, 255, 0.96);
-            border: 1px solid color-mix(in srgb, var(--main-color) 24%, white);
+            border: 1px solid var(--border-color);
         }
 
         .current-race-label {
@@ -440,9 +417,9 @@
         .status-chip {
             gap: 0.45rem;
             padding: 0.42rem 0.82rem;
-            border: 1px solid color-mix(in srgb, var(--main-color) 24%, white);
-            background: color-mix(in srgb, var(--main-color) 12%, white);
-            color: var(--main-color-deep);
+            border: 1px solid var(--border-color);
+            background: var(--surface-tint);
+            color: var(--accent-color);
         }
 
         .link-stack,
@@ -506,22 +483,55 @@
             color: var(--main-color-text);
         }
 
-        body[class*="theme-"] .btn-primary {
+        body .btn-primary {
             background-color: var(--main-color) !important;
             border-color: color-mix(in srgb, var(--main-color) 82%, black) !important;
             color: var(--main-color-text) !important;
         }
 
-        body[class*="theme-"] .btn-primary:hover,
-        body[class*="theme-"] .btn-primary:focus {
+        body .btn-primary:hover,
+        body .btn-primary:focus {
             background-color: color-mix(in srgb, var(--main-color) 88%, black) !important;
             border-color: color-mix(in srgb, var(--main-color) 78%, black) !important;
             color: var(--main-color-text) !important;
         }
 
-        body[class*="theme-"] .btn-outline-primary {
-            color: var(--main-color-deep) !important;
-            border-color: color-mix(in srgb, var(--main-color) 78%, white) !important;
+        body .btn-outline-primary {
+            color: var(--accent-color) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        body .btn-outline-primary:hover,
+        body .btn-outline-primary:focus {
+            background-color: var(--surface-tint) !important;
+            color: var(--accent-color) !important;
+            border-color: color-mix(in srgb, var(--main-color) 70%, white) !important;
+        }
+
+        .section-badge {
+            border-color: var(--border-color);
+            background: var(--surface-tint);
+            color: var(--accent-color);
+        }
+
+        .section-title,
+        .video-panel-title,
+        .flow-title,
+        .current-race-value,
+        .timer-clock,
+        .timer-setting-label,
+        .soft-strong {
+            color: var(--accent-color);
+        }
+
+        .selector-summary-card,
+        .selector-note,
+        .video-placeholder,
+        .youtube-live-shell,
+        .timer-display,
+        .note-placeholder,
+        .timer-setting-row {
+            border-color: var(--border-color);
         }
 
         .mobile-video-panel,
@@ -578,16 +588,95 @@
             margin-bottom: 0.7rem;
         }
 
+        .timer-button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+            gap: 0.65rem;
+        }
+
+        .timer-action-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+        }
+
         .timer-strength-select,
         .timer-start-btn {
             min-height: 3.15rem;
             border-radius: 1rem;
         }
 
+        .timer-preset-btn,
+        .timer-stop-btn {
+            min-height: 2.95rem;
+            border-radius: 0.95rem;
+            font-weight: 700;
+        }
+
+        .timer-stop-btn:disabled {
+            opacity: 0.65;
+        }
+
         .timer-status {
             margin-top: 0.55rem;
             font-size: 0.82rem;
             color: var(--sub);
+        }
+
+        .floating-timer-panel {
+            position: fixed;
+            right: 1rem;
+            bottom: calc(1rem + env(safe-area-inset-bottom));
+            z-index: 1040;
+            width: min(22rem, calc(100vw - 1.5rem));
+            border: 1px solid var(--border-color);
+            border-radius: 1.15rem;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.18);
+            backdrop-filter: blur(8px);
+        }
+
+        .floating-timer-panel.is-collapsed .floating-timer-body {
+            display: none;
+        }
+
+        .floating-timer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.85rem 0.95rem;
+        }
+
+        .floating-timer-summary {
+            min-width: 0;
+        }
+
+        .floating-timer-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--sub);
+        }
+
+        .floating-timer-header .timer-clock {
+            font-size: 1.45rem;
+            line-height: 1;
+        }
+
+        .floating-timer-body {
+            padding: 0 0.95rem 0.95rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .floating-timer-body .timer-controls {
+            margin-bottom: 0.55rem;
+        }
+
+        .timer-toggle-btn {
+            min-width: 3rem;
+            min-height: 2.65rem;
+            border-radius: 0.9rem;
+            font-weight: 700;
         }
 
         .soft-strong {
@@ -608,10 +697,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .top-theme-strip {
-                justify-content: flex-start;
-            }
-
             .section-heading.is-balanced {
                 padding-right: 0;
             }
@@ -627,6 +712,13 @@
             .compact-timer-card {
                 max-width: 100%;
             }
+
+            .floating-timer-panel {
+                left: 0.75rem;
+                right: 0.75rem;
+                bottom: calc(0.75rem + env(safe-area-inset-bottom));
+                width: auto;
+            }
         }
 
         @media (max-width: 767.98px) {
@@ -636,17 +728,6 @@
 
             .page-title {
                 font-size: 2rem;
-            }
-
-            .theme-floating-bar {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .theme-floating-select {
-                min-width: 0;
-                width: 100%;
-                max-width: 11rem;
             }
 
             .video-placeholder {
@@ -687,23 +768,6 @@
 </head>
 <body>
     <div class="app-shell d-flex flex-column">
-        <div class="top-theme-strip">
-            <div class="theme-floating-bar">
-                <label for="homeThemeSelect" class="theme-floating-label mb-0">テーマ</label>
-                <select id="homeThemeSelect" class="form-select form-select-sm theme-floating-select" aria-label="TOPページのテーマ選択">
-                    <option value="default">デフォルト</option>
-                    <option value="white">1 白</option>
-                    <option value="black">2 黒</option>
-                    <option value="red">3 赤</option>
-                    <option value="blue">4 青</option>
-                    <option value="yellow">5 黄</option>
-                    <option value="green">6 緑</option>
-                    <option value="orange">7 オレンジ</option>
-                    <option value="pink">8 ピンク</option>
-                </select>
-            </div>
-        </div>
-
         <div th:replace="~{layout/header :: siteHeader}"></div>
 
         <main class="container py-4 py-md-5 flex-grow-1">
@@ -781,31 +845,27 @@
                 <div class="basic-actions-layout">
                     <div class="section-heading is-balanced">
                         <span class="section-badge mb-2">予想準備</span>
-                        <h2 class="section-title mb-2">まずは開催場とレース番号を決める</h2>
-                        <p class="section-copy mb-3">予想の入口で対象をはっきりさせておくと、試走確認、外部リンク確認、記録入力までの流れがぶれにくくなります。スマホでは最初にこの操作だけ済ませれば、その後の画面移動を最小限に抑えやすくなります。</p>
-                        <p class="helper-copy mb-0">迷ったときは開催場を先に決めてからレース番号を選ぶと、確認する情報を絞り込みやすくなります。</p>
+                        <h2 class="section-title mb-2">レース場とレース番号を選んで次へ進む</h2>
+                        <p class="section-copy mb-3">この枠では、見るレース場とレース番号を先に決められます。最初に選んでおくと、このあとの情報確認や記録入力へ進みやすくなります。</p>
+                        <p class="helper-copy mb-0">まずはレース場を選び、続けてレース番号を合わせると、次に使う情報を迷わず見つけやすくなります。</p>
                     </div>
 
                     <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
                         <div class="row g-3 align-items-end">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <label for="venueSelect" class="form-label fw-semibold fs-5">開催場</label>
                                 <select id="venueSelect" name="venue" class="form-select form-select-lg">
                                     <option value="">選択してください</option>
                                     <option th:each="venueName : ${venueNames}" th:value="${venueName}" th:text="${venueName}">川口</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号</label>
                                 <select id="raceNumberSelect" name="raceNumber" class="form-select form-select-lg">
                                     <option value="">選択してください</option>
                                     <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">この条件で見る</button>
-                            </div>
-
                             <div class="col-sm-6">
                                 <div class="selector-summary-card h-100">
                                     <div class="selector-summary-label">選択中の開催場</div>
@@ -820,13 +880,13 @@
                             </div>
 
                             <div class="col-12">
-                                <div id="selectionSummary" class="selector-note p-3">開催場とレース番号を選ぶと、このあと見る内容がここにまとまります。</div>
+                                <div id="selectionSummary" class="selector-note p-3">レース場とレース番号を選ぶと、次に確認する内容や記録への入口が分かりやすくまとまります。</div>
                             </div>
 
                             <div class="col-12">
                                 <div class="record-action-grid">
-                                    <a href="/records/form.html" class="btn btn-outline-primary btn-lg record-entry-btn">新規登録</a>
-                                    <a href="/records/list.html" class="btn btn-outline-secondary btn-lg record-entry-btn">登録一覧</a>
+                                    <a href="https://autoraceapp.onrender.com/records/new" class="btn btn-outline-primary btn-lg record-entry-btn">新規登録</a>
+                                    <a href="https://autoraceapp.onrender.com/records" class="btn btn-outline-secondary btn-lg record-entry-btn">記録一覧</a>
                                 </div>
                             </div>
                         </div>
@@ -842,14 +902,14 @@
                             <h2 class="section-title mb-2">PCでは左右2画面で同時に見比べやすくする</h2>
                             <p class="section-copy mb-0">左に公式動画、右にレース場動画を並べて、同時視聴しやすい構成にしています。下段には外部リンクと小さめのタイマーを分けて置き、見る情報を詰め込みすぎないように整理しています。</p>
                         </div>
-                        <div class="status-chip">選択中: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '川口'">川口</span></div>
+                        <div class="status-chip" data-venue-sync="summary">選択中: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '川口'">川口</span></div>
                     </div>
 
                     <div class="dual-video-grid mb-4">
                         <div class="video-card p-4">
                             <div class="video-panel-title mb-1">左: 公式動画</div>
                             <div class="video-panel-subtitle mb-3">初期表示ではオートレース公式チャンネルのライブ枠を表示します。</div>
-                            <div class="youtube-live-shell" data-live-source="official">
+                            <div class="youtube-live-shell" data-live-source="official" data-venue-panel="official-video">
                                 <iframe
                                     class="youtube-live-frame"
                                     src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
@@ -863,37 +923,30 @@
 
                         <div class="video-card p-4">
                             <div class="video-panel-title mb-1">右: レース場動画</div>
-                            <div class="video-panel-subtitle mb-3">選択中の会場に合わせた映像を確認するための表示枠です。</div>
-                            <div class="video-placeholder">
-                                <div>
-                                    <strong>レース場動画プレースホルダー</strong>
-                                    <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
+                            <div class="video-panel-subtitle mb-3">選択したレース場に合わせてライブ映像を切り替えて確認できます。</div>
+                            <div class="venue-live-block" data-venue-panel="venue-video">
+                                <div class="youtube-live-shell">
+                                    <iframe
+                                        class="youtube-live-frame"
+                                        data-venue-live-frame
+                                        src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
+                                        title="レース場のYouTubeライブ"
+                                        loading="lazy"
+                                        referrerpolicy="strict-origin-when-cross-origin"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen></iframe>
                                 </div>
+                                <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>レース場を選ぶと、その会場向けのライブ表示に切り替えられます。現在は公式ライブを表示しています。</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="support-layout">
                         <div>
-                            <div class="timer-card compact-timer-card is-compact">
-                                <span class="section-badge mb-2">タイマー</span>
-                                <h2 class="section-title">締切までの残り時間</h2>
-                                <p class="section-copy">20分前から手動でカウントダウンを始めて、終了時はバイブだけで知らせます。</p>
-                                <div class="timer-controls">
-                                    <label class="timer-setting-label mb-0" for="timerStrengthSelect">バイブの強さ</label>
-                                    <select id="timerStrengthSelect" class="form-select timer-strength-select">
-                                        <option value="200">小 200ms</option>
-                                        <option value="500" selected>中 500ms</option>
-                                        <option value="1000">大 1000ms</option>
-                                    </select>
-                                    <button type="button" id="startTwentyMinuteTimerBtn" class="btn btn-primary timer-start-btn">20分前タイマー</button>
-                                </div>
-                                <div class="timer-display">
-                                    <div>
-                                        <div id="desktopTimerClock" class="timer-clock">20:00</div>
-                                        <div id="desktopTimerStatus" class="timer-status">ボタンを押すと20分のカウントダウンを開始します。</div>
-                                    </div>
-                                </div>
+                            <div class="note-card compact-timer-card p-4">
+                                <span class="section-badge mb-2">補助機能</span>
+                                <h2 class="section-title mb-2">タイマーは固定パネルで操作</h2>
+                                <p class="section-copy mb-0">スクロール中や画面切り替え中でも使いやすいように、タイマーは画面右下の小パネルへ移しています。</p>
                             </div>
                         </div>
 
@@ -940,7 +993,7 @@
 
                     <div class="mobile-video-panel active" data-mobile-panel="official-video">
                         <div class="video-panel-title mb-2">公式動画</div>
-                        <div class="youtube-live-shell" data-live-source="official-mobile">
+                        <div class="youtube-live-shell" data-live-source="official-mobile" data-venue-panel="official-video">
                             <iframe
                                 class="youtube-live-frame"
                                 src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
@@ -954,11 +1007,19 @@
 
                     <div class="mobile-video-panel" data-mobile-panel="venue-video">
                         <div class="video-panel-title mb-2">開催場動画</div>
-                        <div class="video-placeholder">
-                            <div>
-                                <strong>開催場動画プレースホルダー</strong>
-                                <div class="mt-2">選択中の開催場に合わせた動画をここへ表示予定です。</div>
+                        <div class="venue-live-block" data-venue-panel="venue-video">
+                            <div class="youtube-live-shell">
+                                <iframe
+                                    class="youtube-live-frame"
+                                    data-venue-live-frame
+                                    src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
+                                    title="開催場のYouTubeライブ"
+                                    loading="lazy"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
                             </div>
+                            <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>開催場を選ぶと、その会場向けのライブ表示に切り替えられます。現在は公式ライブを表示しています。</div>
                         </div>
                     </div>
 
@@ -983,26 +1044,6 @@
                         </div>
                     </div>
 
-                    <div class="timer-card is-compact p-4 mt-4">
-                        <span class="section-badge mb-2">タイマー</span>
-                        <h2 class="section-title mb-2">締切までの残り時間</h2>
-                        <p class="section-copy mb-3">スマホで押しやすいように、開始ボタンとバイブ強度をまとめています。</p>
-                        <div class="timer-controls">
-                            <label class="timer-setting-label mb-0" for="mobileTimerStrengthSelect">バイブの強さ</label>
-                            <select id="mobileTimerStrengthSelect" class="form-select timer-strength-select">
-                                <option value="200">小 200ms</option>
-                                <option value="500" selected>中 500ms</option>
-                                <option value="1000">大 1000ms</option>
-                            </select>
-                            <button type="button" id="mobileStartTwentyMinuteTimerBtn" class="btn btn-primary timer-start-btn">20分前タイマー</button>
-                        </div>
-                        <div class="timer-display">
-                            <div>
-                                <div id="mobileTimerClock" class="timer-clock">20:00</div>
-                                <div id="mobileTimerStatus" class="timer-status">ボタンを押すと20分のカウントダウンを開始します。</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -1029,6 +1070,37 @@
 
             <div class="home-footer-note pb-2">© Auto Race Support App</div>
         </main>
+
+        <div id="floatingTimerPanel" class="floating-timer-panel is-collapsed" data-panel-open="false">
+            <div class="floating-timer-header">
+                <div class="floating-timer-summary">
+                    <div class="floating-timer-title">当日判断タイマー</div>
+                    <div id="floatingTimerClock" class="timer-clock">20:00</div>
+                </div>
+                <button type="button" id="floatingTimerToggleBtn" class="btn btn-outline-primary timer-toggle-btn" aria-expanded="false">開く</button>
+            </div>
+            <div class="floating-timer-body">
+                <div id="floatingTimerStatus" class="timer-status mb-3">時間ボタンを押すとカウントダウンを開始します。</div>
+                <div class="timer-controls">
+                    <label class="timer-setting-label mb-0" for="floatingTimerStrengthSelect">バイブの強さ</label>
+                    <select id="floatingTimerStrengthSelect" class="form-select timer-strength-select">
+                        <option value="200">小 200ms</option>
+                        <option value="500" selected>中 500ms</option>
+                        <option value="1000">大 1000ms</option>
+                    </select>
+                    <div class="timer-button-grid">
+                        <button type="button" class="btn btn-primary timer-preset-btn" data-timer-seconds="1200">20分</button>
+                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="600">10分</button>
+                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="300">5分</button>
+                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="180">3分</button>
+                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="60">1分</button>
+                    </div>
+                    <div class="timer-action-row">
+                        <button type="button" class="btn btn-outline-secondary timer-stop-btn" data-timer-stop>タイマー停止</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
@@ -1108,23 +1180,13 @@
             });
         }
 
-        function syncHomeThemeSelect() {
-            const homeSelect = document.getElementById("homeThemeSelect");
-            const headerSelect = document.getElementById("appThemeSelect");
-            if (!homeSelect || !headerSelect) {
-                return;
+        function getSelectedVenueName() {
+            const venueSelect = document.getElementById("venueSelect");
+            if (!venueSelect || !venueSelect.value) {
+                return "";
             }
 
-            homeSelect.value = headerSelect.value;
-
-            homeSelect.addEventListener("change", function () {
-                headerSelect.value = homeSelect.value;
-                headerSelect.dispatchEvent(new Event("change", { bubbles: true }));
-            });
-
-            headerSelect.addEventListener("change", function () {
-                homeSelect.value = headerSelect.value;
-            });
+            return venueSelect.value;
         }
 
         function applyVenueTheme(venueName) {
@@ -1144,6 +1206,58 @@
             if (themeMap[venueName]) {
                 body.classList.add(themeMap[venueName]);
             }
+
+            body.dataset.selectedVenue = venueName || "";
+        }
+
+        const defaultVenueLiveUrl = "https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA";
+        const venueYoutubeLiveMap = {
+            "川口": "",
+            "伊勢崎": "",
+            "浜松": "",
+            "飯塚": "",
+            "山陽": ""
+        };
+
+        function updateVenueLinkedPanels(venueName) {
+            document.querySelectorAll("[data-venue-panel='venue-video']").forEach(function (panel) {
+                panel.dataset.selectedVenue = venueName || "";
+
+                const liveFrame = panel.querySelector("[data-venue-live-frame]");
+                const liveNote = panel.querySelector("[data-venue-live-note]");
+                const venueLiveUrl = venueYoutubeLiveMap[venueName] || "";
+                const resolvedLiveUrl = venueLiveUrl || defaultVenueLiveUrl;
+
+                if (liveFrame) {
+                    if (liveFrame.src !== resolvedLiveUrl) {
+                        liveFrame.src = resolvedLiveUrl;
+                    }
+                    liveFrame.title = venueName
+                        ? venueName + "のYouTubeライブ"
+                        : "レース場のYouTubeライブ";
+                }
+
+                if (liveNote) {
+                    if (venueName && venueLiveUrl) {
+                        liveNote.textContent = venueName + "のYouTubeライブを表示しています。URLは管理オブジェクトから差し替えできます。";
+                    } else if (venueName) {
+                        liveNote.textContent = venueName + "のライブURLはまだ個別設定していません。現在は公式ライブを表示しています。";
+                    } else {
+                        liveNote.textContent = "レース場を選ぶと、その会場向けのライブ表示に切り替えられます。現在は公式ライブを表示しています。";
+                    }
+                }
+            });
+
+            document.querySelectorAll("[data-venue-panel='official-video']").forEach(function (panel) {
+                panel.dataset.selectedVenue = venueName || "";
+            });
+        }
+
+        function refreshVenueDrivenUi() {
+            const venueName = getSelectedVenueName();
+            updateCurrentRaceDisplay();
+            applyVenueTheme(venueName);
+            updateVenueLinkedPanels(venueName);
         }
 
         function formatCountdownTime(totalSeconds) {
@@ -1153,13 +1267,59 @@
         }
 
         function setupManualTimer() {
-            const timerSeconds = 20 * 60;
-            const timerClocks = Array.from(document.querySelectorAll("#desktopTimerClock, #mobileTimerClock"));
-            const timerStatuses = Array.from(document.querySelectorAll("#desktopTimerStatus, #mobileTimerStatus"));
-            const strengthSelects = Array.from(document.querySelectorAll("#timerStrengthSelect, #mobileTimerStrengthSelect"));
-            const timerButtons = Array.from(document.querySelectorAll("#startTwentyMinuteTimerBtn, #mobileStartTwentyMinuteTimerBtn"));
-            let remainingSeconds = timerSeconds;
+            const timerStorageKey = "autoraceapp.home.timerState.v1";
+            const defaultTimerSeconds = 20 * 60;
+            const timerPanel = document.getElementById("floatingTimerPanel");
+            const toggleButton = document.getElementById("floatingTimerToggleBtn");
+            const timerClocks = Array.from(document.querySelectorAll("#floatingTimerClock"));
+            const timerStatuses = Array.from(document.querySelectorAll("#floatingTimerStatus"));
+            const strengthSelects = Array.from(document.querySelectorAll("#floatingTimerStrengthSelect"));
+            const timerButtons = Array.from(document.querySelectorAll("[data-timer-seconds]"));
+            const stopButtons = Array.from(document.querySelectorAll("[data-timer-stop]"));
+            let remainingSeconds = defaultTimerSeconds;
             let countdownId = null;
+            let activeTimerSeconds = defaultTimerSeconds;
+            let timerEndAt = null;
+            let panelOpen = false;
+
+            function readTimerState() {
+                try {
+                    const raw = window.localStorage.getItem(timerStorageKey);
+                    return raw ? JSON.parse(raw) : null;
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function writeTimerState() {
+                try {
+                    window.localStorage.setItem(timerStorageKey, JSON.stringify({
+                        endAt: timerEndAt,
+                        durationSeconds: activeTimerSeconds,
+                        strength: strengthSelects[0] ? Number(strengthSelects[0].value) : 500,
+                        panelOpen: panelOpen
+                    }));
+                } catch (error) {
+                    return;
+                }
+            }
+
+            function setPanelOpen(nextOpen) {
+                if (!timerPanel || !toggleButton) {
+                    return;
+                }
+
+                panelOpen = nextOpen;
+                timerPanel.classList.toggle("is-collapsed", !nextOpen);
+                timerPanel.dataset.panelOpen = nextOpen ? "true" : "false";
+                toggleButton.textContent = nextOpen ? "閉じる" : "開く";
+                toggleButton.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+                writeTimerState();
+            }
+
+            function getTimerLabel(totalSeconds) {
+                return Math.floor(totalSeconds / 60) + "分";
+            }
 
             function setTimerText(clockText, statusText) {
                 timerClocks.forEach(function (clock) {
@@ -1172,8 +1332,15 @@
 
             function setRunningState(isRunning) {
                 timerButtons.forEach(function (button) {
-                    button.textContent = isRunning ? "カウントダウン中" : "20分前タイマー";
-                    button.disabled = isRunning;
+                    const buttonSeconds = Number(button.dataset.timerSeconds);
+                    const isActive = isRunning && buttonSeconds === activeTimerSeconds;
+                    button.disabled = false;
+                    button.classList.toggle("btn-primary", isActive);
+                    button.classList.toggle("btn-outline-primary", !isActive);
+                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+                });
+                stopButtons.forEach(function (button) {
+                    button.disabled = !isRunning;
                 });
             }
 
@@ -1187,25 +1354,43 @@
 
             function finishTimer() {
                 countdownId = null;
+                timerEndAt = null;
                 setRunningState(false);
-                setTimerText("00:00", "20分経過しました。バイブでお知らせしました。");
+                setTimerText("00:00", getTimerLabel(activeTimerSeconds) + "のタイマーが終了しました。バイブでお知らせしました。");
+                writeTimerState();
 
                 if (navigator.vibrate) {
                     navigator.vibrate(Number(strengthSelects[0].value));
                 }
             }
 
-            function startTimer() {
+            function stopTimer() {
+                if (countdownId !== null) {
+                    window.clearInterval(countdownId);
+                    countdownId = null;
+                }
+                timerEndAt = null;
+                remainingSeconds = activeTimerSeconds;
+                setRunningState(false);
+                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のタイマーを停止しました。");
+                writeTimerState();
+            }
+
+            function startTimer(timerSeconds) {
+                activeTimerSeconds = timerSeconds;
                 remainingSeconds = timerSeconds;
+                timerEndAt = Date.now() + (timerSeconds * 1000);
                 setRunningState(true);
-                setTimerText(formatCountdownTime(remainingSeconds), "20分のカウントダウン中です。");
+                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(timerSeconds) + "のカウントダウン中です。");
+                setPanelOpen(true);
+                writeTimerState();
 
                 if (countdownId !== null) {
                     window.clearInterval(countdownId);
                 }
 
                 countdownId = window.setInterval(function () {
-                    remainingSeconds -= 1;
+                    remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
 
                     if (remainingSeconds <= 0) {
                         window.clearInterval(countdownId);
@@ -1213,7 +1398,8 @@
                         return;
                     }
 
-                    setTimerText(formatCountdownTime(remainingSeconds), "20分のカウントダウン中です。");
+                    setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のカウントダウン中です。");
+                    writeTimerState();
                 }, 1000);
             }
 
@@ -1224,11 +1410,58 @@
             });
 
             timerButtons.forEach(function (button) {
-                button.addEventListener("click", startTimer);
+                button.addEventListener("click", function () {
+                    startTimer(Number(button.dataset.timerSeconds));
+                });
             });
 
+            stopButtons.forEach(function (button) {
+                button.addEventListener("click", stopTimer);
+            });
+
+            if (toggleButton) {
+                toggleButton.addEventListener("click", function () {
+                    setPanelOpen(!panelOpen);
+                });
+            }
+
+            const savedState = readTimerState();
+            if (savedState && strengthSelects[0] && savedState.strength) {
+                strengthSelects[0].value = String(savedState.strength);
+            }
+            if (savedState && typeof savedState.panelOpen === "boolean") {
+                panelOpen = savedState.panelOpen;
+            }
+            setPanelOpen(panelOpen);
+
+            if (savedState && savedState.durationSeconds) {
+                activeTimerSeconds = Number(savedState.durationSeconds) || defaultTimerSeconds;
+            }
+
+            if (savedState && savedState.endAt && Number(savedState.endAt) > Date.now()) {
+                timerEndAt = Number(savedState.endAt);
+                remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
+                setRunningState(true);
+                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のカウントダウン中です。");
+
+                countdownId = window.setInterval(function () {
+                    remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
+
+                    if (remainingSeconds <= 0) {
+                        window.clearInterval(countdownId);
+                        finishTimer();
+                        return;
+                    }
+
+                    setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のカウントダウン中です。");
+                    writeTimerState();
+                }, 1000);
+                return;
+            }
+
             setRunningState(false);
-            setTimerText(formatCountdownTime(timerSeconds), "ボタンを押すと20分のカウントダウンを開始します。");
+            setTimerText(formatCountdownTime(activeTimerSeconds), "時間ボタンを押すとカウントダウンを開始します。");
+            writeTimerState();
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -1244,22 +1477,17 @@
             }
 
             updateSelectionSummary();
-            updateCurrentRaceDisplay();
+            refreshVenueDrivenUi();
             updateCurrentClock();
-            syncHomeThemeSelect();
             setupManualTimer();
-            applyVenueTheme(venueSelect && venueSelect.value ? venueSelect.value : "");
 
             if (venueSelect) {
                 venueSelect.addEventListener("change", updateSelectionSummary);
-                venueSelect.addEventListener("change", updateCurrentRaceDisplay);
-                venueSelect.addEventListener("change", function () {
-                    applyVenueTheme(venueSelect.value);
-                });
+                venueSelect.addEventListener("change", refreshVenueDrivenUi);
             }
             if (raceNumberSelect) {
                 raceNumberSelect.addEventListener("change", updateSelectionSummary);
-                raceNumberSelect.addEventListener("change", updateCurrentRaceDisplay);
+                raceNumberSelect.addEventListener("change", refreshVenueDrivenUi);
             }
 
             document.querySelectorAll("[data-mobile-source], [data-mobile-content]").forEach(function (button) {
