@@ -34,6 +34,11 @@ public class HomeController {
         return "links/index";
     }
 
+    @GetMapping("/help")
+    public String showHelpPage() {
+        return "help/index";
+    }
+
     @GetMapping("/favicon.ico")
     public String redirectFavicon() {
         return "forward:/favicon.svg";

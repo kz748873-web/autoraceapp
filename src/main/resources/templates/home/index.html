@@ -51,6 +51,48 @@
             font-size: 0.88rem;
         }
 
+        body {
+            --main-color: var(--brand-strong);
+            --main-color-deep: var(--deep);
+            --main-color-soft: color-mix(in srgb, var(--main-color) 18%, white);
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-kawaguchi {
+            --main-color: #d96aa0;
+            --main-color-deep: #8b2c5b;
+            --main-color-soft: #f7d9e8;
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-isesaki {
+            --main-color: #49515c;
+            --main-color-deep: #2f3640;
+            --main-color-soft: #dde2e8;
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-hamamatsu {
+            --main-color: #4d8fd6;
+            --main-color-deep: #21558b;
+            --main-color-soft: #dceaf8;
+            --main-color-text: #ffffff;
+        }
+
+        body.theme-iizuka {
+            --main-color: #d4ad2d;
+            --main-color-deep: #7a5f00;
+            --main-color-soft: #fff0bd;
+            --main-color-text: #3f3200;
+        }
+
+        body.theme-sanyo {
+            --main-color: #d88949;
+            --main-color-deep: #8f5728;
+            --main-color-soft: #fee7d6;
+            --main-color-text: #ffffff;
+        }
+
         .hero-stage {
             position: relative;
             overflow: hidden;
@@ -124,6 +166,39 @@
             max-width: 42rem;
         }
 
+        .hero-subinfo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            margin-top: 1rem;
+        }
+
+        .hero-subinfo-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            color: var(--deep);
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            margin-top: 1.25rem;
+        }
+
+        .hero-action-btn {
+            min-height: 3.2rem;
+            padding-inline: 1.15rem;
+            border-radius: 1rem;
+            font-weight: 700;
+        }
+
         .flow-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -140,8 +215,8 @@
             min-width: 2rem;
             min-height: 2rem;
             margin-bottom: 0.65rem;
-            background: var(--section-badge-bg);
-            color: var(--deep);
+            background: var(--main-color-soft);
+            color: var(--main-color-deep);
         }
 
         .flow-title {
@@ -163,8 +238,8 @@
             gap: 0.4rem;
             padding: 0.36rem 0.72rem;
             border-radius: 999px;
-            background: color-mix(in srgb, var(--brand) 18%, white);
-            color: var(--deep);
+            background: color-mix(in srgb, var(--main-color) 16%, white);
+            color: var(--main-color-deep);
             font-size: 0.86rem;
             font-weight: 700;
         }
@@ -180,7 +255,7 @@
             border-radius: 1rem;
             padding: 1rem;
             background: rgba(255, 255, 255, 0.96);
-            border: 1px solid color-mix(in srgb, var(--brand) 18%, white);
+            border: 1px solid color-mix(in srgb, var(--main-color) 24%, white);
         }
 
         .current-race-label {
@@ -262,6 +337,11 @@
             color: var(--deep);
         }
 
+        .selector-card .form-select,
+        .selector-card .btn {
+            min-height: 3.35rem;
+        }
+
         .selector-note,
         .note-placeholder {
             color: var(--sub);
@@ -280,6 +360,21 @@
 
         .video-placeholder {
             min-height: 300px;
+        }
+
+        .youtube-live-shell {
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid var(--card);
+            background: #ffffff;
+        }
+
+        .youtube-live-frame {
+            display: block;
+            width: 100%;
+            height: 360px;
+            border: 0;
+            background: #000000;
         }
 
         .note-placeholder {
@@ -345,9 +440,9 @@
         .status-chip {
             gap: 0.45rem;
             padding: 0.42rem 0.82rem;
-            border: 1px solid color-mix(in srgb, var(--brand) 22%, white);
-            background: color-mix(in srgb, var(--brand) 11%, white);
-            color: var(--deep);
+            border: 1px solid color-mix(in srgb, var(--main-color) 24%, white);
+            background: color-mix(in srgb, var(--main-color) 12%, white);
+            color: var(--main-color-deep);
         }
 
         .link-stack,
@@ -359,11 +454,18 @@
         .link-text-btn,
         .venue-quick-btn,
         .mobile-switch-btn,
-        .official-entry-btn {
+        .official-entry-btn,
+        .record-entry-btn {
             width: 100%;
             min-height: 3.15rem;
             border-radius: 1rem;
             font-weight: 700;
+        }
+
+        .record-action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
         }
 
         .link-text-btn {
@@ -399,9 +501,27 @@
         }
 
         .mobile-switch-btn.active {
-            background: var(--brand);
-            border-color: var(--brand-strong);
-            color: var(--theme-text);
+            background: var(--main-color);
+            border-color: color-mix(in srgb, var(--main-color) 78%, black);
+            color: var(--main-color-text);
+        }
+
+        body[class*="theme-"] .btn-primary {
+            background-color: var(--main-color) !important;
+            border-color: color-mix(in srgb, var(--main-color) 82%, black) !important;
+            color: var(--main-color-text) !important;
+        }
+
+        body[class*="theme-"] .btn-primary:hover,
+        body[class*="theme-"] .btn-primary:focus {
+            background-color: color-mix(in srgb, var(--main-color) 88%, black) !important;
+            border-color: color-mix(in srgb, var(--main-color) 78%, black) !important;
+            color: var(--main-color-text) !important;
+        }
+
+        body[class*="theme-"] .btn-outline-primary {
+            color: var(--main-color-deep) !important;
+            border-color: color-mix(in srgb, var(--main-color) 78%, white) !important;
         }
 
         .mobile-video-panel,
@@ -452,8 +572,31 @@
             color: var(--deep);
         }
 
+        .timer-controls {
+            display: grid;
+            gap: 0.7rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .timer-strength-select,
+        .timer-start-btn {
+            min-height: 3.15rem;
+            border-radius: 1rem;
+        }
+
+        .timer-status {
+            margin-top: 0.55rem;
+            font-size: 0.82rem;
+            color: var(--sub);
+        }
+
         .soft-strong {
             color: color-mix(in srgb, var(--deep) 80%, black);
+        }
+
+        #basic-actions,
+        #help {
+            scroll-margin-top: 6rem;
         }
 
         @media (max-width: 991.98px) {
@@ -509,10 +652,22 @@
             .video-placeholder {
                 min-height: 220px;
             }
+
+            .youtube-live-frame {
+                height: 240px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-action-btn {
+                width: 100%;
+            }
         }
 
         @media (max-width: 575.98px) {
-            .mobile-switch-row,
+            .record-action-grid,
             .venue-quick-grid {
                 grid-template-columns: 1fr;
             }
@@ -557,37 +712,48 @@
                     <div class="hero-layout">
                         <div class="hero-panel">
                             <div class="hero-badge mb-3">TOPページ</div>
-                            <h2 class="page-title mb-3">前日準備から当日判断、記録と振り返りまでを短時間で整理しやすいトップ画面です。</h2>
-                            <p class="lead-text mb-0">まず会場とレース番号を選び、次に動画とリンクで当日の判断材料を確認し、そのまま記録へ進める流れにまとめています。高齢者や初心者でも迷いにくいように、見る順番と押す場所を分かりやすくしています。</p>
+                            <h2 class="page-title mb-3">今日の予想材料を、開催場選びから記録まで迷わずつなげるトップページです。</h2>
+                            <p class="lead-text mb-0">まず開催場とレース番号を決めて、試走前後に見たい動画や公式リンクをすぐ確認できる流れに整えています。スマホでも上から順に追うだけで、予想の下準備から振り返りまで進めやすくしています。</p>
+
+                            <div class="hero-subinfo">
+                                <div class="hero-subinfo-chip">スマホ優先の見やすい導線</div>
+                                <div class="hero-subinfo-chip">開催場とレースをすぐ切替</div>
+                                <div class="hero-subinfo-chip">記録画面へそのまま移動</div>
+                            </div>
+
+                            <div class="hero-actions">
+                                <a href="#basic-actions" class="btn btn-primary hero-action-btn">予想の準備を始める</a>
+                                <a th:href="@{/records/new}" class="btn btn-outline-secondary hero-action-btn">新規記録へ進む</a>
+                            </div>
 
                             <div class="flow-grid">
                                 <div class="flow-card">
                                     <div class="flow-step">1</div>
-                                    <div class="flow-title mb-2">前日準備</div>
-                                    <p class="flow-copy">会場、レース番号、確認したいリンク先を先にそろえて準備します。</p>
+                                    <div class="flow-title mb-2">下準備</div>
+                                    <p class="flow-copy">開催場とレースを先に決めて、確認したい導線を絞り込みます。</p>
                                 </div>
                                 <div class="flow-card">
                                     <div class="flow-step">2</div>
-                                    <div class="flow-title mb-2">当日判断</div>
-                                    <p class="flow-copy">公式動画と会場動画を見ながら、必要な情報だけを一画面で確認します。</p>
+                                    <div class="flow-title mb-2">当日チェック</div>
+                                    <p class="flow-copy">公式配信や開催場の情報を見比べて、直前の判断材料を集めます。</p>
                                 </div>
                                 <div class="flow-card">
                                     <div class="flow-step">3</div>
-                                    <div class="flow-title mb-2">記録・振り返り</div>
-                                    <p class="flow-copy">確認した内容を記録画面につなげて、次回の判断材料として残します。</p>
+                                    <div class="flow-title mb-2">記録と振り返り</div>
+                                    <p class="flow-copy">見た内容を記録に残して、次回の予想に活かしやすくします。</p>
                                 </div>
                             </div>
                         </div>
 
                         <aside class="current-race-panel">
                             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
-                                <div class="hero-badge mb-0">現在開催中の確認枠</div>
-                                <div class="current-race-live">更新時刻 <span id="currentRaceNow">--:--:--</span></div>
+                                <div class="hero-badge mb-0">いま確認中の対象</div>
+                                <div class="current-race-live">現在時刻 <span id="currentRaceNow">--:--:--</span></div>
                             </div>
 
                             <div class="current-race-grid">
                                 <div class="current-race-tile">
-                                    <div class="current-race-label">レース場</div>
+                                    <div class="current-race-label">開催場</div>
                                     <div id="currentVenueLabel" class="current-race-value" th:text="${selectedVenue} ?: '川口'">川口</div>
                                 </div>
                                 <div class="current-race-tile">
@@ -596,14 +762,14 @@
                                 </div>
                             </div>
 
-                            <p class="current-race-help mb-0">いま確認中の会場とレース番号を、PCでもスマホでもすぐ見返せる仮表示枠です。将来は開催中データや締切連動を追加しやすい前提で置いています。</p>
+                            <p class="current-race-help mb-0">開催場とレース番号を先に決めておくと、このあと開く動画や外部リンクの見どころを整理しやすくなります。迷ったときはまずここを合わせてから進めるのがおすすめです。</p>
 
                             <div class="quick-guide">
-                                <div class="quick-guide-label">この画面の使い方</div>
+                                <div class="quick-guide-label">使い始めの順番</div>
                                 <ol class="quick-guide-list">
                                     <li>会場とレース番号を選ぶ</li>
-                                    <li>動画とリンクで判断材料を確認する</li>
-                                    <li>必要に応じて記録や用語検索へ進む</li>
+                                    <li>動画と公式リンクで直前情報を確認する</li>
+                                    <li>必要なら新規記録へ進んで内容を残す</li>
                                 </ol>
                             </div>
                         </aside>
@@ -614,16 +780,16 @@
             <section id="basic-actions" class="page-card p-4 p-md-5 mb-5">
                 <div class="basic-actions-layout">
                     <div class="section-heading is-balanced">
-                        <span class="section-badge mb-2">基本操作</span>
-                        <h2 class="section-title mb-2">最初に会場とレース番号を決めて、確認する情報をしぼる</h2>
-                        <p class="section-copy mb-3">このアプリでは、最初に見る対象を決めるだけで、そのあとに使う動画、外部リンク、記録の流れが分かりやすくなります。説明文は左側に寄りすぎないよう幅を整え、右側の入力欄と見比べやすいバランスにしています。</p>
-                        <p class="helper-copy mb-0">迷ったときは、会場を選んでからレース番号を決める順番で使うと、短時間でも整理しやすくなります。</p>
+                        <span class="section-badge mb-2">予想準備</span>
+                        <h2 class="section-title mb-2">まずは開催場とレース番号を決める</h2>
+                        <p class="section-copy mb-3">予想の入口で対象をはっきりさせておくと、試走確認、外部リンク確認、記録入力までの流れがぶれにくくなります。スマホでは最初にこの操作だけ済ませれば、その後の画面移動を最小限に抑えやすくなります。</p>
+                        <p class="helper-copy mb-0">迷ったときは開催場を先に決めてからレース番号を選ぶと、確認する情報を絞り込みやすくなります。</p>
                     </div>
 
                     <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
                         <div class="row g-3 align-items-end">
                             <div class="col-md-5">
-                                <label for="venueSelect" class="form-label fw-semibold fs-5">レース場</label>
+                                <label for="venueSelect" class="form-label fw-semibold fs-5">開催場</label>
                                 <select id="venueSelect" name="venue" class="form-select form-select-lg">
                                     <option value="">選択してください</option>
                                     <option th:each="venueName : ${venueNames}" th:value="${venueName}" th:text="${venueName}">川口</option>
@@ -637,24 +803,31 @@
                                 </select>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">確認する</button>
+                                <button type="submit" class="btn btn-primary btn-lg">この条件で見る</button>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="selector-summary-card h-100">
-                                    <div class="selector-summary-label">選択中のレース場</div>
+                                    <div class="selector-summary-label">選択中の開催場</div>
                                     <div id="selectorVenueSummary" class="selector-summary-value" th:text="${selectedVenue} ?: '未選択'">未選択</div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="selector-summary-card h-100">
-                                    <div class="selector-summary-label">選択中のレース番号</div>
+                                    <div class="selector-summary-label">選択中のレース</div>
                                     <div id="selectorRaceSummary" class="selector-summary-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '未選択'}">未選択</div>
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <div id="selectionSummary" class="selector-note p-3">会場とレース番号を選ぶと、確認中の内容がここにまとまります。</div>
+                                <div id="selectionSummary" class="selector-note p-3">開催場とレース番号を選ぶと、このあと見る内容がここにまとまります。</div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="record-action-grid">
+                                    <a href="/records/form.html" class="btn btn-outline-primary btn-lg record-entry-btn">新規登録</a>
+                                    <a href="/records/list.html" class="btn btn-outline-secondary btn-lg record-entry-btn">登録一覧</a>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -675,27 +848,27 @@
                     <div class="dual-video-grid mb-4">
                         <div class="video-card p-4">
                             <div class="video-panel-title mb-1">左: 公式動画</div>
-                            <div class="video-panel-subtitle mb-3">公式配信や案内を確認するための表示枠です。</div>
-                            <div class="video-placeholder">
-                                <div>
-                                    <strong>公式動画プレースホルダー</strong>
-                                    <div class="mt-2">公式動画や配信案内をここへ表示予定です。</div>
-                                </div>
+                            <div class="video-panel-subtitle mb-3">初期表示ではオートレース公式チャンネルのライブ枠を表示します。</div>
+                            <div class="youtube-live-shell" data-live-source="official">
+                                <iframe
+                                    class="youtube-live-frame"
+                                    src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
+                                    title="オートレース公式 YouTubeライブ"
+                                    loading="lazy"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
                             </div>
                         </div>
 
                         <div class="video-card p-4">
                             <div class="video-panel-title mb-1">右: レース場動画</div>
                             <div class="video-panel-subtitle mb-3">選択中の会場に合わせた映像を確認するための表示枠です。</div>
-                            <div class="video-placeholder mb-3">
+                            <div class="video-placeholder">
                                 <div>
                                     <strong>レース場動画プレースホルダー</strong>
                                     <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
                                 </div>
-                            </div>
-                            <div class="note-card p-3">
-                                <div class="fw-bold mb-2 soft-strong">将来拡張用メモ枠</div>
-                                <div class="note-placeholder">今後は会場メモや補助情報をここに追加しやすい想定です。</div>
                             </div>
                         </div>
                     </div>
@@ -705,19 +878,20 @@
                             <div class="timer-card compact-timer-card is-compact">
                                 <span class="section-badge mb-2">タイマー</span>
                                 <h2 class="section-title">締切までの残り時間</h2>
-                                <div class="timer-setting-row">
-                                    <span class="timer-setting-label">バイブ通知の準備</span>
-                                    <div class="form-check form-switch mb-0">
-                                        <input id="vibrationReadySwitch" class="form-check-input" type="checkbox" disabled>
-                                        <label class="form-check-label small text-secondary" for="vibrationReadySwitch">準備中</label>
-                                    </div>
+                                <p class="section-copy">20分前から手動でカウントダウンを始めて、終了時はバイブだけで知らせます。</p>
+                                <div class="timer-controls">
+                                    <label class="timer-setting-label mb-0" for="timerStrengthSelect">バイブの強さ</label>
+                                    <select id="timerStrengthSelect" class="form-select timer-strength-select">
+                                        <option value="200">小 200ms</option>
+                                        <option value="500" selected>中 500ms</option>
+                                        <option value="1000">大 1000ms</option>
+                                    </select>
+                                    <button type="button" id="startTwentyMinuteTimerBtn" class="btn btn-primary timer-start-btn">20分前タイマー</button>
                                 </div>
-                                <p class="section-copy">将来は締切直前にバイブ通知を追加しやすい構造です。</p>
-                                <!-- 将来的に vibration API や締切直前アラートを追加しやすい構造にしている -->
                                 <div class="timer-display">
                                     <div>
-                                        <div class="timer-clock">00:00:00</div>
-                                        <div class="mt-2 small">発売締切までの残り時間を表示予定です。</div>
+                                        <div id="desktopTimerClock" class="timer-clock">20:00</div>
+                                        <div id="desktopTimerStatus" class="timer-status">ボタンを押すと20分のカウントダウンを開始します。</div>
                                     </div>
                                 </div>
                             </div>
@@ -732,18 +906,18 @@
                                 <div class="link-stack mb-4">
                                     <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn">AutoRace.jp</a>
                                     <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
-                                    <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">外部リンク一覧を見る</a>
+                                    <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">関連リンクを一覧で見る</a>
                                 </div>
 
-                                <div class="fw-bold mb-3 soft-strong">レース場を切り替える</div>
+                                <div class="fw-bold mb-3 soft-strong">レース場を選択する</div>
                                 <div class="venue-quick-grid mb-4">
                                     <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
                                 </div>
 
                                 <div class="mobile-link-stack">
-                                    <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">レース場のYouTube</a>
-                                    <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">レース場のInstagram</a>
-                                    <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">レース場のFacebook</a>
+                                    <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">開催場のYouTube</a>
+                                    <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">開催場のInstagram</a>
+                                    <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">開催場のFacebook</a>
                                 </div>
                             </div>
                         </div>
@@ -752,12 +926,12 @@
 
                 <div class="mobile-switch-shell d-lg-none">
                     <span class="section-badge mb-2">当日判断</span>
-                    <h2 class="section-title mb-2">スマホでは大きいボタンで動画とリンクを切り替える</h2>
-                    <p class="section-copy mb-4">公式とレース場、動画とリンクを二段ボタンで切り替えられるようにして、初心者でも押し間違えにくい形にしています。</p>
+                    <h2 class="section-title mb-2">スマホでは切り替えながら動画とリンクを確認する</h2>
+                    <p class="section-copy mb-4">小さい画面でも迷いにくいように、公式情報と開催場情報をボタンで切り替えられる形にしています。必要な情報だけを順番に見ていけるので、移動中でも確認しやすい構成です。</p>
 
-                    <div class="mobile-switch-row mb-3" role="group" aria-label="案内元の切り替え">
-                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">公式</button>
-                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">レース場</button>
+                    <div class="mobile-switch-row mb-3" role="group" aria-label="情報元の切り替え">
+                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">公式情報</button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">開催場情報</button>
                     </div>
                     <div class="mobile-switch-row" role="group" aria-label="表示内容の切り替え">
                         <button type="button" class="mobile-switch-btn active" data-mobile-content="video">動画</button>
@@ -766,25 +940,25 @@
 
                     <div class="mobile-video-panel active" data-mobile-panel="official-video">
                         <div class="video-panel-title mb-2">公式動画</div>
-                        <div class="video-placeholder">
-                            <div>
-                                <strong>公式動画プレースホルダー</strong>
-                                <div class="mt-2">公式動画や配信案内をここへ表示予定です。</div>
-                            </div>
+                        <div class="youtube-live-shell" data-live-source="official-mobile">
+                            <iframe
+                                class="youtube-live-frame"
+                                src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
+                                title="オートレース公式 YouTubeライブ"
+                                loading="lazy"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen></iframe>
                         </div>
                     </div>
 
                     <div class="mobile-video-panel" data-mobile-panel="venue-video">
-                        <div class="video-panel-title mb-2">レース場動画</div>
-                        <div class="video-placeholder mb-3">
+                        <div class="video-panel-title mb-2">開催場動画</div>
+                        <div class="video-placeholder">
                             <div>
-                                <strong>レース場動画プレースホルダー</strong>
-                                <div class="mt-2">選択中の会場に合わせた動画をここへ表示予定です。</div>
+                                <strong>開催場動画プレースホルダー</strong>
+                                <div class="mt-2">選択中の開催場に合わせた動画をここへ表示予定です。</div>
                             </div>
-                        </div>
-                        <div class="note-card p-3">
-                            <div class="fw-bold mb-2 soft-strong">将来拡張用メモ枠</div>
-                            <div class="note-placeholder">今後は会場メモや補助情報の切替枠として使える想定です。</div>
                         </div>
                     </div>
 
@@ -793,38 +967,39 @@
                         <div class="mobile-link-stack">
                             <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn">AutoRace.jp</a>
                             <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
-                            <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">外部リンク一覧を見る</a>
+                            <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">関連リンクを一覧で見る</a>
                         </div>
                     </div>
 
                     <div class="mobile-link-panel" data-mobile-panel="venue-link">
-                        <div class="fw-bold mb-3 soft-strong">レース場リンク</div>
+                        <div class="fw-bold mb-3 soft-strong">開催場リンク</div>
                         <div class="venue-quick-grid mb-4">
                             <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn js-keep-mobile-scroll">川口</a>
                         </div>
                         <div class="mobile-link-stack">
-                            <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">レース場のYouTube</a>
-                            <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">レース場のInstagram</a>
-                            <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">レース場のFacebook</a>
+                            <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">開催場のYouTube</a>
+                            <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">開催場のInstagram</a>
+                            <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">開催場のFacebook</a>
                         </div>
                     </div>
 
                     <div class="timer-card is-compact p-4 mt-4">
                         <span class="section-badge mb-2">タイマー</span>
                         <h2 class="section-title mb-2">締切までの残り時間</h2>
-                        <div class="timer-setting-row">
-                            <span class="timer-setting-label">バイブ通知の準備</span>
-                            <div class="form-check form-switch mb-0">
-                                <input id="mobileVibrationReadySwitch" class="form-check-input" type="checkbox" disabled>
-                                <label class="form-check-label small text-secondary" for="mobileVibrationReadySwitch">準備中</label>
-                            </div>
+                        <p class="section-copy mb-3">スマホで押しやすいように、開始ボタンとバイブ強度をまとめています。</p>
+                        <div class="timer-controls">
+                            <label class="timer-setting-label mb-0" for="mobileTimerStrengthSelect">バイブの強さ</label>
+                            <select id="mobileTimerStrengthSelect" class="form-select timer-strength-select">
+                                <option value="200">小 200ms</option>
+                                <option value="500" selected>中 500ms</option>
+                                <option value="1000">大 1000ms</option>
+                            </select>
+                            <button type="button" id="mobileStartTwentyMinuteTimerBtn" class="btn btn-primary timer-start-btn">20分前タイマー</button>
                         </div>
-                        <p class="section-copy mb-3">スマホでも見返しやすい位置に置き、将来の通知機能に広げやすい構造にしています。</p>
-                        <!-- 将来的に vibration API や締切直前アラートを追加しやすい構造にしている -->
                         <div class="timer-display">
                             <div>
-                                <div class="timer-clock">00:00:00</div>
-                                <div class="mt-2 small">発売締切までの残り時間を表示予定です。</div>
+                                <div id="mobileTimerClock" class="timer-clock">20:00</div>
+                                <div id="mobileTimerStatus" class="timer-status">ボタンを押すと20分のカウントダウンを開始します。</div>
                             </div>
                         </div>
                     </div>
@@ -832,7 +1007,7 @@
             </section>
 
             <section id="glossary-search" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">前日準備の補助</span>
+                <span class="section-badge mb-2">用語検索・確認</span>
                 <h2 class="section-title mb-2">わからない言葉をすぐ調べる</h2>
                 <p class="section-copy mb-4">オートレース用語をその場で調べておくと、当日の判断で迷いにくくなります。</p>
                 <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
@@ -847,7 +1022,7 @@
             </section>
 
             <section id="help" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">使い方</span>
+                <span class="section-badge mb-2">ヘルプ</span>
                 <h2 class="section-title mb-2">TOPページの流れ</h2>
                 <p class="section-copy mb-0">会場とレース番号を選び、動画と外部リンクで当日の判断材料を確認し、そのあと記録や振り返りへ進む流れを想定しています。情報を一度に詰め込みすぎず、スマホでも順番に見やすい構成にしています。</p>
             </section>
@@ -871,7 +1046,7 @@
                 return;
             }
 
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "レース場未選択";
+            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "開催場未選択";
             const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "レース番号未選択";
 
             summary.textContent = venueText + " / " + raceText + " を選択中です。";
@@ -952,6 +1127,110 @@
             });
         }
 
+        function applyVenueTheme(venueName) {
+            const body = document.body;
+            const themeMap = {
+                "川口": "theme-kawaguchi",
+                "伊勢崎": "theme-isesaki",
+                "浜松": "theme-hamamatsu",
+                "飯塚": "theme-iizuka",
+                "山陽": "theme-sanyo"
+            };
+
+            Object.values(themeMap).forEach(function (themeClass) {
+                body.classList.remove(themeClass);
+            });
+
+            if (themeMap[venueName]) {
+                body.classList.add(themeMap[venueName]);
+            }
+        }
+
+        function formatCountdownTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        }
+
+        function setupManualTimer() {
+            const timerSeconds = 20 * 60;
+            const timerClocks = Array.from(document.querySelectorAll("#desktopTimerClock, #mobileTimerClock"));
+            const timerStatuses = Array.from(document.querySelectorAll("#desktopTimerStatus, #mobileTimerStatus"));
+            const strengthSelects = Array.from(document.querySelectorAll("#timerStrengthSelect, #mobileTimerStrengthSelect"));
+            const timerButtons = Array.from(document.querySelectorAll("#startTwentyMinuteTimerBtn, #mobileStartTwentyMinuteTimerBtn"));
+            let remainingSeconds = timerSeconds;
+            let countdownId = null;
+
+            function setTimerText(clockText, statusText) {
+                timerClocks.forEach(function (clock) {
+                    clock.textContent = clockText;
+                });
+                timerStatuses.forEach(function (status) {
+                    status.textContent = statusText;
+                });
+            }
+
+            function setRunningState(isRunning) {
+                timerButtons.forEach(function (button) {
+                    button.textContent = isRunning ? "カウントダウン中" : "20分前タイマー";
+                    button.disabled = isRunning;
+                });
+            }
+
+            function syncStrengthSelects(changedSelect) {
+                strengthSelects.forEach(function (select) {
+                    if (select !== changedSelect) {
+                        select.value = changedSelect.value;
+                    }
+                });
+            }
+
+            function finishTimer() {
+                countdownId = null;
+                setRunningState(false);
+                setTimerText("00:00", "20分経過しました。バイブでお知らせしました。");
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(Number(strengthSelects[0].value));
+                }
+            }
+
+            function startTimer() {
+                remainingSeconds = timerSeconds;
+                setRunningState(true);
+                setTimerText(formatCountdownTime(remainingSeconds), "20分のカウントダウン中です。");
+
+                if (countdownId !== null) {
+                    window.clearInterval(countdownId);
+                }
+
+                countdownId = window.setInterval(function () {
+                    remainingSeconds -= 1;
+
+                    if (remainingSeconds <= 0) {
+                        window.clearInterval(countdownId);
+                        finishTimer();
+                        return;
+                    }
+
+                    setTimerText(formatCountdownTime(remainingSeconds), "20分のカウントダウン中です。");
+                }, 1000);
+            }
+
+            strengthSelects.forEach(function (select) {
+                select.addEventListener("change", function () {
+                    syncStrengthSelects(select);
+                });
+            });
+
+            timerButtons.forEach(function (button) {
+                button.addEventListener("click", startTimer);
+            });
+
+            setRunningState(false);
+            setTimerText(formatCountdownTime(timerSeconds), "ボタンを押すと20分のカウントダウンを開始します。");
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const venueSelect = document.getElementById("venueSelect");
             const raceNumberSelect = document.getElementById("raceNumberSelect");
@@ -968,10 +1247,15 @@
             updateCurrentRaceDisplay();
             updateCurrentClock();
             syncHomeThemeSelect();
+            setupManualTimer();
+            applyVenueTheme(venueSelect && venueSelect.value ? venueSelect.value : "");
 
             if (venueSelect) {
                 venueSelect.addEventListener("change", updateSelectionSummary);
                 venueSelect.addEventListener("change", updateCurrentRaceDisplay);
+                venueSelect.addEventListener("change", function () {
+                    applyVenueTheme(venueSelect.value);
+                });
             }
             if (raceNumberSelect) {
                 raceNumberSelect.addEventListener("change", updateSelectionSummary);
