@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{layout/base :: commonHead('TOPページ | オートレース予想補助アプリ')}"></th:block>
+    <th:block th:replace="~{layout/base :: commonHead('TOP繝壹・繧ｸ | 繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ莠域Φ陬懷勧繧｢繝励Μ')}"></th:block>
     <style>
         .site-header .app-theme-toolbar {
             display: none;
@@ -837,16 +837,17 @@
             align-items: center;
             justify-content: center;
             gap: 0.4rem;
-            min-height: 2.8rem;
-            padding: 0.6rem 0.9rem;
+            min-height: 2.6rem;
+            padding: 0.5rem 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.95);
             box-shadow: 0 0.65rem 1.4rem rgba(15, 23, 42, 0.12);
             color: var(--accent-color);
             text-decoration: none;
-            font-size: 0.92rem;
+            font-size: 0.88rem;
             font-weight: 700;
+            white-space: nowrap;
             backdrop-filter: blur(6px);
         }
 
@@ -911,8 +912,8 @@
             .utility-entry-btn {
                 top: 4.9rem;
                 right: 0.75rem;
-                min-height: 3rem;
-                padding-inline: 0.85rem;
+                min-height: 2.9rem;
+                padding-inline: 0.8rem;
             }
         }
 
@@ -973,12 +974,12 @@
         }
     </style>
 </head>
-<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : ${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : ${selectedVenue == '浜松'} ? ' theme-hamamatsu' : ${selectedVenue == '飯塚'} ? ' theme-iizuka' : ${selectedVenue == '山陽'} ? ' theme-sanyo' : ''">
+<body th:classappend="${selectedVenue == '蟾晏哨'} ? ' theme-kawaguchi' : ${selectedVenue == '莨雁兇蟠・} ? ' theme-isesaki' : ${selectedVenue == '豬懈收'} ? ' theme-hamamatsu' : ${selectedVenue == '鬟ｯ蝪・} ? ' theme-iizuka' : ${selectedVenue == '螻ｱ髯ｽ'} ? ' theme-sanyo' : ''">
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
         <a href="#image-switch-entry" class="utility-entry-btn image-switch-entry-btn" aria-label="画像切り替え">
-            <span class="utility-entry-icon" aria-hidden="true">🖼</span>
-            <span>画像切替</span>
+            <span class="utility-entry-icon" aria-hidden="true">画像</span>
+            <span>切替</span>
         </a>
 
         <main class="container py-4 py-md-5 flex-grow-1">
@@ -986,65 +987,65 @@
                 <div class="hero-content">
                     <div class="hero-layout">
                         <div class="hero-panel">
-                            <div class="hero-badge mb-3">TOPページ</div>
-                            <h2 class="page-title mb-3">今日の予想材料を、開催場選びから記録まで迷わずつなげるトップページです。</h2>
-                            <p class="lead-text mb-0">まず開催場とレース番号を決めて、試走前後に見たい動画や公式リンクをすぐ確認できる流れに整えています。スマホでも上から順に追うだけで、予想の下準備から振り返りまで進めやすくしています。</p>
+                            <div class="hero-badge mb-3">TOP繝壹・繧ｸ</div>
+                            <h2 class="page-title mb-3">莉頑律縺ｮ莠域Φ譚先侭繧偵・幕蛯ｬ蝣ｴ驕ｸ縺ｳ縺九ｉ險倬鹸縺ｾ縺ｧ霑ｷ繧上★縺､縺ｪ縺偵ｋ繝医ャ繝励・繝ｼ繧ｸ縺ｧ縺吶・/h2>
+                            <p class="lead-text mb-0">縺ｾ縺夐幕蛯ｬ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧呈ｱｺ繧√※縲∬ｩｦ襍ｰ蜑榊ｾ後↓隕九◆縺・虚逕ｻ繧・・蠑上Μ繝ｳ繧ｯ繧偵☆縺千｢ｺ隱阪〒縺阪ｋ豬√ｌ縺ｫ謨ｴ縺医※縺・∪縺吶ゅせ繝槭・縺ｧ繧ゆｸ翫°繧蛾・↓霑ｽ縺・□縺代〒縲∽ｺ域Φ縺ｮ荳区ｺ門ｙ縺九ｉ謖ｯ繧願ｿ斐ｊ縺ｾ縺ｧ騾ｲ繧√ｄ縺吶￥縺励※縺・∪縺吶・/p>
 
                             <div class="hero-subinfo">
-                                <div class="hero-subinfo-chip">スマホ優先の見やすい導線</div>
-                                <div class="hero-subinfo-chip">開催場とレースをすぐ切替</div>
-                                <div class="hero-subinfo-chip">記録画面へそのまま移動</div>
+                                <div class="hero-subinfo-chip">繧ｹ繝槭・蜆ｪ蜈医・隕九ｄ縺吶＞蟆守ｷ・/div>
+                                <div class="hero-subinfo-chip">髢句ぎ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ繧偵☆縺仙・譖ｿ</div>
+                                <div class="hero-subinfo-chip">險倬鹸逕ｻ髱｢縺ｸ縺昴・縺ｾ縺ｾ遘ｻ蜍・/div>
                             </div>
 
                             <div class="hero-actions">
-                                <a href="#basic-actions" class="btn btn-primary hero-action-btn">予想の準備を始める</a>
-                                <a th:href="@{/records/new}" class="btn btn-outline-secondary hero-action-btn">新規記録へ進む</a>
+                                <a href="#basic-actions" class="btn btn-primary hero-action-btn">莠域Φ縺ｮ貅門ｙ繧貞ｧ九ａ繧・/a>
+                                <a th:href="@{/records/new}" class="btn btn-outline-secondary hero-action-btn">譁ｰ隕剰ｨ倬鹸縺ｸ騾ｲ繧</a>
                             </div>
 
                             <div class="flow-grid">
                                 <div class="flow-card">
                                     <div class="flow-step">1</div>
-                                    <div class="flow-title mb-2">下準備</div>
-                                    <p class="flow-copy">開催場とレースを先に決めて、確認したい導線を絞り込みます。</p>
+                                    <div class="flow-title mb-2">荳区ｺ門ｙ</div>
+                                    <p class="flow-copy">髢句ぎ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ繧貞・縺ｫ豎ｺ繧√※縲∫｢ｺ隱阪＠縺溘＞蟆守ｷ壹ｒ邨槭ｊ霎ｼ縺ｿ縺ｾ縺吶・/p>
                                 </div>
                                 <div class="flow-card">
                                     <div class="flow-step">2</div>
-                                    <div class="flow-title mb-2">当日チェック</div>
-                                    <p class="flow-copy">公式配信や開催場の情報を見比べて、直前の判断材料を集めます。</p>
+                                    <div class="flow-title mb-2">蠖捺律繝√ぉ繝・け</div>
+                                    <p class="flow-copy">蜈ｬ蠑城・菫｡繧・幕蛯ｬ蝣ｴ縺ｮ諠・ｱ繧定ｦ区ｯ斐∋縺ｦ縲∫峩蜑阪・蛻､譁ｭ譚先侭繧帝寔繧√∪縺吶・/p>
                                 </div>
                                 <div class="flow-card">
                                     <div class="flow-step">3</div>
-                                    <div class="flow-title mb-2">記録と振り返り</div>
-                                    <p class="flow-copy">見た内容を記録に残して、次回の予想に活かしやすくします。</p>
+                                    <div class="flow-title mb-2">險倬鹸縺ｨ謖ｯ繧願ｿ斐ｊ</div>
+                                    <p class="flow-copy">隕九◆蜀・ｮｹ繧定ｨ倬鹸縺ｫ谿九＠縺ｦ縲∵ｬ｡蝗槭・莠域Φ縺ｫ豢ｻ縺九＠繧・☆縺上＠縺ｾ縺吶・/p>
                                 </div>
                             </div>
                         </div>
 
                         <aside class="current-race-panel">
                             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
-                                <div class="hero-badge mb-0">いま確認中の対象</div>
-                                <div class="current-race-live">現在時刻 <span id="currentRaceNow">--:--:--</span></div>
+                                <div class="hero-badge mb-0">縺・∪遒ｺ隱堺ｸｭ縺ｮ蟇ｾ雎｡</div>
+                                <div class="current-race-live">迴ｾ蝨ｨ譎ょ綾 <span id="currentRaceNow">--:--:--</span></div>
                             </div>
 
                             <div class="current-race-grid">
                                 <div class="current-race-tile">
-                                    <div class="current-race-label">開催場</div>
-                                    <div id="currentVenueLabel" class="current-race-value" th:text="${selectedVenue} ?: '川口'">川口</div>
+                                    <div class="current-race-label">髢句ぎ蝣ｴ</div>
+                                    <div id="currentVenueLabel" class="current-race-value" th:text="${selectedVenue} ?: '蟾晏哨'">蟾晏哨</div>
                                 </div>
                                 <div class="current-race-tile">
-                                    <div class="current-race-label">レース番号</div>
-                                    <div id="currentRaceNumberLabel" class="current-race-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '8レース'}">8レース</div>
+                                    <div class="current-race-label">繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ</div>
+                                    <div id="currentRaceNumberLabel" class="current-race-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + '繝ｬ繝ｼ繧ｹ' : '8繝ｬ繝ｼ繧ｹ'}">8繝ｬ繝ｼ繧ｹ</div>
                                 </div>
                             </div>
 
-                            <p class="current-race-help mb-0">開催場とレース番号を先に決めておくと、このあと開く動画や外部リンクの見どころを整理しやすくなります。迷ったときはまずここを合わせてから進めるのがおすすめです。</p>
+                            <p class="current-race-help mb-0">髢句ぎ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧貞・縺ｫ豎ｺ繧√※縺翫￥縺ｨ縲√％縺ｮ縺ゅ→髢九￥蜍慕判繧・､夜Κ繝ｪ繝ｳ繧ｯ縺ｮ隕九←縺薙ｍ繧呈紛逅・＠繧・☆縺上↑繧翫∪縺吶りｿｷ縺｣縺溘→縺阪・縺ｾ縺壹％縺薙ｒ蜷医ｏ縺帙※縺九ｉ騾ｲ繧√ｋ縺ｮ縺後♀縺吶☆繧√〒縺吶・/p>
 
                             <div class="quick-guide">
-                                <div class="quick-guide-label">使い始めの順番</div>
+                                <div class="quick-guide-label">菴ｿ縺・ｧ九ａ縺ｮ鬆・分</div>
                                 <ol class="quick-guide-list">
-                                    <li>会場とレース番号を選ぶ</li>
-                                    <li>動画と公式リンクで直前情報を確認する</li>
-                                    <li>必要なら新規記録へ進んで内容を残す</li>
+                                    <li>莨壼ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ</li>
+                                    <li>蜍慕判縺ｨ蜈ｬ蠑上Μ繝ｳ繧ｯ縺ｧ逶ｴ蜑肴ュ蝣ｱ繧堤｢ｺ隱阪☆繧・/li>
+                                    <li>蠢・ｦ√↑繧画眠隕剰ｨ倬鹸縺ｸ騾ｲ繧薙〒蜀・ｮｹ繧呈ｮ九☆</li>
                                 </ol>
                             </div>
                         </aside>
@@ -1054,51 +1055,52 @@
 
             <section id="basic-actions" class="page-card p-4 p-md-5 mb-5">
                 <div class="basic-actions-layout">
-                    <div class="section-heading is-balanced">
-                        <span class="section-badge mb-2">予想準備</span>
-                        <h2 class="section-title mb-2">レース場とレース番号を選んで次へ進む</h2>
-                        <p class="section-copy mb-3">この枠では、見るレース場とレース番号を先に決められます。最初に選んでおくと、このあとの情報確認や記録入力へ進みやすくなります。</p>
-                        <p class="helper-copy mb-0">まずはレース場を選び、続けてレース番号を合わせると、次に使う情報を迷わず見つけやすくなります。</p>
+                    <div class="section-heading is-balanced" id="predictionPrepSection">
+                        <span class="section-badge mb-2">莠域Φ貅門ｙ</span>
+                        <h2 class="section-title mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈繧薙〒谺｡縺ｸ騾ｲ繧</h2>
+                        <p class="section-copy mb-3">縺薙・譫縺ｧ縺ｯ縲∬ｦ九ｋ繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧貞・縺ｫ豎ｺ繧√ｉ繧後∪縺吶よ怙蛻昴↓驕ｸ繧薙〒縺翫￥縺ｨ縲√％縺ｮ縺ゅ→縺ｮ諠・ｱ遒ｺ隱阪ｄ險倬鹸蜈･蜉帙∈騾ｲ縺ｿ繧・☆縺上↑繧翫∪縺吶・/p>
+                        <p class="helper-copy mb-0">縺ｾ縺壹・繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈縺ｳ縲∫ｶ壹￠縺ｦ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧貞粋繧上○繧九→縲∵ｬ｡縺ｫ菴ｿ縺・ュ蝣ｱ繧定ｿｷ繧上★隕九▽縺代ｄ縺吶￥縺ｪ繧翫∪縺吶・/p>
                     </div>
 
                     <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
                         <div class="row g-3 align-items-end">
                             <div class="col-md-6">
-                                <label for="venueSelect" class="form-label fw-semibold fs-5">開催場</label>
+                                <label for="venueSelect" class="form-label fw-semibold fs-5">髢句ぎ蝣ｴ</label>
                                 <select id="venueSelect" name="venue" class="form-select form-select-lg">
-                                    <option value="">選択してください</option>
+                                    <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
                                     <option
                                         th:each="venueName : ${venueNames}"
                                         th:value="${venueName}"
                                         th:text="${venueName}"
-                                        th:attr="data-theme-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}">川口</option>
+                                        th:attr="data-theme-key=${venueName == '蟾晏哨' ? 'kawaguchi' : venueName == '莨雁兇蟠・ ? 'isesaki' : venueName == '豬懈收' ? 'hamamatsu' : venueName == '鬟ｯ蝪・ ? 'iizuka' : venueName == '螻ｱ髯ｽ' ? 'sanyo' : ''}">蟾晏哨</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="raceNumberSelect" class="form-label fw-semibold fs-5">レース番号</label>
+                                <label for="raceNumberSelect" class="form-label fw-semibold fs-5">繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ</label>
                                 <select id="raceNumberSelect" name="raceNumber" class="form-select form-select-lg">
-                                    <option value="">選択してください</option>
-                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                                    <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
+                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + '繝ｬ繝ｼ繧ｹ'}">1繝ｬ繝ｼ繧ｹ</option>
                                 </select>
                             </div>
                             <div class="col-sm-6">
                                 <div class="selector-summary-card h-100">
-                                    <div class="selector-summary-label">選択中の開催場</div>
-                                    <div id="selectorVenueSummary" class="selector-summary-value" th:text="${selectedVenue} ?: '未選択'">未選択</div>
+                                    <div class="selector-summary-label">驕ｸ謚樔ｸｭ縺ｮ髢句ぎ蝣ｴ</div>
+                                    <div id="selectorVenueSummary" class="selector-summary-value" th:text="${selectedVenue} ?: '譛ｪ驕ｸ謚・">譛ｪ驕ｸ謚・/div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="selector-summary-card h-100">
-                                    <div class="selector-summary-label">選択中のレース</div>
-                                    <div id="selectorRaceSummary" class="selector-summary-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '未選択'}">未選択</div>
+                                    <div class="selector-summary-label">驕ｸ謚樔ｸｭ縺ｮ繝ｬ繝ｼ繧ｹ</div>
+                                    <div id="selectorRaceSummary" class="selector-summary-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + '繝ｬ繝ｼ繧ｹ' : '譛ｪ驕ｸ謚・}">譛ｪ驕ｸ謚・/div>
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <div id="selectionSummary" class="selector-note p-3">レース場とレース番号を選ぶと、次に確認する内容や記録への入口が分かりやすくまとまります。</div>
+                                <div id="selectionSummary" class="selector-note p-3">繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ縺ｨ縲∵ｬ｡縺ｫ遒ｺ隱阪☆繧句・螳ｹ繧・ｨ倬鹸縺ｸ縺ｮ蜈･蜿｣縺悟・縺九ｊ繧・☆縺上∪縺ｨ縺ｾ繧翫∪縺吶・/div>
                             </div>
 
                             <div class="col-12">
+                                <div class="selector-summary-label">驕ｸ繧薙□縺ゅ→縺ｫ騾ｲ繧</div>
                                 <div class="record-action-grid">
                                     <a href="https://autoraceapp.onrender.com/records/new" class="btn btn-outline-primary btn-lg record-entry-btn">新規登録</a>
                                     <a href="https://autoraceapp.onrender.com/records" class="btn btn-outline-secondary btn-lg record-entry-btn">記録一覧</a>
@@ -1113,22 +1115,22 @@
                 <div class="desktop-media-layout">
                     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                         <div class="media-heading">
-                            <span class="section-badge mb-2">当日判断</span>
-                            <h2 class="section-title mb-2">PCでは左右2画面で同時に見比べやすくする</h2>
-                            <p class="section-copy mb-0">左に公式動画、右にレース場動画を並べて、同時視聴しやすい構成にしています。下段には外部リンクと小さめのタイマーを分けて置き、見る情報を詰め込みすぎないように整理しています。</p>
+                            <span class="section-badge mb-2">蠖捺律蛻､譁ｭ</span>
+                            <h2 class="section-title mb-2">PC縺ｧ縺ｯ蟾ｦ蜿ｳ2逕ｻ髱｢縺ｧ蜷梧凾縺ｫ隕区ｯ斐∋繧・☆縺上☆繧・/h2>
+                            <p class="section-copy mb-0">蟾ｦ縺ｫ蜈ｬ蠑丞虚逕ｻ縲∝承縺ｫ繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判繧剃ｸｦ縺ｹ縺ｦ縲∝酔譎りｦ冶・縺励ｄ縺吶＞讒区・縺ｫ縺励※縺・∪縺吶ゆｸ区ｮｵ縺ｫ縺ｯ螟夜Κ繝ｪ繝ｳ繧ｯ縺ｨ蟆上＆繧√・繧ｿ繧､繝槭・繧貞・縺代※鄂ｮ縺阪∬ｦ九ｋ諠・ｱ繧定ｩｰ繧∬ｾｼ縺ｿ縺吶℃縺ｪ縺・ｈ縺・↓謨ｴ逅・＠縺ｦ縺・∪縺吶・/p>
                         </div>
-                        <div class="status-chip" data-venue-sync="summary">選択中: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '川口'">川口</span></div>
+                        <div class="status-chip" data-venue-sync="summary">驕ｸ謚樔ｸｭ: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '蟾晏哨'">蟾晏哨</span></div>
                     </div>
 
                     <div class="dual-video-grid mb-4">
                         <div class="video-card p-4">
-                            <div class="video-panel-title mb-1">左: 公式動画</div>
-                            <div class="video-panel-subtitle mb-3">初期表示ではオートレース公式チャンネルのライブ枠を表示します。</div>
+                            <div class="video-panel-title mb-1">蟾ｦ: 蜈ｬ蠑丞虚逕ｻ</div>
+                            <div class="video-panel-subtitle mb-3">蛻晄悄陦ｨ遉ｺ縺ｧ縺ｯ繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ蜈ｬ蠑上メ繝｣繝ｳ繝阪Ν縺ｮ繝ｩ繧､繝匁棧繧定｡ｨ遉ｺ縺励∪縺吶・/div>
                             <div class="youtube-live-shell" data-live-source="official" data-venue-panel="official-video">
                                 <iframe
                                     class="youtube-live-frame"
                                     src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
-                                    title="オートレース公式 YouTubeライブ"
+                                    title="繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ蜈ｬ蠑・YouTube繝ｩ繧､繝・
                                     loading="lazy"
                                     referrerpolicy="strict-origin-when-cross-origin"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1137,21 +1139,21 @@
                         </div>
 
                         <div class="video-card p-4">
-                            <div class="video-panel-title mb-1">右: レース場動画</div>
-                            <div class="video-panel-subtitle mb-3">選択したレース場に合わせてライブ映像を切り替えて確認できます。</div>
+                            <div class="video-panel-title mb-1">蜿ｳ: 繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判</div>
+                            <div class="video-panel-subtitle mb-3">驕ｸ謚槭＠縺溘Ξ繝ｼ繧ｹ蝣ｴ縺ｫ蜷医ｏ縺帙※繝ｩ繧､繝匁丐蜒上ｒ蛻・ｊ譖ｿ縺医※遒ｺ隱阪〒縺阪∪縺吶・/div>
                             <div class="venue-live-block" data-venue-panel="venue-video">
                                 <div class="youtube-live-shell">
                                     <iframe
                                         class="youtube-live-frame"
                                         data-venue-live-frame
-                                        src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
-                                        title="レース場のYouTubeライブ"
+                                        src="about:blank"
+                                        title="レース場ライブ動画"
                                         loading="lazy"
                                         referrerpolicy="strict-origin-when-cross-origin"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                         allowfullscreen></iframe>
                                 </div>
-                                <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>レース場を選ぶと、その会場向けのライブ表示に切り替えられます。現在は公式ライブを表示しています。</div>
+                                <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈縺ｶ縺ｨ縲√◎縺ｮ莨壼ｴ蜷代￠縺ｮ繝ｩ繧､繝冶｡ｨ遉ｺ縺ｫ蛻・ｊ譖ｿ縺医ｉ繧後∪縺吶ら樟蝨ｨ縺ｯ蜈ｬ蠑上Λ繧､繝悶ｒ陦ｨ遉ｺ縺励※縺・∪縺吶・/div>
                             </div>
                         </div>
                     </div>
@@ -1159,36 +1161,36 @@
                     <div class="support-layout">
                         <div>
                             <div class="note-card compact-timer-card p-4">
-                                <span class="section-badge mb-2">補助機能</span>
-                                <h2 class="section-title mb-2">タイマーは固定パネルで操作</h2>
-                                <p class="section-copy mb-0">スクロール中や画面切り替え中でも使いやすいように、タイマーは画面右下の小パネルへ移しています。</p>
+                                <span class="section-badge mb-2">陬懷勧讖溯・</span>
+                                <h2 class="section-title mb-2">繧ｿ繧､繝槭・縺ｯ蝗ｺ螳壹ヱ繝阪Ν縺ｧ謫堺ｽ・/h2>
+                                <p class="section-copy mb-0">繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ荳ｭ繧・判髱｢蛻・ｊ譖ｿ縺井ｸｭ縺ｧ繧ゆｽｿ縺・ｄ縺吶＞繧医≧縺ｫ縲√ち繧､繝槭・縺ｯ逕ｻ髱｢蜿ｳ荳九・蟆上ヱ繝阪Ν縺ｸ遘ｻ縺励※縺・∪縺吶・/p>
                             </div>
                         </div>
 
                         <div>
                             <div class="link-card p-4 p-md-5 h-100">
-                                <span class="section-badge mb-2">外部リンク</span>
-                                <h2 class="section-title mb-2">必要なリンクだけを迷わず押せる形に整理</h2>
-                                <p class="section-copy mb-4">公式サイトと公式FANCLUBはそれぞれ1つだけ表示し、会場ごとの外部リンクは文字中心のボタンで読みやすくしています。</p>
+                                <span class="section-badge mb-2">螟夜Κ繝ｪ繝ｳ繧ｯ</span>
+                                <h2 class="section-title mb-2">蠢・ｦ√↑繝ｪ繝ｳ繧ｯ縺縺代ｒ霑ｷ繧上★謚ｼ縺帙ｋ蠖｢縺ｫ謨ｴ逅・/h2>
+                                <p class="section-copy mb-4">蜈ｬ蠑上し繧､繝医→蜈ｬ蠑洲ANCLUB縺ｯ縺昴ｌ縺槭ｌ1縺､縺縺題｡ｨ遉ｺ縺励∽ｼ壼ｴ縺斐→縺ｮ螟夜Κ繝ｪ繝ｳ繧ｯ縺ｯ譁・ｭ嶺ｸｭ蠢・・繝懊ち繝ｳ縺ｧ隱ｭ縺ｿ繧・☆縺上＠縺ｦ縺・∪縺吶・/p>
 
                                 <div class="link-stack mb-4">
                                     <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn">AutoRace.jp</a>
                                     <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
-                                    <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">関連リンクを一覧で見る</a>
+                                    <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">髢｢騾｣繝ｪ繝ｳ繧ｯ繧剃ｸ隕ｧ縺ｧ隕九ｋ</a>
                                 </div>
 
                                 <div class="venue-selector-block">
-                                    <div class="venue-selector-title">レース場を選択する</div>
-                                    <p class="venue-selector-note">選んだレース場に合わせて、色やリンク、動画表示が切り替わる共通ボタンです。</p>
-                                    <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="レース場を選択する">
-                                        <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">川口</a>
+                                    <div class="venue-selector-title">繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・/div>
+                                    <p class="venue-selector-note">驕ｸ繧薙□繝ｬ繝ｼ繧ｹ蝣ｴ縺ｫ蜷医ｏ縺帙※縲∬牡繧・Μ繝ｳ繧ｯ縲∝虚逕ｻ陦ｨ遉ｺ縺悟・繧頑崛繧上ｋ蜈ｱ騾壹・繧ｿ繝ｳ縺ｧ縺吶・/p>
+                                    <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・>
+                                        <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '蟾晏哨' ? 'kawaguchi' : venueName == '莨雁兇蟠・ ? 'isesaki' : venueName == '豬懈收' ? 'hamamatsu' : venueName == '鬟ｯ蝪・ ? 'iizuka' : venueName == '螻ｱ髯ｽ' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">蟾晏哨</a>
                                     </div>
                                 </div>
 
                                 <div class="mobile-link-stack">
-                                    <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">開催場のYouTube</a>
-                                    <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">開催場のInstagram</a>
-                                    <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">開催場のFacebook</a>
+                                    <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">髢句ぎ蝣ｴ縺ｮYouTube</a>
+                                    <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">髢句ぎ蝣ｴ縺ｮInstagram</a>
+                                    <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">髢句ぎ蝣ｴ縺ｮFacebook</a>
                                 </div>
                             </div>
                         </div>
@@ -1196,26 +1198,26 @@
                 </div>
 
                 <div class="mobile-switch-shell d-lg-none">
-                    <span class="section-badge mb-2">当日判断</span>
-                    <h2 class="section-title mb-2">スマホでは切り替えながら動画とリンクを確認する</h2>
-                    <p class="section-copy mb-4">小さい画面でも迷いにくいように、公式情報と開催場情報をボタンで切り替えられる形にしています。必要な情報だけを順番に見ていけるので、移動中でも確認しやすい構成です。</p>
+                    <span class="section-badge mb-2">蠖捺律蛻､譁ｭ</span>
+                    <h2 class="section-title mb-2">繧ｹ繝槭・縺ｧ縺ｯ蛻・ｊ譖ｿ縺医↑縺後ｉ蜍慕判縺ｨ繝ｪ繝ｳ繧ｯ繧堤｢ｺ隱阪☆繧・/h2>
+                    <p class="section-copy mb-4">蟆上＆縺・判髱｢縺ｧ繧りｿｷ縺・↓縺上＞繧医≧縺ｫ縲∝・蠑乗ュ蝣ｱ縺ｨ髢句ぎ蝣ｴ諠・ｱ繧偵・繧ｿ繝ｳ縺ｧ蛻・ｊ譖ｿ縺医ｉ繧後ｋ蠖｢縺ｫ縺励※縺・∪縺吶ょｿ・ｦ√↑諠・ｱ縺縺代ｒ鬆・分縺ｫ隕九※縺・￠繧九・縺ｧ縲∫ｧｻ蜍穂ｸｭ縺ｧ繧ら｢ｺ隱阪＠繧・☆縺・ｧ区・縺ｧ縺吶・/p>
 
-                    <div class="mobile-switch-row mb-3" role="group" aria-label="情報元の切り替え">
-                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">公式情報</button>
-                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">開催場情報</button>
+                    <div class="mobile-switch-row mb-3" role="group" aria-label="諠・ｱ蜈・・蛻・ｊ譖ｿ縺・>
+                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">蜈ｬ蠑乗ュ蝣ｱ</button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">髢句ぎ蝣ｴ諠・ｱ</button>
                     </div>
-                    <div class="mobile-switch-row" role="group" aria-label="表示内容の切り替え">
-                        <button type="button" class="mobile-switch-btn active" data-mobile-content="video">動画</button>
-                        <button type="button" class="mobile-switch-btn" data-mobile-content="link">リンク</button>
+                    <div class="mobile-switch-row" role="group" aria-label="陦ｨ遉ｺ蜀・ｮｹ縺ｮ蛻・ｊ譖ｿ縺・>
+                        <button type="button" class="mobile-switch-btn active" data-mobile-content="video">蜍慕判</button>
+                        <button type="button" class="mobile-switch-btn" data-mobile-content="link">繝ｪ繝ｳ繧ｯ</button>
                     </div>
 
                     <div class="mobile-video-panel active" data-mobile-panel="official-video">
-                        <div class="video-panel-title mb-2">公式動画</div>
+                        <div class="video-panel-title mb-2">蜈ｬ蠑丞虚逕ｻ</div>
                         <div class="youtube-live-shell" data-live-source="official-mobile" data-venue-panel="official-video">
                             <iframe
                                 class="youtube-live-frame"
                                 src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
-                                title="オートレース公式 YouTubeライブ"
+                                title="繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ蜈ｬ蠑・YouTube繝ｩ繧､繝・
                                 loading="lazy"
                                 referrerpolicy="strict-origin-when-cross-origin"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1224,44 +1226,44 @@
                     </div>
 
                     <div class="mobile-video-panel" data-mobile-panel="venue-video">
-                        <div class="video-panel-title mb-2">開催場動画</div>
+                        <div class="video-panel-title mb-2">髢句ぎ蝣ｴ蜍慕判</div>
                         <div class="venue-live-block" data-venue-panel="venue-video">
                             <div class="youtube-live-shell">
                                 <iframe
                                     class="youtube-live-frame"
                                     data-venue-live-frame
-                                    src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
-                                    title="開催場のYouTubeライブ"
+                                    src="about:blank"
+                                    title="レース場ライブ動画"
                                     loading="lazy"
                                     referrerpolicy="strict-origin-when-cross-origin"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     allowfullscreen></iframe>
                             </div>
-                            <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>開催場を選ぶと、その会場向けのライブ表示に切り替えられます。現在は公式ライブを表示しています。</div>
+                            <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>髢句ぎ蝣ｴ繧帝∈縺ｶ縺ｨ縲√◎縺ｮ莨壼ｴ蜷代￠縺ｮ繝ｩ繧､繝冶｡ｨ遉ｺ縺ｫ蛻・ｊ譖ｿ縺医ｉ繧後∪縺吶ら樟蝨ｨ縺ｯ蜈ｬ蠑上Λ繧､繝悶ｒ陦ｨ遉ｺ縺励※縺・∪縺吶・/div>
                         </div>
                     </div>
 
                     <div class="mobile-link-panel" data-mobile-panel="official-link">
-                        <div class="fw-bold mb-3 soft-strong">公式リンク</div>
+                        <div class="fw-bold mb-3 soft-strong">蜈ｬ蠑上Μ繝ｳ繧ｯ</div>
                         <div class="mobile-link-stack">
                             <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn">AutoRace.jp</a>
                             <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
-                            <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">関連リンクを一覧で見る</a>
+                            <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">髢｢騾｣繝ｪ繝ｳ繧ｯ繧剃ｸ隕ｧ縺ｧ隕九ｋ</a>
                         </div>
                     </div>
 
                     <div class="mobile-link-panel" data-mobile-panel="venue-link">
                         <div class="venue-selector-block">
-                            <div class="venue-selector-title">レース場を選択する</div>
-                            <p class="venue-selector-note">スマホでも押しやすいように、5場を同じ並びでまとめています。</p>
-                            <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="レース場を選択する">
-                                <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">川口</a>
+                            <div class="venue-selector-title">繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・/div>
+                            <p class="venue-selector-note">繧ｹ繝槭・縺ｧ繧よ款縺励ｄ縺吶＞繧医≧縺ｫ縲・蝣ｴ繧貞酔縺倅ｸｦ縺ｳ縺ｧ縺ｾ縺ｨ繧√※縺・∪縺吶・/p>
+                            <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・>
+                                <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '蟾晏哨' ? 'kawaguchi' : venueName == '莨雁兇蟠・ ? 'isesaki' : venueName == '豬懈收' ? 'hamamatsu' : venueName == '鬟ｯ蝪・ ? 'iizuka' : venueName == '螻ｱ髯ｽ' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">蟾晏哨</a>
                             </div>
                         </div>
                         <div class="mobile-link-stack">
-                            <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">開催場のYouTube</a>
-                            <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">開催場のInstagram</a>
-                            <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">開催場のFacebook</a>
+                            <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">髢句ぎ蝣ｴ縺ｮYouTube</a>
+                            <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">髢句ぎ蝣ｴ縺ｮInstagram</a>
+                            <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">髢句ぎ蝣ｴ縺ｮFacebook</a>
                         </div>
                     </div>
 
@@ -1269,27 +1271,27 @@
             </section>
 
             <section id="glossary-search" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">用語検索・確認</span>
-                <h2 class="section-title mb-2">わからない言葉をすぐ調べる</h2>
-                <p class="section-copy mb-4">オートレース用語をその場で調べておくと、当日の判断で迷いにくくなります。</p>
+                <span class="section-badge mb-2">逕ｨ隱樊､懃ｴ｢繝ｻ遒ｺ隱・/span>
+                <h2 class="section-title mb-2">繧上°繧峨↑縺・ｨ闡峨ｒ縺吶＄隱ｿ縺ｹ繧・/h2>
+                <p class="section-copy mb-4">繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ逕ｨ隱槭ｒ縺昴・蝣ｴ縺ｧ隱ｿ縺ｹ縺ｦ縺翫￥縺ｨ縲∝ｽ捺律縺ｮ蛻､譁ｭ縺ｧ霑ｷ縺・↓縺上￥縺ｪ繧翫∪縺吶・/p>
                 <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
                     <div class="col-lg-9">
-                        <label for="glossaryQuery" class="form-label fw-semibold">検索キーワード</label>
-                        <input id="glossaryQuery" type="text" name="q" class="form-control form-control-lg" placeholder="例: 試走 / オッズ / 走路状況">
+                        <label for="glossaryQuery" class="form-label fw-semibold">讀懃ｴ｢繧ｭ繝ｼ繝ｯ繝ｼ繝・/label>
+                        <input id="glossaryQuery" type="text" name="q" class="form-control form-control-lg" placeholder="萓・ 隧ｦ襍ｰ / 繧ｪ繝・ぜ / 襍ｰ霍ｯ迥ｶ豕・>
                     </div>
                     <div class="col-lg-3 d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">用語を探す</button>
+                        <button type="submit" class="btn btn-primary btn-lg">逕ｨ隱槭ｒ謗｢縺・/button>
                     </div>
                 </form>
             </section>
 
             <section id="help" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">ヘルプ</span>
-                <h2 class="section-title mb-2">TOPページの流れ</h2>
-                <p class="section-copy mb-0">会場とレース番号を選び、動画と外部リンクで当日の判断材料を確認し、そのあと記録や振り返りへ進む流れを想定しています。情報を一度に詰め込みすぎず、スマホでも順番に見やすい構成にしています。</p>
+                <span class="section-badge mb-2">繝倥Ν繝・/span>
+                <h2 class="section-title mb-2">TOP繝壹・繧ｸ縺ｮ豬√ｌ</h2>
+                <p class="section-copy mb-0">莨壼ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｳ縲∝虚逕ｻ縺ｨ螟夜Κ繝ｪ繝ｳ繧ｯ縺ｧ蠖捺律縺ｮ蛻､譁ｭ譚先侭繧堤｢ｺ隱阪＠縲√◎縺ｮ縺ゅ→險倬鹸繧・険繧願ｿ斐ｊ縺ｸ騾ｲ繧豬√ｌ繧呈Φ螳壹＠縺ｦ縺・∪縺吶よュ蝣ｱ繧剃ｸ蠎ｦ縺ｫ隧ｰ繧∬ｾｼ縺ｿ縺吶℃縺壹√せ繝槭・縺ｧ繧る・分縺ｫ隕九ｄ縺吶＞讒区・縺ｫ縺励※縺・∪縺吶・/p>
             </section>
 
-            <div class="home-footer-note pb-2">© Auto Race Support App</div>
+            <div class="home-footer-note pb-2">ﾂｩ Auto Race Support App</div>
         </main>
 
         <div id="floatingTimerPanel" class="floating-timer-panel is-collapsed" data-panel-open="false">
@@ -1317,7 +1319,7 @@
                         <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="60">1分</button>
                     </div>
                     <div class="timer-action-row">
-                        <button type="button" class="btn btn-outline-secondary timer-stop-btn" data-timer-stop>タイマー停止</button>
+                        <button type="button" class="btn btn-outline-secondary timer-stop-btn" data-timer-stop>停止</button>
                     </div>
                 </div>
             </div>
@@ -1339,7 +1341,7 @@
                 return;
             }
 
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "開催場未選択";
+            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "レース場未選択";
             const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "レース番号未選択";
 
             summary.textContent = venueText + " / " + raceText + " を選択中です。";
@@ -1360,8 +1362,8 @@
             const currentRaceNumberLabel = document.getElementById("currentRaceNumberLabel");
             const selectedVenueChip = document.getElementById("selectedVenueChip");
 
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "川口";
-            const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "8レース";
+            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "蟾晏哨";
+            const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "繝ｬ繝ｼ繧ｹ" : "8繝ｬ繝ｼ繧ｹ";
 
             if (currentVenueLabel) {
                 currentVenueLabel.textContent = venueText;
@@ -1423,7 +1425,7 @@
             const selectedOption = venueSelect.options[venueSelect.selectedIndex];
             return {
                 name: venueSelect.value || "",
-                videoKey: venueSelect.value || "",
+                videoKey: selectedOption && selectedOption.dataset.themeKey ? selectedOption.dataset.themeKey : "",
                 themeKey: selectedOption && selectedOption.dataset.themeKey ? selectedOption.dataset.themeKey : ""
             };
         }
@@ -1451,37 +1453,61 @@
             body.dataset.selectedThemeKey = venueContext.themeKey || "";
         }
 
-        const defaultVenueLiveUrl = "https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA";
-        const racePlaceVideoMap = {
-            "川口": {
+        const venueYoutubeLives = {
+            kawaguchi: {
                 label: "川口オート",
-                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
-                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+                youtubeUrl: ""
             },
-            "伊勢崎": {
+            isesaki: {
                 label: "伊勢崎オート",
-                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
-                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+                youtubeUrl: ""
             },
-            "浜松": {
+            hamamatsu: {
                 label: "浜松オート",
-                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
-                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+                youtubeUrl: ""
             },
-            "飯塚": {
+            iizuka: {
                 label: "飯塚オート",
-                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
-                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+                youtubeUrl: ""
             },
-            "山陽": {
+            sanyo: {
                 label: "山陽オート",
-                youtubeWatchUrl: "https://www.youtube.com/watch?v=ここ",
-                youtubeEmbedUrl: "https://www.youtube.com/embed/ここ"
+                youtubeUrl: ""
             }
         };
 
+        const venueLivePlaceholderUrl = "about:blank";
+
+        function resolveVenueLiveEmbedUrl(youtubeUrl) {
+            if (!youtubeUrl) {
+                return venueLivePlaceholderUrl;
+            }
+
+            if (youtubeUrl.includes("/embed/")) {
+                return youtubeUrl;
+            }
+
+            try {
+                const parsedUrl = new URL(youtubeUrl);
+                const videoId = parsedUrl.searchParams.get("v");
+
+                if (videoId) {
+                    return "https://www.youtube.com/embed/" + videoId;
+                }
+
+                if (parsedUrl.hostname.includes("youtu.be")) {
+                    const shortId = parsedUrl.pathname.replace(/^\/+/, "");
+                    return shortId ? "https://www.youtube.com/embed/" + shortId : venueLivePlaceholderUrl;
+                }
+            } catch (error) {
+                return venueLivePlaceholderUrl;
+            }
+
+            return venueLivePlaceholderUrl;
+        }
+
         function updateVenueLinkedPanels(venueContext) {
-            const venueVideoConfig = venueContext.videoKey ? racePlaceVideoMap[venueContext.videoKey] : null;
+            const venueVideoConfig = venueContext.videoKey ? venueYoutubeLives[venueContext.videoKey] : null;
 
             document.querySelectorAll("[data-venue-panel='venue-video']").forEach(function (panel) {
                 panel.dataset.selectedVenue = venueContext.name || "";
@@ -1489,8 +1515,9 @@
 
                 const liveFrame = panel.querySelector("[data-venue-live-frame]");
                 const liveNote = panel.querySelector("[data-venue-live-note]");
-                const venueLiveUrl = venueVideoConfig && venueVideoConfig.youtubeEmbedUrl ? venueVideoConfig.youtubeEmbedUrl : "";
-                const resolvedLiveUrl = venueLiveUrl && !venueLiveUrl.includes("REPLACE_") ? venueLiveUrl : defaultVenueLiveUrl;
+                const venueLiveUrl = venueVideoConfig && venueVideoConfig.youtubeUrl ? venueVideoConfig.youtubeUrl : "";
+                const resolvedLiveUrl = resolveVenueLiveEmbedUrl(venueLiveUrl);
+                const hasConfiguredUrl = resolvedLiveUrl !== venueLivePlaceholderUrl;
 
                 if (liveFrame) {
                     if (liveFrame.src !== resolvedLiveUrl) {
@@ -1498,16 +1525,16 @@
                     }
                     liveFrame.title = venueVideoConfig && venueVideoConfig.label
                         ? venueVideoConfig.label + "のYouTubeライブ"
-                        : "レース場のYouTubeライブ";
+                        : "レース場ライブ動画";
                 }
 
                 if (liveNote) {
-                    if (venueContext.name && venueVideoConfig && venueLiveUrl && !venueLiveUrl.includes("REPLACE_")) {
+                    if (venueContext.name && venueVideoConfig && hasConfiguredUrl) {
                         liveNote.textContent = venueVideoConfig.label + "のYouTubeライブを表示しています。";
                     } else if (venueContext.name) {
-                        liveNote.textContent = venueContext.name + "のYouTube URLはまだテンプレートのままです。外部リンクページと同じ想定で、`racePlaceVideoMap` のURLを差し替えると会場別ライブへ切り替わります。";
+                        liveNote.textContent = venueContext.name + "のYouTube URLはまだ未設定です。`venueYoutubeLives` のURLを差し替えると、この枠へライブを表示できます。";
                     } else {
-                        liveNote.textContent = "レース場を選ぶと、各会場のYouTubeライブへ切り替えられます。";
+                        liveNote.textContent = "レース場を選ぶと、右側の動画枠がその会場のYouTubeライブに切り替わります。";
                     }
                 }
             });
@@ -1523,6 +1550,45 @@
             updateCurrentRaceDisplay();
             applyVenueTheme(venueContext);
             updateVenueLinkedPanels(venueContext);
+        }
+
+        function setupPredictionPrepCopy() {
+            const prepSection = document.getElementById("predictionPrepSection");
+            const selectionSummary = document.getElementById("selectionSummary");
+            const newRecordButton = document.querySelector(".record-action-grid a[href='https://autoraceapp.onrender.com/records/new']");
+            const recordsButton = document.querySelector(".record-action-grid a[href='https://autoraceapp.onrender.com/records']");
+
+            if (prepSection) {
+                const badge = prepSection.querySelector(".section-badge");
+                const title = prepSection.querySelector(".section-title");
+                const copy = prepSection.querySelector(".section-copy");
+                const helper = prepSection.querySelector(".helper-copy");
+
+                if (badge) {
+                    badge.textContent = "莠域Φ貅門ｙ";
+                }
+                if (title) {
+                    title.textContent = "繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ蝣ｴ謇";
+                }
+                if (copy) {
+                    copy.textContent = "縺薙％縺ｧ縺ｯ譛蛻昴↓隕九ｋ繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｳ縺ｾ縺吶る∈謚槭ｒ蜈医↓豎ｺ繧√※縺翫￥縺ｨ縲√％縺ｮ縺ゅ→遒ｺ隱阪☆繧句虚逕ｻ繧・Μ繝ｳ繧ｯ縲∬ｨ倬鹸縺ｸ縺ｮ騾ｲ縺ｿ蜈医′蛻・°繧翫ｄ縺吶￥縺ｪ繧翫∪縺吶・;
+                }
+                if (helper) {
+                    helper.textContent = "荳翫°繧蛾・↓驕ｸ縺ｶ縺縺代〒螟ｧ荳亥､ｫ縺ｧ縺吶る∈繧薙□蜀・ｮｹ縺ｯ縺吶＄荳九・遒ｺ隱肴ｬ・↓蜿肴丐縺輔ｌ縲√◎縺ｮ縺ｾ縺ｾ險倬鹸蜈･蜉帙ｄ險倬鹸荳隕ｧ縺ｸ騾ｲ繧√∪縺吶・;
+                }
+            }
+
+            if (selectionSummary) {
+                selectionSummary.textContent = "繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ縺ｨ縲∵ｬ｡縺ｫ隕九ｋ蜀・ｮｹ縺ｨ騾ｲ縺ｿ蜈医′蛻・°繧翫ｄ縺吶￥縺ｾ縺ｨ縺ｾ繧翫∪縺吶・;
+            }
+
+            if (newRecordButton) {
+                newRecordButton.textContent = "譁ｰ隕冗匳骭ｲ";
+            }
+
+            if (recordsButton) {
+                recordsButton.textContent = "險倬鹸荳隕ｧ";
+            }
         }
 
         function formatCountdownTime(totalSeconds) {
@@ -1569,19 +1635,6 @@
                 }
             }
 
-            function setPanelOpen(nextOpen) {
-                if (!timerPanel || !toggleButton) {
-                    return;
-                }
-
-                panelOpen = nextOpen;
-                timerPanel.classList.toggle("is-collapsed", !nextOpen);
-                timerPanel.dataset.panelOpen = nextOpen ? "true" : "false";
-                toggleButton.textContent = nextOpen ? "閉じる" : "開く";
-                toggleButton.setAttribute("aria-expanded", nextOpen ? "true" : "false");
-                writeTimerState();
-            }
-
             function getTimerLabel(totalSeconds) {
                 return Math.floor(totalSeconds / 60) + "分";
             }
@@ -1595,6 +1648,19 @@
                 });
             }
 
+            function setPanelOpen(nextOpen) {
+                if (!timerPanel || !toggleButton) {
+                    return;
+                }
+
+                panelOpen = nextOpen;
+                timerPanel.classList.toggle("is-collapsed", !nextOpen);
+                timerPanel.dataset.panelOpen = nextOpen ? "true" : "false";
+                toggleButton.textContent = nextOpen ? "閉じる" : "開く";
+                toggleButton.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+                writeTimerState();
+            }
+
             function setRunningState(isRunning) {
                 timerButtons.forEach(function (button) {
                     const buttonSeconds = Number(button.dataset.timerSeconds);
@@ -1604,6 +1670,7 @@
                     button.classList.toggle("btn-outline-primary", !isActive);
                     button.setAttribute("aria-pressed", isActive ? "true" : "false");
                 });
+
                 stopButtons.forEach(function (button) {
                     button.disabled = !isRunning;
                 });
@@ -1615,13 +1682,14 @@
                         select.value = changedSelect.value;
                     }
                 });
+                writeTimerState();
             }
 
             function finishTimer() {
                 countdownId = null;
                 timerEndAt = null;
                 setRunningState(false);
-                setTimerText("00:00", getTimerLabel(activeTimerSeconds) + "のタイマーが終了しました。バイブでお知らせしました。");
+                setTimerText("00:00", getTimerLabel(activeTimerSeconds) + "タイマーが終了しました。");
                 writeTimerState();
 
                 if (navigator.vibrate) {
@@ -1634,10 +1702,26 @@
                     window.clearInterval(countdownId);
                     countdownId = null;
                 }
+
                 timerEndAt = null;
                 remainingSeconds = activeTimerSeconds;
                 setRunningState(false);
-                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のタイマーを停止しました。");
+                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "タイマーを停止しました。");
+                writeTimerState();
+            }
+
+            function tickTimer() {
+                remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
+
+                if (remainingSeconds <= 0) {
+                    if (countdownId !== null) {
+                        window.clearInterval(countdownId);
+                    }
+                    finishTimer();
+                    return;
+                }
+
+                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "タイマー動作中です。");
                 writeTimerState();
             }
 
@@ -1646,7 +1730,7 @@
                 remainingSeconds = timerSeconds;
                 timerEndAt = Date.now() + (timerSeconds * 1000);
                 setRunningState(true);
-                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(timerSeconds) + "のカウントダウン中です。");
+                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(timerSeconds) + "タイマー動作中です。");
                 setPanelOpen(true);
                 writeTimerState();
 
@@ -1654,18 +1738,7 @@
                     window.clearInterval(countdownId);
                 }
 
-                countdownId = window.setInterval(function () {
-                    remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
-
-                    if (remainingSeconds <= 0) {
-                        window.clearInterval(countdownId);
-                        finishTimer();
-                        return;
-                    }
-
-                    setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のカウントダウン中です。");
-                    writeTimerState();
-                }, 1000);
+                countdownId = window.setInterval(tickTimer, 1000);
             }
 
             strengthSelects.forEach(function (select) {
@@ -1693,6 +1766,7 @@
             const savedState = readTimerState();
             if (savedState && strengthSelects[0] && savedState.strength) {
                 strengthSelects[0].value = String(savedState.strength);
+                syncStrengthSelects(strengthSelects[0]);
             }
             if (savedState && typeof savedState.panelOpen === "boolean") {
                 panelOpen = savedState.panelOpen;
@@ -1705,22 +1779,9 @@
 
             if (savedState && savedState.endAt && Number(savedState.endAt) > Date.now()) {
                 timerEndAt = Number(savedState.endAt);
-                remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
                 setRunningState(true);
-                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のカウントダウン中です。");
-
-                countdownId = window.setInterval(function () {
-                    remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
-
-                    if (remainingSeconds <= 0) {
-                        window.clearInterval(countdownId);
-                        finishTimer();
-                        return;
-                    }
-
-                    setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "のカウントダウン中です。");
-                    writeTimerState();
-                }, 1000);
+                tickTimer();
+                countdownId = window.setInterval(tickTimer, 1000);
                 return;
             }
 
@@ -1742,6 +1803,7 @@
             }
 
             updateSelectionSummary();
+            setupPredictionPrepCopy();
             refreshVenueDrivenUi();
             updateCurrentClock();
             setupManualTimer();
@@ -1784,3 +1846,5 @@
     </script>
 </body>
 </html>
+
+
