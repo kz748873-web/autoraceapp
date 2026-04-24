@@ -7,6 +7,70 @@
             display: none;
         }
 
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .site-header .container {
+            padding-top: 0.9rem !important;
+            padding-bottom: 0.9rem !important;
+        }
+
+        .site-header-actions {
+            gap: 0.8rem !important;
+        }
+
+        .site-header-actions > .d-flex {
+            width: 100%;
+        }
+
+        .site-header-nav {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            gap: 0.7rem !important;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.2rem 0.1rem 0.45rem;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .site-header-nav::-webkit-scrollbar {
+            height: 0.42rem;
+        }
+
+        .site-header-nav::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--border-color) 78%, white);
+            border-radius: 999px;
+        }
+
+        .site-header-nav .btn {
+            flex: 0 0 auto;
+            min-height: 3.15rem;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.08);
+        }
+
+        .site-header-nav .btn:not(:first-child) {
+            background: #ffffff !important;
+            color: var(--theme-text) !important;
+            border-color: color-mix(in srgb, var(--border-color) 70%, white) !important;
+        }
+
+        .site-header-nav .btn:not(:first-child):hover,
+        .site-header-nav .btn:not(:first-child):focus {
+            background: var(--surface-tint) !important;
+            color: var(--accent-color) !important;
+            border-color: var(--main-color) !important;
+        }
+
         .hero-panel,
         .current-race-panel,
         .flow-card,
@@ -23,11 +87,15 @@
         }
 
         body {
-            --main-color: var(--brand-strong);
-            --accent-color: var(--deep);
-            --border-color: color-mix(in srgb, var(--main-color) 30%, white);
-            --surface-tint: color-mix(in srgb, var(--main-color) 14%, white);
+            --main-color: #84acd9;
+            --accent-color: #1f4f83;
+            --border-color: #cbdced;
+            --surface-tint: #edf5fd;
             --main-color-text: #ffffff;
+            --hero-panel-bg: rgba(255, 255, 255, 0.9);
+            --hero-panel-text: #18324f;
+            --hero-panel-border: rgba(255, 255, 255, 0.92);
+            --hero-stage-overlay: linear-gradient(135deg, rgba(13, 39, 67, 0.48), rgba(13, 39, 67, 0.16));
         }
 
         body.theme-kawaguchi {
@@ -36,6 +104,7 @@
             --border-color: #e9b5cf;
             --surface-tint: #f9e1eb;
             --main-color-text: #ffffff;
+            --hero-stage-overlay: linear-gradient(135deg, rgba(139, 44, 91, 0.52), rgba(217, 106, 160, 0.18));
         }
 
         body.theme-isesaki {
@@ -44,6 +113,7 @@
             --border-color: #c4cad2;
             --surface-tint: #e5e9ee;
             --main-color-text: #ffffff;
+            --hero-stage-overlay: linear-gradient(135deg, rgba(47, 54, 64, 0.54), rgba(73, 81, 92, 0.2));
         }
 
         body.theme-hamamatsu {
@@ -52,6 +122,7 @@
             --border-color: #c5dbf4;
             --surface-tint: #e3eefb;
             --main-color-text: #ffffff;
+            --hero-stage-overlay: linear-gradient(135deg, rgba(33, 85, 139, 0.52), rgba(77, 143, 214, 0.18));
         }
 
         body.theme-iizuka {
@@ -60,6 +131,7 @@
             --border-color: #ead48b;
             --surface-tint: #fff6d6;
             --main-color-text: #3f3200;
+            --hero-stage-overlay: linear-gradient(135deg, rgba(111, 86, 0, 0.48), rgba(212, 173, 45, 0.16));
         }
 
         body.theme-sanyo {
@@ -68,6 +140,7 @@
             --border-color: #ecc5a6;
             --surface-tint: #fcebdd;
             --main-color-text: #ffffff;
+            --hero-stage-overlay: linear-gradient(135deg, rgba(143, 87, 40, 0.5), rgba(216, 137, 73, 0.16));
         }
 
         .hero-stage {
@@ -75,6 +148,14 @@
             overflow: hidden;
             background: url("https://commons.wikimedia.org/wiki/Special:FilePath/Auto%20Race%20in%20Kawaguchi.jpg") center / cover no-repeat;
             min-height: 320px;
+        }
+
+        .hero-stage::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--hero-stage-overlay);
+            pointer-events: none;
         }
 
         .hero-content {
@@ -91,9 +172,10 @@
 
         .hero-panel,
         .current-race-panel {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--hero-panel-bg);
             box-shadow: 0 1rem 2rem rgba(13, 39, 67, 0.14);
             backdrop-filter: blur(6px);
+            border-color: var(--hero-panel-border);
         }
 
         .hero-panel {
@@ -284,7 +366,7 @@
         }
 
         .selector-card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(240, 246, 252, 0.99));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), color-mix(in srgb, var(--surface-tint) 38%, white));
         }
 
         .selector-summary-card,
@@ -492,6 +574,11 @@
             text-align: center;
             background: #ffffff;
             border-width: 1px;
+            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.06);
+        }
+
+        .venue-selector-btn.btn-primary {
+            box-shadow: 0 0.85rem 1.35rem color-mix(in srgb, var(--main-color) 22%, transparent);
         }
 
         .mobile-switch-shell {
@@ -516,6 +603,17 @@
             background: var(--main-color);
             border-color: color-mix(in srgb, var(--main-color) 78%, black);
             color: var(--main-color-text);
+        }
+
+        .site-header-nav .btn:first-child,
+        .site-header-nav .btn:first-child:hover,
+        .site-header-nav .btn:first-child:focus {
+            background: var(--surface-tint) !important;
+            color: var(--accent-color) !important;
+            border-color: var(--main-color) !important;
+            box-shadow:
+                inset 0 0 0 1px color-mix(in srgb, var(--main-color) 24%, transparent),
+                0 0.55rem 1.15rem color-mix(in srgb, var(--main-color) 16%, transparent);
         }
 
         body .btn-primary {
@@ -774,6 +872,11 @@
         }
 
         @media (max-width: 991.98px) {
+            .site-header .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
             .hero-layout,
             .basic-actions-layout,
             .support-layout,
@@ -840,6 +943,17 @@
         }
 
         @media (max-width: 575.98px) {
+            .site-header-nav {
+                gap: 0.6rem !important;
+                padding-bottom: 0.35rem;
+            }
+
+            .site-header-nav .btn {
+                min-height: 3rem;
+                padding: 0.82rem 1rem;
+                font-size: 0.98rem;
+            }
+
             .record-action-grid,
             .venue-quick-grid,
             .venue-selector-grid {
@@ -859,7 +973,7 @@
         }
     </style>
 </head>
-<body>
+<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : ${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : ${selectedVenue == '浜松'} ? ' theme-hamamatsu' : ${selectedVenue == '飯塚'} ? ' theme-iizuka' : ${selectedVenue == '山陽'} ? ' theme-sanyo' : ''">
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
         <a href="#image-switch-entry" class="utility-entry-btn image-switch-entry-btn" aria-label="画像切り替え">
