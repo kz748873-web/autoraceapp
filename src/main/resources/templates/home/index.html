@@ -1,7 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{layout/base :: commonHead('TOP繝壹・繧ｸ | 繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ莠域Φ陬懷勧繧｢繝励Μ')}"></th:block>
+    <th:block th:replace="~{layout/base :: commonHead('TOPページ | オートレース予想補助アプリ')}"></th:block>
     <style>
         .site-header .app-theme-toolbar {
             display: none;
@@ -13,19 +13,6 @@
             z-index: 1030;
         }
 
-        .site-header .container {
-            padding-top: 0.9rem !important;
-            padding-bottom: 0.9rem !important;
-        }
-
-        .site-header-actions {
-            gap: 0.8rem !important;
-        }
-
-        .site-header-actions > .d-flex {
-            width: 100%;
-        }
-
         .site-header-nav {
             display: flex !important;
             flex-wrap: nowrap !important;
@@ -33,57 +20,26 @@
             width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 0.2rem 0.1rem 0.45rem;
+            padding: 0.15rem 0 0.35rem;
             scrollbar-width: thin;
             -webkit-overflow-scrolling: touch;
         }
 
-        .site-header-nav::-webkit-scrollbar {
-            height: 0.42rem;
-        }
-
-        .site-header-nav::-webkit-scrollbar-thumb {
-            background: color-mix(in srgb, var(--border-color) 78%, white);
-            border-radius: 999px;
-        }
-
         .site-header-nav .btn {
             flex: 0 0 auto;
-            min-height: 3.15rem;
-            padding: 0.9rem 1.2rem;
+            min-height: 3rem;
+            padding: 0.82rem 1rem;
             border-radius: 1rem;
-            font-size: 1rem;
-            font-weight: 700;
             white-space: nowrap;
-            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.08);
+            font-size: 0.98rem;
+            font-weight: 700;
         }
 
-        .site-header-nav .btn:not(:first-child) {
-            background: #ffffff !important;
-            color: var(--theme-text) !important;
-            border-color: color-mix(in srgb, var(--border-color) 70%, white) !important;
-        }
-
-        .site-header-nav .btn:not(:first-child):hover,
-        .site-header-nav .btn:not(:first-child):focus {
-            background: var(--surface-tint) !important;
-            color: var(--accent-color) !important;
-            border-color: var(--main-color) !important;
-        }
-
-        .hero-panel,
-        .current-race-panel,
-        .flow-card,
-        .selector-card,
-        .video-card,
-        .link-card,
-        .timer-card,
-        .note-card,
-        .mobile-switch-shell,
-        .mobile-link-panel,
-        .mobile-video-panel {
-            border: 1px solid var(--card);
-            border-radius: 1.25rem;
+        .site-header-nav .btn[href="/"],
+        .site-header-nav .btn[href="/home"] {
+            background: var(--surface-tint, #edf5fd) !important;
+            color: var(--accent-color, #1f4f83) !important;
+            border-color: var(--main-color, #84acd9) !important;
         }
 
         body {
@@ -92,10 +48,6 @@
             --border-color: #cbdced;
             --surface-tint: #edf5fd;
             --main-color-text: #ffffff;
-            --hero-panel-bg: rgba(255, 255, 255, 0.9);
-            --hero-panel-text: #18324f;
-            --hero-panel-border: rgba(255, 255, 255, 0.92);
-            --hero-stage-overlay: linear-gradient(135deg, rgba(13, 39, 67, 0.48), rgba(13, 39, 67, 0.16));
         }
 
         body.theme-kawaguchi {
@@ -104,7 +56,6 @@
             --border-color: #e9b5cf;
             --surface-tint: #f9e1eb;
             --main-color-text: #ffffff;
-            --hero-stage-overlay: linear-gradient(135deg, rgba(139, 44, 91, 0.52), rgba(217, 106, 160, 0.18));
         }
 
         body.theme-isesaki {
@@ -113,7 +64,6 @@
             --border-color: #c4cad2;
             --surface-tint: #e5e9ee;
             --main-color-text: #ffffff;
-            --hero-stage-overlay: linear-gradient(135deg, rgba(47, 54, 64, 0.54), rgba(73, 81, 92, 0.2));
         }
 
         body.theme-hamamatsu {
@@ -122,7 +72,6 @@
             --border-color: #c5dbf4;
             --surface-tint: #e3eefb;
             --main-color-text: #ffffff;
-            --hero-stage-overlay: linear-gradient(135deg, rgba(33, 85, 139, 0.52), rgba(77, 143, 214, 0.18));
         }
 
         body.theme-iizuka {
@@ -131,7 +80,6 @@
             --border-color: #ead48b;
             --surface-tint: #fff6d6;
             --main-color-text: #3f3200;
-            --hero-stage-overlay: linear-gradient(135deg, rgba(111, 86, 0, 0.48), rgba(212, 173, 45, 0.16));
         }
 
         body.theme-sanyo {
@@ -140,649 +88,126 @@
             --border-color: #ecc5a6;
             --surface-tint: #fcebdd;
             --main-color-text: #ffffff;
-            --hero-stage-overlay: linear-gradient(135deg, rgba(143, 87, 40, 0.5), rgba(216, 137, 73, 0.16));
-        }
-
-        .hero-stage {
-            position: relative;
-            overflow: hidden;
-            background: url("https://commons.wikimedia.org/wiki/Special:FilePath/Auto%20Race%20in%20Kawaguchi.jpg") center / cover no-repeat;
-            min-height: 320px;
-        }
-
-        .hero-stage::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: var(--hero-stage-overlay);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-layout {
-            display: grid;
-            grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.95fr);
-            gap: 1.2rem;
-            align-items: stretch;
-        }
-
-        .hero-panel,
-        .current-race-panel {
-            background: var(--hero-panel-bg);
-            box-shadow: 0 1rem 2rem rgba(13, 39, 67, 0.14);
-            backdrop-filter: blur(6px);
-            border-color: var(--hero-panel-border);
-        }
-
-        .hero-panel {
-            padding: 1.7rem;
-        }
-
-        .current-race-panel {
-            padding: 1.4rem;
-        }
-
-        .hero-badge,
-        .flow-step,
-        .status-chip {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 999px;
-            font-weight: 700;
-        }
-
-        .hero-badge {
-            padding: 0.48rem 0.88rem;
-            font-size: 0.93rem;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.95);
-            color: var(--hero-panel-text);
-        }
-
-        .page-title {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 800;
-            line-height: 1.25;
-            color: var(--hero-panel-text);
-        }
-
-        .lead-text,
-        .section-copy,
-        .current-race-help,
-        .helper-copy,
-        .home-footer-note {
-            color: var(--sub);
-            line-height: 1.75;
-        }
-
-        .lead-text {
-            font-size: 1.02rem;
-            max-width: 42rem;
-        }
-
-        .hero-subinfo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.65rem;
-            margin-top: 1rem;
-        }
-
-        .hero-subinfo-chip {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.45rem 0.8rem;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.84);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            color: var(--deep);
-            font-size: 0.88rem;
-            font-weight: 700;
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.85rem;
-            margin-top: 1.25rem;
-        }
-
-        .hero-action-btn {
-            min-height: 3.2rem;
-            padding-inline: 1.15rem;
-            border-radius: 1rem;
-            font-weight: 700;
-        }
-
-        .flow-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.85rem;
-            margin-top: 1.35rem;
-        }
-
-        .flow-card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-        }
-
-        .flow-step {
-            min-width: 2rem;
-            min-height: 2rem;
-            margin-bottom: 0.65rem;
-            background: var(--surface-tint);
-            color: var(--accent-color);
-        }
-
-        .flow-title {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--deep);
-        }
-
-        .flow-copy {
-            font-size: 0.92rem;
-            color: var(--sub);
-            line-height: 1.65;
-            margin-bottom: 0;
-        }
-
-        .current-race-live {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.36rem 0.72rem;
-            border-radius: 999px;
-            background: var(--surface-tint);
-            color: var(--accent-color);
-            font-size: 0.86rem;
-            font-weight: 700;
-        }
-
-        .current-race-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.85rem;
-            margin-bottom: 0.9rem;
-        }
-
-        .current-race-tile {
-            border-radius: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid var(--border-color);
-        }
-
-        .current-race-label {
-            color: var(--sub);
-            font-size: 0.88rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .current-race-value {
-            font-size: 1.42rem;
-            font-weight: 800;
-            color: var(--deep);
-        }
-
-        .quick-guide {
-            border-top: 1px solid color-mix(in srgb, var(--card) 75%, white);
-            margin-top: 1rem;
-            padding-top: 1rem;
-        }
-
-        .quick-guide-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--sub);
-            margin-bottom: 0.45rem;
-        }
-
-        .quick-guide-list {
-            margin: 0;
-            padding-left: 1.1rem;
-            color: var(--deep);
-        }
-
-        .quick-guide-list li + li {
-            margin-top: 0.35rem;
-        }
-
-        .selector-card,
-        .video-card,
-        .link-card,
-        .timer-card,
-        .note-card,
-        .mobile-switch-shell,
-        .mobile-link-panel,
-        .mobile-video-panel {
-            background: var(--soft-surface);
-            box-shadow: 0 0.95rem 1.8rem rgba(20, 61, 105, 0.08);
-        }
-
-        .selector-card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), color-mix(in srgb, var(--surface-tint) 38%, white));
-        }
-
-        .selector-summary-card,
-        .selector-note,
-        .video-placeholder,
-        .timer-display,
-        .note-placeholder {
-            border-radius: 1rem;
-            border: 1px solid var(--card);
-            background: #ffffff;
-        }
-
-        .selector-summary-card {
-            padding: 1rem;
-        }
-
-        .selector-summary-label {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--sub);
-            margin-bottom: 0.35rem;
-        }
-
-        .selector-summary-value {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--deep);
-        }
-
-        .selector-card .form-select,
-        .selector-card .btn {
-            min-height: 3.35rem;
-        }
-
-        .selector-note,
-        .note-placeholder {
-            color: var(--sub);
-        }
-
-        .video-placeholder,
-        .timer-display,
-        .note-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 1.15rem;
-            color: #2f516f;
-        }
-
-        .video-placeholder {
-            min-height: 300px;
-        }
-
-        .youtube-live-shell {
-            overflow: hidden;
-            border-radius: 1rem;
-            border: 1px solid var(--card);
-            background: #ffffff;
-        }
-
-        .youtube-live-frame {
-            display: block;
-            width: 100%;
-            height: 360px;
-            border: 0;
-            background: #000000;
-        }
-
-        .note-placeholder {
-            min-height: 108px;
-        }
-
-        .timer-display {
-            min-height: 72px;
-            padding: 0.8rem;
-        }
-
-        .timer-clock {
-            font-size: 1.28rem;
-            font-weight: 800;
-            color: var(--deep);
-            letter-spacing: 0.04em;
-        }
-
-        .section-heading {
-            max-width: 36rem;
-            margin-inline: auto;
-        }
-
-        .section-heading.is-balanced {
-            padding-right: 1rem;
-        }
-
-        .basic-actions-layout {
-            display: grid;
-            grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.05fr);
-            gap: 1.8rem;
-            align-items: center;
-        }
-
-        .media-heading {
-            max-width: 42rem;
-        }
-
-        .support-layout {
-            display: grid;
-            grid-template-columns: minmax(260px, 0.63fr) minmax(0, 1.37fr);
-            gap: 1.1rem;
-            align-items: start;
-        }
-
-        .dual-video-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 1rem;
-        }
-
-        .video-panel-title {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: var(--deep);
-        }
-
-        .video-panel-subtitle {
-            font-size: 0.92rem;
-            color: var(--sub);
-        }
-
-        .status-chip {
-            gap: 0.45rem;
-            padding: 0.42rem 0.82rem;
-            border: 1px solid var(--border-color);
-            background: var(--surface-tint);
-            color: var(--accent-color);
-        }
-
-        .link-stack,
-        .mobile-link-stack {
-            display: grid;
-            gap: 0.75rem;
-        }
-
-        .link-text-btn,
-        .venue-quick-btn,
-        .mobile-switch-btn,
-        .official-entry-btn,
-        .record-entry-btn {
-            width: 100%;
-            min-height: 3.15rem;
-            border-radius: 1rem;
-            font-weight: 700;
-        }
-
-        .record-action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.75rem;
-        }
-
-        .link-text-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0.95rem 1rem;
-        }
-
-        .venue-quick-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .venue-selector-block {
-            margin-bottom: 1rem;
-        }
-
-        .venue-selector-title {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--accent-color);
-            margin-bottom: 0.35rem;
-        }
-
-        .venue-selector-note {
-            font-size: 0.9rem;
-            color: var(--sub);
-            line-height: 1.7;
-            margin-bottom: 0.85rem;
-        }
-
-        .venue-selector-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .venue-selector-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 3.3rem;
-            padding: 0.8rem 0.95rem;
-            text-align: center;
-            background: #ffffff;
-            border-width: 1px;
-            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.06);
-        }
-
-        .venue-selector-btn.btn-primary {
-            box-shadow: 0 0.85rem 1.35rem color-mix(in srgb, var(--main-color) 22%, transparent);
-        }
-
-        .mobile-switch-shell {
-            display: none;
-            padding: 1rem;
-        }
-
-        .mobile-switch-row {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.7rem;
-        }
-
-        .mobile-switch-btn {
-            border: 1px solid var(--card);
-            background: #ffffff;
-            color: var(--deep);
-            padding: 0.85rem 0.9rem;
-        }
-
-        .mobile-switch-btn.active {
-            background: var(--main-color);
-            border-color: color-mix(in srgb, var(--main-color) 78%, black);
-            color: var(--main-color-text);
-        }
-
-        .site-header-nav .btn:first-child,
-        .site-header-nav .btn:first-child:hover,
-        .site-header-nav .btn:first-child:focus {
-            background: var(--surface-tint) !important;
-            color: var(--accent-color) !important;
-            border-color: var(--main-color) !important;
-            box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--main-color) 24%, transparent),
-                0 0.55rem 1.15rem color-mix(in srgb, var(--main-color) 16%, transparent);
         }
 
         body .btn-primary {
             background-color: var(--main-color) !important;
-            border-color: color-mix(in srgb, var(--main-color) 82%, black) !important;
-            color: var(--main-color-text) !important;
-        }
-
-        body .btn-primary:hover,
-        body .btn-primary:focus {
-            background-color: color-mix(in srgb, var(--main-color) 88%, black) !important;
-            border-color: color-mix(in srgb, var(--main-color) 78%, black) !important;
+            border-color: var(--main-color) !important;
             color: var(--main-color-text) !important;
         }
 
         body .btn-outline-primary {
             color: var(--accent-color) !important;
             border-color: var(--border-color) !important;
+            background: #ffffff !important;
         }
 
         body .btn-outline-primary:hover,
         body .btn-outline-primary:focus {
-            background-color: var(--surface-tint) !important;
+            background: var(--surface-tint) !important;
             color: var(--accent-color) !important;
-            border-color: color-mix(in srgb, var(--main-color) 70%, white) !important;
+            border-color: var(--main-color) !important;
         }
 
-        .section-badge {
-            border-color: var(--border-color);
-            background: var(--surface-tint);
-            color: var(--accent-color);
-        }
-
-        .section-title,
-        .video-panel-title,
-        .flow-title,
-        .current-race-value,
-        .timer-clock,
-        .timer-setting-label,
-        .soft-strong {
-            color: var(--accent-color);
-        }
-
-        .hero-panel,
-        .current-race-panel,
-        .flow-card,
-        .selector-card,
-        .video-card,
-        .link-card,
-        .timer-card,
-        .note-card,
-        .mobile-switch-shell,
-        .mobile-link-panel,
-        .mobile-video-panel,
-        .current-race-tile,
-        .venue-live-block {
-            border-color: var(--border-color);
-        }
-
-        .selector-summary-card,
-        .selector-note,
-        .video-placeholder,
-        .youtube-live-shell,
-        .timer-display,
-        .note-placeholder,
-        .timer-setting-row {
-            border-color: var(--border-color);
-        }
-
-        .mobile-video-panel,
-        .mobile-link-panel {
-            display: none;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .mobile-video-panel.active,
-        .mobile-link-panel.active {
-            display: block;
-        }
-
-        .compact-timer-card {
-            max-width: 320px;
-        }
-
-        .timer-card.is-compact {
-            padding: 0.95rem 1rem !important;
-        }
-
-        .timer-card.is-compact .section-title {
-            font-size: 1rem;
-            margin-bottom: 0.3rem !important;
-        }
-
-        .timer-card.is-compact .section-copy {
-            font-size: 0.88rem;
-            margin-bottom: 0.65rem !important;
-        }
-
-        .timer-setting-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            padding: 0.55rem 0.75rem;
-            border: 1px dashed var(--card);
-            border-radius: 0.9rem;
+        .top-hero,
+        .section-box {
             background: #ffffff;
-            margin-bottom: 0.65rem;
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
         }
 
-        .timer-setting-label {
-            font-size: 0.88rem;
+        .top-hero {
+            padding: 1.25rem;
+        }
+
+        .section-box {
+            padding: 1.2rem;
+        }
+
+        .section-title {
+            margin: 0 0 0.6rem;
+            color: var(--accent-color);
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--deep);
         }
 
-        .timer-controls {
-            display: grid;
-            gap: 0.7rem;
-            margin-bottom: 0.7rem;
+        .section-note,
+        .summary-text,
+        .link-note {
+            color: #5f6f82;
+            line-height: 1.7;
+            font-size: 0.98rem;
         }
 
-        .timer-button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
-            gap: 0.65rem;
+        .current-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2.4rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: var(--surface-tint);
+            border: 1px solid var(--border-color);
+            color: var(--accent-color);
+            font-weight: 700;
         }
 
-        .timer-action-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.65rem;
+        .selector-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
         }
 
-        .timer-strength-select,
-        .timer-start-btn {
-            min-height: 3.15rem;
+        .live-frame {
+            width: 100%;
+            min-height: 220px;
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
+            background: #f7f9fc;
         }
 
-        .timer-preset-btn,
-        .timer-stop-btn {
-            min-height: 2.95rem;
-            border-radius: 0.95rem;
+        .official-link-grid,
+        .venue-link-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .link-card {
+            display: block;
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .link-card:hover {
+            background: var(--surface-tint);
+        }
+
+        .link-card-title {
+            color: var(--accent-color);
             font-weight: 700;
-        }
-
-        .timer-stop-btn:disabled {
-            opacity: 0.65;
         }
 
         .timer-status {
-            margin-top: 0.55rem;
-            font-size: 0.82rem;
-            color: var(--sub);
+            color: #5f6f82;
+            font-size: 0.94rem;
+            line-height: 1.5;
         }
 
         .floating-timer-panel {
             position: fixed;
-            right: 0.85rem;
-            bottom: calc(0.85rem + env(safe-area-inset-bottom));
-            z-index: 1040;
-            width: min(18.5rem, calc(100vw - 4.5rem));
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 1070;
+            width: min(300px, calc(100vw - 2rem));
             border: 1px solid var(--border-color);
             border-radius: 1rem;
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 0.8rem 1.6rem rgba(15, 23, 42, 0.16);
-            backdrop-filter: blur(8px);
+            background: #ffffff;
+            box-shadow: 0 1rem 2rem rgba(13, 79, 139, 0.16);
+            overflow: hidden;
         }
 
         .floating-timer-panel.is-collapsed .floating-timer-body {
@@ -791,535 +216,223 @@
 
         .floating-timer-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 0.6rem;
-            padding: 0.75rem 0.8rem;
-        }
-
-        .floating-timer-summary {
-            min-width: 0;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            background: var(--surface-tint);
         }
 
         .floating-timer-title {
-            font-size: 0.76rem;
+            color: var(--accent-color);
+            font-size: 0.98rem;
             font-weight: 700;
-            color: var(--sub);
         }
 
-        .floating-timer-header .timer-clock {
-            font-size: 1.3rem;
-            line-height: 1;
+        .timer-clock {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--accent-color);
         }
 
         .floating-timer-body {
-            padding: 0 0.8rem 0.8rem;
-            border-top: 1px solid var(--border-color);
+            padding: 0.9rem;
         }
 
-        .floating-timer-body .timer-controls {
-            margin-bottom: 0.55rem;
-        }
-
-        .timer-toggle-btn {
-            min-width: 2.7rem;
-            min-height: 2.4rem;
-            border-radius: 0.8rem;
-            font-weight: 700;
-            font-size: 0.86rem;
-        }
-
-        .timer-strength-select,
+        .timer-toggle-btn,
         .timer-preset-btn,
-        .timer-stop-btn {
-            font-size: 0.9rem;
-        }
-
+        .timer-stop-btn,
         .timer-strength-select {
-            min-height: 2.8rem;
-            border-radius: 0.85rem;
+            min-height: 2.5rem;
         }
 
-        .timer-preset-btn,
-        .timer-stop-btn {
-            min-height: 2.65rem;
-            border-radius: 0.85rem;
-            padding: 0.55rem 0.7rem;
+        .timer-button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.5rem;
         }
 
         body .floating-memo-wrapper {
-            right: 0.85rem !important;
-            bottom: calc(0.85rem + env(safe-area-inset-bottom) + 3.8rem) !important;
-            z-index: 1045 !important;
+            right: 1rem;
+            z-index: 1080;
         }
 
         body .floating-memo-wrapper > .btn {
-            min-height: 2.75rem;
-            padding: 0.55rem 0.9rem;
-            border-radius: 999px;
-            font-size: 0.92rem;
+            min-height: 2.8rem;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
         }
 
         body .floating-memo-panel {
-            width: min(18.5rem, calc(100vw - 4.5rem)) !important;
-        }
-
-        .soft-strong {
-            color: color-mix(in srgb, var(--deep) 80%, black);
-        }
-
-        #basic-actions,
-        #help {
-            scroll-margin-top: 6rem;
-        }
-
-        @media (max-width: 991.98px) {
-            .site-header .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-
-            .hero-layout,
-            .basic-actions-layout,
-            .support-layout,
-            .dual-video-grid,
-            .flow-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-heading.is-balanced {
-                padding-right: 0;
-            }
-
-            .desktop-media-layout {
-                display: none;
-            }
-
-            .mobile-switch-shell {
-                display: block;
-            }
-
-            .compact-timer-card {
-                max-width: 100%;
-            }
-
-            .floating-timer-panel {
-                right: 0.75rem;
-                bottom: calc(0.75rem + env(safe-area-inset-bottom));
-                left: auto;
-                width: min(17.25rem, calc(100vw - 3.5rem));
-            }
-        }
-
-        @media (max-width: 767.98px) {
-            .current-race-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .video-placeholder {
-                min-height: 220px;
-            }
-
-            .youtube-live-frame {
-                height: 240px;
-            }
-
-            .hero-actions {
-                flex-direction: column;
-            }
-
-            .hero-action-btn {
-                width: 100%;
-            }
+            width: min(320px, calc(100vw - 2rem));
         }
 
         @media (max-width: 575.98px) {
-            .site-header-nav {
-                gap: 0.6rem !important;
-                padding-bottom: 0.35rem;
+            .top-hero,
+            .section-box {
+                padding: 1rem;
             }
 
-            .site-header-nav .btn {
-                min-height: 3rem;
-                padding: 0.82rem 1rem;
-                font-size: 0.98rem;
+            .live-frame {
+                min-height: 200px;
             }
 
             .floating-timer-panel {
-                right: 0.65rem;
-                bottom: calc(0.65rem + env(safe-area-inset-bottom));
-                width: min(16.5rem, calc(100vw - 2.4rem));
+                width: min(280px, calc(100vw - 1.5rem));
+                right: 0.75rem;
+                bottom: 0.75rem;
             }
 
             body .floating-memo-wrapper {
-                right: 0.65rem !important;
+                right: 0.75rem;
             }
 
-            .record-action-grid,
-            .venue-quick-grid,
-            .venue-selector-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-panel,
-            .current-race-panel,
-            .video-card,
-            .link-card,
-            .timer-card,
-            .note-card,
-            .mobile-video-panel,
-            .mobile-link-panel {
-                padding: 1rem !important;
+            .timer-button-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
     </style>
 </head>
-<body th:classappend="${selectedVenue == '蟾晏哨'} ? ' theme-kawaguchi' : ${selectedVenue == '莨雁兇蟠・} ? ' theme-isesaki' : ${selectedVenue == '豬懈收'} ? ' theme-hamamatsu' : ${selectedVenue == '鬟ｯ蝪・} ? ' theme-iizuka' : ${selectedVenue == '螻ｱ髯ｽ'} ? ' theme-sanyo' : ''">
-    <div class="app-shell d-flex flex-column">
+<body>
+    <div class="app-shell">
         <div th:replace="~{layout/header :: siteHeader}"></div>
-        <main class="container py-4 py-md-5 flex-grow-1">
-            <section class="hero-stage page-card p-4 p-md-5 mb-5">
-                <div class="hero-content">
-                    <div class="hero-layout">
-                        <div class="hero-panel">
-                            <div class="hero-badge mb-3">TOP繝壹・繧ｸ</div>
-                            <h2 class="page-title mb-3">莉頑律縺ｮ莠域Φ譚先侭繧偵・幕蛯ｬ蝣ｴ驕ｸ縺ｳ縺九ｉ險倬鹸縺ｾ縺ｧ霑ｷ繧上★縺､縺ｪ縺偵ｋ繝医ャ繝励・繝ｼ繧ｸ縺ｧ縺吶・/h2>
-                            <p class="lead-text mb-0">縺ｾ縺夐幕蛯ｬ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧呈ｱｺ繧√※縲∬ｩｦ襍ｰ蜑榊ｾ後↓隕九◆縺・虚逕ｻ繧・・蠑上Μ繝ｳ繧ｯ繧偵☆縺千｢ｺ隱阪〒縺阪ｋ豬√ｌ縺ｫ謨ｴ縺医※縺・∪縺吶ゅせ繝槭・縺ｧ繧ゆｸ翫°繧蛾・↓霑ｽ縺・□縺代〒縲∽ｺ域Φ縺ｮ荳区ｺ門ｙ縺九ｉ謖ｯ繧願ｿ斐ｊ縺ｾ縺ｧ騾ｲ繧√ｄ縺吶￥縺励※縺・∪縺吶・/p>
 
-                            <div class="hero-subinfo">
-                                <div class="hero-subinfo-chip">繧ｹ繝槭・蜆ｪ蜈医・隕九ｄ縺吶＞蟆守ｷ・/div>
-                                <div class="hero-subinfo-chip">髢句ぎ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ繧偵☆縺仙・譖ｿ</div>
-                                <div class="hero-subinfo-chip">險倬鹸逕ｻ髱｢縺ｸ縺昴・縺ｾ縺ｾ遘ｻ蜍・/div>
-                            </div>
-
-                            <div class="hero-actions">
-                                <a href="#basic-actions" class="btn btn-primary hero-action-btn">莠域Φ縺ｮ貅門ｙ繧貞ｧ九ａ繧・/a>
-                                <a th:href="@{/records/new}" class="btn btn-outline-secondary hero-action-btn">譁ｰ隕剰ｨ倬鹸縺ｸ騾ｲ繧</a>
-                            </div>
-
-                            <div class="flow-grid">
-                                <div class="flow-card">
-                                    <div class="flow-step">1</div>
-                                    <div class="flow-title mb-2">荳区ｺ門ｙ</div>
-                                    <p class="flow-copy">髢句ぎ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ繧貞・縺ｫ豎ｺ繧√※縲∫｢ｺ隱阪＠縺溘＞蟆守ｷ壹ｒ邨槭ｊ霎ｼ縺ｿ縺ｾ縺吶・/p>
-                                </div>
-                                <div class="flow-card">
-                                    <div class="flow-step">2</div>
-                                    <div class="flow-title mb-2">蠖捺律繝√ぉ繝・け</div>
-                                    <p class="flow-copy">蜈ｬ蠑城・菫｡繧・幕蛯ｬ蝣ｴ縺ｮ諠・ｱ繧定ｦ区ｯ斐∋縺ｦ縲∫峩蜑阪・蛻､譁ｭ譚先侭繧帝寔繧√∪縺吶・/p>
-                                </div>
-                                <div class="flow-card">
-                                    <div class="flow-step">3</div>
-                                    <div class="flow-title mb-2">險倬鹸縺ｨ謖ｯ繧願ｿ斐ｊ</div>
-                                    <p class="flow-copy">隕九◆蜀・ｮｹ繧定ｨ倬鹸縺ｫ谿九＠縺ｦ縲∵ｬ｡蝗槭・莠域Φ縺ｫ豢ｻ縺九＠繧・☆縺上＠縺ｾ縺吶・/p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <aside class="current-race-panel">
-                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
-                                <div class="hero-badge mb-0">縺・∪遒ｺ隱堺ｸｭ縺ｮ蟇ｾ雎｡</div>
-                                <div class="current-race-live">迴ｾ蝨ｨ譎ょ綾 <span id="currentRaceNow">--:--:--</span></div>
-                            </div>
-
-                            <div class="current-race-grid">
-                                <div class="current-race-tile">
-                                    <div class="current-race-label">髢句ぎ蝣ｴ</div>
-                                    <div id="currentVenueLabel" class="current-race-value" th:text="${selectedVenue} ?: '蟾晏哨'">蟾晏哨</div>
-                                </div>
-                                <div class="current-race-tile">
-                                    <div class="current-race-label">繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ</div>
-                                    <div id="currentRaceNumberLabel" class="current-race-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + '繝ｬ繝ｼ繧ｹ' : '8繝ｬ繝ｼ繧ｹ'}">8繝ｬ繝ｼ繧ｹ</div>
-                                </div>
-                            </div>
-
-                            <p class="current-race-help mb-0">髢句ぎ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧貞・縺ｫ豎ｺ繧√※縺翫￥縺ｨ縲√％縺ｮ縺ゅ→髢九￥蜍慕判繧・､夜Κ繝ｪ繝ｳ繧ｯ縺ｮ隕九←縺薙ｍ繧呈紛逅・＠繧・☆縺上↑繧翫∪縺吶りｿｷ縺｣縺溘→縺阪・縺ｾ縺壹％縺薙ｒ蜷医ｏ縺帙※縺九ｉ騾ｲ繧√ｋ縺ｮ縺後♀縺吶☆繧√〒縺吶・/p>
-
-                            <div class="quick-guide">
-                                <div class="quick-guide-label">菴ｿ縺・ｧ九ａ縺ｮ鬆・分</div>
-                                <ol class="quick-guide-list">
-                                    <li>莨壼ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ</li>
-                                    <li>蜍慕判縺ｨ蜈ｬ蠑上Μ繝ｳ繧ｯ縺ｧ逶ｴ蜑肴ュ蝣ｱ繧堤｢ｺ隱阪☆繧・/li>
-                                    <li>蠢・ｦ√↑繧画眠隕剰ｨ倬鹸縺ｸ騾ｲ繧薙〒蜀・ｮｹ繧呈ｮ九☆</li>
-                                </ol>
-                            </div>
-                        </aside>
-                    </div>
+        <main class="container py-4 pb-5">
+            <section class="top-hero mb-4">
+                <div class="d-flex flex-column gap-2">
+                    <span class="current-chip">TOPページ</span>
+                    <h2 class="section-title mb-0">レース場とレース番号を選んで次に進めます</h2>
+                    <p class="section-note mb-0">表示復旧を優先した安全構成です。</p>
                 </div>
             </section>
 
-            <section id="basic-actions" class="page-card p-4 p-md-5 mb-5">
-                <div class="basic-actions-layout">
-                    <div class="section-heading is-balanced" id="predictionPrepSection">
-                        <span class="section-badge mb-2">莠域Φ貅門ｙ</span>
-                        <h2 class="section-title mb-2">繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈繧薙〒谺｡縺ｸ騾ｲ繧</h2>
-                        <p class="section-copy mb-3">縺薙・譫縺ｧ縺ｯ縲∬ｦ九ｋ繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧貞・縺ｫ豎ｺ繧√ｉ繧後∪縺吶よ怙蛻昴↓驕ｸ繧薙〒縺翫￥縺ｨ縲√％縺ｮ縺ゅ→縺ｮ諠・ｱ遒ｺ隱阪ｄ險倬鹸蜈･蜉帙∈騾ｲ縺ｿ繧・☆縺上↑繧翫∪縺吶・/p>
-                        <p class="helper-copy mb-0">縺ｾ縺壹・繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈縺ｳ縲∫ｶ壹￠縺ｦ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧貞粋繧上○繧九→縲∵ｬ｡縺ｫ菴ｿ縺・ュ蝣ｱ繧定ｿｷ繧上★隕九▽縺代ｄ縺吶￥縺ｪ繧翫∪縺吶・/p>
-                    </div>
+            <div class="row g-4">
+                <div class="col-12 col-lg-7">
+                    <section class="section-box mb-4">
+                        <h3 class="section-title">予想準備</h3>
+                        <p class="section-note">レース場とレース番号を選ぶ基本操作だけを安全に残しています。</p>
 
-                    <form method="get" th:action="@{/}" class="selector-card p-3 p-md-4">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-md-6">
-                                <label for="venueSelect" class="form-label fw-semibold fs-5">髢句ぎ蝣ｴ</label>
-                                <select id="venueSelect" name="venue" class="form-select form-select-lg">
-                                    <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                    <option
-                                        th:each="venueName : ${venueNames}"
-                                        th:value="${venueName}"
-                                        th:text="${venueName}"
-                                        th:attr="data-theme-key=${venueName == '蟾晏哨' ? 'kawaguchi' : venueName == '莨雁兇蟠・ ? 'isesaki' : venueName == '豬懈收' ? 'hamamatsu' : venueName == '鬟ｯ蝪・ ? 'iizuka' : venueName == '螻ｱ髯ｽ' ? 'sanyo' : ''}">蟾晏哨</option>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="venueSelect" class="form-label fw-semibold">レース場</label>
+                                <select id="venueSelect" class="form-select form-select-lg">
+                                    <option value="">レース場を選択</option>
+                                    <option th:each="venueName : ${venueNames}"
+                                            th:value="${venueName}"
+                                            th:text="${venueName}"
+                                            th:selected="${venueName == selectedVenue}"
+                                            th:attr="data-theme-key=${
+                                                venueName == '川口' ? 'kawaguchi' :
+                                                venueName == '伊勢崎' ? 'isesaki' :
+                                                venueName == '浜松' ? 'hamamatsu' :
+                                                venueName == '飯塚' ? 'iizuka' :
+                                                venueName == '山陽' ? 'sanyo' : ''
+                                            }">川口</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label for="raceNumberSelect" class="form-label fw-semibold fs-5">繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ</label>
-                                <select id="raceNumberSelect" name="raceNumber" class="form-select form-select-lg">
-                                    <option value="">驕ｸ謚槭＠縺ｦ縺上□縺輔＞</option>
-                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + '繝ｬ繝ｼ繧ｹ'}">1繝ｬ繝ｼ繧ｹ</option>
+                            <div class="col-12 col-md-6">
+                                <label for="raceNumberSelect" class="form-label fw-semibold">レース番号</label>
+                                <select id="raceNumberSelect" class="form-select form-select-lg">
+                                    <option value="">レース番号を選択</option>
+                                    <option th:each="raceNumber : ${#numbers.sequence(1, 12)}"
+                                            th:value="${raceNumber}"
+                                            th:text="${raceNumber + 'レース'}">1レース</option>
                                 </select>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="selector-summary-card h-100">
-                                    <div class="selector-summary-label">驕ｸ謚樔ｸｭ縺ｮ髢句ぎ蝣ｴ</div>
-                                    <div id="selectorVenueSummary" class="selector-summary-value" th:text="${selectedVenue} ?: '譛ｪ驕ｸ謚・">譛ｪ驕ｸ謚・/div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="selector-summary-card h-100">
-                                    <div class="selector-summary-label">驕ｸ謚樔ｸｭ縺ｮ繝ｬ繝ｼ繧ｹ</div>
-                                    <div id="selectorRaceSummary" class="selector-summary-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + '繝ｬ繝ｼ繧ｹ' : '譛ｪ驕ｸ謚・}">譛ｪ驕ｸ謚・/div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div id="selectionSummary" class="selector-note p-3">繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ縺ｨ縲∵ｬ｡縺ｫ遒ｺ隱阪☆繧句・螳ｹ繧・ｨ倬鹸縺ｸ縺ｮ蜈･蜿｣縺悟・縺九ｊ繧・☆縺上∪縺ｨ縺ｾ繧翫∪縺吶・/div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="selector-summary-label">驕ｸ繧薙□縺ゅ→縺ｫ騾ｲ繧</div>
-                                <div class="record-action-grid">
-                                    <a href="https://autoraceapp.onrender.com/records/new" class="btn btn-outline-primary btn-lg record-entry-btn">新規登録</a>
-                                    <a href="https://autoraceapp.onrender.com/records" class="btn btn-outline-secondary btn-lg record-entry-btn">記録一覧</a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <section id="media-area" class="page-card p-4 p-md-5 mb-5">
-                <div class="desktop-media-layout">
-                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-                        <div class="media-heading">
-                            <span class="section-badge mb-2">蠖捺律蛻､譁ｭ</span>
-                            <h2 class="section-title mb-2">PC縺ｧ縺ｯ蟾ｦ蜿ｳ2逕ｻ髱｢縺ｧ蜷梧凾縺ｫ隕区ｯ斐∋繧・☆縺上☆繧・/h2>
-                            <p class="section-copy mb-0">蟾ｦ縺ｫ蜈ｬ蠑丞虚逕ｻ縲∝承縺ｫ繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判繧剃ｸｦ縺ｹ縺ｦ縲∝酔譎りｦ冶・縺励ｄ縺吶＞讒区・縺ｫ縺励※縺・∪縺吶ゆｸ区ｮｵ縺ｫ縺ｯ螟夜Κ繝ｪ繝ｳ繧ｯ縺ｨ蟆上＆繧√・繧ｿ繧､繝槭・繧貞・縺代※鄂ｮ縺阪∬ｦ九ｋ諠・ｱ繧定ｩｰ繧∬ｾｼ縺ｿ縺吶℃縺ｪ縺・ｈ縺・↓謨ｴ逅・＠縺ｦ縺・∪縺吶・/p>
-                        </div>
-                        <div class="status-chip" data-venue-sync="summary">驕ｸ謚樔ｸｭ: <span id="selectedVenueChip" th:text="${selectedVenue} ?: '蟾晏哨'">蟾晏哨</span></div>
-                    </div>
-
-                    <div class="dual-video-grid mb-4">
-                        <div class="video-card p-4">
-                            <div class="video-panel-title mb-1">蟾ｦ: 蜈ｬ蠑丞虚逕ｻ</div>
-                            <div class="video-panel-subtitle mb-3">蛻晄悄陦ｨ遉ｺ縺ｧ縺ｯ繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ蜈ｬ蠑上メ繝｣繝ｳ繝阪Ν縺ｮ繝ｩ繧､繝匁棧繧定｡ｨ遉ｺ縺励∪縺吶・/div>
-                            <div class="youtube-live-shell" data-live-source="official" data-venue-panel="official-video">
-                                <iframe
-                                    class="youtube-live-frame"
-                                    src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
-                                    title="繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ蜈ｬ蠑・YouTube繝ｩ繧､繝・
-                                    loading="lazy"
-                                    referrerpolicy="strict-origin-when-cross-origin"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen></iframe>
-                            </div>
                         </div>
 
-                        <div class="video-card p-4">
-                            <div class="video-panel-title mb-1">蜿ｳ: 繝ｬ繝ｼ繧ｹ蝣ｴ蜍慕判</div>
-                            <div class="video-panel-subtitle mb-3">驕ｸ謚槭＠縺溘Ξ繝ｼ繧ｹ蝣ｴ縺ｫ蜷医ｏ縺帙※繝ｩ繧､繝匁丐蜒上ｒ蛻・ｊ譖ｿ縺医※遒ｺ隱阪〒縺阪∪縺吶・/div>
-                            <div class="venue-live-block" data-venue-panel="venue-video">
-                                <div class="youtube-live-shell">
-                                    <iframe
-                                        class="youtube-live-frame"
-                                        data-venue-live-frame
-                                        src="about:blank"
-                                        title="レース場ライブ動画"
-                                        loading="lazy"
-                                        referrerpolicy="strict-origin-when-cross-origin"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowfullscreen></iframe>
-                                </div>
-                                <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈縺ｶ縺ｨ縲√◎縺ｮ莨壼ｴ蜷代￠縺ｮ繝ｩ繧､繝冶｡ｨ遉ｺ縺ｫ蛻・ｊ譖ｿ縺医ｉ繧後∪縺吶ら樟蝨ｨ縺ｯ蜈ｬ蠑上Λ繧､繝悶ｒ陦ｨ遉ｺ縺励※縺・∪縺吶・/div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="support-layout">
-                        <div>
-                            <div class="note-card compact-timer-card p-4">
-                                <span class="section-badge mb-2">陬懷勧讖溯・</span>
-                                <h2 class="section-title mb-2">繧ｿ繧､繝槭・縺ｯ蝗ｺ螳壹ヱ繝阪Ν縺ｧ謫堺ｽ・/h2>
-                                <p class="section-copy mb-0">繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ荳ｭ繧・判髱｢蛻・ｊ譖ｿ縺井ｸｭ縺ｧ繧ゆｽｿ縺・ｄ縺吶＞繧医≧縺ｫ縲√ち繧､繝槭・縺ｯ逕ｻ髱｢蜿ｳ荳九・蟆上ヱ繝阪Ν縺ｸ遘ｻ縺励※縺・∪縺吶・/p>
-                            </div>
+                        <div class="mt-3">
+                            <div id="selectionSummary" class="summary-text">未選択 / 未選択</div>
                         </div>
 
-                        <div>
-                            <div class="link-card p-4 p-md-5 h-100">
-                                <span class="section-badge mb-2">螟夜Κ繝ｪ繝ｳ繧ｯ</span>
-                                <h2 class="section-title mb-2">蠢・ｦ√↑繝ｪ繝ｳ繧ｯ縺縺代ｒ霑ｷ繧上★謚ｼ縺帙ｋ蠖｢縺ｫ謨ｴ逅・/h2>
-                                <p class="section-copy mb-4">蜈ｬ蠑上し繧､繝医→蜈ｬ蠑洲ANCLUB縺ｯ縺昴ｌ縺槭ｌ1縺､縺縺題｡ｨ遉ｺ縺励∽ｼ壼ｴ縺斐→縺ｮ螟夜Κ繝ｪ繝ｳ繧ｯ縺ｯ譁・ｭ嶺ｸｭ蠢・・繝懊ち繝ｳ縺ｧ隱ｭ縺ｿ繧・☆縺上＠縺ｦ縺・∪縺吶・/p>
+                        <div class="selector-actions mt-3">
+                            <a class="btn btn-primary btn-lg" href="https://autoraceapp.onrender.com/records/new">新規登録</a>
+                            <a class="btn btn-outline-primary btn-lg" href="https://autoraceapp.onrender.com/records">記録一覧</a>
+                        </div>
 
-                                <div class="link-stack mb-4">
-                                    <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn">AutoRace.jp</a>
-                                    <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
-                                    <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">髢｢騾｣繝ｪ繝ｳ繧ｯ繧剃ｸ隕ｧ縺ｧ隕九ｋ</a>
-                                </div>
-
-                                <div class="venue-selector-block">
-                                    <div class="venue-selector-title">繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・/div>
-                                    <p class="venue-selector-note">驕ｸ繧薙□繝ｬ繝ｼ繧ｹ蝣ｴ縺ｫ蜷医ｏ縺帙※縲∬牡繧・Μ繝ｳ繧ｯ縲∝虚逕ｻ陦ｨ遉ｺ縺悟・繧頑崛繧上ｋ蜈ｱ騾壹・繧ｿ繝ｳ縺ｧ縺吶・/p>
-                                    <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・>
-                                        <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '蟾晏哨' ? 'kawaguchi' : venueName == '莨雁兇蟠・ ? 'isesaki' : venueName == '豬懈收' ? 'hamamatsu' : venueName == '鬟ｯ蝪・ ? 'iizuka' : venueName == '螻ｱ髯ｽ' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">蟾晏哨</a>
-                                    </div>
-                                </div>
-
-                                <div class="mobile-link-stack">
-                                    <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">髢句ぎ蝣ｴ縺ｮYouTube</a>
-                                    <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">髢句ぎ蝣ｴ縺ｮInstagram</a>
-                                    <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">髢句ぎ蝣ｴ縺ｮFacebook</a>
-                                </div>
+                        <div class="row g-2 mt-3">
+                            <div class="col-6">
+                                <div class="current-chip w-100 justify-content-center" id="selectorVenueSummary">未選択</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="current-chip w-100 justify-content-center" id="selectorRaceSummary">未選択</div>
                             </div>
                         </div>
-                    </div>
+                    </section>
+
+                    <section class="section-box mb-4">
+                        <h3 class="section-title">公式リンク</h3>
+                        <div class="official-link-grid">
+                            <a th:each="link : ${officialRelatedLinks}"
+                               th:href="${link.url}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="link-card">
+                                <div class="link-card-title" th:text="${link.siteName}">公式サイト</div>
+                                <div class="link-note" th:text="${link.note}">リンク説明</div>
+                            </a>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="mobile-switch-shell d-lg-none">
-                    <span class="section-badge mb-2">蠖捺律蛻､譁ｭ</span>
-                    <h2 class="section-title mb-2">繧ｹ繝槭・縺ｧ縺ｯ蛻・ｊ譖ｿ縺医↑縺後ｉ蜍慕判縺ｨ繝ｪ繝ｳ繧ｯ繧堤｢ｺ隱阪☆繧・/h2>
-                    <p class="section-copy mb-4">蟆上＆縺・判髱｢縺ｧ繧りｿｷ縺・↓縺上＞繧医≧縺ｫ縲∝・蠑乗ュ蝣ｱ縺ｨ髢句ぎ蝣ｴ諠・ｱ繧偵・繧ｿ繝ｳ縺ｧ蛻・ｊ譖ｿ縺医ｉ繧後ｋ蠖｢縺ｫ縺励※縺・∪縺吶ょｿ・ｦ√↑諠・ｱ縺縺代ｒ鬆・分縺ｫ隕九※縺・￠繧九・縺ｧ縲∫ｧｻ蜍穂ｸｭ縺ｧ繧ら｢ｺ隱阪＠繧・☆縺・ｧ区・縺ｧ縺吶・/p>
+                <div class="col-12 col-lg-5">
+                    <section class="section-box mb-4">
+                        <h3 class="section-title">ライブ動画</h3>
+                        <p class="section-note">
+                            <span id="currentVenueLabel" th:text="${selectedVenue}">会場</span>
+                            の動画枠です。
+                        </p>
+                        <iframe
+                            class="live-frame"
+                            data-venue-live-frame
+                            src="about:blank"
+                            title="venue live"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                        <p class="link-note mt-3 mb-0" data-venue-live-note>レース場を選ぶと動画枠が切り替わります。</p>
+                    </section>
 
-                    <div class="mobile-switch-row mb-3" role="group" aria-label="諠・ｱ蜈・・蛻・ｊ譖ｿ縺・>
-                        <button type="button" class="mobile-switch-btn active" data-mobile-source="official">蜈ｬ蠑乗ュ蝣ｱ</button>
-                        <button type="button" class="mobile-switch-btn" data-mobile-source="venue">髢句ぎ蝣ｴ諠・ｱ</button>
-                    </div>
-                    <div class="mobile-switch-row" role="group" aria-label="陦ｨ遉ｺ蜀・ｮｹ縺ｮ蛻・ｊ譖ｿ縺・>
-                        <button type="button" class="mobile-switch-btn active" data-mobile-content="video">蜍慕判</button>
-                        <button type="button" class="mobile-switch-btn" data-mobile-content="link">繝ｪ繝ｳ繧ｯ</button>
-                    </div>
-
-                    <div class="mobile-video-panel active" data-mobile-panel="official-video">
-                        <div class="video-panel-title mb-2">蜈ｬ蠑丞虚逕ｻ</div>
-                        <div class="youtube-live-shell" data-live-source="official-mobile" data-venue-panel="official-video">
-                            <iframe
-                                class="youtube-live-frame"
-                                src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
-                                title="繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ蜈ｬ蠑・YouTube繝ｩ繧､繝・
-                                loading="lazy"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen></iframe>
+                    <section class="section-box mb-4">
+                        <h3 class="section-title">選択中の情報</h3>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="current-chip" id="selectedVenueChip" th:text="${selectedVenue}">会場</span>
+                            <span class="current-chip" id="currentRaceNumberLabel">未選択</span>
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="mobile-video-panel" data-mobile-panel="venue-video">
-                        <div class="video-panel-title mb-2">髢句ぎ蝣ｴ蜍慕判</div>
-                        <div class="venue-live-block" data-venue-panel="venue-video">
-                            <div class="youtube-live-shell">
-                                <iframe
-                                    class="youtube-live-frame"
-                                    data-venue-live-frame
-                                    src="about:blank"
-                                    title="レース場ライブ動画"
-                                    loading="lazy"
-                                    referrerpolicy="strict-origin-when-cross-origin"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen></iframe>
-                            </div>
-                            <div class="selector-note p-3 mt-3 mb-0" data-venue-live-note>髢句ぎ蝣ｴ繧帝∈縺ｶ縺ｨ縲√◎縺ｮ莨壼ｴ蜷代￠縺ｮ繝ｩ繧､繝冶｡ｨ遉ｺ縺ｫ蛻・ｊ譖ｿ縺医ｉ繧後∪縺吶ら樟蝨ｨ縺ｯ蜈ｬ蠑上Λ繧､繝悶ｒ陦ｨ遉ｺ縺励※縺・∪縺吶・/div>
-                        </div>
-                    </div>
-
-                    <div class="mobile-link-panel" data-mobile-panel="official-link">
-                        <div class="fw-bold mb-3 soft-strong">蜈ｬ蠑上Μ繝ｳ繧ｯ</div>
-                        <div class="mobile-link-stack">
-                            <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary official-entry-btn">AutoRace.jp</a>
-                            <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary official-entry-btn">AutoRace FANCLUB</a>
-                            <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary link-text-btn">髢｢騾｣繝ｪ繝ｳ繧ｯ繧剃ｸ隕ｧ縺ｧ隕九ｋ</a>
-                        </div>
-                    </div>
-
-                    <div class="mobile-link-panel" data-mobile-panel="venue-link">
-                        <div class="venue-selector-block">
-                            <div class="venue-selector-title">繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・/div>
-                            <p class="venue-selector-note">繧ｹ繝槭・縺ｧ繧よ款縺励ｄ縺吶＞繧医≧縺ｫ縲・蝣ｴ繧貞酔縺倅ｸｦ縺ｳ縺ｧ縺ｾ縺ｨ繧√※縺・∪縺吶・/p>
-                            <div class="venue-selector-grid venue-quick-grid mb-4" role="group" aria-label="繝ｬ繝ｼ繧ｹ蝣ｴ繧帝∈謚槭☆繧・>
-                                <a th:href="@{/(venue=${venueName})}" th:each="venueName : ${venueNames}" th:text="${venueName}" th:attr="data-venue-key=${venueName == '蟾晏哨' ? 'kawaguchi' : venueName == '莨雁兇蟠・ ? 'isesaki' : venueName == '豬懈收' ? 'hamamatsu' : venueName == '鬟ｯ蝪・ ? 'iizuka' : venueName == '螻ｱ髯ｽ' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn venue-quick-btn venue-selector-btn js-keep-mobile-scroll">蟾晏哨</a>
-                            </div>
-                        </div>
-                        <div class="mobile-link-stack">
-                            <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger link-text-btn">髢句ぎ蝣ｴ縺ｮYouTube</a>
-                            <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning link-text-btn">髢句ぎ蝣ｴ縺ｮInstagram</a>
-                            <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info link-text-btn">髢句ぎ蝣ｴ縺ｮFacebook</a>
-                        </div>
-                    </div>
-
+                    <section class="section-box">
+                        <h3 class="section-title">補助機能</h3>
+                        <p class="section-note mb-0">固定UIは残していますが、初期化で落ちないよう一時的に機能を絞っています。</p>
+                    </section>
                 </div>
-            </section>
-
-            <section id="glossary-search" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">逕ｨ隱樊､懃ｴ｢繝ｻ遒ｺ隱・/span>
-                <h2 class="section-title mb-2">繧上°繧峨↑縺・ｨ闡峨ｒ縺吶＄隱ｿ縺ｹ繧・/h2>
-                <p class="section-copy mb-4">繧ｪ繝ｼ繝医Ξ繝ｼ繧ｹ逕ｨ隱槭ｒ縺昴・蝣ｴ縺ｧ隱ｿ縺ｹ縺ｦ縺翫￥縺ｨ縲∝ｽ捺律縺ｮ蛻､譁ｭ縺ｧ霑ｷ縺・↓縺上￥縺ｪ繧翫∪縺吶・/p>
-                <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
-                    <div class="col-lg-9">
-                        <label for="glossaryQuery" class="form-label fw-semibold">讀懃ｴ｢繧ｭ繝ｼ繝ｯ繝ｼ繝・/label>
-                        <input id="glossaryQuery" type="text" name="q" class="form-control form-control-lg" placeholder="萓・ 隧ｦ襍ｰ / 繧ｪ繝・ぜ / 襍ｰ霍ｯ迥ｶ豕・>
-                    </div>
-                    <div class="col-lg-3 d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">逕ｨ隱槭ｒ謗｢縺・/button>
-                    </div>
-                </form>
-            </section>
-
-            <section id="help" class="page-card p-4 p-md-5 mb-5">
-                <span class="section-badge mb-2">繝倥Ν繝・/span>
-                <h2 class="section-title mb-2">TOP繝壹・繧ｸ縺ｮ豬√ｌ</h2>
-                <p class="section-copy mb-0">莨壼ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｳ縲∝虚逕ｻ縺ｨ螟夜Κ繝ｪ繝ｳ繧ｯ縺ｧ蠖捺律縺ｮ蛻､譁ｭ譚先侭繧堤｢ｺ隱阪＠縲√◎縺ｮ縺ゅ→險倬鹸繧・険繧願ｿ斐ｊ縺ｸ騾ｲ繧豬√ｌ繧呈Φ螳壹＠縺ｦ縺・∪縺吶よュ蝣ｱ繧剃ｸ蠎ｦ縺ｫ隧ｰ繧∬ｾｼ縺ｿ縺吶℃縺壹√せ繝槭・縺ｧ繧る・分縺ｫ隕九ｄ縺吶＞讒区・縺ｫ縺励※縺・∪縺吶・/p>
-            </section>
-
-            <div class="home-footer-note pb-2">ﾂｩ Auto Race Support App</div>
+            </div>
         </main>
 
         <div id="floatingTimerPanel" class="floating-timer-panel is-collapsed" data-panel-open="false">
             <div class="floating-timer-header">
-                <div class="floating-timer-summary">
+                <div>
                     <div class="floating-timer-title">当日判断タイマー</div>
                     <div id="floatingTimerClock" class="timer-clock">20:00</div>
                 </div>
                 <button type="button" id="floatingTimerToggleBtn" class="btn btn-outline-primary timer-toggle-btn" aria-expanded="false">開く</button>
             </div>
             <div class="floating-timer-body">
-                <div id="floatingTimerStatus" class="timer-status mb-3">時間ボタンを押すとカウントダウンを開始します。</div>
-                <div class="timer-controls">
-                    <label class="timer-setting-label mb-0" for="floatingTimerStrengthSelect">バイブの強さ</label>
-                    <select id="floatingTimerStrengthSelect" class="form-select timer-strength-select">
-                        <option value="200">小 200ms</option>
-                        <option value="500" selected>中 500ms</option>
-                        <option value="1000">大 1000ms</option>
-                    </select>
-                    <div class="timer-button-grid">
-                        <button type="button" class="btn btn-primary timer-preset-btn" data-timer-seconds="1200">20分</button>
-                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="600">10分</button>
-                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="300">5分</button>
-                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="180">3分</button>
-                        <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="60">1分</button>
-                    </div>
-                    <div class="timer-action-row">
-                        <button type="button" class="btn btn-outline-secondary timer-stop-btn" data-timer-stop>停止</button>
-                    </div>
+                <div id="floatingTimerStatus" class="timer-status mb-3">一時停止中です。</div>
+                <label class="form-label fw-semibold" for="floatingTimerStrengthSelect">バイブの強さ</label>
+                <select id="floatingTimerStrengthSelect" class="form-select timer-strength-select mb-3">
+                    <option value="300">弱め</option>
+                    <option value="500" selected>標準</option>
+                    <option value="800">強め</option>
+                </select>
+                <div class="timer-button-grid">
+                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="1200" disabled>20分</button>
+                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="600" disabled>10分</button>
+                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="300" disabled>5分</button>
+                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="180" disabled>3分</button>
+                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="60" disabled>1分</button>
+                    <button type="button" class="btn btn-outline-secondary timer-stop-btn" data-timer-stop disabled>停止</button>
                 </div>
             </div>
         </div>
@@ -1327,43 +440,41 @@
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
 
-    <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
     <script>
+        // White screen recovery: timer, memo persistence, and advanced video behavior are intentionally paused.
+        const venueYoutubeLives = {
+            kawaguchi: { label: "Kawaguchi", youtubeUrl: "" },
+            isesaki: { label: "Isesaki", youtubeUrl: "" },
+            hamamatsu: { label: "Hamamatsu", youtubeUrl: "" },
+            iizuka: { label: "Iizuka", youtubeUrl: "" },
+            sanyo: { label: "Sanyo", youtubeUrl: "" }
+        };
+
         function updateSelectionSummary() {
             const venueSelect = document.getElementById("venueSelect");
             const raceNumberSelect = document.getElementById("raceNumberSelect");
             const summary = document.getElementById("selectionSummary");
             const selectorVenueSummary = document.getElementById("selectorVenueSummary");
             const selectorRaceSummary = document.getElementById("selectorRaceSummary");
-
-            if (!summary) {
-                return;
-            }
-
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "レース場未選択";
-            const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "レース番号未選択";
-
-            summary.textContent = venueText + " / " + raceText + " を選択中です。";
-
-            if (selectorVenueSummary) {
-                selectorVenueSummary.textContent = venueSelect && venueSelect.value ? venueSelect.value : "未選択";
-            }
-
-            if (selectorRaceSummary) {
-                selectorRaceSummary.textContent = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "未選択";
-            }
-        }
-
-        function updateCurrentRaceDisplay() {
-            const venueSelect = document.getElementById("venueSelect");
-            const raceNumberSelect = document.getElementById("raceNumberSelect");
             const currentVenueLabel = document.getElementById("currentVenueLabel");
             const currentRaceNumberLabel = document.getElementById("currentRaceNumberLabel");
             const selectedVenueChip = document.getElementById("selectedVenueChip");
 
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "蟾晏哨";
-            const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "繝ｬ繝ｼ繧ｹ" : "8繝ｬ繝ｼ繧ｹ";
+            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "未選択";
+            const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "未選択";
 
+            if (summary) {
+                summary.textContent = venueText + " / " + raceText;
+            }
+            if (selectorVenueSummary) {
+                selectorVenueSummary.textContent = venueText;
+            }
+            if (selectorRaceSummary) {
+                selectorRaceSummary.textContent = raceText;
+            }
             if (currentVenueLabel) {
                 currentVenueLabel.textContent = venueText;
             }
@@ -1375,62 +486,25 @@
             }
         }
 
-        function updateCurrentClock() {
-            const nowTarget = document.getElementById("currentRaceNow");
-            if (!nowTarget) {
-                return;
-            }
-
-            const now = new Date();
-            nowTarget.textContent = now.toLocaleTimeString("ja-JP", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            });
-        }
-
-        function showMobilePanel() {
-            const sourceButton = document.querySelector("[data-mobile-source].active");
-            const contentButton = document.querySelector("[data-mobile-content].active");
-            if (!sourceButton || !contentButton) {
-                return;
-            }
-
-            const panelKey = sourceButton.dataset.mobileSource + "-" + contentButton.dataset.mobileContent;
-            document.querySelectorAll("[data-mobile-panel]").forEach(function (panel) {
-                panel.classList.toggle("active", panel.dataset.mobilePanel === panelKey);
-            });
-        }
-
-        function getSelectedVenueName() {
-            const venueSelect = document.getElementById("venueSelect");
-            if (!venueSelect || !venueSelect.value) {
-                return "";
-            }
-
-            return venueSelect.value;
-        }
-
         function getSelectedVenueContext() {
             const venueSelect = document.getElementById("venueSelect");
             if (!venueSelect) {
-                return {
-                    name: "",
-                    videoKey: "",
-                    themeKey: ""
-                };
+                return { name: "", themeKey: "" };
             }
 
             const selectedOption = venueSelect.options[venueSelect.selectedIndex];
             return {
                 name: venueSelect.value || "",
-                videoKey: selectedOption && selectedOption.dataset.themeKey ? selectedOption.dataset.themeKey : "",
-                themeKey: selectedOption && selectedOption.dataset.themeKey ? selectedOption.dataset.themeKey : ""
+                themeKey: selectedOption && selectedOption.dataset ? selectedOption.dataset.themeKey || "" : ""
             };
         }
 
-        function applyVenueTheme(venueContext) {
+        function applyVenueTheme() {
             const body = document.body;
+            if (!body) {
+                return;
+            }
+
             const themeMap = {
                 kawaguchi: "theme-kawaguchi",
                 isesaki: "theme-isesaki",
@@ -1439,375 +513,74 @@
                 sanyo: "theme-sanyo"
             };
 
-            Object.values(themeMap).forEach(function (themeClass) {
-                body.classList.remove(themeClass);
+            Object.keys(themeMap).forEach(function (key) {
+                body.classList.remove(themeMap[key]);
             });
 
+            const venueContext = getSelectedVenueContext();
             if (venueContext.themeKey && themeMap[venueContext.themeKey]) {
                 body.classList.add(themeMap[venueContext.themeKey]);
             }
-
-            body.dataset.selectedVenue = venueContext.name || "";
-            body.dataset.selectedVenueKey = venueContext.videoKey || "";
-            body.dataset.selectedThemeKey = venueContext.themeKey || "";
         }
-
-        const venueYoutubeLives = {
-            kawaguchi: {
-                label: "川口オート",
-                youtubeUrl: ""
-            },
-            isesaki: {
-                label: "伊勢崎オート",
-                youtubeUrl: ""
-            },
-            hamamatsu: {
-                label: "浜松オート",
-                youtubeUrl: ""
-            },
-            iizuka: {
-                label: "飯塚オート",
-                youtubeUrl: ""
-            },
-            sanyo: {
-                label: "山陽オート",
-                youtubeUrl: ""
-            }
-        };
-
-        const venueLivePlaceholderUrl = "about:blank";
 
         function resolveVenueLiveEmbedUrl(youtubeUrl) {
             if (!youtubeUrl) {
-                return venueLivePlaceholderUrl;
+                return "about:blank";
             }
 
-            if (youtubeUrl.includes("/embed/")) {
+            if (youtubeUrl.indexOf("/embed/") !== -1) {
                 return youtubeUrl;
             }
 
             try {
                 const parsedUrl = new URL(youtubeUrl);
                 const videoId = parsedUrl.searchParams.get("v");
-
                 if (videoId) {
                     return "https://www.youtube.com/embed/" + videoId;
                 }
 
-                if (parsedUrl.hostname.includes("youtu.be")) {
+                if (parsedUrl.hostname.indexOf("youtu.be") !== -1) {
                     const shortId = parsedUrl.pathname.replace(/^\/+/, "");
-                    return shortId ? "https://www.youtube.com/embed/" + shortId : venueLivePlaceholderUrl;
+                    return shortId ? "https://www.youtube.com/embed/" + shortId : "about:blank";
                 }
             } catch (error) {
-                return venueLivePlaceholderUrl;
+                return "about:blank";
             }
 
-            return venueLivePlaceholderUrl;
+            return "about:blank";
         }
 
-        function updateVenueLinkedPanels(venueContext) {
-            const venueVideoConfig = venueContext.videoKey ? venueYoutubeLives[venueContext.videoKey] : null;
-
-            document.querySelectorAll("[data-venue-panel='venue-video']").forEach(function (panel) {
-                panel.dataset.selectedVenue = venueContext.name || "";
-                panel.dataset.selectedVenueKey = venueContext.videoKey || "";
-
-                const liveFrame = panel.querySelector("[data-venue-live-frame]");
-                const liveNote = panel.querySelector("[data-venue-live-note]");
-                const venueLiveUrl = venueVideoConfig && venueVideoConfig.youtubeUrl ? venueVideoConfig.youtubeUrl : "";
-                const resolvedLiveUrl = resolveVenueLiveEmbedUrl(venueLiveUrl);
-                const hasConfiguredUrl = resolvedLiveUrl !== venueLivePlaceholderUrl;
-
-                if (liveFrame) {
-                    if (liveFrame.src !== resolvedLiveUrl) {
-                        liveFrame.src = resolvedLiveUrl;
-                    }
-                    liveFrame.title = venueVideoConfig && venueVideoConfig.label
-                        ? venueVideoConfig.label + "のYouTubeライブ"
-                        : "レース場ライブ動画";
-                }
-
-                if (liveNote) {
-                    if (venueContext.name && venueVideoConfig && hasConfiguredUrl) {
-                        liveNote.textContent = venueVideoConfig.label + "のYouTubeライブを表示しています。";
-                    } else if (venueContext.name) {
-                        liveNote.textContent = venueContext.name + "のYouTube URLはまだ未設定です。`venueYoutubeLives` のURLを差し替えると、この枠へライブを表示できます。";
-                    } else {
-                        liveNote.textContent = "レース場を選ぶと、右側の動画枠がその会場のYouTubeライブに切り替わります。";
-                    }
-                }
-            });
-
-            document.querySelectorAll("[data-venue-panel='official-video']").forEach(function (panel) {
-                panel.dataset.selectedVenue = venueContext.name || "";
-                panel.dataset.selectedVenueKey = venueContext.videoKey || "";
-            });
-        }
-
-        function refreshVenueDrivenUi() {
+        function updateVenueLinkedPanels() {
             const venueContext = getSelectedVenueContext();
-            updateCurrentRaceDisplay();
-            applyVenueTheme(venueContext);
-            updateVenueLinkedPanels(venueContext);
-        }
+            const liveConfig = venueContext.themeKey ? venueYoutubeLives[venueContext.themeKey] : null;
+            const liveUrl = liveConfig ? resolveVenueLiveEmbedUrl(liveConfig.youtubeUrl) : "about:blank";
+            const liveFrames = document.querySelectorAll("[data-venue-live-frame]");
+            const liveNotes = document.querySelectorAll("[data-venue-live-note]");
 
-        function setupPredictionPrepCopy() {
-            const prepSection = document.getElementById("predictionPrepSection");
-            const selectionSummary = document.getElementById("selectionSummary");
-            const newRecordButton = document.querySelector(".record-action-grid a[href='https://autoraceapp.onrender.com/records/new']");
-            const recordsButton = document.querySelector(".record-action-grid a[href='https://autoraceapp.onrender.com/records']");
-
-            if (prepSection) {
-                const badge = prepSection.querySelector(".section-badge");
-                const title = prepSection.querySelector(".section-title");
-                const copy = prepSection.querySelector(".section-copy");
-                const helper = prepSection.querySelector(".helper-copy");
-
-                if (badge) {
-                    badge.textContent = "莠域Φ貅門ｙ";
-                }
-                if (title) {
-                    title.textContent = "繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ蝣ｴ謇";
-                }
-                if (copy) {
-                    copy.textContent = "縺薙％縺ｧ縺ｯ譛蛻昴↓隕九ｋ繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｳ縺ｾ縺吶る∈謚槭ｒ蜈医↓豎ｺ繧√※縺翫￥縺ｨ縲√％縺ｮ縺ゅ→遒ｺ隱阪☆繧句虚逕ｻ繧・Μ繝ｳ繧ｯ縲∬ｨ倬鹸縺ｸ縺ｮ騾ｲ縺ｿ蜈医′蛻・°繧翫ｄ縺吶￥縺ｪ繧翫∪縺吶・;
-                }
-                if (helper) {
-                    helper.textContent = "荳翫°繧蛾・↓驕ｸ縺ｶ縺縺代〒螟ｧ荳亥､ｫ縺ｧ縺吶る∈繧薙□蜀・ｮｹ縺ｯ縺吶＄荳九・遒ｺ隱肴ｬ・↓蜿肴丐縺輔ｌ縲√◎縺ｮ縺ｾ縺ｾ險倬鹸蜈･蜉帙ｄ險倬鹸荳隕ｧ縺ｸ騾ｲ繧√∪縺吶・;
-                }
-            }
-
-            if (selectionSummary) {
-                selectionSummary.textContent = "繝ｬ繝ｼ繧ｹ蝣ｴ縺ｨ繝ｬ繝ｼ繧ｹ逡ｪ蜿ｷ繧帝∈縺ｶ縺ｨ縲∵ｬ｡縺ｫ隕九ｋ蜀・ｮｹ縺ｨ騾ｲ縺ｿ蜈医′蛻・°繧翫ｄ縺吶￥縺ｾ縺ｨ縺ｾ繧翫∪縺吶・;
-            }
-
-            if (newRecordButton) {
-                newRecordButton.textContent = "譁ｰ隕冗匳骭ｲ";
-            }
-
-            if (recordsButton) {
-                recordsButton.textContent = "險倬鹸荳隕ｧ";
-            }
-        }
-
-        function formatCountdownTime(totalSeconds) {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
-        }
-
-        function layoutFloatingUtilities() {
-            const timerPanel = document.getElementById("floatingTimerPanel");
-            const memoWrapper = document.querySelector(".floating-memo-wrapper");
-
-            if (!timerPanel || !memoWrapper) {
-                return;
-            }
-
-            const timerRect = timerPanel.getBoundingClientRect();
-            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            const gap = 10;
-            const bottomOffset = Math.max(12, viewportHeight - timerRect.top + gap);
-
-            memoWrapper.style.bottom = bottomOffset + "px";
-        }
-
-        function setupManualTimer() {
-            const timerStorageKey = "autoraceapp.home.timerState.v1";
-            const defaultTimerSeconds = 20 * 60;
-            const timerPanel = document.getElementById("floatingTimerPanel");
-            const toggleButton = document.getElementById("floatingTimerToggleBtn");
-            const timerClocks = Array.from(document.querySelectorAll("#floatingTimerClock"));
-            const timerStatuses = Array.from(document.querySelectorAll("#floatingTimerStatus"));
-            const strengthSelects = Array.from(document.querySelectorAll("#floatingTimerStrengthSelect"));
-            const timerButtons = Array.from(document.querySelectorAll("[data-timer-seconds]"));
-            const stopButtons = Array.from(document.querySelectorAll("[data-timer-stop]"));
-            let remainingSeconds = defaultTimerSeconds;
-            let countdownId = null;
-            let activeTimerSeconds = defaultTimerSeconds;
-            let timerEndAt = null;
-            let panelOpen = false;
-
-            function readTimerState() {
-                try {
-                    const raw = window.localStorage.getItem(timerStorageKey);
-                    return raw ? JSON.parse(raw) : null;
-                } catch (error) {
-                    return null;
-                }
-            }
-
-            function writeTimerState() {
-                try {
-                    window.localStorage.setItem(timerStorageKey, JSON.stringify({
-                        endAt: timerEndAt,
-                        durationSeconds: activeTimerSeconds,
-                        strength: strengthSelects[0] ? Number(strengthSelects[0].value) : 500,
-                        panelOpen: panelOpen
-                    }));
-                } catch (error) {
+            liveFrames.forEach(function (frame) {
+                if (!frame) {
                     return;
                 }
-            }
+                frame.src = liveUrl;
+                frame.title = liveConfig ? liveConfig.label + " live" : "venue live";
+            });
 
-            function getTimerLabel(totalSeconds) {
-                return Math.floor(totalSeconds / 60) + "分";
-            }
-
-            function setTimerText(clockText, statusText) {
-                timerClocks.forEach(function (clock) {
-                    clock.textContent = clockText;
-                });
-                timerStatuses.forEach(function (status) {
-                    status.textContent = statusText;
-                });
-            }
-
-            function setPanelOpen(nextOpen) {
-                if (!timerPanel || !toggleButton) {
+            liveNotes.forEach(function (note) {
+                if (!note) {
                     return;
                 }
 
-                panelOpen = nextOpen;
-                timerPanel.classList.toggle("is-collapsed", !nextOpen);
-                timerPanel.dataset.panelOpen = nextOpen ? "true" : "false";
-                toggleButton.textContent = nextOpen ? "閉じる" : "開く";
-                toggleButton.setAttribute("aria-expanded", nextOpen ? "true" : "false");
-                writeTimerState();
-                window.requestAnimationFrame(layoutFloatingUtilities);
-            }
-
-            function setRunningState(isRunning) {
-                timerButtons.forEach(function (button) {
-                    const buttonSeconds = Number(button.dataset.timerSeconds);
-                    const isActive = isRunning && buttonSeconds === activeTimerSeconds;
-                    button.disabled = false;
-                    button.classList.toggle("btn-primary", isActive);
-                    button.classList.toggle("btn-outline-primary", !isActive);
-                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
-                });
-
-                stopButtons.forEach(function (button) {
-                    button.disabled = !isRunning;
-                });
-            }
-
-            function syncStrengthSelects(changedSelect) {
-                strengthSelects.forEach(function (select) {
-                    if (select !== changedSelect) {
-                        select.value = changedSelect.value;
-                    }
-                });
-                writeTimerState();
-            }
-
-            function finishTimer() {
-                countdownId = null;
-                timerEndAt = null;
-                setRunningState(false);
-                setTimerText("00:00", getTimerLabel(activeTimerSeconds) + "タイマーが終了しました。");
-                writeTimerState();
-
-                if (navigator.vibrate) {
-                    navigator.vibrate(Number(strengthSelects[0].value));
+                if (venueContext.name && liveConfig && liveConfig.youtubeUrl) {
+                    note.textContent = "ライブ動画を表示中です。";
+                } else if (venueContext.name) {
+                    note.textContent = "動画URLは未設定です。";
+                } else {
+                    note.textContent = "レース場を選ぶと動画枠が切り替わります。";
                 }
-            }
-
-            function stopTimer() {
-                if (countdownId !== null) {
-                    window.clearInterval(countdownId);
-                    countdownId = null;
-                }
-
-                timerEndAt = null;
-                remainingSeconds = activeTimerSeconds;
-                setRunningState(false);
-                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "タイマーを停止しました。");
-                writeTimerState();
-            }
-
-            function tickTimer() {
-                remainingSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
-
-                if (remainingSeconds <= 0) {
-                    if (countdownId !== null) {
-                        window.clearInterval(countdownId);
-                    }
-                    finishTimer();
-                    return;
-                }
-
-                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(activeTimerSeconds) + "タイマー動作中です。");
-                writeTimerState();
-            }
-
-            function startTimer(timerSeconds) {
-                activeTimerSeconds = timerSeconds;
-                remainingSeconds = timerSeconds;
-                timerEndAt = Date.now() + (timerSeconds * 1000);
-                setRunningState(true);
-                setTimerText(formatCountdownTime(remainingSeconds), getTimerLabel(timerSeconds) + "タイマー動作中です。");
-                setPanelOpen(true);
-                writeTimerState();
-
-                if (countdownId !== null) {
-                    window.clearInterval(countdownId);
-                }
-
-                countdownId = window.setInterval(tickTimer, 1000);
-            }
-
-            strengthSelects.forEach(function (select) {
-                select.addEventListener("change", function () {
-                    syncStrengthSelects(select);
-                });
             });
-
-            timerButtons.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    startTimer(Number(button.dataset.timerSeconds));
-                });
-            });
-
-            stopButtons.forEach(function (button) {
-                button.addEventListener("click", stopTimer);
-            });
-
-            if (toggleButton) {
-                toggleButton.addEventListener("click", function () {
-                    setPanelOpen(!panelOpen);
-                });
-            }
-
-            const savedState = readTimerState();
-            if (savedState && strengthSelects[0] && savedState.strength) {
-                strengthSelects[0].value = String(savedState.strength);
-                syncStrengthSelects(strengthSelects[0]);
-            }
-            if (savedState && typeof savedState.panelOpen === "boolean") {
-                panelOpen = savedState.panelOpen;
-            }
-            setPanelOpen(panelOpen);
-
-            if (savedState && savedState.durationSeconds) {
-                activeTimerSeconds = Number(savedState.durationSeconds) || defaultTimerSeconds;
-            }
-
-            if (savedState && savedState.endAt && Number(savedState.endAt) > Date.now()) {
-                timerEndAt = Number(savedState.endAt);
-                setRunningState(true);
-                tickTimer();
-                countdownId = window.setInterval(tickTimer, 1000);
-                return;
-            }
-
-            setRunningState(false);
-            setTimerText(formatCountdownTime(activeTimerSeconds), "時間ボタンを押すとカウントダウンを開始します。");
-            writeTimerState();
-            window.requestAnimationFrame(layoutFloatingUtilities);
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
+        function initializeHomePage() {
             const venueSelect = document.getElementById("venueSelect");
             const raceNumberSelect = document.getElementById("raceNumberSelect");
             const searchParams = new URLSearchParams(window.location.search);
@@ -1820,50 +593,29 @@
             }
 
             updateSelectionSummary();
-            setupPredictionPrepCopy();
-            refreshVenueDrivenUi();
-            updateCurrentClock();
-            setupManualTimer();
+            applyVenueTheme();
+            updateVenueLinkedPanels();
 
             if (venueSelect) {
-                venueSelect.addEventListener("change", updateSelectionSummary);
-                venueSelect.addEventListener("change", refreshVenueDrivenUi);
+                venueSelect.addEventListener("change", function () {
+                    updateSelectionSummary();
+                    applyVenueTheme();
+                    updateVenueLinkedPanels();
+                });
             }
+
             if (raceNumberSelect) {
                 raceNumberSelect.addEventListener("change", updateSelectionSummary);
-                raceNumberSelect.addEventListener("change", refreshVenueDrivenUi);
             }
+        }
 
-            document.querySelectorAll("[data-mobile-source], [data-mobile-content]").forEach(function (button) {
-                button.addEventListener("click", function () {
-                    const selector = button.dataset.mobileSource ? "[data-mobile-source]" : "[data-mobile-content]";
-                    document.querySelectorAll(selector).forEach(function (peer) {
-                        peer.classList.remove("active");
-                    });
-                    button.classList.add("active");
-                    showMobilePanel();
-                });
-            });
-
-            document.querySelectorAll(".js-keep-mobile-scroll").forEach(function (link) {
-                link.addEventListener("click", function () {
-                    sessionStorage.setItem("autoraceapp-home-scroll", String(window.scrollY));
-                });
-            });
-
-            const savedScroll = sessionStorage.getItem("autoraceapp-home-scroll");
-            if (savedScroll !== null) {
-                sessionStorage.removeItem("autoraceapp-home-scroll");
-                window.scrollTo(0, Number(savedScroll));
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                initializeHomePage();
+            } catch (error) {
+                console.error("home/index initialization error", error);
             }
-
-            showMobilePanel();
-            layoutFloatingUtilities();
-            window.addEventListener("resize", layoutFloatingUtilities);
-            window.setInterval(updateCurrentClock, 1000);
         });
     </script>
 </body>
 </html>
-
-
