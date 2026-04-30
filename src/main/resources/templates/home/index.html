@@ -3,10 +3,6 @@
 <head>
     <th:block th:replace="~{layout/base :: commonHead('TOPページ | オートレース予想補助アプリ')}"></th:block>
     <style>
-        .site-header .app-theme-toolbar {
-            display: none;
-        }
-
         body {
             --main-color: #84acd9;
             --accent-color: #1f4f83;
@@ -290,6 +286,58 @@
             gap: 1rem;
         }
 
+        .venue-choice-field {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .venue-choice-title {
+            margin: 0;
+            color: #304a69;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .venue-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0.65rem;
+        }
+
+        .venue-choice-btn {
+            min-height: 3.25rem;
+            padding: 0.75rem 0.7rem;
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            background: #ffffff;
+            color: var(--accent-color);
+            font: inherit;
+            font-size: 0.98rem;
+            font-weight: 800;
+            line-height: 1.2;
+            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.06);
+            transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+        }
+
+        .venue-choice-btn:hover,
+        .venue-choice-btn:focus {
+            border-color: color-mix(in srgb, var(--main-color) 70%, white);
+            background: var(--surface-tint);
+            color: var(--accent-color);
+        }
+
+        .venue-choice-btn:focus-visible {
+            outline: 3px solid color-mix(in srgb, var(--main-color) 35%, transparent);
+            outline-offset: 2px;
+        }
+
+        .venue-choice-btn.is-selected {
+            background: var(--main-color);
+            border-color: color-mix(in srgb, var(--main-color) 82%, black);
+            color: var(--main-color-text);
+            transform: translateY(-1px);
+        }
+
         .form-label {
             color: #304a69;
         }
@@ -356,6 +404,10 @@
         .frame-card {
             display: grid;
             gap: 0.75rem;
+            padding: 1rem;
+            border: 1px solid color-mix(in srgb, var(--main-color) 18%, white);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.96);
         }
 
         .frame-title {
@@ -370,10 +422,14 @@
         }
 
         .video-frame-shell {
+            position: relative;
+            display: grid;
+            place-items: stretch;
             overflow: hidden;
             border-radius: 1rem;
             border: 1px solid color-mix(in srgb, var(--main-color) 20%, white);
             background: #ffffff;
+            min-height: 320px;
         }
 
         .video-frame {
@@ -382,6 +438,26 @@
             min-height: 320px;
             border: 0;
             background: #f5f8fb;
+        }
+
+        .video-frame-shell.is-empty .video-frame {
+            display: none;
+        }
+
+        .video-empty-message {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 320px;
+            padding: 1rem;
+            color: #61758a;
+            font-weight: 700;
+            text-align: center;
+            background: #f5f8fb;
+        }
+
+        .video-frame-shell.is-empty .video-empty-message {
+            display: flex;
         }
 
         .link-stack {
@@ -552,6 +628,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .venue-choice-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .hero-actions {
                 flex-direction: column;
             }
@@ -585,6 +665,10 @@
                 padding: 1rem !important;
             }
 
+            .venue-choice-btn {
+                min-height: 3.35rem;
+            }
+
             .floating-timer-panel {
                 right: 0.65rem;
                 bottom: calc(0.65rem + env(safe-area-inset-bottom));
@@ -599,7 +683,28 @@
 </head>
 <body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : (${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : (${selectedVenue == '浜松'} ? ' theme-hamamatsu' : (${selectedVenue == '飯塚'} ? ' theme-iizuka' : (${selectedVenue == '山陽'} ? ' theme-sanyo' : ''))))">
     <div class="app-shell d-flex flex-column">
-        <div th:replace="~{layout/header :: siteHeader}"></div>
+        <header class="border-bottom bg-white shadow-sm site-header">
+            <div class="container py-3">
+                <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
+                    <div>
+                        <div class="text-primary fw-semibold mb-1">AUTO RACE SUPPORT APP</div>
+                        <h1 class="h3 fw-bold mb-0">オートレース予想補助アプリ</h1>
+                    </div>
+
+                    <div class="site-header-actions d-flex flex-column align-items-xl-end gap-2">
+                        <div class="d-flex flex-wrap align-items-center justify-content-xl-end gap-2 w-100">
+                            <nav class="site-header-nav d-flex flex-wrap gap-2 justify-content-xl-end">
+                                <a th:href="@{/}" class="btn btn-outline-primary btn-lg">TOPページ</a>
+                                <a th:href="@{/records/new}" class="btn btn-outline-secondary btn-lg">新規記録</a>
+                                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">記録一覧を見る</a>
+                                <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">用語</a>
+                                <a th:href="@{/help}" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
         <main class="container py-4 py-md-5 flex-grow-1">
             <div class="home-shell">
@@ -607,8 +712,8 @@
                     <div class="hero-layout">
                         <section class="hero-panel">
                             <div class="panel-badge">TOPページ</div>
-                            <h1 class="hero-title">開催確認、動画確認、記録入力までを一画面で始めやすくしたデモ用トップです。</h1>
-                            <p class="hero-copy mb-0">レース場とレース番号を選び、動画や外部リンクを見ながら、そのまま記録と確認へ進める流れに整理しています。PCでは左右2画面で見比べやすく、スマホでは切り替えやすさを優先した構成です。</p>
+                            <h1 class="hero-title">開催確認、動画確認、記録入力までを一画面で始めます。</h1>
+                            <p class="hero-copy mb-0">レース場を選択することで表示内容を切り替え、レース番号、動画、外部リンクを確認しながら、そのまま記録と確認へ進める流れに整理しています。</p>
 
                             <div class="hero-actions">
                                 <a href="#prepSection" class="btn btn-primary">予想準備を見る</a>
@@ -640,28 +745,31 @@
 
                 <div class="utility-grid">
                     <section id="prepSection" class="prep-panel">
-                        <div class="panel-badge">予想準備</div>
-                        <h2 class="section-title">レース場とレース番号を選んで次に進めます</h2>
-                        <p class="section-copy">Figma のワイヤーフレーム構成に合わせて、入力前の準備をこのエリアに集約しています。選択後はそのまま動画確認、公式リンク確認、記録入力へ進めます。</p>
+                        <h2 class="section-title">予想準備</h2>
+                        <p class="section-copy">レース場とレース番号を選んで、記録や確認へ進めます。</p>
 
                         <form method="get" th:action="@{/}" class="prep-form-grid mt-4">
-                            <div>
-                                <label for="venueSelect" class="form-label fw-semibold">レース場</label>
-                                <select id="venueSelect" name="venue" class="form-select">
-                                    <option value="">選択してください</option>
-                                    <option
-                                        th:each="venueName : ${venueNames}"
-                                        th:value="${venueName}"
-                                        th:text="${venueName}"
-                                        th:attr="data-theme-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}">川口</option>
-                                </select>
+                            <div class="venue-choice-field">
+                                <h3 id="venueChoiceTitle" class="venue-choice-title">レース場を選択する</h3>
+                                <input type="hidden" id="venueInput" name="venue" th:value="${selectedVenue}">
+                                <div class="venue-choice-grid" role="group" aria-labelledby="venueChoiceTitle">
+                                    <button type="button" class="venue-choice-btn" data-venue-choice data-venue-name="川口" data-theme-key="kawaguchi" th:classappend="${selectedVenue == '川口'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '川口'}">川口</button>
+                                    <button type="button" class="venue-choice-btn" data-venue-choice data-venue-name="伊勢崎" data-theme-key="isesaki" th:classappend="${selectedVenue == '伊勢崎'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '伊勢崎'}">伊勢崎</button>
+                                    <button type="button" class="venue-choice-btn" data-venue-choice data-venue-name="浜松" data-theme-key="hamamatsu" th:classappend="${selectedVenue == '浜松'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '浜松'}">浜松</button>
+                                    <button type="button" class="venue-choice-btn" data-venue-choice data-venue-name="飯塚" data-theme-key="iizuka" th:classappend="${selectedVenue == '飯塚'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '飯塚'}">飯塚</button>
+                                    <button type="button" class="venue-choice-btn" data-venue-choice data-venue-name="山陽" data-theme-key="sanyo" th:classappend="${selectedVenue == '山陽'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '山陽'}">山陽</button>
+                                </div>
                             </div>
 
                             <div>
                                 <label for="raceNumberSelect" class="form-label fw-semibold">レース番号</label>
                                 <select id="raceNumberSelect" name="raceNumber" class="form-select">
                                     <option value="">選択してください</option>
-                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                                    <option
+                                        th:each="num : ${#numbers.sequence(1, 12)}"
+                                        th:value="${num}"
+                                        th:text="${num + 'レース'}"
+                                        th:selected="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) and param.raceNumber[0] == #strings.toString(num)}">1レース</option>
                                 </select>
                             </div>
 
@@ -679,8 +787,8 @@
                             <div id="selectionSummary" class="summary-note">レース場とレース番号を選ぶと、ここに現在の選択内容が表示されます。</div>
 
                             <div class="action-grid">
-                                <a th:href="@{/records/new}" class="btn btn-primary">新規記録</a>
-                                <a th:href="@{/records}" class="btn btn-outline-primary">記録一覧を見る</a>
+                                <a href="https://autoraceapp.onrender.com/records/new" class="btn btn-primary">新規登録</a>
+                                <a href="https://autoraceapp.onrender.com/records" class="btn btn-outline-primary">記録一覧</a>
                             </div>
                         </form>
                     </section>
@@ -688,54 +796,54 @@
                     <div class="d-grid gap-3">
                         <section class="video-panel">
                             <div class="panel-badge">ライブ動画枠</div>
-                            <h2 class="section-title">公式ライブと会場動画を並べて確認できます</h2>
+                            <h2 class="section-title">当日判断のライブ動画を確認する</h2>
                             <div class="media-grid mt-3">
-                                <article class="frame-card">
-                                    <div class="frame-title">公式ライブ</div>
-                                    <div class="frame-copy">オートレース公式チャンネルのライブ枠です。</div>
-                                    <div class="video-frame-shell">
+                                <article class="frame-card" data-live-card="official">
+                                    <div class="frame-title" data-live-title>公式ライブ</div>
+                                    <div class="frame-copy" data-live-copy>オートレース公式チャンネルのライブ枠です。</div>
+                                    <div class="video-frame-shell is-empty" data-live-shell>
                                         <iframe
                                             class="video-frame"
-                                            src="https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
+                                            data-live-frame
+                                            src="about:blank"
                                             title="オートレース公式YouTubeライブ"
                                             loading="lazy"
                                             referrerpolicy="strict-origin-when-cross-origin"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen></iframe>
+                                        <div class="video-empty-message" data-live-empty>動画URLは未設定です</div>
                                     </div>
+                                    <div class="summary-note" data-live-note>公式ライブを表示します。</div>
                                 </article>
 
-                                <article class="frame-card" data-venue-panel="venue-video">
-                                    <div class="frame-title">会場動画枠</div>
-                                    <div class="frame-copy">選択したレース場に連動する動画表示枠です。</div>
-                                    <div class="video-frame-shell">
+                                <article class="frame-card" data-live-card="venue">
+                                    <div class="frame-title" data-live-title>会場動画枠</div>
+                                    <div class="frame-copy" data-live-copy>選択したレース場に連動する動画表示枠です。</div>
+                                    <div class="video-frame-shell is-empty" data-live-shell>
                                         <iframe
                                             class="video-frame"
-                                            data-venue-live-frame
+                                            data-live-frame
                                             src="about:blank"
                                             title="レース場ライブ動画"
                                             loading="lazy"
                                             referrerpolicy="strict-origin-when-cross-origin"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen></iframe>
+                                        <div class="video-empty-message" data-live-empty>動画URLは未設定です</div>
                                     </div>
-                                    <div class="summary-note" data-venue-live-note>レース場を選ぶと、その会場向けの動画枠へ切り替わります。</div>
+                                    <div class="summary-note" data-live-note>レース場を選ぶと、その会場向けの動画枠へ切り替わります。</div>
                                 </article>
                             </div>
                         </section>
 
                         <section class="link-panel">
                             <div class="panel-badge">公式リンク</div>
-                            <h2 class="section-title">必要なリンクだけを迷わず開ける形に整理しています</h2>
-                            <p class="link-note">公式サイト、FANCLUB、会場ごとの関連リンクをここにまとめています。メモとタイマーは右下固定のまま使えます。</p>
+                            <h2 class="section-title">公式情報を開く</h2>
+                            <p class="link-note">当日判断で使う公式リンクだけをまとめています。</p>
 
                             <div class="link-stack">
                                 <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">AutoRace.jp</a>
-                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">AutoRace FANCLUB</a>
-                                <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-primary">公式リンク一覧</a>
-                                <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">レース場のYouTube</a>
-                                <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">レース場のInstagram</a>
-                                <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">レース場のFacebook</a>
+                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">公式FANCLUB</a>
                             </div>
                         </section>
                     </div>
@@ -781,12 +889,19 @@
 
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
     <script>
-        const venueYoutubeLives = {
-            kawaguchi: { label: "川口オート", youtubeUrl: "" },
-            isesaki: { label: "伊勢崎オート", youtubeUrl: "" },
-            hamamatsu: { label: "浜松オート", youtubeUrl: "" },
-            iizuka: { label: "飯塚オート", youtubeUrl: "" },
-            sanyo: { label: "山陽オート", youtubeUrl: "" }
+        const liveVideoConfig = {
+            official: {
+                label: "オートレース公式ライブ",
+                copy: "オートレース公式チャンネルのライブ枠です。",
+                youtubeUrl: "https://www.youtube.com/embed/live_stream?channel=UCJAPqcMNYk3HMknRuPMNvKA"
+            },
+            venues: {
+                kawaguchi: { label: "川口オート", copy: "川口の会場動画枠です。", youtubeUrl: "" },
+                isesaki: { label: "伊勢崎オート", copy: "伊勢崎の会場動画枠です。", youtubeUrl: "" },
+                hamamatsu: { label: "浜松オート", copy: "浜松の会場動画枠です。", youtubeUrl: "" },
+                iizuka: { label: "飯塚オート", copy: "飯塚の会場動画枠です。", youtubeUrl: "" },
+                sanyo: { label: "山陽オート", copy: "山陽の会場動画枠です。", youtubeUrl: "" }
+            }
         };
 
         const venueThemeMap = {
@@ -821,27 +936,57 @@
             }
         }
 
+        function getVenueChoiceButtons() {
+            return Array.from(document.querySelectorAll("[data-venue-choice]"));
+        }
+
+        function findVenueChoiceButton(venueName) {
+            return getVenueChoiceButtons().find(function (button) {
+                return button && button.dataset && button.dataset.venueName === venueName;
+            }) || null;
+        }
+
+        function setVenueChoice(venueName) {
+            const venueInput = document.getElementById("venueInput");
+            const venueButtons = getVenueChoiceButtons();
+            const fallbackButton = venueButtons.length > 0 ? venueButtons[0] : null;
+            const selectedButton = findVenueChoiceButton(venueName) || fallbackButton;
+            const selectedVenueName = selectedButton && selectedButton.dataset ? selectedButton.dataset.venueName || "" : "";
+
+            if (venueInput) {
+                venueInput.value = selectedVenueName;
+            }
+
+            venueButtons.forEach(function (button) {
+                const isSelected = button === selectedButton;
+                button.classList.toggle("is-selected", isSelected);
+                button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+            });
+        }
+
         function getSelectedVenueContext() {
-            const venueSelect = document.getElementById("venueSelect");
-            if (!venueSelect) {
+            const venueInput = document.getElementById("venueInput");
+            const selectedVenueName = venueInput && venueInput.value ? venueInput.value : "";
+            const selectedButton = findVenueChoiceButton(selectedVenueName) || document.querySelector("[data-venue-choice].is-selected");
+
+            if (!selectedButton || !selectedButton.dataset) {
                 return { name: "", themeKey: "" };
             }
 
-            const selectedOption = venueSelect.options[venueSelect.selectedIndex];
             return {
-                name: venueSelect.value || "",
-                themeKey: selectedOption && selectedOption.dataset ? selectedOption.dataset.themeKey || "" : ""
+                name: selectedButton.dataset.venueName || "",
+                themeKey: selectedButton.dataset.themeKey || ""
             };
         }
 
         function updateSelectionSummary() {
-            const venueSelect = document.getElementById("venueSelect");
+            const venueContext = getSelectedVenueContext();
             const raceNumberSelect = document.getElementById("raceNumberSelect");
             const summary = document.getElementById("selectionSummary");
             const selectorVenueSummary = document.getElementById("selectorVenueSummary");
             const selectorRaceSummary = document.getElementById("selectorRaceSummary");
 
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "未選択";
+            const venueText = venueContext.name || "未選択";
             const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "未選択";
 
             if (summary) {
@@ -856,12 +1001,12 @@
         }
 
         function updateCurrentRaceDisplay() {
-            const venueSelect = document.getElementById("venueSelect");
+            const venueContext = getSelectedVenueContext();
             const raceNumberSelect = document.getElementById("raceNumberSelect");
             const currentVenueLabel = document.getElementById("currentVenueLabel");
             const currentRaceNumberLabel = document.getElementById("currentRaceNumberLabel");
 
-            const venueText = venueSelect && venueSelect.value ? venueSelect.value : "川口";
+            const venueText = venueContext.name || "川口";
             const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "8レース";
 
             if (currentVenueLabel) {
@@ -927,35 +1072,57 @@
             return "about:blank";
         }
 
-        function updateVenueLinkedPanels() {
-            const venueContext = getSelectedVenueContext();
-            const venueVideoConfig = venueContext.themeKey ? venueYoutubeLives[venueContext.themeKey] : null;
-            const resolvedLiveUrl = venueVideoConfig ? resolveVenueLiveEmbedUrl(venueVideoConfig.youtubeUrl) : "about:blank";
+        function updateLiveVideoCard(card, config, emptyNoteText) {
+            if (!card) {
+                return;
+            }
+
+            const title = card.querySelector("[data-live-title]");
+            const copy = card.querySelector("[data-live-copy]");
+            const shell = card.querySelector("[data-live-shell]");
+            const liveFrame = card.querySelector("[data-live-frame]");
+            const liveEmpty = card.querySelector("[data-live-empty]");
+            const liveNote = card.querySelector("[data-live-note]");
+            const resolvedLiveUrl = config ? resolveVenueLiveEmbedUrl(config.youtubeUrl) : "about:blank";
             const hasConfiguredUrl = resolvedLiveUrl !== "about:blank";
 
-            document.querySelectorAll("[data-venue-panel='venue-video']").forEach(function (panel) {
-                if (!panel) {
-                    return;
+            if (title) {
+                title.textContent = config && config.label ? config.label : "ライブ動画";
+            }
+            if (copy) {
+                copy.textContent = config && config.copy ? config.copy : "選択内容に応じた動画枠です。";
+            }
+            if (shell) {
+                shell.classList.toggle("is-empty", !hasConfiguredUrl);
+            }
+            if (liveFrame) {
+                liveFrame.src = hasConfiguredUrl ? resolvedLiveUrl : "about:blank";
+                liveFrame.title = config && config.label ? config.label + " YouTubeライブ" : "ライブ動画";
+            }
+            if (liveEmpty) {
+                liveEmpty.textContent = "動画URLは未設定です";
+            }
+            if (liveNote) {
+                if (hasConfiguredUrl) {
+                    liveNote.textContent = (config && config.label ? config.label : "ライブ動画") + "を表示しています。";
+                } else {
+                    liveNote.textContent = emptyNoteText || "動画URLは未設定です";
                 }
+            }
+        }
 
-                const liveFrame = panel.querySelector("[data-venue-live-frame]");
-                const liveNote = panel.querySelector("[data-venue-live-note]");
+        function updateVenueLinkedPanels() {
+            const venueContext = getSelectedVenueContext();
+            const officialCard = document.querySelector("[data-live-card='official']");
+            const venueCard = document.querySelector("[data-live-card='venue']");
+            const venueVideoConfig = venueContext.themeKey ? liveVideoConfig.venues[venueContext.themeKey] : null;
 
-                if (liveFrame) {
-                    liveFrame.src = resolvedLiveUrl;
-                    liveFrame.title = venueVideoConfig ? venueVideoConfig.label + "のYouTubeライブ" : "レース場ライブ動画";
-                }
-
-                if (liveNote) {
-                    if (venueContext.name && venueVideoConfig && hasConfiguredUrl) {
-                        liveNote.textContent = venueVideoConfig.label + "のYouTubeライブを表示しています。";
-                    } else if (venueContext.name) {
-                        liveNote.textContent = venueContext.name + "の動画URLはまだ未設定です。";
-                    } else {
-                        liveNote.textContent = "レース場を選ぶと、その会場向けの動画枠へ切り替わります。";
-                    }
-                }
-            });
+            try {
+                updateLiveVideoCard(officialCard, liveVideoConfig.official, "動画URLは未設定です");
+                updateLiveVideoCard(venueCard, venueVideoConfig, venueContext.name ? venueContext.name + "の動画URLは未設定です。" : "動画URLは未設定です");
+            } catch (error) {
+                console.error("home/live video update error", error);
+            }
         }
 
         function formatCountdownTime(totalSeconds) {
@@ -1144,8 +1311,14 @@
         }
 
         function initializeHomePage() {
-            const venueSelect = document.getElementById("venueSelect");
+            const venueInput = document.getElementById("venueInput");
+            const venueButtons = getVenueChoiceButtons();
             const raceNumberSelect = document.getElementById("raceNumberSelect");
+
+            if (venueButtons.length > 0) {
+                const initialVenueName = venueInput && venueInput.value ? venueInput.value : venueButtons[0].dataset.venueName;
+                setVenueChoice(initialVenueName);
+            }
 
             updateSelectionSummary();
             updateCurrentRaceDisplay();
@@ -1155,14 +1328,15 @@
             setupManualTimer();
             layoutFloatingUtilities();
 
-            if (venueSelect) {
-                venueSelect.addEventListener("change", function () {
+            venueButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    setVenueChoice(button.dataset.venueName || "");
                     updateSelectionSummary();
                     updateCurrentRaceDisplay();
                     applyVenueTheme();
                     updateVenueLinkedPanels();
                 });
-            }
+            });
 
             if (raceNumberSelect) {
                 raceNumberSelect.addEventListener("change", function () {
