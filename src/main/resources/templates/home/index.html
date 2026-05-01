@@ -127,6 +127,28 @@
             font-weight: 700;
         }
 
+        .site-venue-current {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.32rem;
+            padding: 0.3rem 0.48rem;
+            border-radius: 0.58rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid color-mix(in srgb, var(--main-color) 22%, white);
+        }
+
+        .site-venue-current-label {
+            color: #61758a;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .site-venue-current-value {
+            color: var(--accent-color);
+            font-size: 0.86rem;
+            font-weight: 800;
+        }
+
         .site-venue-switch-list {
             display: inline-flex;
             align-items: center;
@@ -295,12 +317,12 @@
         .hero-title {
             margin-top: 1.1rem;
             margin-bottom: 1rem;
-            max-width: 21ch;
+            max-width: 48rem;
             color: #213d60;
-            font-size: clamp(1.9rem, 3vw, 2.7rem);
+            font-size: clamp(1.45rem, 2.1vw, 1.85rem);
             font-weight: 800;
             letter-spacing: 0;
-            line-height: 1.35;
+            line-height: 1.55;
         }
 
         .hero-copy,
@@ -401,6 +423,32 @@
             font-weight: 800;
         }
 
+        .usage-box {
+            margin-top: 1rem;
+            padding: 1rem 1.1rem;
+            border-radius: 1rem;
+            background: color-mix(in srgb, var(--surface-tint) 62%, white);
+            border: 1px solid color-mix(in srgb, var(--main-color) 26%, white);
+        }
+
+        .usage-title {
+            color: var(--accent-color);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .usage-list {
+            margin: 0.65rem 0 0;
+            padding-left: 1.25rem;
+            color: #52657a;
+            font-size: 0.92rem;
+            line-height: 1.65;
+        }
+
+        .usage-list li + li {
+            margin-top: 0.25rem;
+        }
+
         .utility-grid {
             display: grid;
             grid-template-columns: minmax(0, 1fr);
@@ -435,7 +483,7 @@
             grid-column: 3;
         }
 
-        .prep-form-grid > .summary-grid {
+        .prep-form-grid > .selection-summary-card {
             grid-column: 1 / span 2;
         }
 
@@ -445,9 +493,10 @@
         }
 
         .prep-form-grid > .action-grid {
-            grid-column: 1 / -1;
-            justify-self: end;
-            width: min(28rem, 100%);
+            grid-column: 3;
+            align-self: stretch;
+            justify-self: stretch;
+            width: 100%;
         }
 
         .venue-choice-field {
@@ -512,26 +561,6 @@
             border-radius: 1rem;
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.85rem;
-        }
-
-        .summary-card {
-            padding: 0.95rem 1rem;
-            border-radius: 1rem;
-            background: #ffffff;
-            border: 1px solid color-mix(in srgb, var(--main-color) 20%, white);
-        }
-
-        .summary-label {
-            color: #61758a;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
         .summary-value {
             color: var(--accent-color);
             font-size: 1.1rem;
@@ -547,6 +576,38 @@
             line-height: 1.7;
         }
 
+        .selection-summary-card {
+            display: grid;
+            grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
+            gap: 1rem;
+            align-items: center;
+            min-height: 5.8rem;
+            padding: 1rem 1.15rem;
+            border-radius: 1rem;
+            background: #ffffff;
+            border: 1px solid color-mix(in srgb, var(--main-color) 22%, white);
+            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.06);
+        }
+
+        .selection-summary-values {
+            display: flex;
+            flex-direction: column;
+            gap: 0.28rem;
+            min-width: 0;
+        }
+
+        .selection-summary-card .summary-value {
+            font-size: 1.2rem;
+            line-height: 1.22;
+            overflow-wrap: anywhere;
+        }
+
+        .selection-summary-text {
+            min-width: 0;
+            color: #52657a;
+            line-height: 1.7;
+        }
+
         .action-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -554,6 +615,9 @@
         }
 
         .action-grid .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             min-height: 3.2rem;
             border-radius: 1rem;
             font-weight: 700;
@@ -563,11 +627,16 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 1.15rem;
+            align-items: start;
+            width: 100%;
+            max-width: 100%;
         }
 
         .frame-card {
             display: grid;
             gap: 0.75rem;
+            min-width: 0;
+            overflow: hidden;
             padding: 1.1rem;
             border: 1px solid color-mix(in srgb, var(--main-color) 18%, white);
             border-radius: 1rem;
@@ -593,15 +662,19 @@
             border-radius: 1rem;
             border: 1px solid color-mix(in srgb, var(--main-color) 20%, white);
             background: #ffffff;
-            min-height: 340px;
+            width: 100%;
+            max-width: 100%;
+            min-height: 0;
             aspect-ratio: 16 / 9;
         }
 
         .video-frame {
             display: block;
             width: 100%;
+            max-width: 100%;
             height: 100%;
-            min-height: inherit;
+            min-height: 0;
+            aspect-ratio: 16 / 9;
             border: 0;
             background: #f5f8fb;
         }
@@ -614,7 +687,9 @@
             display: none;
             align-items: center;
             justify-content: center;
-            min-height: inherit;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
             padding: 1rem;
             color: #61758a;
             font-weight: 700;
@@ -628,6 +703,7 @@
 
         .link-stack {
             display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 0.8rem;
         }
 
@@ -834,7 +910,7 @@
 
             .prep-form-grid > .venue-choice-field,
             .prep-form-grid > div:nth-child(2),
-            .prep-form-grid > .summary-grid,
+            .prep-form-grid > .selection-summary-card,
             .prep-form-grid > .summary-note,
             .prep-form-grid > .action-grid {
                 grid-column: auto;
@@ -850,11 +926,11 @@
         @media (max-width: 767.98px) {
             .hero-title {
                 max-width: none;
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
-            .summary-grid,
             .action-grid,
+            .link-stack,
             .status-grid,
             .venue-choice-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -868,12 +944,18 @@
                 width: 100%;
             }
 
-            .video-frame {
-                min-height: 240px;
+            .selection-summary-card {
+                grid-template-columns: 1fr;
             }
 
-            .video-frame-shell {
-                min-height: 240px;
+            .selection-summary-values {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.45rem 1rem;
+            }
+
+            .link-stack {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -918,9 +1000,12 @@
             }
 
             .hero-step-grid,
-            .summary-grid,
             .action-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .selection-summary-values {
+                flex-direction: column;
             }
 
             .hero-panel,
@@ -992,14 +1077,10 @@
                                 <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">用語</a>
                                 <a th:href="@{/help}" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
                             </nav>
-                            <div class="site-venue-switch" role="group" aria-label="レース場切替">
-                                <span class="site-venue-switch-label">レース場切替</span>
-                                <span class="site-venue-switch-list">
-                                    <button type="button" class="site-venue-choice-btn" data-venue-choice data-venue-name="川口" data-theme-key="kawaguchi" th:classappend="${selectedVenue == '川口'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '川口'}">川口</button>
-                                    <button type="button" class="site-venue-choice-btn" data-venue-choice data-venue-name="伊勢崎" data-theme-key="isesaki" th:classappend="${selectedVenue == '伊勢崎'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '伊勢崎'}">伊勢崎</button>
-                                    <button type="button" class="site-venue-choice-btn" data-venue-choice data-venue-name="浜松" data-theme-key="hamamatsu" th:classappend="${selectedVenue == '浜松'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '浜松'}">浜松</button>
-                                    <button type="button" class="site-venue-choice-btn" data-venue-choice data-venue-name="飯塚" data-theme-key="iizuka" th:classappend="${selectedVenue == '飯塚'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '飯塚'}">飯塚</button>
-                                    <button type="button" class="site-venue-choice-btn" data-venue-choice data-venue-name="山陽" data-theme-key="sanyo" th:classappend="${selectedVenue == '山陽'} ? ' is-selected' : ''" th:attr="aria-pressed=${selectedVenue == '山陽'}">山陽</button>
+                            <div class="site-venue-switch" aria-label="現在選択中のレース場">
+                                <span class="site-venue-current" aria-live="polite">
+                                    <span class="site-venue-current-label">選択中</span>
+                                    <span class="site-venue-current-value" data-menu-venue-label th:text="${selectedVenue} ?: '川口'">川口</span>
                                 </span>
                             </div>
                         </div>
@@ -1014,7 +1095,7 @@
                     <div class="hero-layout">
                         <section class="hero-panel">
                             <div class="panel-badge">TOPページ</div>
-                            <h1 class="hero-title">前日準備から当日判断、記録と振り返りまでを短時間で整理しやすいトップ画面です。</h1>
+                            <h1 class="hero-title">本アプリは、オートレースにおける膨大な情報を整理し、<br>予想過程の可視化および記録を行うことで、<br>短時間でも効率的かつ再現性のある予想判断を支援する補助アプリである。</h1>
                             <p class="hero-copy mb-0">レース場、レース番号、動画、外部リンクをひとつの流れで確認し、必要な記録へ迷わず進めるように整理しています。</p>
 
                             <div class="hero-step-grid" aria-label="TOPページで整理する流れ">
@@ -1032,10 +1113,6 @@
                                 </article>
                             </div>
 
-                            <div class="hero-actions">
-                                <a href="#prepSection" class="btn btn-primary">予想準備を見る</a>
-                                <a th:href="@{/records/new}" class="btn btn-outline-primary">新規記録へ進む</a>
-                            </div>
                         </section>
 
                         <aside class="status-panel">
@@ -1056,6 +1133,15 @@
                             </div>
 
                             <p class="status-copy mb-0">いま確認したい会場とレース番号を、PCでもスマホでも右側で迷わず見返せる確認枠です。動画確認と記録入力へすぐ戻れるよう、情報を絞ったまま整理しています。</p>
+
+                            <div class="usage-box">
+                                <div class="usage-title">この画面の使い方</div>
+                                <ol class="usage-list">
+                                    <li>会場とレース番号を選ぶ</li>
+                                    <li>動画とリンクで判断材料を確認する</li>
+                                    <li>必要に応じて記録や用語検索へ進む</li>
+                                </ol>
+                            </div>
                         </aside>
                     </div>
                 </section>
@@ -1091,18 +1177,13 @@
                                 </select>
                             </div>
 
-                            <div class="summary-grid">
-                                <div class="summary-card">
-                                    <div class="summary-label">選択中のレース場</div>
+                            <div class="selection-summary-card">
+                                <div class="selection-summary-values">
                                     <div id="selectorVenueSummary" class="summary-value" th:text="${selectedVenue} ?: '未選択'">未選択</div>
-                                </div>
-                                <div class="summary-card">
-                                    <div class="summary-label">選択中のレース</div>
                                     <div id="selectorRaceSummary" class="summary-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '未選択'}">未選択</div>
                                 </div>
+                                <div id="selectionSummary" class="selection-summary-text">レース場とレース番号を選ぶと、ここに現在の選択内容が表示されます。</div>
                             </div>
-
-                            <div id="selectionSummary" class="summary-note">レース場とレース番号を選ぶと、ここに現在の選択内容が表示されます。</div>
 
                             <div class="action-grid">
                                 <a href="https://autoraceapp.onrender.com/records/new" class="btn btn-primary">新規登録</a>
@@ -1112,6 +1193,18 @@
                     </section>
 
                     <div class="d-grid gap-3">
+                        <section id="officialLinksSection" class="link-panel">
+                            <div class="panel-badge">当日判断リンク</div>
+                            <h2 class="section-title">公式・外部リンク</h2>
+                            <p class="link-note">当日判断で使う公式リンクだけをまとめています。</p>
+
+                            <div class="link-stack">
+                                <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">AutoRace.jp</a>
+                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">公式FANCLUB</a>
+                                <a th:href="@{/links}" class="btn btn-primary">外部リンク画面へ進む</a>
+                            </div>
+                        </section>
+
                         <section id="videoSection" class="video-panel">
                             <div class="panel-badge">当日判断</div>
                             <h2 class="section-title">当日判断のライブ動画を確認する</h2>
@@ -1135,7 +1228,7 @@
                                 </article>
 
                                 <article class="frame-card" data-live-card="venue">
-                                    <div class="frame-title" data-live-title>会場動画枠</div>
+                                    <div class="frame-title" data-live-title>レース場動画</div>
                                     <div class="frame-copy" data-live-copy>選択したレース場に連動する動画表示枠です。</div>
                                     <div class="video-frame-shell is-empty" data-live-shell>
                                         <iframe
@@ -1151,17 +1244,6 @@
                                     </div>
                                     <div class="summary-note" data-live-note>レース場を選ぶと、その会場向けの動画枠へ切り替わります。</div>
                                 </article>
-                            </div>
-                        </section>
-
-                        <section id="officialLinksSection" class="link-panel">
-                            <div class="panel-badge">公式リンク</div>
-                            <h2 class="section-title">公式情報を開く</h2>
-                            <p class="link-note">当日判断で使う公式リンクだけをまとめています。</p>
-
-                            <div class="link-stack">
-                                <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">AutoRace.jp</a>
-                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">公式FANCLUB</a>
                             </div>
                         </section>
                     </div>
