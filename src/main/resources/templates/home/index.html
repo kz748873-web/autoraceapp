@@ -64,26 +64,81 @@
             position: sticky;
             top: 0;
             z-index: 1030;
+            border-bottom-color: color-mix(in srgb, var(--main-color) 28%, white) !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .site-header .text-primary {
+            color: var(--accent-color) !important;
+        }
+
+        .site-header h1 {
+            color: #213d60;
         }
 
         .site-header .container {
-            padding-top: 0.9rem !important;
-            padding-bottom: 0.9rem !important;
+            padding-top: 1.35rem !important;
+            padding-bottom: 1.1rem !important;
+        }
+
+        .site-header-layout {
+            align-items: flex-start !important;
+        }
+
+        .site-header-brand {
+            min-width: 15rem;
+            padding-top: 0.1rem;
         }
 
         .site-header-actions {
             gap: 0.8rem !important;
+            padding-top: 0.5rem;
         }
 
         .site-header-actions > .d-flex {
             width: 100%;
         }
 
+        .site-menu-row {
+            gap: 0.65rem !important;
+        }
+
+        .site-menu-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            min-height: 2.65rem;
+            gap: 0.45rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 0.8rem;
+            background: var(--surface-tint);
+            border: 1px solid color-mix(in srgb, var(--main-color) 42%, white);
+            color: var(--accent-color);
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 0.3rem 0.75rem rgba(18, 61, 106, 0.06);
+        }
+
+        .site-menu-status-label {
+            color: #61758a;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .site-menu-status-value {
+            font-size: 0.94rem;
+            line-height: 1.2;
+        }
+
         .site-header-nav {
             display: flex !important;
             flex-wrap: nowrap !important;
+            flex: 1 1 auto;
             gap: 0.7rem !important;
-            width: 100%;
+            width: auto;
+            min-width: 0;
             overflow-x: auto;
             overflow-y: hidden;
             padding: 0.2rem 0.1rem 0.45rem;
@@ -93,13 +148,13 @@
 
         .site-header-nav .btn {
             flex: 0 0 auto;
-            min-height: 3.1rem;
-            padding: 0.9rem 1.15rem;
-            border-radius: 1rem;
-            font-size: 1rem;
+            min-height: 2.65rem;
+            padding: 0.62rem 0.95rem;
+            border-radius: 0.8rem;
+            font-size: 0.94rem;
             font-weight: 700;
             white-space: nowrap;
-            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.08);
+            box-shadow: 0 0.3rem 0.75rem rgba(18, 61, 106, 0.06);
         }
 
         .site-header-nav .btn:not(:first-child) {
@@ -116,27 +171,42 @@
             border-color: var(--main-color) !important;
         }
 
+        .site-header-nav .btn:not(:first-child):hover,
+        .site-header-nav .btn:not(:first-child):focus {
+            background: var(--surface-tint) !important;
+            color: var(--accent-color) !important;
+            border-color: color-mix(in srgb, var(--main-color) 70%, white) !important;
+        }
+
+        #prepSection,
+        #videoSection,
+        #officialLinksSection {
+            scroll-margin-top: 7.5rem;
+        }
+
         .home-shell {
             display: grid;
-            gap: 1.5rem;
+            gap: 1.35rem;
         }
 
         .hero-stage {
             position: relative;
             overflow: hidden;
-            min-height: 620px;
-            padding: 4.5rem 1.4rem 2.2rem;
-            border-radius: 2rem;
-            background: url("https://commons.wikimedia.org/wiki/Special:FilePath/Auto%20Race%20in%20Kawaguchi.jpg") center / cover no-repeat;
+            min-height: auto;
+            padding: 2rem;
+            border-radius: 1.25rem;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.88)),
+                linear-gradient(135deg, var(--surface-tint), #ffffff);
             border: 1px solid color-mix(in srgb, var(--main-color) 26%, white);
-            box-shadow: 0 1.6rem 3.2rem rgba(120, 74, 103, 0.12);
+            box-shadow: 0 1rem 2rem rgba(29, 45, 78, 0.1);
         }
 
         .hero-stage::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: var(--hero-overlay);
+            background: linear-gradient(90deg, color-mix(in srgb, var(--main-color) 12%, transparent), transparent 52%);
             pointer-events: none;
         }
 
@@ -144,9 +214,9 @@
             position: relative;
             z-index: 1;
             display: grid;
-            grid-template-columns: minmax(0, 1.75fr) minmax(320px, 0.92fr);
-            gap: 1.5rem;
-            align-items: start;
+            grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.82fr);
+            gap: 1.25rem;
+            align-items: stretch;
         }
 
         .hero-panel,
@@ -162,12 +232,17 @@
         }
 
         .hero-panel {
-            padding: 2.3rem 2.4rem;
+            padding: 0.6rem 0.8rem 0.6rem 0;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
         }
 
         .status-panel {
-            padding: 1.8rem;
-            margin-top: 4.5rem;
+            padding: 1.5rem;
+            margin-top: 0;
         }
 
         .panel-badge {
@@ -185,13 +260,13 @@
 
         .hero-title {
             margin-top: 1.1rem;
-            margin-bottom: 1.3rem;
-            max-width: 12ch;
+            margin-bottom: 1rem;
+            max-width: 21ch;
             color: #213d60;
-            font-size: clamp(3rem, 4.8vw, 4.25rem);
+            font-size: clamp(1.9rem, 3vw, 2.7rem);
             font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.18;
+            letter-spacing: 0;
+            line-height: 1.35;
         }
 
         .hero-copy,
@@ -203,15 +278,15 @@
         }
 
         .hero-copy {
-            max-width: 44rem;
-            font-size: 1rem;
+            max-width: 42rem;
+            font-size: 0.98rem;
         }
 
         .hero-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 0.9rem;
-            margin-top: 1.55rem;
+            margin-top: 1.15rem;
         }
 
         .hero-actions .btn {
@@ -219,6 +294,36 @@
             padding-inline: 1.2rem;
             border-radius: 1rem;
             font-weight: 700;
+        }
+
+        .hero-step-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+            margin-top: 1.35rem;
+        }
+
+        .hero-step-card {
+            min-height: 8.2rem;
+            padding: 1rem;
+            border-radius: 0.95rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid color-mix(in srgb, var(--main-color) 20%, white);
+            box-shadow: 0 0.45rem 1rem rgba(18, 61, 106, 0.06);
+        }
+
+        .hero-step-card h3 {
+            margin: 0 0 0.5rem;
+            color: var(--accent-color);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .hero-step-card p {
+            margin: 0;
+            color: #52657a;
+            font-size: 0.88rem;
+            line-height: 1.65;
         }
 
         .status-header {
@@ -264,14 +369,14 @@
 
         .utility-grid {
             display: grid;
-            grid-template-columns: minmax(320px, 0.96fr) minmax(0, 1.04fr);
-            gap: 1.35rem;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1.25rem;
         }
 
         .prep-panel,
         .video-panel,
         .link-panel {
-            padding: 1.45rem;
+            padding: 1.7rem;
         }
 
         .section-title {
@@ -283,7 +388,32 @@
 
         .prep-form-grid {
             display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(13rem, 0.72fr) minmax(17rem, 0.9fr);
             gap: 1rem;
+            align-items: end;
+        }
+
+        .prep-form-grid > .venue-choice-field {
+            grid-column: 1 / span 2;
+        }
+
+        .prep-form-grid > div:nth-child(2) {
+            grid-column: 3;
+        }
+
+        .prep-form-grid > .summary-grid {
+            grid-column: 1 / span 2;
+        }
+
+        .prep-form-grid > .summary-note {
+            grid-column: 3;
+            align-self: stretch;
+        }
+
+        .prep-form-grid > .action-grid {
+            grid-column: 1 / -1;
+            justify-self: end;
+            width: min(28rem, 100%);
         }
 
         .venue-choice-field {
@@ -398,13 +528,13 @@
         .media-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
+            gap: 1.15rem;
         }
 
         .frame-card {
             display: grid;
             gap: 0.75rem;
-            padding: 1rem;
+            padding: 1.1rem;
             border: 1px solid color-mix(in srgb, var(--main-color) 18%, white);
             border-radius: 1rem;
             background: rgba(255, 255, 255, 0.96);
@@ -429,13 +559,15 @@
             border-radius: 1rem;
             border: 1px solid color-mix(in srgb, var(--main-color) 20%, white);
             background: #ffffff;
-            min-height: 320px;
+            min-height: 340px;
+            aspect-ratio: 16 / 9;
         }
 
         .video-frame {
             display: block;
             width: 100%;
-            min-height: 320px;
+            height: 100%;
+            min-height: inherit;
             border: 0;
             background: #f5f8fb;
         }
@@ -448,7 +580,7 @@
             display: none;
             align-items: center;
             justify-content: center;
-            min-height: 320px;
+            min-height: inherit;
             padding: 1rem;
             color: #61758a;
             font-weight: 700;
@@ -620,15 +752,59 @@
         }
 
         @media (max-width: 991.98px) {
+            .site-header-layout {
+                gap: 1rem !important;
+            }
+
+            .site-header-brand {
+                min-width: 0;
+            }
+
+            .site-header-actions {
+                width: 100%;
+                padding-top: 0;
+            }
+
+            .site-menu-row {
+                align-items: stretch !important;
+            }
+
+            .site-menu-status {
+                width: 100%;
+            }
+
+            .site-header-nav {
+                flex-basis: 100%;
+                width: 100%;
+            }
+
             .hero-stage {
                 min-height: auto;
-                padding-top: 1.3rem;
+                padding: 1.4rem;
             }
 
             .hero-layout,
-            .utility-grid,
             .media-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .hero-panel {
+                padding-right: 0;
+            }
+
+            .hero-step-grid,
+            .prep-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prep-form-grid > .venue-choice-field,
+            .prep-form-grid > div:nth-child(2),
+            .prep-form-grid > .summary-grid,
+            .prep-form-grid > .summary-note,
+            .prep-form-grid > .action-grid {
+                grid-column: auto;
+                width: 100%;
+                justify-self: stretch;
             }
 
             .status-panel {
@@ -639,7 +815,7 @@
         @media (max-width: 767.98px) {
             .hero-title {
                 max-width: none;
-                font-size: 2.65rem;
+                font-size: 2rem;
             }
 
             .summary-grid,
@@ -660,18 +836,41 @@
             .video-frame {
                 min-height: 240px;
             }
+
+            .video-frame-shell {
+                min-height: 240px;
+            }
         }
 
         @media (max-width: 575.98px) {
+            .site-header .container {
+                padding-top: 1rem !important;
+                padding-bottom: 0.85rem !important;
+            }
+
             .site-header-nav {
                 gap: 0.6rem !important;
                 padding-bottom: 0.35rem;
             }
 
             .site-header-nav .btn {
-                min-height: 3rem;
-                padding: 0.82rem 1rem;
-                font-size: 0.98rem;
+                min-height: 2.75rem;
+                padding: 0.68rem 0.85rem;
+                font-size: 0.9rem;
+            }
+
+            .site-menu-status {
+                min-height: 2.55rem;
+            }
+
+            .hero-stage {
+                padding: 1rem;
+            }
+
+            .hero-step-grid,
+            .summary-grid,
+            .action-grid {
+                grid-template-columns: 1fr;
             }
 
             .hero-panel,
@@ -728,18 +927,26 @@
     <div class="app-shell d-flex flex-column">
         <header class="border-bottom bg-white shadow-sm site-header">
             <div class="container py-3">
-                <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
-                    <div>
+                <div class="site-header-layout d-flex flex-column flex-xl-row justify-content-between gap-3">
+                    <div class="site-header-brand">
                         <div class="text-primary fw-semibold mb-1">AUTO RACE SUPPORT APP</div>
                         <h1 class="h3 fw-bold mb-0">オートレース予想補助アプリ</h1>
                     </div>
 
                     <div class="site-header-actions d-flex flex-column align-items-xl-end gap-2">
-                        <div class="d-flex flex-wrap align-items-center justify-content-xl-end gap-2 w-100">
-                            <nav class="site-header-nav d-flex flex-wrap gap-2 justify-content-xl-end">
-                                <a th:href="@{/}" class="btn btn-outline-primary btn-lg">TOPページ</a>
+                        <div class="site-menu-row d-flex flex-wrap align-items-center justify-content-xl-end w-100">
+                            <div class="site-menu-status" aria-live="polite">
+                                <span class="site-menu-status-label">選択中</span>
+                                <span class="site-menu-status-value" data-menu-venue-label th:text="${selectedVenue} ?: '川口'">川口</span>
+                            </div>
+                            <nav class="site-header-nav d-flex flex-wrap gap-2 justify-content-xl-end" aria-label="TOPページメニュー">
+                                <a th:href="@{/}" class="btn btn-outline-primary btn-lg" data-menu-param-target="home">TOPページ</a>
+                                <a href="#prepSection" class="btn btn-outline-secondary btn-lg">予想準備</a>
+                                <a href="#videoSection" class="btn btn-outline-secondary btn-lg">動画確認</a>
+                                <a href="#officialLinksSection" class="btn btn-outline-secondary btn-lg">公式リンク</a>
                                 <a th:href="@{/records/new}" class="btn btn-outline-secondary btn-lg">新規記録</a>
-                                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">記録一覧を見る</a>
+                                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg" data-menu-param-target="records">記録一覧を見る</a>
+                                <a th:href="@{/links(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg" data-menu-param-target="links">関連リンク</a>
                                 <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">用語</a>
                                 <a th:href="@{/help}" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
                             </nav>
@@ -755,8 +962,23 @@
                     <div class="hero-layout">
                         <section class="hero-panel">
                             <div class="panel-badge">TOPページ</div>
-                            <h1 class="hero-title">開催確認、動画確認、記録入力までを一画面で始めます。</h1>
-                            <p class="hero-copy mb-0">レース場を選択することで表示内容を切り替え、レース番号、動画、外部リンクを確認しながら、そのまま記録と確認へ進める流れに整理しています。</p>
+                            <h1 class="hero-title">前日準備から当日判断、記録と振り返りまでを短時間で整理しやすいトップ画面です。</h1>
+                            <p class="hero-copy mb-0">レース場、レース番号、動画、外部リンクをひとつの流れで確認し、必要な記録へ迷わず進めるように整理しています。</p>
+
+                            <div class="hero-step-grid" aria-label="TOPページで整理する流れ">
+                                <article class="hero-step-card">
+                                    <h3>前日準備</h3>
+                                    <p>確認したい会場とレースを先に決め、予想前の材料を整えます。</p>
+                                </article>
+                                <article class="hero-step-card">
+                                    <h3>当日判断</h3>
+                                    <p>ライブ動画と公式情報を見ながら、直前の気配を確認します。</p>
+                                </article>
+                                <article class="hero-step-card">
+                                    <h3>記録・振り返り</h3>
+                                    <p>入力した内容を残し、次の予想に使いやすく振り返ります。</p>
+                                </article>
+                            </div>
 
                             <div class="hero-actions">
                                 <a href="#prepSection" class="btn btn-primary">予想準備を見る</a>
@@ -788,8 +1010,9 @@
 
                 <div class="utility-grid">
                     <section id="prepSection" class="prep-panel">
+                        <div class="panel-badge">前日予想準備枠</div>
                         <h2 class="section-title">予想準備</h2>
-                        <p class="section-copy">レース場とレース番号を選んで、記録や確認へ進めます。</p>
+                        <p class="section-copy">レース場とレース番号を選んで次に進めます。記録や確認へ進む前の状態をここで整えます。</p>
 
                         <form method="get" th:action="@{/}" class="prep-form-grid mt-4">
                             <div class="venue-choice-field">
@@ -837,8 +1060,8 @@
                     </section>
 
                     <div class="d-grid gap-3">
-                        <section class="video-panel">
-                            <div class="panel-badge">ライブ動画枠</div>
+                        <section id="videoSection" class="video-panel">
+                            <div class="panel-badge">当日判断</div>
                             <h2 class="section-title">当日判断のライブ動画を確認する</h2>
                             <div class="media-grid mt-3">
                                 <article class="frame-card" data-live-card="official">
@@ -879,7 +1102,7 @@
                             </div>
                         </section>
 
-                        <section class="link-panel">
+                        <section id="officialLinksSection" class="link-panel">
                             <div class="panel-badge">公式リンク</div>
                             <h2 class="section-title">公式情報を開く</h2>
                             <p class="link-note">当日判断で使う公式リンクだけをまとめています。</p>
@@ -1058,6 +1281,39 @@
             if (currentRaceNumberLabel) {
                 currentRaceNumberLabel.textContent = raceText;
             }
+        }
+
+        function updateMenuContext() {
+            const venueContext = getSelectedVenueContext();
+            const menuVenueLabel = document.querySelector("[data-menu-venue-label]");
+            const raceNumberSelect = document.getElementById("raceNumberSelect");
+            const selectedRaceNumber = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value : "";
+
+            if (menuVenueLabel) {
+                menuVenueLabel.textContent = venueContext.name || "未選択";
+            }
+
+            document.querySelectorAll("[data-menu-param-target]").forEach(function (link) {
+                if (!link.dataset.menuBaseHref) {
+                    const initialHref = link.getAttribute("href") || "/";
+                    const initialUrl = new URL(initialHref, window.location.origin);
+                    initialUrl.search = "";
+                    link.dataset.menuBaseHref = initialUrl.pathname + initialUrl.hash;
+                }
+
+                const target = link.dataset.menuParamTarget || "";
+                const nextUrl = new URL(link.dataset.menuBaseHref || "/", window.location.origin);
+                nextUrl.search = "";
+
+                if (venueContext.name) {
+                    nextUrl.searchParams.set("venue", venueContext.name);
+                }
+                if (target === "home" && selectedRaceNumber) {
+                    nextUrl.searchParams.set("raceNumber", selectedRaceNumber);
+                }
+
+                link.href = nextUrl.pathname + nextUrl.search + nextUrl.hash;
+            });
         }
 
         function updateCurrentClock() {
@@ -1371,6 +1627,7 @@
             updateSelectionSummary();
             updateCurrentRaceDisplay();
             updateCurrentClock();
+            updateMenuContext();
             applyVenueTheme();
             updateVenueLinkedPanels();
             setupManualTimer();
@@ -1381,6 +1638,7 @@
                     setVenueChoice(button.dataset.venueName || "");
                     updateSelectionSummary();
                     updateCurrentRaceDisplay();
+                    updateMenuContext();
                     applyVenueTheme();
                     updateVenueLinkedPanels();
                 });
@@ -1390,6 +1648,7 @@
                 raceNumberSelect.addEventListener("change", function () {
                     updateSelectionSummary();
                     updateCurrentRaceDisplay();
+                    updateMenuContext();
                 });
             }
 
