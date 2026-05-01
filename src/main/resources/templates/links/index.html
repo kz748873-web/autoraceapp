@@ -265,38 +265,16 @@
             color: var(--sub);
         }
 
-        .utility-entry-btn {
-            position: fixed;
-            top: 5.4rem;
-            right: 1rem;
-            z-index: 1035;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            min-height: 2.8rem;
-            padding: 0.6rem 0.9rem;
-            border: 1px solid var(--border-color);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 0.65rem 1.4rem rgba(15, 23, 42, 0.12);
-            color: var(--accent-color);
-            text-decoration: none;
-            font-size: 0.92rem;
-            font-weight: 700;
-            backdrop-filter: blur(6px);
+        .link-page-grid {
+            display: grid;
+            grid-template-columns: minmax(18rem, 0.82fr) minmax(0, 1.18fr);
+            gap: 1.25rem;
+            align-items: start;
         }
 
-        .utility-entry-btn:hover,
-        .utility-entry-btn:focus {
-            background: var(--surface-tint);
-            color: var(--accent-color);
-            border-color: color-mix(in srgb, var(--main-color) 70%, white);
-        }
-
-        .utility-entry-icon {
-            font-size: 1rem;
-            line-height: 1;
+        .link-section-stack {
+            display: grid;
+            gap: 1.25rem;
         }
 
         body .btn-primary {
@@ -332,22 +310,25 @@
                 min-height: 3.8rem;
             }
 
-            .utility-entry-btn {
-                top: 4.9rem;
-                right: 0.75rem;
-                min-height: 3rem;
-                padding-inline: 0.85rem;
+            .link-page-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .live-link-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .live-link-item:last-child {
+                grid-column: 1 / -1;
             }
         }
     </style>
 </head>
-<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : ${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : ${selectedVenue == '浜松'} ? ' theme-hamamatsu' : ${selectedVenue == '飯塚'} ? ' theme-iizuka' : ${selectedVenue == '山陽'} ? ' theme-sanyo' : ''">
+<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : ${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : ${selectedVenue == '浜松'} ? ' theme-hamamatsu' : ${selectedVenue == '飯塚'} ? ' theme-iizuka' : ${selectedVenue == '山陽'} ? ' theme-sanyo' : ''" th:attr="data-selected-venue=${selectedVenue}">
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
-        <a href="#image-switch-entry" class="utility-entry-btn image-switch-entry-btn" aria-label="画像切り替え">
-            <span class="utility-entry-icon" aria-hidden="true">🖼</span>
-            <span>画像切替</span>
-        </a>
         <main class="container py-4 py-md-5 flex-grow-1">
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                 <div>
@@ -360,173 +341,145 @@
                 </div>
             </div>
 
-            <div class="row g-4 align-items-start">
-                <div class="col-lg-4">
-                    <div class="vstack gap-4">
-                        <section class="page-card p-4">
-                            <span class="mini-badge mb-2">公式関連</span>
-                            <h2 class="h4 fw-bold mb-2">公式サイトと FANCLUB</h2>
-                            <p class="section-note mb-3">AutoRace.jp と 公式FANCLUB だけを分かりやすく並べています。</p>
-                            <div class="vstack gap-3">
-                                <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
-                                    <span class="official-link-text">
-                                        <span class="official-link-title" th:text="${officialRelatedLinks[0].siteName}">AutoRace.jp</span>
-                                        <span class="official-link-note" th:text="${officialRelatedLinks[0].note}">公式案内</span>
-                                    </span>
-                                    <span class="mini-badge">公式</span>
-                                </a>
-                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
-                                    <span class="official-link-text">
-                                        <span class="official-link-title" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</span>
-                                        <span class="official-link-note" th:text="${officialRelatedLinks[1].note}">会員向け案内</span>
-                                    </span>
-                                    <span class="mini-badge">FANCLUB</span>
-                                </a>
-                            </div>
-                        </section>
+            <div class="link-page-grid">
+                <div class="link-section-stack">
+                    <section class="page-card p-4">
+                        <span class="mini-badge mb-2">公式情報</span>
+                        <h2 class="h4 fw-bold mb-2">AutoRace.jp</h2>
+                        <p class="section-note mb-3">開催日程、出走表、結果など、まず確認したい公式情報を開きます。</p>
+                        <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
+                            <span class="official-link-text">
+                                <span class="official-link-title" th:text="${officialRelatedLinks[0].siteName}">AutoRace.jp</span>
+                                <span class="official-link-note" th:text="${officialRelatedLinks[0].note}">オートレース公式サイトです。</span>
+                            </span>
+                            <span class="mini-badge">公式</span>
+                        </a>
+                    </section>
 
-                        <section class="page-card p-4">
-                            <span class="mini-badge mb-2">レース場カテゴリ</span>
-                            <h2 class="h4 fw-bold mb-2">会場を選んで確認</h2>
-                            <p class="section-note mb-3">川口、伊勢崎、浜松、飯塚、山陽から選ぶと、右側の内容がその会場に合わせて切り替わります。</p>
-                            <div class="venue-select-grid">
-                                <a th:each="venueName : ${venueNames}" th:href="@{/links(venue=${venueName})}" th:text="${venueName}" th:attr="data-theme-key=${venueName == '川口' ? 'kawaguchi' : venueName == '伊勢崎' ? 'isesaki' : venueName == '浜松' ? 'hamamatsu' : venueName == '飯塚' ? 'iizuka' : venueName == '山陽' ? 'sanyo' : ''}" th:classappend="${venueName == selectedVenue} ? ' btn-primary' : ' btn-outline-primary'" class="btn btn-lg venue-select-btn">川口</a>
-                            </div>
-                        </section>
-                    </div>
-                </div>
+                    <section class="page-card p-4">
+                        <span class="mini-badge mb-2">FANCLUB</span>
+                        <h2 class="h4 fw-bold mb-2">公式FANCLUB</h2>
+                        <p class="section-note mb-3">会員向け情報やファンサービスを確認したいときに使います。</p>
+                        <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
+                            <span class="official-link-text">
+                                <span class="official-link-title" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</span>
+                                <span class="official-link-note" th:text="${officialRelatedLinks[1].note}">公式FANCLUBの入口です。</span>
+                            </span>
+                            <span class="mini-badge">FANCLUB</span>
+                        </a>
+                    </section>
 
-                <div class="col-lg-8">
-                    <section class="page-card p-4 p-md-5">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-                            <div>
-                                <span class="mini-badge mb-2">選択中のレース場</span>
-                                <div class="fs-2 fw-bold" th:text="${selectedVenue}">川口</div>
-                            </div>
-                            <a th:href="@{/(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg">TOPでも見る</a>
-                        </div>
-
-                        <div class="venue-summary-card p-4 mb-4">
-                            <h3 class="h5 fw-bold mb-2">このページで確認できる内容</h3>
-                            <p class="section-note mb-0">レース場ライブ配信は専用一覧でまとめ、選択したレース場の公式サイトやSNSは別の枠で確認できるようにしています。</p>
-                        </div>
-
-                        <div class="vstack gap-3 mb-4">
-                            <div class="venue-link-section live-link-section p-4">
-                                <span class="mini-badge mb-2">ライブ配信</span>
-                                <div class="venue-link-section-title mb-2">レース場ライブ配信</div>
-                                <p class="section-note mb-2">このページでは watch 形式の YouTube URL をまとめて管理します。後から確認や修正をするときは、下の一覧だけ見直せば大丈夫です。</p>
-                                <p class="live-link-section-note mb-3">会場名とURLの対応が分かるように、同じ並びでそろえています。</p>
-                                <div class="live-link-list">
-                                    <div class="live-link-item" data-race-place="kawaguchi">
-                                        <div class="live-link-row">
-                                            <div class="live-link-caption">レース場名</div>
-                                            <div class="live-link-label">川口オート</div>
-                                        </div>
-                                        <div class="live-link-row mt-2">
-                                            <div class="live-link-caption">YouTube watch URL</div>
-                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
-                                        </div>
-                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">川口オートのライブを見る</a>
-                                    </div>
-                                    <div class="live-link-item" data-race-place="isesaki">
-                                        <div class="live-link-row">
-                                            <div class="live-link-caption">レース場名</div>
-                                            <div class="live-link-label">伊勢崎オート</div>
-                                        </div>
-                                        <div class="live-link-row mt-2">
-                                            <div class="live-link-caption">YouTube watch URL</div>
-                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
-                                        </div>
-                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">伊勢崎オートのライブを見る</a>
-                                    </div>
-                                    <div class="live-link-item" data-race-place="hamamatsu">
-                                        <div class="live-link-row">
-                                            <div class="live-link-caption">レース場名</div>
-                                            <div class="live-link-label">浜松オート</div>
-                                        </div>
-                                        <div class="live-link-row mt-2">
-                                            <div class="live-link-caption">YouTube watch URL</div>
-                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
-                                        </div>
-                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">浜松オートのライブを見る</a>
-                                    </div>
-                                    <div class="live-link-item" data-race-place="iizuka">
-                                        <div class="live-link-row">
-                                            <div class="live-link-caption">レース場名</div>
-                                            <div class="live-link-label">飯塚オート</div>
-                                        </div>
-                                        <div class="live-link-row mt-2">
-                                            <div class="live-link-caption">YouTube watch URL</div>
-                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
-                                        </div>
-                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">飯塚オートのライブを見る</a>
-                                    </div>
-                                    <div class="live-link-item" data-race-place="sanyo">
-                                        <div class="live-link-row">
-                                            <div class="live-link-caption">レース場名</div>
-                                            <div class="live-link-label">山陽オート</div>
-                                        </div>
-                                        <div class="live-link-row mt-2">
-                                            <div class="live-link-caption">YouTube watch URL</div>
-                                            <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
-                                        </div>
-                                        <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn">山陽オートのライブを見る</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="venue-link-section p-4">
-                                <div class="venue-link-section-title mb-3">レース場の公式情報</div>
-                                <div class="row g-3">
-                                    <div class="col-md-12">
-                                        <a th:if="${selectedVenueLinks['officialSite'] != null}" th:href="${selectedVenueLinks['officialSite'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg w-100 social-link-btn">公式サイト</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="venue-link-section p-4">
-                                <div class="venue-link-section-title mb-3">レース場のSNS</div>
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <a th:if="${selectedVenueLinks['youtube'] != null}" th:href="${selectedVenueLinks['youtube'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg w-100 social-link-btn youtube-btn">YouTube</a>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <a th:if="${selectedVenueLinks['instagram'] != null}" th:href="${selectedVenueLinks['instagram'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg w-100 social-link-btn instagram-btn">Instagram</a>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <a th:if="${selectedVenueLinks['facebook'] != null}" th:href="${selectedVenueLinks['facebook'].url}" target="_blank" rel="noopener noreferrer" class="btn btn-lg w-100 social-link-btn facebook-btn">Facebook</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="detail-tile p-4 h-100">
-                                    <div class="fw-semibold mb-2">会場公式サイト</div>
-                                    <div class="text-secondary" th:text="${selectedVenueLinks['officialSite'] != null ? selectedVenueLinks['officialSite'].note : 'リンク準備中です。'}">会場の案内文</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="detail-tile p-4 h-100">
-                                    <div class="fw-semibold mb-2">SNS・ライブ案内</div>
-                                    <div class="text-secondary">ライブ配信は上の専用一覧で確認し、SNSは会場ごとの案内として下のボタンから開けます。</div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <a th:href="@{/(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg top-link-btn">
-                                    <span>TOPページの外部リンク導線へ戻る</span>
-                                </a>
-                            </div>
-                        </div>
+                    <section class="page-card p-4">
+                        <span class="mini-badge mb-2">TOP連携</span>
+                        <h2 class="h4 fw-bold mb-2">TOPページへ戻る</h2>
+                        <p class="section-note mb-3">リンク確認が終わったら、TOPページで動画や記録の確認に戻れます。</p>
+                        <a th:href="@{/(venue=${selectedVenue})}" class="btn btn-outline-secondary btn-lg top-link-btn">
+                            <span>TOPページへ戻る</span>
+                        </a>
                     </section>
                 </div>
+
+                <section class="page-card p-4 p-md-5 live-link-section">
+                    <span class="mini-badge mb-2">ライブ配信</span>
+                    <h2 class="h4 fw-bold mb-2">レース場ライブ配信</h2>
+                    <p class="section-note mb-2">各レース場のYouTubeリンクを watch 形式で整理しています。URLを差し替えるときは、この一覧の値だけ確認してください。</p>
+                    <p class="live-link-section-note mb-4">公式、FANCLUB、ライブ配信を分けているので、必要なリンクだけ迷わず開けます。</p>
+
+                    <div class="live-link-list" data-youtube-watch-list>
+                        <div class="live-link-item" data-race-place="kawaguchi" data-venue-name="川口オート" data-youtube-watch-url="https://www.youtube.com/watch?v=xxxxx">
+                            <div class="live-link-row">
+                                <div class="live-link-caption">レース場ライブ配信</div>
+                                <div class="live-link-label">川口オート</div>
+                            </div>
+                            <div class="live-link-row mt-2">
+                                <div class="live-link-caption">YouTube watch URL</div>
+                                <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn" data-live-youtube-link>川口オートのライブ配信を開く</a>
+                        </div>
+
+                        <div class="live-link-item" data-race-place="isesaki" data-venue-name="伊勢崎オート" data-youtube-watch-url="https://www.youtube.com/watch?v=xxxxx">
+                            <div class="live-link-row">
+                                <div class="live-link-caption">レース場ライブ配信</div>
+                                <div class="live-link-label">伊勢崎オート</div>
+                            </div>
+                            <div class="live-link-row mt-2">
+                                <div class="live-link-caption">YouTube watch URL</div>
+                                <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn" data-live-youtube-link>伊勢崎オートのライブ配信を開く</a>
+                        </div>
+
+                        <div class="live-link-item" data-race-place="hamamatsu" data-venue-name="浜松オート" data-youtube-watch-url="https://www.youtube.com/watch?v=xxxxx">
+                            <div class="live-link-row">
+                                <div class="live-link-caption">レース場ライブ配信</div>
+                                <div class="live-link-label">浜松オート</div>
+                            </div>
+                            <div class="live-link-row mt-2">
+                                <div class="live-link-caption">YouTube watch URL</div>
+                                <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn" data-live-youtube-link>浜松オートのライブ配信を開く</a>
+                        </div>
+
+                        <div class="live-link-item" data-race-place="iizuka" data-venue-name="飯塚オート" data-youtube-watch-url="https://www.youtube.com/watch?v=xxxxx">
+                            <div class="live-link-row">
+                                <div class="live-link-caption">レース場ライブ配信</div>
+                                <div class="live-link-label">飯塚オート</div>
+                            </div>
+                            <div class="live-link-row mt-2">
+                                <div class="live-link-caption">YouTube watch URL</div>
+                                <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn" data-live-youtube-link>飯塚オートのライブ配信を開く</a>
+                        </div>
+
+                        <div class="live-link-item" data-race-place="sanyo" data-venue-name="山陽オート" data-youtube-watch-url="https://www.youtube.com/watch?v=xxxxx">
+                            <div class="live-link-row">
+                                <div class="live-link-caption">レース場ライブ配信</div>
+                                <div class="live-link-label">山陽オート</div>
+                            </div>
+                            <div class="live-link-row mt-2">
+                                <div class="live-link-caption">YouTube watch URL</div>
+                                <code class="live-link-url">https://www.youtube.com/watch?v=xxxxx</code>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=xxxxx" target="_blank" rel="noopener noreferrer" class="btn btn-danger btn-lg w-100 live-link-btn" data-live-youtube-link>山陽オートのライブ配信を開く</a>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
         <div th:replace="~{layout/footer :: siteFooter}"></div>
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const liveLinks = document.querySelectorAll("[data-live-youtube-link]");
+
+            liveLinks.forEach(function (link) {
+                if (!link) {
+                    return;
+                }
+
+                const item = link.closest("[data-youtube-watch-url]");
+                const watchUrl = item && item.dataset ? item.dataset.youtubeWatchUrl : "";
+
+                if (watchUrl) {
+                    link.setAttribute("href", watchUrl);
+                }
+            });
+
+            const selectedVenue = document.body ? document.body.dataset.selectedVenue : "";
+
+            if (selectedVenue) {
+                try {
+                    window.localStorage.setItem("autorace:selectedVenue", selectedVenue);
+                } catch (error) {
+                    return;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
