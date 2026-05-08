@@ -1,9 +1,15 @@
 ﻿<header xmlns:th="http://www.thymeleaf.org" th:fragment="siteHeader" class="border-bottom bg-white shadow-sm site-header">
     <div class="container py-3">
         <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
-            <div>
-                <div class="text-primary fw-semibold mb-1">AUTO RACE SUPPORT APP</div>
-                <h1 class="h3 fw-bold mb-0">オートレース予想補助アプリ</h1>
+            <div class="site-header-brand">
+                <div class="site-header-brand-logo">
+                    <img th:src="@{/images/rogo.png}"
+                         src="/images/rogo.png"
+                         alt="Prediction Pit プレピット"
+                         class="site-header-logo-image"
+                         width="288"
+                         height="72">
+                </div>
             </div>
 
             <div class="site-header-actions d-flex flex-column align-items-xl-end gap-2">
