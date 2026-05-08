@@ -4,6 +4,189 @@
     <th:block th:replace="~{layout/base :: commonHead('レース記録登録 | オートレース予想補助アプリ')}"></th:block>
     <link rel="stylesheet" th:href="@{/css/records-start-diagram.css}">
     <style>
+        body.record-form-page {
+            --main-color: #84acd9;
+            --accent-color: #1f4f83;
+            --border-color: #cbdced;
+            --surface-tint: #edf5fd;
+            --main-color-text: #ffffff;
+            --header-strong-text: var(--theme-text, #213d60);
+            --header-muted-text: var(--sub, #52657a);
+        }
+
+        body.record-form-page.theme-kawaguchi {
+            --main-color: #d96aa0;
+            --accent-color: #8b2c5b;
+            --border-color: #e9b5cf;
+            --surface-tint: #f9e1eb;
+            --main-color-text: #ffffff;
+        }
+
+        body.record-form-page.theme-isesaki {
+            --main-color: #49515c;
+            --accent-color: #2f3640;
+            --border-color: #c4cad2;
+            --surface-tint: #e5e9ee;
+            --main-color-text: #ffffff;
+        }
+
+        body.record-form-page.theme-hamamatsu {
+            --main-color: #4d8fd6;
+            --accent-color: #21558b;
+            --border-color: #c5dbf4;
+            --surface-tint: #e3eefb;
+            --main-color-text: #ffffff;
+        }
+
+        body.record-form-page.theme-iizuka {
+            --main-color: #d4ad2d;
+            --accent-color: #6f5600;
+            --border-color: #ead48b;
+            --surface-tint: #fff6d6;
+            --main-color-text: #3f3200;
+        }
+
+        body.record-form-page.theme-sanyo {
+            --main-color: #d88949;
+            --accent-color: #8f5728;
+            --border-color: #ecc5a6;
+            --surface-tint: #fcebdd;
+            --main-color-text: #ffffff;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            border-bottom-color: color-mix(in srgb, var(--main-color) 28%, white) !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .site-header .container {
+            padding-top: 1.35rem !important;
+            padding-bottom: 1.1rem !important;
+        }
+
+        .site-header-layout {
+            align-items: center !important;
+        }
+
+        .site-header-brand {
+            min-width: 15rem;
+            padding-top: 0.1rem;
+        }
+
+        .site-header-brand-kicker {
+            color: var(--accent-color);
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .site-header h1 {
+            color: var(--header-strong-text);
+        }
+
+        .site-header-actions {
+            gap: 0.8rem !important;
+            padding-top: 0.5rem;
+        }
+
+        .site-menu-row {
+            gap: 0.65rem !important;
+        }
+
+        .site-header-nav {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            flex: 1 1 auto;
+            gap: 0.7rem !important;
+            width: auto;
+            min-width: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.2rem 0.1rem 0.45rem;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .site-header-nav .btn {
+            flex: 0 0 auto;
+            min-height: 2.65rem;
+            padding: 0.62rem 0.95rem;
+            border-radius: 0.8rem;
+            font-size: 0.94rem;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 0.3rem 0.75rem rgba(18, 61, 106, 0.06);
+        }
+
+        .site-header-nav .btn:not(.is-active) {
+            background: #ffffff !important;
+            color: var(--accent-color) !important;
+            border-color: color-mix(in srgb, var(--border-color) 70%, white) !important;
+        }
+
+        .site-header-nav .btn.is-active {
+            background: var(--main-color) !important;
+            color: var(--main-color-text) !important;
+            border-color: color-mix(in srgb, var(--main-color) 82%, black) !important;
+        }
+
+        .site-header-nav .btn:not(.is-active):hover,
+        .site-header-nav .btn:not(.is-active):focus {
+            background: var(--surface-tint) !important;
+            color: var(--accent-color) !important;
+            border-color: color-mix(in srgb, var(--main-color) 70%, white) !important;
+        }
+
+        .site-header .app-theme-toolbar {
+            border-color: color-mix(in srgb, var(--main-color) 22%, white);
+        }
+
+        .site-header .app-theme-select {
+            color: var(--accent-color);
+            border-color: color-mix(in srgb, var(--main-color) 30%, white);
+        }
+
+        .site-venue-switch {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            min-height: 2.65rem;
+            padding: 0.38rem 0.45rem 0.38rem 0.72rem;
+            border-radius: 0.8rem;
+            background: var(--surface-tint);
+            border: 1px solid color-mix(in srgb, var(--main-color) 42%, white);
+            color: var(--accent-color);
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 0.3rem 0.75rem rgba(18, 61, 106, 0.06);
+        }
+
+        .site-venue-current {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.32rem;
+            padding: 0.3rem 0.48rem;
+            border-radius: 0.58rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid color-mix(in srgb, var(--main-color) 22%, white);
+        }
+
+        .site-venue-current-label {
+            color: var(--header-muted-text);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .site-venue-current-value {
+            color: var(--accent-color);
+            font-size: 0.86rem;
+            font-weight: 800;
+        }
+
         .section-shell {
             border: 1px solid var(--card);
             border-radius: 1.5rem;
@@ -74,9 +257,13 @@
         }
 
         .start-diagram-shell {
+            --track-surface-color: #5e6f80;
+            --track-shadow-color: rgba(20, 43, 65, 0.1);
+            --track-infield-color: #bfd7b2;
+            --track-label-color: #1f2f44;
             border: 1px solid var(--card);
             border-radius: 1.25rem;
-            background: #f7f9fc;
+            background: color-mix(in srgb, var(--surface-tint) 42%, white);
             overflow: hidden;
         }
 
@@ -85,7 +272,8 @@
             width: 100%;
             aspect-ratio: 16 / 9;
             min-height: 22rem;
-            background: linear-gradient(180deg, #f9fbff 0%, #eef4fb 100%);
+            background:
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 56%, white) 0%, #f7f9fc 100%);
         }
 
         .start-diagram-bg-layer,
@@ -105,8 +293,77 @@
             display: block;
         }
 
+        .start-diagram-track .track-surface {
+            fill: var(--track-surface-color);
+        }
+
+        .start-diagram-track .track-shadow {
+            fill: var(--track-shadow-color);
+        }
+
+        .start-diagram-track .track-inner {
+            fill: var(--track-infield-color);
+            stroke: rgba(255, 255, 255, 0.96);
+            stroke-width: 5;
+        }
+
+        .start-diagram-track .track-lane {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.66);
+            stroke-width: 3.4;
+            stroke-linecap: round;
+            stroke-dasharray: 18 14;
+        }
+
+        .start-diagram-track .track-edge {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.88);
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .start-diagram-track .handicap-line {
+            stroke: rgba(255, 255, 255, 0.82);
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .start-diagram-track .handicap-line.is-main {
+            stroke: #fff1a6;
+            stroke-width: 7;
+        }
+
+        .start-diagram-track .track-label-box {
+            fill: rgba(255, 255, 255, 0.94);
+            stroke: rgba(255, 255, 255, 0.98);
+            stroke-width: 2.4;
+        }
+
+        .start-diagram-track .track-label-text,
+        .start-diagram-track .corner-label-text,
+        .start-diagram-track .handicap-text {
+            fill: var(--track-label-color);
+            font-weight: 800;
+            paint-order: stroke fill;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 3;
+        }
+
+        .start-diagram-track .corner-label-text {
+            font-size: 24px;
+        }
+
+        .start-diagram-track .track-label-text {
+            font-size: 22px;
+        }
+
+        .start-diagram-track .handicap-text {
+            font-size: 17px;
+        }
+
         .start-diagram-token-layer {
-            z-index: 2;
+            z-index: 5;
         }
 
         .start-diagram-overlay {
@@ -116,9 +373,9 @@
 
         .start-diagram-control {
             position: absolute;
-            top: 5%;
+            top: 4%;
             right: 2.4%;
-            z-index: 4;
+            z-index: 6;
         }
 
         .start-diagram-control .btn {
@@ -131,8 +388,8 @@
         .start-diagram-guide {
             position: absolute;
             left: 2.6%;
-            top: 3.8%;
-            z-index: 4;
+            bottom: 3.4%;
+            z-index: 6;
             display: inline-flex;
             align-items: center;
             padding: 0.35rem 0.7rem;
@@ -172,21 +429,22 @@
 
         .start-token {
             position: absolute;
-            width: 3rem;
-            height: 3rem;
+            width: 2.55rem;
+            height: 2.55rem;
             border-radius: 50%;
             border: 2px solid #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #ffffff;
             box-shadow: 0 0.65rem 1.2rem rgba(15, 23, 42, 0.22);
             transform: translate(-50%, -50%);
             touch-action: none;
             user-select: none;
             cursor: grab;
+            z-index: 1;
         }
 
         .start-token.is-dragging {
@@ -333,12 +591,68 @@
         }
 
         @media (max-width: 991.98px) {
+            .site-header-layout {
+                gap: 1rem !important;
+            }
+
+            .site-header-brand {
+                min-width: 0;
+            }
+
+            .site-header-actions {
+                width: 100%;
+                padding-top: 0;
+            }
+
+            .site-menu-row {
+                align-items: stretch !important;
+            }
+
+            .site-header-nav {
+                flex-basis: 100%;
+                width: 100%;
+                flex-wrap: wrap !important;
+                overflow-x: visible;
+            }
+
+            .site-header-nav .btn {
+                flex: 1 1 calc(50% - 0.5rem);
+                min-width: 0;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                white-space: normal;
+            }
+
+            .site-venue-switch {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
             .start-diagram-board {
                 min-height: 19rem;
             }
         }
 
         @media (max-width: 767.98px) {
+            .site-header .container {
+                padding-top: 1rem !important;
+                padding-bottom: 0.85rem !important;
+            }
+
+            .site-header-nav {
+                gap: 0.6rem !important;
+                padding-bottom: 0.35rem;
+            }
+
+            .site-header-nav .btn {
+                flex: 1 1 calc(50% - 0.35rem);
+                min-height: 2.75rem;
+                padding: 0.68rem 0.85rem;
+                font-size: 0.9rem;
+            }
+
             .section-header,
             .section-actions,
             .section-body {
@@ -360,9 +674,9 @@
             }
 
             .start-token {
-                width: 1.9rem;
-                height: 1.9rem;
-                font-size: 0.82rem;
+                width: 2.25rem;
+                height: 2.25rem;
+                font-size: 0.86rem;
             }
 
             .trial-input-row {
@@ -379,20 +693,75 @@
             }
 
             .start-diagram-control {
-                top: 4.8%;
-                right: 2%;
+                top: auto;
+                right: 3%;
+                bottom: 3%;
             }
 
             .start-diagram-control .btn {
                 padding: 0.3rem 0.55rem;
                 font-size: 0.72rem;
             }
+
+            .start-diagram-guide {
+                left: 3%;
+                bottom: 13%;
+                max-width: min(17rem, calc(100% - 2rem));
+                font-size: 0.72rem;
+                line-height: 1.35;
+            }
         }
     </style>
 </head>
-<body>
+<body class="record-form-page"
+      th:with="initialVenue=${record != null and !#strings.isEmpty(record.venue) ? record.venue : (param.venue != null and !#lists.isEmpty(param.venue) ? param.venue[0] : '未選択')}"
+      th:classappend="${initialVenue == '川口'} ? ' theme-kawaguchi' : (${initialVenue == '伊勢崎'} ? ' theme-isesaki' : (${initialVenue == '浜松'} ? ' theme-hamamatsu' : (${initialVenue == '飯塚'} ? ' theme-iizuka' : (${initialVenue == '山陽'} ? ' theme-sanyo' : ''))))">
 <div class="app-shell d-flex flex-column">
-    <div th:replace="~{layout/header :: siteHeader}"></div>
+    <header class="border-bottom bg-white shadow-sm site-header">
+        <div class="container py-3">
+            <div class="site-header-layout d-flex flex-column flex-xl-row justify-content-between gap-3">
+                <div class="site-header-brand">
+                    <div class="site-header-brand-kicker mb-1">Prediction Pit</div>
+                    <h1 class="h3 fw-bold mb-0">オートレース予想補助アプリ</h1>
+                </div>
+
+                <div class="site-header-actions d-flex flex-column align-items-xl-end gap-2">
+                    <div class="w-100 d-flex justify-content-xl-end">
+                        <div class="app-theme-toolbar" role="group" aria-label="テーマ選択">
+                            <label for="appThemeSelect" class="app-theme-label mb-0">テーマ</label>
+                            <select id="appThemeSelect" class="form-select form-select-sm app-theme-select" aria-label="カラーテーマ選択">
+                                <option value="default">デフォルト</option>
+                                <option value="white">1 白</option>
+                                <option value="black">2 黒</option>
+                                <option value="red">3 赤</option>
+                                <option value="blue">4 青</option>
+                                <option value="yellow">5 黄</option>
+                                <option value="green">6 緑</option>
+                                <option value="orange">7 オレンジ</option>
+                                <option value="pink">8 ピンク</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="site-menu-row d-flex flex-wrap align-items-center justify-content-xl-end w-100">
+                        <nav class="site-header-nav d-flex flex-wrap gap-2 justify-content-xl-end" aria-label="新規記録ページメニュー">
+                            <a th:href="@{/}" class="btn btn-outline-secondary btn-lg" data-form-menu-param-target="home">TOPページ</a>
+                            <a th:href="@{/records/new}" class="btn btn-primary btn-lg is-active" aria-current="page" data-form-menu-param-target="new-record">新規記録</a>
+                            <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg" data-form-menu-param-target="records">記録一覧を見る</a>
+                            <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">用語</a>
+                            <a th:href="@{/help}" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
+                        </nav>
+                        <div class="site-venue-switch" aria-label="現在選択中のレース場">
+                            <span class="site-venue-current" aria-live="polite">
+                                <span class="site-venue-current-label">選択中</span>
+                                <span class="site-venue-current-value" data-form-menu-venue-label th:text="${initialVenue}">未選択</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
     <main class="container py-4 py-md-5 flex-grow-1">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
@@ -628,100 +997,71 @@
                             <div id="startDiagramBoard" class="start-diagram-board">
                                 <div class="start-diagram-bg-layer">
                                     <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
-                                    <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="スタートから1コーナー進入までの展開図">
-                                        <defs>
-                                            <linearGradient id="trackSurface" x1="0" y1="0" x2="1" y2="1">
-                                                <stop offset="0%" stop-color="#32465e"></stop>
-                                                <stop offset="100%" stop-color="#1e2f43"></stop>
-                                            </linearGradient>
-                                            <linearGradient id="infieldSurface" x1="0" y1="0" x2="1" y2="1">
-                                                <stop offset="0%" stop-color="#dce8d1"></stop>
-                                                <stop offset="100%" stop-color="#b7d0a4"></stop>
-                                            </linearGradient>
-                                            <radialGradient id="startFocusGlow" cx="0.18" cy="0.86" r="0.36">
-                                                <stop offset="0%" stop-color="#f8fbff" stop-opacity="0.48"></stop>
-                                                <stop offset="70%" stop-color="#f8fbff" stop-opacity="0.14"></stop>
-                                                <stop offset="100%" stop-color="#f8fbff" stop-opacity="0"></stop>
-                                            </radialGradient>
-                                        </defs>
+                                    <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="オートレース場を模したスタート展開図">
+                                        <rect x="0" y="0" width="1000" height="560" fill="transparent"></rect>
 
-                                        <rect x="0" y="0" width="1000" height="560" fill="#f5f8fc"></rect>
-                                        <path d="M150 430 L610 430 C720 430, 802 406, 848 356 C892 309, 906 246, 880 188"
-                                              fill="none" stroke="url(#trackSurface)" stroke-width="138" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M150 430 L610 430 C720 430, 802 406, 848 356 C892 309, 906 246, 880 188"
-                                              fill="none" stroke="#ffffff" stroke-opacity="0.82" stroke-width="4" stroke-dasharray="14 12" stroke-linecap="round"></path>
-                                        <path d="M150 430 L610 430 C720 430, 802 406, 848 356 C892 309, 906 246, 880 188"
-                                              fill="none" stroke="#5f768d" stroke-opacity="0.34" stroke-width="78" stroke-linecap="round"></path>
-                                        <path d="M150 430 L610 430 C720 430, 802 406, 848 356 C892 309, 906 246, 880 188"
-                                              fill="none" stroke="url(#infieldSurface)" stroke-width="48" stroke-linecap="round"></path>
-                                        <ellipse cx="244" cy="430" rx="240" ry="122" fill="url(#startFocusGlow)"></ellipse>
+                                        <path class="track-shadow"
+                                              d="M113 392 C69 314 87 209 167 143 C284 46 668 48 821 136 C929 198 956 339 873 431 C762 552 285 546 147 454 C132 444 120 423 113 392 Z"></path>
 
-                                        <!-- ハンデ基準ライン。スタート位置そのものとして横ラインで表示 -->
-                                        <g stroke-linecap="round">
-                                            <line x1="176" y1="430" x2="610" y2="430" stroke="#fff7cc" stroke-width="8"></line>
-                                            <line x1="166" y1="400" x2="578" y2="400" stroke="#fff0a3" stroke-width="7"></line>
-                                            <line x1="156" y1="370" x2="546" y2="370" stroke="#ffe680" stroke-width="6.2"></line>
+                                        <path class="track-surface" fill-rule="evenodd"
+                                              d="M115 382 C67 301 86 199 169 134 C287 42 668 45 823 129 C938 191 959 331 873 422 C763 538 286 535 148 445 C132 434 121 408 115 382 Z
+                                                 M248 356 C215 305 228 245 278 209 C364 147 635 149 734 205 C796 240 810 312 758 360 C684 429 356 427 271 384 C262 380 254 369 248 356 Z"></path>
 
-                                            <line x1="146" y1="340" x2="514" y2="340" stroke="#ffffff" stroke-opacity="0.68" stroke-width="4.6"></line>
-                                            <line x1="136" y1="310" x2="482" y2="310" stroke="#ffffff" stroke-opacity="0.56" stroke-width="4.1"></line>
-                                            <line x1="126" y1="280" x2="450" y2="280" stroke="#ffffff" stroke-opacity="0.48" stroke-width="3.7"></line>
-                                            <line x1="116" y1="250" x2="418" y2="250" stroke="#ffffff" stroke-opacity="0.42" stroke-width="3.3"></line>
-                                            <line x1="106" y1="220" x2="386" y2="220" stroke="#ffffff" stroke-opacity="0.36" stroke-width="3"></line>
-                                            <line x1="96" y1="190" x2="354" y2="190" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2.7"></line>
-                                            <line x1="86" y1="160" x2="322" y2="160" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2.4"></line>
-                                            <line x1="76" y1="130" x2="290" y2="130" stroke="#ffffff" stroke-opacity="0.2" stroke-width="2.2"></line>
-                                            <line x1="66" y1="100" x2="258" y2="100" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"></line>
+                                        <path class="track-inner"
+                                              d="M248 356 C215 305 228 245 278 209 C364 147 635 149 734 205 C796 240 810 312 758 360 C684 429 356 427 271 384 C262 380 254 369 248 356 Z"></path>
+
+                                        <path class="track-edge"
+                                              d="M115 382 C67 301 86 199 169 134 C287 42 668 45 823 129 C938 191 959 331 873 422 C763 538 286 535 148 445 C132 434 121 408 115 382 Z"></path>
+                                        <path class="track-lane"
+                                              d="M174 373 C139 310 154 225 222 171 C324 91 654 94 783 164 C875 214 896 325 826 394 C734 487 327 487 203 412 C190 404 180 388 174 373 Z"></path>
+
+                                        <g class="start-diagram-handicap-layer">
+                                            <line class="handicap-line is-main" x1="112" y1="405" x2="336" y2="405"></line>
+                                            <line class="handicap-line" x1="121" y1="382" x2="322" y2="382"></line>
+                                            <line class="handicap-line" x1="128" y1="359" x2="309" y2="359"></line>
+                                            <line class="handicap-line" x1="136" y1="336" x2="296" y2="336"></line>
+                                            <line class="handicap-line" x1="145" y1="313" x2="284" y2="313"></line>
+                                            <line class="handicap-line" x1="157" y1="290" x2="273" y2="290"></line>
+                                            <line class="handicap-line" x1="173" y1="267" x2="268" y2="267"></line>
+                                            <line class="handicap-line" x1="194" y1="244" x2="272" y2="244"></line>
+
+                                            <text class="handicap-text" x="70" y="411">0m</text>
+                                            <text class="handicap-text" x="74" y="388">10m</text>
+                                            <text class="handicap-text" x="82" y="365">20m</text>
+                                            <text class="handicap-text" x="91" y="342">30m</text>
+                                            <text class="handicap-text" x="103" y="319">40m</text>
+                                            <text class="handicap-text" x="118" y="296">50m</text>
+                                            <text class="handicap-text" x="137" y="273">60m</text>
+                                            <text class="handicap-text" x="160" y="250">70m</text>
                                         </g>
 
-                                        <!-- ハンデラベル -->
-                                        <g fill="#1f2f44" font-size="18" font-weight="800"
-                                           stroke="#ffffff" stroke-opacity="0.92" stroke-width="3.2" paint-order="stroke fill">
-                                            <text x="118" y="436">0m</text>
-                                            <text x="104" y="406">10m</text>
-                                            <text x="90" y="376">20m</text>
-                                        </g>
-                                        <g fill="#49637f" font-size="15" font-weight="700"
-                                           stroke="#ffffff" stroke-opacity="0.86" stroke-width="2.6" paint-order="stroke fill">
-                                            <text x="78" y="346">30m</text>
-                                            <text x="66" y="316">40m</text>
-                                            <text x="54" y="286">50m</text>
-                                            <text x="42" y="256">60m</text>
-                                            <text x="30" y="226">70m</text>
-                                            <text x="18" y="196">80m</text>
-                                            <text x="6" y="166">90m</text>
-                                            <text x="2" y="136">100m</text>
-                                            <text x="2" y="106">110m</text>
+                                        <g class="start-diagram-label-layer">
+                                            <rect class="track-label-box" x="150" y="446" width="118" height="38" rx="19"></rect>
+                                            <text class="track-label-text" x="172" y="472">スタート</text>
+
+                                            <rect class="track-label-box" x="523" y="446" width="94" height="38" rx="19"></rect>
+                                            <text class="track-label-text" x="548" y="472">ゴール</text>
                                         </g>
 
-                                        <!-- スタートとコーナー案内 -->
-                                        <g>
-                                            <rect x="168" y="454" width="188" height="34" rx="17" fill="#f8fbff" fill-opacity="0.96"
-                                                  stroke="#ffffff" stroke-opacity="0.98" stroke-width="2.4"></rect>
-                                            <text x="188" y="476" fill="#1f2f44" font-size="18" font-weight="800">スタート = ハンデ位置</text>
-                                        </g>
-                                        <g>
-                                            <rect x="738" y="308" width="126" height="38" rx="19" fill="#eef5ff" fill-opacity="0.94"
-                                                  stroke="#ffffff" stroke-opacity="0.95" stroke-width="2.6"></rect>
-                                            <text x="756" y="333" fill="#1c2f45" font-size="24" font-weight="800">1コーナー</text>
-                                        </g>
-                                        <g fill="#1f2f44" fill-opacity="0.9" font-size="21" font-weight="700"
-                                           stroke="#ffffff" stroke-opacity="0.84" stroke-width="3" paint-order="stroke fill">
-                                            <text x="302" y="454">スタート直線</text>
-                                            <text x="656" y="402">進入ライン</text>
+                                        <g class="start-diagram-corner-layer">
+                                            <text class="corner-label-text" x="705" y="345">1コーナー</text>
+                                            <text class="corner-label-text" x="704" y="229">2コーナー</text>
+                                            <text class="corner-label-text" x="332" y="225">3コーナー</text>
+                                            <text class="corner-label-text" x="322" y="346">4コーナー</text>
                                         </g>
                                     </svg>
                                 </div>
 
-                                <div class="start-diagram-guide">丸は上段に整列、ドラッグで位置調整できます</div>
+                                <div class="start-diagram-guide">上段の丸をドラッグしてコース上へ置けます</div>
                                 <div class="start-diagram-control">
                                     <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
                                 </div>
 
-                                 <div class="start-diagram-token-layer">
+                                <div class="start-diagram-token-layer">
                                     <div th:each="num : ${#numbers.sequence(1, 8)}"
                                          th:class="'start-token car-' + ${num}"
-                                         th:attr="data-default-x=${13 + (num - 1) * 8.6},data-default-y=16"
-                                         th:style="'left:' + (${13 + (num - 1) * 8.6}) + '%; top:16%;'">
+                                         th:attr="data-default-x=${17 + (num - 1) * 8.2},data-default-y=13"
+                                         th:style="'left:' + (${17 + (num - 1) * 8.2}) + '%; top:13%;'">
                                         <span th:text="${num}">1</span>
                                     </div>
                                 </div>
@@ -1082,6 +1422,64 @@
 <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
 <script th:src="@{/js/records-start-diagram.js}"></script>
 <script>
+    const recordFormVenueThemeMap = {
+        "川口": "theme-kawaguchi",
+        "伊勢崎": "theme-isesaki",
+        "浜松": "theme-hamamatsu",
+        "飯塚": "theme-iizuka",
+        "山陽": "theme-sanyo"
+    };
+
+    function applyRecordFormVenueContext(venueName) {
+        const selectedVenueName = recordFormVenueThemeMap[venueName] ? venueName : "";
+        const label = document.querySelector("[data-form-menu-venue-label]");
+
+        Object.keys(recordFormVenueThemeMap).forEach(function (key) {
+            document.body.classList.remove(recordFormVenueThemeMap[key]);
+        });
+
+        if (selectedVenueName) {
+            document.body.classList.add(recordFormVenueThemeMap[selectedVenueName]);
+        }
+
+        if (label) {
+            label.textContent = selectedVenueName || "未選択";
+        }
+
+        document.querySelectorAll("[data-form-menu-param-target]").forEach(function (link) {
+            try {
+                if (!link.dataset.formMenuBaseHref) {
+                    const initialUrl = new URL(link.getAttribute("href") || "/", window.location.origin);
+                    initialUrl.search = "";
+                    link.dataset.formMenuBaseHref = initialUrl.pathname + initialUrl.hash;
+                }
+
+                const nextUrl = new URL(link.dataset.formMenuBaseHref || "/", window.location.origin);
+                nextUrl.search = "";
+                if (selectedVenueName) {
+                    nextUrl.searchParams.set("venue", selectedVenueName);
+                }
+                link.href = nextUrl.pathname + nextUrl.search + nextUrl.hash;
+            } catch (error) {
+                return;
+            }
+        });
+    }
+
+    function initializeRecordFormHeader() {
+        const venueField = document.getElementById("venue");
+        const label = document.querySelector("[data-form-menu-venue-label]");
+        const initialVenueName = venueField && venueField.value ? venueField.value : (label ? label.textContent.trim() : "");
+
+        applyRecordFormVenueContext(initialVenueName);
+
+        if (venueField) {
+            venueField.addEventListener("change", function () {
+                applyRecordFormVenueContext(venueField.value);
+            });
+        }
+    }
+
     function parseTrialTimeValue(value) {
         if (!value) {
             return null;
@@ -1294,6 +1692,8 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        initializeRecordFormHeader();
+
         const form = document.getElementById("raceRecordForm");
         const trialInputs = document.querySelectorAll(".js-trial-time");
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
