@@ -1,6 +1,6 @@
 ﻿<header xmlns:th="http://www.thymeleaf.org" th:fragment="siteHeader" class="border-bottom bg-white shadow-sm site-header">
     <div class="container py-3">
-        <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
+        <div class="site-header-layout d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
             <div class="site-header-brand">
                 <div class="site-header-brand-logo">
                     <img th:src="@{/images/rogo.png}"
@@ -13,7 +13,7 @@
             </div>
 
             <div class="site-header-actions d-flex flex-column align-items-xl-end gap-2">
-                <div class="d-flex flex-wrap align-items-center justify-content-xl-end gap-2 w-100">
+                <div class="site-menu-row d-flex flex-wrap align-items-center justify-content-xl-end gap-2 w-100">
                     <nav class="site-header-nav d-flex flex-wrap gap-2 justify-content-xl-end">
                         <a th:href="@{/}" class="btn btn-outline-primary btn-lg">TOPページ</a>
                         <a th:href="@{/records/new}" class="btn btn-outline-secondary btn-lg">新規記録</a>
@@ -21,6 +21,14 @@
                         <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">用語</a>
                         <a th:href="@{/help}" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
                     </nav>
+                    <div class="site-venue-switch"
+                         th:if="${selectedVenue != null and !#strings.isEmpty(selectedVenue)}"
+                         aria-label="現在選択中のレース場">
+                        <span class="site-venue-current" aria-live="polite">
+                            <span class="site-venue-current-label">選択中</span>
+                            <span class="site-venue-current-value" th:text="${selectedVenue}">川口</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

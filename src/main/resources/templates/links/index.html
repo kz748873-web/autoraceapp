@@ -326,7 +326,7 @@
         }
     </style>
 </head>
-<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : ${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : ${selectedVenue == '浜松'} ? ' theme-hamamatsu' : ${selectedVenue == '飯塚'} ? ' theme-iizuka' : ${selectedVenue == '山陽'} ? ' theme-sanyo' : ''" th:attr="data-selected-venue=${selectedVenue}">
+<body th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : (${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : (${selectedVenue == '浜松'} ? ' theme-hamamatsu' : (${selectedVenue == '飯塚'} ? ' theme-iizuka' : (${selectedVenue == '山陽'} ? ' theme-sanyo' : ''))))" th:attr="data-selected-venue=${selectedVenue}">
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
         <main class="container py-4 py-md-5 flex-grow-1">

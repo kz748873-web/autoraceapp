@@ -58,67 +58,72 @@
             position: sticky;
             top: 0;
             z-index: 1030;
-            border-bottom-color: color-mix(in srgb, var(--main-color) 28%, white) !important;
-            background: rgba(255, 255, 255, 0.96) !important;
+            border-bottom-color: color-mix(in srgb, #c5162e 24%, var(--main-color)) !important;
+            background:
+                linear-gradient(90deg, rgba(17, 24, 39, 0.04), rgba(197, 22, 46, 0.035) 38%, rgba(255, 255, 255, 0.96) 70%),
+                rgba(255, 255, 255, 0.96) !important;
             backdrop-filter: blur(10px);
+            box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08) !important;
         }
 
         .site-header .container {
-            padding-top: 1.35rem !important;
-            padding-bottom: 1.1rem !important;
+            padding-top: 0.95rem !important;
+            padding-bottom: 0.8rem !important;
         }
 
         .site-header-layout {
             align-items: center !important;
+            gap: 1rem !important;
         }
 
         .site-header-brand {
-            min-width: 15rem;
-            padding-top: 0.1rem;
-        }
-
-        .site-header-brand-kicker {
-            color: var(--accent-color);
-            font-weight: 800;
-            letter-spacing: 0.04em;
-        }
-
-        .site-header h1 {
-            color: var(--header-strong-text);
+            min-width: 12.5rem;
+            padding-top: 0;
         }
 
         .site-header-actions {
-            gap: 0.8rem !important;
-            padding-top: 0.5rem;
+            flex: 1 1 auto;
+            min-width: 0;
+            gap: 0.55rem !important;
+            padding-top: 0;
         }
 
         .site-menu-row {
-            gap: 0.65rem !important;
+            flex-wrap: nowrap !important;
+            gap: 0.55rem !important;
+            min-width: 0;
         }
 
         .site-header-nav {
             display: flex !important;
             flex-wrap: nowrap !important;
             flex: 1 1 auto;
-            gap: 0.7rem !important;
+            gap: 0.5rem !important;
             width: auto;
             min-width: 0;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 0.2rem 0.1rem 0.45rem;
-            scrollbar-width: thin;
+            padding: 0.12rem 0.1rem 0.32rem;
+            scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
         }
 
+        .site-header-nav::-webkit-scrollbar {
+            display: none;
+        }
+
         .site-header-nav .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             flex: 0 0 auto;
-            min-height: 2.65rem;
-            padding: 0.62rem 0.95rem;
-            border-radius: 0.8rem;
-            font-size: 0.94rem;
-            font-weight: 700;
+            min-height: 2.4rem;
+            padding: 0.46rem 0.78rem;
+            border-radius: 0.68rem;
+            font-size: 0.9rem;
+            font-weight: 800;
             white-space: nowrap;
-            box-shadow: 0 0.3rem 0.75rem rgba(18, 61, 106, 0.06);
+            box-shadow: 0 0.32rem 0.85rem rgba(17, 24, 39, 0.07);
         }
 
         .site-header-nav .btn:not(.is-active) {
@@ -145,23 +150,24 @@
             align-items: center;
             justify-content: center;
             flex: 0 0 auto;
-            min-height: 2.65rem;
-            padding: 0.38rem 0.45rem 0.38rem 0.72rem;
-            border-radius: 0.8rem;
+            min-height: 2.4rem;
+            padding: 0.28rem 0.36rem 0.28rem 0.58rem;
+            border-radius: 0.68rem;
             background: var(--surface-tint);
             border: 1px solid color-mix(in srgb, var(--main-color) 42%, white);
+            border-left: 0.24rem solid #c5162e;
             color: var(--accent-color);
             font-weight: 800;
             white-space: nowrap;
-            box-shadow: 0 0.3rem 0.75rem rgba(18, 61, 106, 0.06);
+            box-shadow: 0 0.32rem 0.85rem rgba(17, 24, 39, 0.07);
         }
 
         .site-venue-current {
             display: inline-flex;
             align-items: center;
-            gap: 0.32rem;
-            padding: 0.3rem 0.48rem;
-            border-radius: 0.58rem;
+            gap: 0.28rem;
+            padding: 0.25rem 0.42rem;
+            border-radius: 0.54rem;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid color-mix(in srgb, var(--main-color) 22%, white);
         }
@@ -582,12 +588,23 @@
         }
 
         @media (max-width: 991.98px) {
+            .site-header .container {
+                padding-top: 0.85rem !important;
+                padding-bottom: 0.72rem !important;
+            }
+
             .site-header-layout {
-                gap: 1rem !important;
+                align-items: flex-start !important;
+                gap: 0.65rem !important;
             }
 
             .site-header-brand {
                 min-width: 0;
+            }
+
+            .site-header-brand-logo {
+                width: min(14.75rem, 56vw);
+                height: 3.15rem;
             }
 
             .site-header-actions {
@@ -596,28 +613,27 @@
             }
 
             .site-menu-row {
-                align-items: stretch !important;
+                align-items: center !important;
+                flex-wrap: nowrap !important;
             }
 
             .site-header-nav {
-                flex-basis: 100%;
-                width: 100%;
-                flex-wrap: wrap !important;
-                overflow-x: visible;
+                flex: 1 1 auto;
+                flex-basis: auto;
+                width: auto;
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
             }
 
             .site-header-nav .btn {
-                flex: 1 1 calc(50% - 0.5rem);
-                min-width: 0;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                white-space: normal;
+                flex: 0 0 auto;
+                min-width: auto;
+                min-height: 2.35rem;
+                white-space: nowrap;
             }
 
             .site-venue-switch {
-                width: 100%;
+                width: auto;
                 justify-content: flex-start;
             }
 
@@ -628,20 +644,47 @@
 
         @media (max-width: 767.98px) {
             .site-header .container {
-                padding-top: 1rem !important;
-                padding-bottom: 0.85rem !important;
+                padding-top: 0.72rem !important;
+                padding-bottom: 0.62rem !important;
+            }
+
+            .site-header-brand-logo {
+                width: min(12.5rem, 62vw);
+                height: 2.7rem;
+            }
+
+            .site-menu-row {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 0.45rem !important;
             }
 
             .site-header-nav {
-                gap: 0.6rem !important;
-                padding-bottom: 0.35rem;
+                gap: 0.45rem !important;
+                padding-bottom: 0.22rem;
             }
 
             .site-header-nav .btn {
-                flex: 1 1 calc(50% - 0.35rem);
-                min-height: 2.75rem;
-                padding: 0.68rem 0.85rem;
-                font-size: 0.9rem;
+                min-height: 2.28rem;
+                padding: 0.44rem 0.62rem;
+                font-size: 0.84rem;
+            }
+
+            .site-venue-switch {
+                min-height: 2.28rem;
+                padding: 0.22rem 0.28rem;
+            }
+
+            .site-venue-current {
+                padding: 0.22rem 0.34rem;
+            }
+
+            .site-venue-current-label {
+                font-size: 0.68rem;
+            }
+
+            .site-venue-current-value {
+                font-size: 0.8rem;
             }
 
             .section-header,
