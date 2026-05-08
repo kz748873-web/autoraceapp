@@ -281,7 +281,7 @@
             padding: 2rem;
             border-radius: var(--home-panel-radius);
             background:
-                linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+                linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.82)),
                 url('/images/autorace-bg.jpg');
             background-size: cover;
             background-position: center;
@@ -295,7 +295,7 @@
             position: absolute;
             inset: 0;
             background: var(--hero-overlay);
-            opacity: 0.16;
+            opacity: 0.14;
             pointer-events: none;
         }
 
@@ -1003,11 +1003,11 @@
 
         @media (max-width: 767.98px) {
             .hero-title {
-                width: 18rem;
-                max-width: 100%;
-                font-size: 0.94rem;
-                line-height: 1.62;
-                word-break: break-all;
+                width: auto;
+                max-width: none;
+                font-size: 1.18rem;
+                line-height: 1.58;
+                word-break: normal;
             }
 
             .hero-title br {
@@ -1018,8 +1018,8 @@
             .section-copy,
             .status-copy,
             .link-note {
-                width: 18rem;
-                max-width: 100%;
+                width: auto;
+                max-width: none;
             }
 
             .action-grid,
@@ -1184,7 +1184,7 @@
                         <div class="site-menu-row d-flex flex-wrap align-items-center justify-content-xl-end w-100">
                             <nav class="site-header-nav d-flex flex-wrap gap-2 justify-content-xl-end" aria-label="TOPページメニュー">
                                 <a th:href="@{/}" class="btn btn-outline-primary btn-lg" data-menu-param-target="home">TOPページ</a>
-                                <a th:href="@{/records/new}" class="btn btn-outline-secondary btn-lg">新規記録</a>
+                                <a th:href="@{/records/new}" class="btn btn-outline-secondary btn-lg" data-menu-param-target="new-record">新規記録</a>
                                 <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg" data-menu-param-target="records">記録一覧を見る</a>
                                 <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">用語</a>
                                 <a th:href="@{/help}" class="btn btn-outline-secondary btn-lg">ヘルプ</a>
@@ -1207,7 +1207,7 @@
                     <div class="hero-layout">
                         <section class="hero-panel">
                             <div class="panel-badge">TOPページ</div>
-                            <h1 class="hero-title">本アプリは、オートレースにおける膨大な情報を整理し、<br>予想過程の可視化および記録を行うことで、<br>短時間でも効率的かつ再現性のある予想判断を支援する補助アプリである。</h1>
+                            <h1 class="hero-title">本アプリは、オートレースにおける膨大な情報を整理し、<br>予想過程の可視化と記録を通じて、<br>短時間でも再現性のある予想判断を支援します。</h1>
                             <p class="hero-copy mb-0">レース場、レース番号、動画、外部リンクをひとつの流れで確認し、必要な記録へ迷わず進めるように整理しています。</p>
 
                             <div class="hero-step-grid" aria-label="TOPページで整理する流れ">
@@ -1244,7 +1244,7 @@
                                 </div>
                             </div>
 
-                            <p class="status-copy mb-0">いま確認したい会場とレース番号を、PCでもスマホでも右側で迷わず見返せる確認枠です。動画確認と記録入力へすぐ戻れるよう、情報を絞ったまま整理しています。</p>
+                            <p class="status-copy mb-0">いま確認したい会場とレース番号を、PCでもスマホでもすぐ見返せる確認枠です。動画確認と記録入力へすぐ戻れるよう、情報を絞ったまま整理しています。</p>
 
                             <div class="usage-box">
                                 <div class="usage-title">この画面の使い方</div>
@@ -1298,8 +1298,8 @@
                             </div>
 
                             <div class="action-grid">
-                                <a href="https://autoraceapp.onrender.com/records/new" class="btn btn-primary">新規登録</a>
-                                <a href="https://autoraceapp.onrender.com/records" class="btn btn-outline-primary">記録一覧</a>
+                                <a th:href="@{/records/new}" class="btn btn-primary" data-menu-param-target="new-record">新規登録</a>
+                                <a th:href="@{/records}" class="btn btn-outline-primary" data-menu-param-target="records">記録一覧</a>
                             </div>
                         </form>
                     </section>
@@ -1308,12 +1308,12 @@
                         <section id="officialLinksSection" class="link-panel">
                             <div class="panel-badge">当日判断リンク</div>
                             <h2 class="section-title">公式・外部リンク</h2>
-                            <p class="link-note">当日判断で使う公式リンクだけをまとめています。</p>
+                            <p class="link-note">当日判断で使う公式リンクと外部リンクをまとめています。</p>
 
                             <div class="link-stack">
                                 <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">AutoRace.jp</a>
                                 <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">公式FANCLUB</a>
-                                <a th:href="@{/links}" class="btn btn-primary">外部リンク画面へ進む</a>
+                                <a th:href="@{/links}" class="btn btn-primary" data-menu-param-target="links">外部リンク画面へ進む</a>
                             </div>
                         </section>
 
@@ -1556,7 +1556,7 @@
                     if (venueContext.name) {
                         nextUrl.searchParams.set("venue", venueContext.name);
                     }
-                    if (target === "home" && selectedRaceNumber) {
+                    if ((target === "home" || target === "new-record") && selectedRaceNumber) {
                         nextUrl.searchParams.set("raceNumber", selectedRaceNumber);
                     }
 
