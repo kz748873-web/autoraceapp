@@ -265,11 +265,101 @@
             box-shadow: 0 0.65rem 1.4rem rgba(197, 22, 46, 0.07);
         }
 
+        .start-diagram-zoom-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.55rem;
+            padding: 0.7rem 0.8rem;
+            border-bottom: 1px solid #f2dbe8;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(197, 22, 46, 0.08), transparent 32%),
+                linear-gradient(180deg, rgba(255, 246, 251, 0.98), rgba(255, 249, 252, 0.94));
+        }
+
+        .start-diagram-zoom-controls {
+            display: inline-grid;
+            grid-template-columns: repeat(2, 2.45rem) minmax(4.15rem, auto) minmax(4.6rem, auto);
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .start-diagram-zoom-btn,
+        .start-diagram-zoom-reset {
+            min-height: 2.35rem;
+            border-radius: 0.6rem;
+            border-color: #ff4f9d;
+            background: rgba(255, 255, 255, 0.95);
+            color: #e91e7a;
+            font-weight: 900;
+            box-shadow: 0 0.25rem 0.65rem rgba(197, 22, 46, 0.08);
+        }
+
+        .start-diagram-zoom-btn {
+            padding: 0.25rem 0.55rem;
+            font-size: 1.22rem;
+            line-height: 1;
+        }
+
+        .start-diagram-zoom-reset {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.78rem;
+        }
+
+        .start-diagram-zoom-value {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.35rem;
+            padding: 0.35rem 0.72rem;
+            border: 1px solid #f2dbe8;
+            border-radius: 0.6rem;
+            background: rgba(255, 255, 255, 0.86);
+            color: #23415f;
+            font-size: 0.82rem;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .start-diagram-viewport {
+            width: 100%;
+            overflow: auto;
+            overscroll-behavior: contain;
+            touch-action: pan-x pan-y;
+            background: #fff7fb;
+            scrollbar-color: rgba(233, 30, 122, 0.45) rgba(255, 247, 251, 0.95);
+            scrollbar-width: thin;
+        }
+
+        .start-diagram-viewport::-webkit-scrollbar {
+            width: 0.65rem;
+            height: 0.65rem;
+        }
+
+        .start-diagram-viewport::-webkit-scrollbar-track {
+            background: rgba(255, 247, 251, 0.95);
+        }
+
+        .start-diagram-viewport::-webkit-scrollbar-thumb {
+            background: rgba(233, 30, 122, 0.45);
+            border-radius: 999px;
+        }
+
+        .start-diagram-canvas {
+            position: relative;
+            width: 100%;
+            min-width: 100%;
+            touch-action: pan-x pan-y;
+        }
+
         .start-diagram-board {
             position: relative;
             width: 100%;
             aspect-ratio: 16 / 9;
             min-height: 22rem;
+            transform-origin: 0 0;
+            will-change: transform;
+            touch-action: pan-x pan-y;
             background:
                 linear-gradient(180deg, rgba(255, 245, 251, 0.98) 0 18%, rgba(255, 247, 251, 0.88) 18% 100%),
                 #fff7fb;
@@ -818,6 +908,39 @@
                 overflow: hidden;
             }
 
+            .start-diagram-zoom-toolbar {
+                justify-content: stretch;
+                padding: 0.65rem;
+            }
+
+            .start-diagram-zoom-controls {
+                width: 100%;
+                grid-template-columns: repeat(2, minmax(2.35rem, 1fr)) minmax(4rem, 1.1fr) minmax(4.3rem, 1.2fr);
+                gap: 0.38rem;
+            }
+
+            .start-diagram-zoom-btn,
+            .start-diagram-zoom-reset,
+            .start-diagram-zoom-value {
+                min-height: 2.3rem;
+            }
+
+            .start-diagram-zoom-btn {
+                font-size: 1.1rem;
+            }
+
+            .start-diagram-zoom-reset {
+                padding-left: 0.45rem;
+                padding-right: 0.45rem;
+                font-size: 0.72rem;
+            }
+
+            .start-diagram-zoom-value {
+                padding-left: 0.45rem;
+                padding-right: 0.45rem;
+                font-size: 0.76rem;
+            }
+
             .start-diagram-bg-layer {
                 inset: 7.15rem 0.65rem auto;
                 aspect-ratio: 16 / 9;
@@ -1139,98 +1262,110 @@
                             </div>
                         </div>
                         <div class="start-diagram-shell">
-                            <div id="startDiagramBoard" class="start-diagram-board">
-                                <div class="start-diagram-bg-layer">
-                                    <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
-                                    <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="オートレース場を模したスタート展開図">
-                                        <defs>
-                                            <linearGradient id="startTrackSurfaceGradient" x1="0" y1="0" x2="1" y2="1">
-                                                <stop offset="0%" stop-color="#708091"></stop>
-                                                <stop offset="48%" stop-color="#4d5e6e"></stop>
-                                                <stop offset="100%" stop-color="#394a5b"></stop>
-                                            </linearGradient>
-                                            <linearGradient id="startTrackInfieldGradient" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stop-color="#d3e6c8"></stop>
-                                                <stop offset="100%" stop-color="#a8c79b"></stop>
-                                            </linearGradient>
-                                        </defs>
-                                        <rect x="0" y="0" width="1000" height="560" fill="transparent"></rect>
-
-                                        <path class="track-shadow"
-                                              d="M250 124 L750 124 C850 124 918 194 918 282 C918 370 850 448 750 448 L250 448 C150 448 82 370 82 282 C82 194 150 124 250 124 Z"></path>
-
-                                        <path class="track-surface" fill-rule="evenodd"
-                                              d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z
-                                                 M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
-
-                                        <path class="track-inner"
-                                              d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
-
-                                        <path class="track-curb-base"
-                                              d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
-                                        <path class="track-curb-accent"
-                                              d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
-
-                                        <path class="track-edge"
-                                              d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z"></path>
-                                        <path class="track-lane"
-                                              d="M265 146 L735 146 C822 146 875 207 875 280 C875 353 822 418 735 418 L265 418 C178 418 125 353 125 280 C125 207 178 146 265 146 Z"></path>
-
-                                        <g class="start-diagram-racing-layer">
-                                            <path class="track-rubber"
-                                                  d="M265 146 L735 146 C822 146 875 207 875 280 C875 353 822 418 735 418 L585 418"></path>
-                                        </g>
-
-                                        <g class="start-diagram-handicap-layer">
-                                            <line class="handicap-line" x1="150" y1="187" x2="206" y2="218"></line>
-                                            <line class="handicap-line" x1="136" y1="213" x2="195" y2="237"></line>
-                                            <line class="handicap-line" x1="126" y1="240" x2="187" y2="257"></line>
-                                            <line class="handicap-line" x1="118" y1="267" x2="181" y2="278"></line>
-                                            <line class="handicap-line" x1="116" y1="295" x2="181" y2="299"></line>
-                                            <line class="handicap-line" x1="121" y1="323" x2="187" y2="321"></line>
-                                            <line class="handicap-line" x1="133" y1="350" x2="198" y2="341"></line>
-                                            <line class="handicap-line is-main" x1="149" y1="376" x2="213" y2="360"></line>
-
-                                            <text class="handicap-text" x="133" y="187">70m</text>
-                                            <text class="handicap-text" x="117" y="213">60m</text>
-                                            <text class="handicap-text" x="106" y="240">50m</text>
-                                            <text class="handicap-text" x="97" y="267">40m</text>
-                                            <text class="handicap-text" x="94" y="295">30m</text>
-                                            <text class="handicap-text" x="100" y="323">20m</text>
-                                            <text class="handicap-text" x="115" y="350">10m</text>
-                                            <text class="handicap-text" x="131" y="376">0m</text>
-                                        </g>
-
-                                        <g class="start-diagram-label-layer">
-                                            <line class="goal-line" x1="555" y1="390" x2="555" y2="444"></line>
-                                            <text class="track-goal-text" x="516" y="445">ゴール</text>
-                                        </g>
-
-                                        <g class="start-diagram-corner-layer">
-                                            <text class="corner-label-text" x="665" y="360">1コーナー</text>
-                                            <text class="corner-label-text" x="665" y="208">2コーナー</text>
-                                            <text class="corner-label-text" x="275" y="208">3コーナー</text>
-                                            <text class="corner-label-text" x="275" y="360">4コーナー</text>
-                                        </g>
-                                    </svg>
+                            <div class="start-diagram-zoom-toolbar" aria-label="スタート展開図の拡大縮小">
+                                <div class="start-diagram-zoom-controls">
+                                    <button type="button" id="startDiagramZoomOut" class="btn btn-outline-secondary start-diagram-zoom-btn" aria-label="縮小">−</button>
+                                    <button type="button" id="startDiagramZoomIn" class="btn btn-outline-secondary start-diagram-zoom-btn" aria-label="拡大">＋</button>
+                                    <output id="startDiagramZoomValue" class="start-diagram-zoom-value" aria-live="polite">100%</output>
+                                    <button type="button" id="startDiagramZoomReset" class="btn btn-outline-secondary start-diagram-zoom-reset">等倍</button>
                                 </div>
+                            </div>
+                            <div id="startDiagramViewport" class="start-diagram-viewport">
+                                <div id="startDiagramCanvas" class="start-diagram-canvas">
+                                    <div id="startDiagramBoard" class="start-diagram-board">
+                                        <div class="start-diagram-bg-layer">
+                                            <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
+                                            <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="オートレース場を模したスタート展開図">
+                                                <defs>
+                                                    <linearGradient id="startTrackSurfaceGradient" x1="0" y1="0" x2="1" y2="1">
+                                                        <stop offset="0%" stop-color="#708091"></stop>
+                                                        <stop offset="48%" stop-color="#4d5e6e"></stop>
+                                                        <stop offset="100%" stop-color="#394a5b"></stop>
+                                                    </linearGradient>
+                                                    <linearGradient id="startTrackInfieldGradient" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stop-color="#d3e6c8"></stop>
+                                                        <stop offset="100%" stop-color="#a8c79b"></stop>
+                                                    </linearGradient>
+                                                </defs>
+                                                <rect x="0" y="0" width="1000" height="560" fill="transparent"></rect>
 
-                                <div class="start-diagram-dock" aria-hidden="true"></div>
-                                <div class="start-diagram-guide">上段の丸をドラッグしてコース上へ配置します</div>
-                                <div class="start-diagram-control">
-                                    <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
-                                </div>
+                                                <path class="track-shadow"
+                                                      d="M250 124 L750 124 C850 124 918 194 918 282 C918 370 850 448 750 448 L250 448 C150 448 82 370 82 282 C82 194 150 124 250 124 Z"></path>
 
-                                <div class="start-diagram-token-layer">
-                                    <div th:each="num : ${#numbers.sequence(1, 8)}"
-                                         th:class="'start-token car-' + ${num}"
-                                         th:attr="data-default-x=${31 + (num - 1) * 5.9},data-default-y=12.7"
-                                         th:style="'left:' + (${31 + (num - 1) * 5.9}) + '%; top:12.7%;'">
-                                        <span th:text="${num}">1</span>
+                                                <path class="track-surface" fill-rule="evenodd"
+                                                      d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z
+                                                         M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+
+                                                <path class="track-inner"
+                                                      d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+
+                                                <path class="track-curb-base"
+                                                      d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+                                                <path class="track-curb-accent"
+                                                      d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+
+                                                <path class="track-edge"
+                                                      d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z"></path>
+                                                <path class="track-lane"
+                                                      d="M265 146 L735 146 C822 146 875 207 875 280 C875 353 822 418 735 418 L265 418 C178 418 125 353 125 280 C125 207 178 146 265 146 Z"></path>
+
+                                                <g class="start-diagram-racing-layer">
+                                                    <path class="track-rubber"
+                                                          d="M265 146 L735 146 C822 146 875 207 875 280 C875 353 822 418 735 418 L585 418"></path>
+                                                </g>
+
+                                                <g class="start-diagram-handicap-layer">
+                                                    <line class="handicap-line" x1="150" y1="187" x2="206" y2="218"></line>
+                                                    <line class="handicap-line" x1="136" y1="213" x2="195" y2="237"></line>
+                                                    <line class="handicap-line" x1="126" y1="240" x2="187" y2="257"></line>
+                                                    <line class="handicap-line" x1="118" y1="267" x2="181" y2="278"></line>
+                                                    <line class="handicap-line" x1="116" y1="295" x2="181" y2="299"></line>
+                                                    <line class="handicap-line" x1="121" y1="323" x2="187" y2="321"></line>
+                                                    <line class="handicap-line" x1="133" y1="350" x2="198" y2="341"></line>
+                                                    <line class="handicap-line is-main" x1="149" y1="376" x2="213" y2="360"></line>
+
+                                                    <text class="handicap-text" x="133" y="187">70m</text>
+                                                    <text class="handicap-text" x="117" y="213">60m</text>
+                                                    <text class="handicap-text" x="106" y="240">50m</text>
+                                                    <text class="handicap-text" x="97" y="267">40m</text>
+                                                    <text class="handicap-text" x="94" y="295">30m</text>
+                                                    <text class="handicap-text" x="100" y="323">20m</text>
+                                                    <text class="handicap-text" x="115" y="350">10m</text>
+                                                    <text class="handicap-text" x="131" y="376">0m</text>
+                                                </g>
+
+                                                <g class="start-diagram-label-layer">
+                                                    <line class="goal-line" x1="555" y1="390" x2="555" y2="444"></line>
+                                                    <text class="track-goal-text" x="516" y="445">ゴール</text>
+                                                </g>
+
+                                                <g class="start-diagram-corner-layer">
+                                                    <text class="corner-label-text" x="665" y="360">1コーナー</text>
+                                                    <text class="corner-label-text" x="665" y="208">2コーナー</text>
+                                                    <text class="corner-label-text" x="275" y="208">3コーナー</text>
+                                                    <text class="corner-label-text" x="275" y="360">4コーナー</text>
+                                                </g>
+                                            </svg>
+                                        </div>
+
+                                        <div class="start-diagram-dock" aria-hidden="true"></div>
+                                        <div class="start-diagram-guide">上段の丸をドラッグしてコース上へ配置します</div>
+                                        <div class="start-diagram-control">
+                                            <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
+                                        </div>
+
+                                        <div class="start-diagram-token-layer">
+                                            <div th:each="num : ${#numbers.sequence(1, 8)}"
+                                                 th:class="'start-token car-' + ${num}"
+                                                 th:attr="data-default-x=${31 + (num - 1) * 5.9},data-default-y=12.7"
+                                                 th:style="'left:' + (${31 + (num - 1) * 5.9}) + '%; top:12.7%;'">
+                                                <span th:text="${num}">1</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="start-diagram-overlay"></div>
                                     </div>
                                 </div>
-
-                                <div class="start-diagram-overlay"></div>
                             </div>
                         </div>
                         <div class="start-diagram-points">
@@ -1794,6 +1929,231 @@
         }
     }
 
+    function initializeStartDiagramZoom() {
+        try {
+            const viewport = document.getElementById("startDiagramViewport");
+            const canvas = document.getElementById("startDiagramCanvas");
+            const board = document.getElementById("startDiagramBoard");
+            const zoomOutButton = document.getElementById("startDiagramZoomOut");
+            const zoomInButton = document.getElementById("startDiagramZoomIn");
+            const zoomResetButton = document.getElementById("startDiagramZoomReset");
+            const zoomValue = document.getElementById("startDiagramZoomValue");
+
+            if (!viewport || !canvas || !board) {
+                return;
+            }
+
+            const minZoom = 1;
+            const maxZoom = 2.4;
+            const zoomStep = 0.15;
+            const touchPointers = new Map();
+            let zoom = 1;
+            let baseWidth = 0;
+            let baseHeight = 0;
+            let pinchStart = null;
+            let resizeFrame = 0;
+
+            function clampNumber(value, min, max) {
+                return Math.min(Math.max(value, min), max);
+            }
+
+            function clampZoom(value) {
+                const numericValue = Number(value);
+                return clampNumber(Number.isFinite(numericValue) ? numericValue : 1, minZoom, maxZoom);
+            }
+
+            function updateZoomControls() {
+                if (zoomValue) {
+                    zoomValue.textContent = Math.round(zoom * 100) + "%";
+                }
+                if (zoomOutButton) {
+                    zoomOutButton.disabled = zoom <= minZoom + 0.01;
+                }
+                if (zoomInButton) {
+                    zoomInButton.disabled = zoom >= maxZoom - 0.01;
+                }
+                viewport.classList.toggle("is-zoomed", zoom > 1.01);
+            }
+
+            function renderZoom(ratioX, ratioY, anchorViewportX, anchorViewportY) {
+                const scaledWidth = Math.max(1, baseWidth * zoom);
+                const scaledHeight = Math.max(1, baseHeight * zoom);
+
+                viewport.style.height = baseHeight + "px";
+                canvas.style.width = scaledWidth + "px";
+                canvas.style.height = scaledHeight + "px";
+                board.style.width = baseWidth + "px";
+                board.style.height = baseHeight + "px";
+                board.style.transform = zoom > 1.001 ? "scale(" + zoom + ")" : "";
+
+                updateZoomControls();
+
+                window.requestAnimationFrame(function () {
+                    const maxScrollLeft = Math.max(0, scaledWidth - viewport.clientWidth);
+                    const maxScrollTop = Math.max(0, scaledHeight - viewport.clientHeight);
+                    viewport.scrollLeft = clampNumber((scaledWidth * ratioX) - anchorViewportX, 0, maxScrollLeft);
+                    viewport.scrollTop = clampNumber((scaledHeight * ratioY) - anchorViewportY, 0, maxScrollTop);
+                });
+            }
+
+            function applyZoom(nextZoom, anchor) {
+                if (!baseWidth || !baseHeight) {
+                    return;
+                }
+
+                const previousZoom = zoom;
+                const previousWidth = Math.max(1, baseWidth * previousZoom);
+                const previousHeight = Math.max(1, baseHeight * previousZoom);
+                const viewportRect = viewport.getBoundingClientRect();
+                const anchorViewportX = anchor ? anchor.clientX - viewportRect.left : viewport.clientWidth / 2;
+                const anchorViewportY = anchor ? anchor.clientY - viewportRect.top : viewport.clientHeight / 2;
+                const ratioX = clampNumber((viewport.scrollLeft + anchorViewportX) / previousWidth, 0, 1);
+                const ratioY = clampNumber((viewport.scrollTop + anchorViewportY) / previousHeight, 0, 1);
+
+                zoom = clampZoom(nextZoom);
+                renderZoom(ratioX, ratioY, anchorViewportX, anchorViewportY);
+            }
+
+            function measureBaseSize() {
+                const previousWidth = baseWidth ? baseWidth * zoom : viewport.scrollWidth;
+                const previousHeight = baseHeight ? baseHeight * zoom : viewport.scrollHeight;
+                const ratioX = previousWidth > 0
+                    ? clampNumber((viewport.scrollLeft + viewport.clientWidth / 2) / previousWidth, 0, 1)
+                    : 0.5;
+                const ratioY = previousHeight > 0
+                    ? clampNumber((viewport.scrollTop + viewport.clientHeight / 2) / previousHeight, 0, 1)
+                    : 0.5;
+
+                canvas.style.width = "";
+                canvas.style.height = "";
+                board.style.width = "";
+                board.style.height = "";
+                board.style.transform = "";
+
+                baseWidth = Math.max(1, Math.round(board.offsetWidth || viewport.clientWidth));
+                baseHeight = Math.max(1, Math.round(board.offsetHeight || baseWidth * 0.5625));
+                renderZoom(ratioX, ratioY, viewport.clientWidth / 2, viewport.clientHeight / 2);
+            }
+
+            function scheduleMeasureBaseSize() {
+                if (resizeFrame) {
+                    window.cancelAnimationFrame(resizeFrame);
+                }
+                resizeFrame = window.requestAnimationFrame(function () {
+                    resizeFrame = 0;
+                    measureBaseSize();
+                });
+            }
+
+            function getPinchState() {
+                const points = Array.from(touchPointers.values()).slice(0, 2);
+                if (points.length < 2) {
+                    return null;
+                }
+                const dx = points[0].clientX - points[1].clientX;
+                const dy = points[0].clientY - points[1].clientY;
+                const distance = Math.hypot(dx, dy);
+                if (distance < 8) {
+                    return null;
+                }
+                return {
+                    distance: distance,
+                    zoom: zoom,
+                    midpoint: {
+                        clientX: (points[0].clientX + points[1].clientX) / 2,
+                        clientY: (points[0].clientY + points[1].clientY) / 2
+                    }
+                };
+            }
+
+            function isTokenTarget(target) {
+                return target instanceof Element && Boolean(target.closest(".start-token"));
+            }
+
+            if (zoomOutButton) {
+                zoomOutButton.addEventListener("click", function () {
+                    applyZoom(zoom - zoomStep);
+                });
+            }
+            if (zoomInButton) {
+                zoomInButton.addEventListener("click", function () {
+                    applyZoom(zoom + zoomStep);
+                });
+            }
+            if (zoomResetButton) {
+                zoomResetButton.addEventListener("click", function () {
+                    applyZoom(1);
+                });
+            }
+
+            viewport.addEventListener("wheel", function (event) {
+                if (!event.ctrlKey) {
+                    return;
+                }
+                event.preventDefault();
+                applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep), {
+                    clientX: event.clientX,
+                    clientY: event.clientY
+                });
+            }, { passive: false });
+
+            viewport.addEventListener("pointerdown", function (event) {
+                if (event.pointerType !== "touch" || isTokenTarget(event.target)) {
+                    return;
+                }
+                touchPointers.set(event.pointerId, {
+                    clientX: event.clientX,
+                    clientY: event.clientY
+                });
+                if (touchPointers.size === 2) {
+                    pinchStart = getPinchState();
+                    if (pinchStart) {
+                        event.preventDefault();
+                    }
+                }
+            }, { passive: false });
+
+            viewport.addEventListener("pointermove", function (event) {
+                if (!touchPointers.has(event.pointerId)) {
+                    return;
+                }
+                touchPointers.set(event.pointerId, {
+                    clientX: event.clientX,
+                    clientY: event.clientY
+                });
+                if (!pinchStart || touchPointers.size < 2) {
+                    return;
+                }
+
+                const currentPinch = getPinchState();
+                if (!currentPinch) {
+                    return;
+                }
+
+                event.preventDefault();
+                applyZoom(pinchStart.zoom * (currentPinch.distance / pinchStart.distance), currentPinch.midpoint);
+            }, { passive: false });
+
+            ["pointerup", "pointercancel", "pointerleave"].forEach(function (eventName) {
+                viewport.addEventListener(eventName, function (event) {
+                    touchPointers.delete(event.pointerId);
+                    pinchStart = touchPointers.size >= 2 ? getPinchState() : null;
+                });
+            });
+
+            if (window.ResizeObserver) {
+                const resizeObserver = new ResizeObserver(scheduleMeasureBaseSize);
+                resizeObserver.observe(viewport);
+            } else {
+                window.addEventListener("resize", scheduleMeasureBaseSize);
+            }
+
+            measureBaseSize();
+        } catch (error) {
+            // ズームUIで問題が出ても、記録フォーム全体は止めない。
+        }
+    }
+
     function resetStartDiagramTokens() {
         if (window.AutoRaceStartDiagram) {
             window.AutoRaceStartDiagram.reset("startDiagramBoard");
@@ -1893,6 +2253,7 @@
                 resetButtonId: "resetStartDiagram"
             });
         }
+        initializeStartDiagramZoom();
 
         document.querySelectorAll("[data-section-id]").forEach(function (section) {
             const sectionId = section.dataset.sectionId;
