@@ -53,6 +53,7 @@
             return;
         }
 
+        state.enabled = enabled;
         state.tokens.forEach(function (token) {
             token.style.pointerEvents = enabled ? "auto" : "none";
             token.classList.remove("is-dragging");
@@ -77,37 +78,61 @@
         setTokenPosition(state.activeToken, xPercent, yPercent);
     }
 
+    function finishDrag(state, event) {
+        const token = state.activeToken;
+        if (!token || state.activePointerId !== event.pointerId) {
+            return;
+        }
+
+        token.classList.remove("is-dragging");
+        if (typeof token.releasePointerCapture === "function"
+            && typeof token.hasPointerCapture === "function"
+            && token.hasPointerCapture(event.pointerId)) {
+            try {
+                token.releasePointerCapture(event.pointerId);
+            } catch (error) {
+                // Pointer capture can already be released by the browser.
+            }
+        }
+        state.activeToken = null;
+        state.activePointerId = null;
+    }
+
     function bindEvents(state) {
         state.tokens.forEach(function (token) {
             token.addEventListener("pointerdown", function (event) {
-                if (token.style.pointerEvents === "none") {
+                if (state.enabled === false || token.style.pointerEvents === "none") {
                     return;
                 }
+                event.preventDefault();
                 state.activeToken = token;
                 state.activePointerId = event.pointerId;
                 token.classList.add("is-dragging");
-                token.setPointerCapture(event.pointerId);
-                moveActiveToken(state, event.clientX, event.clientY);
-            });
-
-            token.addEventListener("pointermove", function (event) {
-                if (state.activeToken !== token || state.activePointerId !== event.pointerId) {
-                    return;
+                if (typeof token.setPointerCapture === "function") {
+                    try {
+                        token.setPointerCapture(event.pointerId);
+                    } catch (error) {
+                        // Document-level pointermove keeps dragging usable without capture.
+                    }
                 }
                 moveActiveToken(state, event.clientX, event.clientY);
             });
+        });
 
-            function finishDrag(event) {
-                if (state.activeToken !== token || state.activePointerId !== event.pointerId) {
-                    return;
-                }
-                token.classList.remove("is-dragging");
-                state.activeToken = null;
-                state.activePointerId = null;
+        document.addEventListener("pointermove", function (event) {
+            if (!state.activeToken || state.activePointerId !== event.pointerId) {
+                return;
             }
+            event.preventDefault();
+            moveActiveToken(state, event.clientX, event.clientY);
+        }, { passive: false });
 
-            token.addEventListener("pointerup", finishDrag);
-            token.addEventListener("pointercancel", finishDrag);
+        document.addEventListener("pointerup", function (event) {
+            finishDrag(state, event);
+        });
+
+        document.addEventListener("pointercancel", function (event) {
+            finishDrag(state, event);
         });
 
         if (state.resetButton) {
@@ -135,6 +160,7 @@
             board: board,
             resetButton: document.getElementById(resetButtonId),
             tokens: Array.from(board.querySelectorAll(".start-token")),
+            enabled: true,
             activeToken: null,
             activePointerId: null
         };

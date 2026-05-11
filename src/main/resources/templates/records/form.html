@@ -254,7 +254,7 @@
         }
 
         .start-diagram-shell {
-            --track-surface-color: #5e6f80;
+            --track-surface-color: #4c5d6c;
             --track-shadow-color: rgba(20, 43, 65, 0.1);
             --track-infield-color: #bfd7b2;
             --track-label-color: #1f2f44;
@@ -270,6 +270,8 @@
             aspect-ratio: 16 / 9;
             min-height: 22rem;
             background:
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 74px),
+                linear-gradient(90deg, rgba(197, 22, 46, 0.08), transparent 26%, transparent 74%, rgba(197, 22, 46, 0.06)),
                 linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 56%, white) 0%, #f7f9fc 100%);
         }
 
@@ -291,7 +293,7 @@
         }
 
         .start-diagram-track .track-surface {
-            fill: var(--track-surface-color);
+            fill: url(#startTrackSurfaceGradient);
         }
 
         .start-diagram-track .track-shadow {
@@ -299,9 +301,49 @@
         }
 
         .start-diagram-track .track-inner {
-            fill: var(--track-infield-color);
+            fill: url(#startTrackInfieldGradient);
             stroke: rgba(255, 255, 255, 0.96);
             stroke-width: 5;
+        }
+
+        .start-diagram-track .track-curb-base,
+        .start-diagram-track .track-curb-accent,
+        .start-diagram-track .track-rubber,
+        .start-diagram-track .track-direction {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .start-diagram-track .track-curb-base {
+            stroke: rgba(255, 255, 255, 0.94);
+            stroke-width: 8;
+        }
+
+        .start-diagram-track .track-curb-accent {
+            stroke: #c5162e;
+            stroke-width: 5;
+            stroke-dasharray: 20 20;
+        }
+
+        .start-diagram-track .track-rubber {
+            stroke: rgba(20, 30, 42, 0.26);
+            stroke-width: 10;
+            stroke-dasharray: 64 20;
+            opacity: 0.72;
+        }
+
+        .start-diagram-track .track-direction {
+            stroke: #fff1a6;
+            stroke-width: 6;
+            filter: drop-shadow(0 2px 3px rgba(15, 23, 42, 0.22));
+        }
+
+        .start-diagram-track .start-gate-line {
+            stroke: #fff1a6;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 18 10;
         }
 
         .start-diagram-track .track-lane {
@@ -339,7 +381,8 @@
 
         .start-diagram-track .track-label-text,
         .start-diagram-track .corner-label-text,
-        .start-diagram-track .handicap-text {
+        .start-diagram-track .handicap-text,
+        .start-diagram-track .track-small-text {
             fill: var(--track-label-color);
             font-weight: 800;
             paint-order: stroke fill;
@@ -359,8 +402,30 @@
             font-size: 17px;
         }
 
+        .start-diagram-track .track-small-text {
+            font-size: 18px;
+            letter-spacing: 0;
+        }
+
         .start-diagram-token-layer {
             z-index: 5;
+            pointer-events: none;
+        }
+
+        .start-diagram-dock {
+            position: absolute;
+            top: 6%;
+            left: 10%;
+            width: 70%;
+            height: 4.7rem;
+            z-index: 4;
+            border: 1px solid rgba(31, 79, 131, 0.2);
+            border-radius: 0.95rem;
+            background:
+                repeating-linear-gradient(90deg, rgba(31, 79, 131, 0.18) 0 1px, transparent 1px 12.5%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(237, 245, 253, 0.78));
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.82), 0 0.6rem 1.3rem rgba(15, 23, 42, 0.08);
+            pointer-events: none;
         }
 
         .start-diagram-overlay {
@@ -396,6 +461,7 @@
             color: #23415f;
             font-size: 0.82rem;
             font-weight: 700;
+            pointer-events: none;
         }
 
         .start-diagram-label {
@@ -442,6 +508,7 @@
             user-select: none;
             cursor: grab;
             z-index: 1;
+            pointer-events: auto;
         }
 
         .start-token.is-dragging {
@@ -1021,6 +1088,20 @@
                                 <div class="start-diagram-bg-layer">
                                     <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
                                     <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="オートレース場を模したスタート展開図">
+                                        <defs>
+                                            <linearGradient id="startTrackSurfaceGradient" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stop-color="#708091"></stop>
+                                                <stop offset="48%" stop-color="#4d5e6e"></stop>
+                                                <stop offset="100%" stop-color="#394a5b"></stop>
+                                            </linearGradient>
+                                            <linearGradient id="startTrackInfieldGradient" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stop-color="#d3e6c8"></stop>
+                                                <stop offset="100%" stop-color="#a8c79b"></stop>
+                                            </linearGradient>
+                                            <marker id="startDirectionArrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+                                                <path d="M2 1 L11 6 L2 11 Z" fill="#fff1a6"></path>
+                                            </marker>
+                                        </defs>
                                         <rect x="0" y="0" width="1000" height="560" fill="transparent"></rect>
 
                                         <path class="track-shadow"
@@ -1033,10 +1114,26 @@
                                         <path class="track-inner"
                                               d="M248 356 C215 305 228 245 278 209 C364 147 635 149 734 205 C796 240 810 312 758 360 C684 429 356 427 271 384 C262 380 254 369 248 356 Z"></path>
 
+                                        <path class="track-curb-base"
+                                              d="M248 356 C215 305 228 245 278 209 C364 147 635 149 734 205 C796 240 810 312 758 360 C684 429 356 427 271 384 C262 380 254 369 248 356 Z"></path>
+                                        <path class="track-curb-accent"
+                                              d="M248 356 C215 305 228 245 278 209 C364 147 635 149 734 205 C796 240 810 312 758 360 C684 429 356 427 271 384 C262 380 254 369 248 356 Z"></path>
+
                                         <path class="track-edge"
                                               d="M115 382 C67 301 86 199 169 134 C287 42 668 45 823 129 C938 191 959 331 873 422 C763 538 286 535 148 445 C132 434 121 408 115 382 Z"></path>
                                         <path class="track-lane"
                                               d="M174 373 C139 310 154 225 222 171 C324 91 654 94 783 164 C875 214 896 325 826 394 C734 487 327 487 203 412 C190 404 180 388 174 373 Z"></path>
+
+                                        <g class="start-diagram-racing-layer">
+                                            <path class="track-rubber"
+                                                  d="M190 369 C156 310 169 235 232 184 C334 101 650 104 774 171 C860 218 879 320 815 386 C725 478 337 477 215 405"></path>
+                                            <path class="track-direction"
+                                                  marker-end="url(#startDirectionArrow)"
+                                                  d="M650 411 C723 397 798 354 824 294"></path>
+                                            <text class="track-small-text" x="662" y="424">走行方向</text>
+                                            <line class="start-gate-line" x1="112" y1="423" x2="340" y2="423"></line>
+                                            <text class="track-small-text" x="342" y="429">発走線</text>
+                                        </g>
 
                                         <g class="start-diagram-handicap-layer">
                                             <line class="handicap-line is-main" x1="112" y1="405" x2="336" y2="405"></line>
@@ -1075,6 +1172,7 @@
                                     </svg>
                                 </div>
 
+                                <div class="start-diagram-dock" aria-hidden="true"></div>
                                 <div class="start-diagram-guide">上段の丸をドラッグしてコース上へ置けます</div>
                                 <div class="start-diagram-control">
                                     <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
@@ -1738,6 +1836,13 @@
             });
         }
 
+        if (window.AutoRaceStartDiagram) {
+            window.AutoRaceStartDiagram.init({
+                boardId: "startDiagramBoard",
+                resetButtonId: "resetStartDiagram"
+            });
+        }
+
         document.querySelectorAll("[data-section-id]").forEach(function (section) {
             const sectionId = section.dataset.sectionId;
             const storageKey = sectionStoragePrefix + sectionId;
@@ -1786,13 +1891,6 @@
                 });
             }
         });
-
-        if (window.AutoRaceStartDiagram) {
-            window.AutoRaceStartDiagram.init({
-                boardId: "startDiagramBoard",
-                resetButtonId: "resetStartDiagram"
-            });
-        }
 
         trialInputs.forEach(function (input) {
             input.addEventListener("input", updateTrialTimeAssist);
