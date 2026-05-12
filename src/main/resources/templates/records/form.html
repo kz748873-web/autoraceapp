@@ -798,8 +798,8 @@
             }
 
             .site-header-brand-logo {
-                width: min(14.75rem, 56vw);
-                height: 3.15rem;
+                width: clamp(10rem, 45vw, 11.875rem);
+                height: auto;
             }
 
             .site-header-actions {
@@ -844,8 +844,8 @@
             }
 
             .site-header-brand-logo {
-                width: min(12.5rem, 62vw);
-                height: 2.7rem;
+                width: clamp(9.375rem, 48vw, 11.5rem);
+                height: auto;
             }
 
             .site-menu-row {
@@ -902,10 +902,23 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
+            .section-shell[data-section-id="start-diagram"] .sub-block {
+                padding: 0.9rem !important;
+            }
+
+            .start-diagram-canvas {
+                min-width: 100%;
+            }
+
             .start-diagram-board {
                 aspect-ratio: auto;
-                min-height: 24rem;
+                height: clamp(22rem, 98vw, 25rem);
+                min-height: 0;
                 overflow: hidden;
+            }
+
+            .start-diagram-bg-layer {
+                inset: 7.15rem 0.35rem 0.85rem;
             }
 
             .start-diagram-zoom-toolbar {
@@ -941,20 +954,18 @@
                 font-size: 0.76rem;
             }
 
-            .start-diagram-bg-layer {
-                inset: 7.15rem 0.65rem auto;
-                aspect-ratio: 16 / 9;
-                height: auto;
-            }
-
             .start-diagram-dock {
-                height: 7.05rem;
+                height: 6.65rem;
             }
 
             .start-token {
-                width: 2.05rem;
-                height: 2.05rem;
-                font-size: 0.82rem;
+                width: 2.18rem;
+                height: 2.18rem;
+                font-size: 0.86rem;
+            }
+
+            .start-token::before {
+                inset: -0.28rem;
             }
 
             .trial-input-row {
@@ -970,9 +981,20 @@
                 padding: 0.2rem 0.5rem;
             }
 
+            .start-diagram-track .handicap-text {
+                font-size: 29px;
+                stroke-width: 3;
+            }
+
+            .start-diagram-track .corner-label-text,
+            .start-diagram-track .track-goal-text {
+                font-size: 30px;
+                stroke-width: 3.2;
+            }
+
             .start-diagram-control {
-                top: 0.7rem;
-                right: 0.7rem;
+                top: 6.95rem;
+                right: 2.2rem;
                 bottom: auto;
             }
 
@@ -1001,12 +1023,12 @@
             <div class="site-header-layout d-flex flex-column flex-xl-row justify-content-between gap-3">
                 <div class="site-header-brand">
                     <div class="site-header-brand-logo">
-                        <img th:src="@{/images/prediction-pit-logo.svg}"
-                             src="/images/prediction-pit-logo.svg"
+                        <img th:src="@{/images/rogo.png}"
+                             src="/images/rogo.png"
                              alt="Prediction Pit プレピット"
                              class="site-header-logo-image"
-                             width="288"
-                             height="72">
+                             width="1717"
+                             height="916">
                     </div>
                 </div>
 
@@ -1275,7 +1297,7 @@
                                     <div id="startDiagramBoard" class="start-diagram-board">
                                         <div class="start-diagram-bg-layer">
                                             <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
-                                            <svg class="start-diagram-track" viewBox="0 0 1000 560" role="img" aria-label="オートレース場を模したスタート展開図">
+                                            <svg class="start-diagram-track" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMin meet" role="img" aria-label="オートレース場を模したスタート展開図">
                                                 <defs>
                                                     <linearGradient id="startTrackSurfaceGradient" x1="0" y1="0" x2="1" y2="1">
                                                         <stop offset="0%" stop-color="#708091"></stop>

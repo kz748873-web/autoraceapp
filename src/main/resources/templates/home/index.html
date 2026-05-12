@@ -938,8 +938,8 @@
             }
 
             .site-header-brand-logo {
-                width: min(14.75rem, 56vw);
-                height: 3.15rem;
+                width: clamp(10rem, 45vw, 11.875rem);
+                height: auto;
             }
 
             .site-header-actions {
@@ -1064,8 +1064,8 @@
             }
 
             .site-header-brand-logo {
-                width: min(12.5rem, 62vw);
-                height: 2.7rem;
+                width: clamp(9.375rem, 48vw, 11.5rem);
+                height: auto;
             }
 
             .site-menu-row {
@@ -1185,12 +1185,12 @@
                 <div class="site-header-layout d-flex flex-column flex-xl-row justify-content-between gap-3">
                     <div class="site-header-brand">
                         <div class="site-header-brand-logo">
-                            <img th:src="@{/images/prediction-pit-logo.svg}"
-                                 src="/images/prediction-pit-logo.svg"
+                            <img th:src="@{/images/rogo.png}"
+                                 src="/images/rogo.png"
                                  alt="Prediction Pit プレピット"
                                  class="site-header-logo-image"
-                                 width="288"
-                                 height="72">
+                                 width="1717"
+                                 height="916">
                         </div>
                     </div>
 
