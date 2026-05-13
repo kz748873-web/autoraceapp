@@ -496,7 +496,7 @@
 
         .start-diagram-token-layer {
             z-index: 5;
-            pointer-events: auto;
+            pointer-events: none;
         }
 
         .start-diagram-dock {
@@ -585,22 +585,22 @@
 
         .start-token {
             position: absolute;
-            width: 2.3rem;
-            height: 2.3rem;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: 2px solid #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.84rem;
             color: #ffffff;
             box-shadow: 0 0.65rem 1.2rem rgba(15, 23, 42, 0.22);
             transform: translate(-50%, -50%);
             touch-action: none;
             user-select: none;
             cursor: grab;
-            z-index: 1;
+            z-index: 2;
             pointer-events: auto;
         }
 
@@ -642,7 +642,7 @@
         .start-token.is-dragging {
             cursor: grabbing;
             box-shadow: 0 1rem 1.8rem rgba(15, 23, 42, 0.26);
-            z-index: 3;
+            z-index: 8;
         }
 
         .car-1 { background: #ffffff; color: #0f172a; border-color: #334155; }
@@ -2177,14 +2177,127 @@
     }
 
     function resetStartDiagramTokens() {
-        if (window.AutoRaceStartDiagram) {
-            window.AutoRaceStartDiagram.reset("startDiagramBoard");
-            return;
+        if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.reset === "function") {
+            try {
+                window.AutoRaceStartDiagram.reset("startDiagramBoard");
+            } catch (error) {
+                // スタート展開図の復元に失敗してもフォーム全体は止めない。
+            }
         }
         document.querySelectorAll("#startDiagramBoard .start-token").forEach(function (token) {
-            token.style.left = token.dataset.defaultX + "%";
-            token.style.top = token.dataset.defaultY + "%";
+            const defaultX = Number(token.dataset.defaultX);
+            const defaultY = Number(token.dataset.defaultY);
+
+            if (!Number.isFinite(defaultX) || !Number.isFinite(defaultY)) {
+                return;
+            }
+
+            token.dataset.x = defaultX.toFixed(2);
+            token.dataset.y = defaultY.toFixed(2);
+            token.style.left = defaultX + "%";
+            token.style.top = defaultY + "%";
+            token.classList.remove("is-dragging");
         });
+    }
+
+    function initializeStartDiagramMouseDragRepair() {
+        try {
+            const board = document.getElementById("startDiagramBoard");
+            const resetButton = document.getElementById("resetStartDiagram");
+
+            if (!board) {
+                return;
+            }
+
+            let activeToken = null;
+
+            function clampNumber(value, min, max) {
+                return Math.min(Math.max(value, min), max);
+            }
+
+            function findToken(target) {
+                if (!(target instanceof Element)) {
+                    return null;
+                }
+                const token = target.closest(".start-token");
+                return token && board.contains(token) ? token : null;
+            }
+
+            function canDragToken(token) {
+                if (!token || token.style.pointerEvents === "none") {
+                    return false;
+                }
+                if (resetButton && resetButton.disabled) {
+                    return false;
+                }
+                return window.getComputedStyle(token).pointerEvents !== "none";
+            }
+
+            function moveToken(token, clientX, clientY) {
+                const boardRect = board.getBoundingClientRect();
+
+                if (!boardRect.width || !boardRect.height) {
+                    return;
+                }
+
+                const tokenRect = token.getBoundingClientRect();
+                const tokenHalfWidth = (tokenRect.width || token.offsetWidth || 0) / 2;
+                const tokenHalfHeight = (tokenRect.height || token.offsetHeight || 0) / 2;
+                const rawX = clientX - boardRect.left;
+                const rawY = clientY - boardRect.top;
+                const clampedX = clampNumber(rawX, tokenHalfWidth, boardRect.width - tokenHalfWidth);
+                const clampedY = clampNumber(rawY, tokenHalfHeight, boardRect.height - tokenHalfHeight);
+                const xPercent = (clampedX / boardRect.width) * 100;
+                const yPercent = (clampedY / boardRect.height) * 100;
+
+                token.dataset.x = xPercent.toFixed(2);
+                token.dataset.y = yPercent.toFixed(2);
+                token.style.left = xPercent + "%";
+                token.style.top = yPercent + "%";
+            }
+
+            function finishDrag() {
+                if (!activeToken) {
+                    return;
+                }
+                activeToken.classList.remove("is-dragging");
+                activeToken = null;
+            }
+
+            board.addEventListener("mousedown", function (event) {
+                if (event.button !== 0) {
+                    return;
+                }
+
+                const token = findToken(event.target);
+                if (!canDragToken(token)) {
+                    return;
+                }
+
+                event.preventDefault();
+                activeToken = token;
+                activeToken.classList.add("is-dragging");
+                moveToken(activeToken, event.clientX, event.clientY);
+            });
+
+            document.addEventListener("mousemove", function (event) {
+                if (!activeToken) {
+                    return;
+                }
+
+                event.preventDefault();
+                moveToken(activeToken, event.clientX, event.clientY);
+            }, { passive: false });
+
+            document.addEventListener("mouseup", finishDrag);
+            window.addEventListener("blur", finishDrag);
+
+            if (resetButton) {
+                resetButton.addEventListener("click", resetStartDiagramTokens);
+            }
+        } catch (error) {
+            // マウスドラッグ補助で問題が出ても、記録フォーム全体は止めない。
+        }
     }
 
     function setSectionDisabled(section, disabled) {
@@ -2198,14 +2311,18 @@
         if (resetButton) {
             resetButton.disabled = disabled;
         }
-        if (window.AutoRaceStartDiagram) {
-            window.AutoRaceStartDiagram.setEnabled("startDiagramBoard", !disabled);
-        } else {
-            section.querySelectorAll(".start-token").forEach(function (token) {
-                token.style.pointerEvents = disabled ? "none" : "auto";
-                token.classList.remove("is-dragging");
-            });
+        if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.setEnabled === "function") {
+            try {
+                window.AutoRaceStartDiagram.setEnabled("startDiagramBoard", !disabled);
+                return;
+            } catch (error) {
+                // スタート展開図だけの問題でセクション操作を止めない。
+            }
         }
+        section.querySelectorAll(".start-token").forEach(function (token) {
+            token.style.pointerEvents = disabled ? "none" : "auto";
+            token.classList.remove("is-dragging");
+        });
     }
 
     function serializeSection(section) {
@@ -2269,13 +2386,18 @@
             });
         }
 
-        if (window.AutoRaceStartDiagram) {
-            window.AutoRaceStartDiagram.init({
-                boardId: "startDiagramBoard",
-                resetButtonId: "resetStartDiagram"
-            });
+        if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.init === "function") {
+            try {
+                window.AutoRaceStartDiagram.init({
+                    boardId: "startDiagramBoard",
+                    resetButtonId: "resetStartDiagram"
+                });
+            } catch (error) {
+                // 既存ドラッグ初期化に失敗しても、下のマウス補助でPC操作を復旧する。
+            }
         }
         initializeStartDiagramZoom();
+        initializeStartDiagramMouseDragRepair();
 
         document.querySelectorAll("[data-section-id]").forEach(function (section) {
             const sectionId = section.dataset.sectionId;
