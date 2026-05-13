@@ -907,18 +907,19 @@
             }
 
             .start-diagram-canvas {
-                min-width: 100%;
+                width: max(100%, 44rem);
+                min-width: 44rem;
             }
 
             .start-diagram-board {
-                aspect-ratio: auto;
-                height: clamp(22rem, 98vw, 25rem);
+                aspect-ratio: 16 / 9;
+                height: auto;
                 min-height: 0;
                 overflow: hidden;
             }
 
             .start-diagram-bg-layer {
-                inset: 7.15rem 0.35rem 0.85rem;
+                inset: 0;
             }
 
             .start-diagram-zoom-toolbar {
@@ -955,17 +956,17 @@
             }
 
             .start-diagram-dock {
-                height: 6.65rem;
+                height: 6.45rem;
             }
 
             .start-token {
-                width: 2.18rem;
-                height: 2.18rem;
-                font-size: 0.86rem;
+                width: 2.35rem;
+                height: 2.35rem;
+                font-size: 0.88rem;
             }
 
             .start-token::before {
-                inset: -0.28rem;
+                inset: -0.38rem;
             }
 
             .trial-input-row {
@@ -993,8 +994,9 @@
             }
 
             .start-diagram-control {
-                top: 6.95rem;
-                right: 2.2rem;
+                top: 6.72rem;
+                right: auto;
+                left: 0.85rem;
                 bottom: auto;
             }
 
@@ -1007,7 +1009,7 @@
                 top: 0.82rem;
                 left: 0.85rem;
                 bottom: auto;
-                max-width: calc(100% - 9.5rem);
+                max-width: 10.5rem;
                 font-size: 0.72rem;
                 line-height: 1.35;
             }
