@@ -2280,28 +2280,76 @@
         }
     }
 
-    function resetStartDiagramTokens() {
-        if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.reset === "function") {
-            try {
-                window.AutoRaceStartDiagram.reset("startDiagramBoard");
-            } catch (error) {
-                // スタート展開図の復元に失敗してもフォーム全体は止めない。
-            }
+    function parseStartDiagramPercent(value) {
+        if (!value || !String(value).includes("%")) {
+            return NaN;
         }
-        document.querySelectorAll("#startDiagramBoard .start-token").forEach(function (token) {
+        return Number(String(value).replace("%", ""));
+    }
+
+    function getStartDiagramTokens() {
+        const board = document.getElementById("startDiagramBoard");
+        return board ? Array.from(board.querySelectorAll(".start-token")) : [];
+    }
+
+    function initializeStartDiagramInitialPositions() {
+        const board = document.getElementById("startDiagramBoard");
+
+        if (!board || board.dataset.startDiagramInitialPositionReady === "true") {
+            return;
+        }
+        board.dataset.startDiagramInitialPositionReady = "true";
+
+        getStartDiagramTokens().forEach(function (token) {
             const defaultX = Number(token.dataset.defaultX);
             const defaultY = Number(token.dataset.defaultY);
+            const styleX = parseStartDiagramPercent(token.style.left);
+            const styleY = parseStartDiagramPercent(token.style.top);
+            const initialX = Number.isFinite(defaultX) ? defaultX : styleX;
+            const initialY = Number.isFinite(defaultY) ? defaultY : styleY;
 
-            if (!Number.isFinite(defaultX) || !Number.isFinite(defaultY)) {
+            if (!Number.isFinite(initialX) || !Number.isFinite(initialY)) {
                 return;
             }
 
-            token.dataset.x = defaultX.toFixed(2);
-            token.dataset.y = defaultY.toFixed(2);
-            token.style.left = defaultX + "%";
-            token.style.top = defaultY + "%";
+            token.dataset.initialX = initialX.toFixed(2);
+            token.dataset.initialY = initialY.toFixed(2);
+            token.dataset.x = initialX.toFixed(2);
+            token.dataset.y = initialY.toFixed(2);
+            token.style.left = initialX + "%";
+            token.style.top = initialY + "%";
+            token.style.transform = "translate(-50%, -50%)";
             token.classList.remove("is-dragging");
         });
+    }
+
+    function resetStartDiagramTokens() {
+        try {
+            initializeStartDiagramInitialPositions();
+
+            getStartDiagramTokens().forEach(function (token) {
+                const initialX = Number(token.dataset.initialX);
+                const initialY = Number(token.dataset.initialY);
+                const fallbackX = Number(token.dataset.defaultX);
+                const fallbackY = Number(token.dataset.defaultY);
+                const resetX = Number.isFinite(initialX) ? initialX : fallbackX;
+                const resetY = Number.isFinite(initialY) ? initialY : fallbackY;
+
+                if (!Number.isFinite(resetX) || !Number.isFinite(resetY)) {
+                    return;
+                }
+
+                token.dataset.x = resetX.toFixed(2);
+                token.dataset.y = resetY.toFixed(2);
+                token.style.left = resetX + "%";
+                token.style.top = resetY + "%";
+                token.style.transform = "translate(-50%, -50%)";
+                token.style.removeProperty("translate");
+                token.classList.remove("is-dragging");
+            });
+        } catch (error) {
+            // スタート展開図の復元に失敗してもフォーム全体は止めない。
+        }
     }
 
     function initializeStartDiagramMouseDragRepair() {
@@ -2500,10 +2548,15 @@
             window.addEventListener("blur", finishDrag);
 
             if (resetButton) {
-                resetButton.addEventListener("click", function () {
+                resetButton.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (typeof event.stopImmediatePropagation === "function") {
+                        event.stopImmediatePropagation();
+                    }
                     finishDrag();
                     resetStartDiagramTokens();
-                });
+                }, { capture: true });
             }
         } catch (error) {
             // マウスドラッグ補助で問題が出ても、記録フォーム全体は止めない。
@@ -2515,6 +2568,8 @@
         if (!board) {
             return;
         }
+
+        initializeStartDiagramInitialPositions();
 
         if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.init === "function") {
             try {
