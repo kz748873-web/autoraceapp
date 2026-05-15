@@ -1589,11 +1589,20 @@
                     const nextUrl = new URL(link.dataset.menuBaseHref || "/", window.location.origin);
                     nextUrl.search = "";
 
-                    if (venueContext.name) {
-                        nextUrl.searchParams.set("venue", venueContext.name);
-                    }
-                    if ((target === "home" || target === "new-record") && selectedRaceNumber) {
-                        nextUrl.searchParams.set("raceNumber", selectedRaceNumber);
+                    if (target === "new-record") {
+                        if (venueContext.themeKey) {
+                            nextUrl.searchParams.set("place", venueContext.themeKey);
+                        }
+                        if (selectedRaceNumber) {
+                            nextUrl.searchParams.set("race", selectedRaceNumber);
+                        }
+                    } else {
+                        if (venueContext.name) {
+                            nextUrl.searchParams.set("venue", venueContext.name);
+                        }
+                        if (target === "home" && selectedRaceNumber) {
+                            nextUrl.searchParams.set("raceNumber", selectedRaceNumber);
+                        }
                     }
 
                     link.href = nextUrl.pathname + nextUrl.search + nextUrl.hash;

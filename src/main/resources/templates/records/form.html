@@ -1861,6 +1861,60 @@
         }
     }
 
+    function resolveRecordFormVenueFromPlaceParam(placeParam) {
+        const normalizedPlace = placeParam ? placeParam.trim().toLowerCase() : "";
+        const themeName = normalizedPlace ? "theme-" + normalizedPlace : "";
+
+        if (!themeName) {
+            return "";
+        }
+
+        return Object.keys(recordFormVenueThemeMap).find(function (venueName) {
+            return recordFormVenueThemeMap[venueName] === themeName;
+        }) || "";
+    }
+
+    function setRecordFormFieldValue(field, value) {
+        if (!field || value === "") {
+            return false;
+        }
+
+        if (field.tagName === "SELECT") {
+            const hasOption = Array.from(field.options).some(function (option) {
+                return option.value === value;
+            });
+
+            if (!hasOption) {
+                return false;
+            }
+        }
+
+        field.value = value;
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        field.dispatchEvent(new Event("change", { bubbles: true }));
+        return true;
+    }
+
+    function initializeRecordFormPrefillFromParams() {
+        try {
+            const params = new URLSearchParams(window.location.search || "");
+            const venueField = document.getElementById("venue");
+            const raceNumberField = document.getElementById("raceNumber");
+            const venueName = resolveRecordFormVenueFromPlaceParam(params.get("place"));
+            const raceParam = params.get("race");
+            const raceNumber = raceParam && /^[1-9][0-9]*$/.test(raceParam) ? String(Number(raceParam)) : "";
+
+            if (venueName && setRecordFormFieldValue(venueField, venueName)) {
+                applyRecordFormVenueContext(venueName);
+            }
+            if (raceNumber) {
+                setRecordFormFieldValue(raceNumberField, raceNumber);
+            }
+        } catch (error) {
+            // URLパラメータの反映に失敗しても、登録フォーム全体は止めない。
+        }
+    }
+
     function parseTrialTimeValue(value) {
         if (!value) {
             return null;
@@ -2555,6 +2609,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         initializeRecordFormHeader();
+        initializeRecordFormPrefillFromParams();
 
         const form = document.getElementById("raceRecordForm");
         const trialInputs = document.querySelectorAll(".js-trial-time");
