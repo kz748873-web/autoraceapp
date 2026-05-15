@@ -1365,15 +1365,15 @@
 
                                                 <path class="track-surface" fill-rule="evenodd"
                                                       d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z
-                                                         M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+                                                         M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
 
                                                 <path class="track-inner"
-                                                      d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+                                                      d="M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
 
                                                 <path class="track-curb-base"
-                                                      d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+                                                      d="M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
                                                 <path class="track-curb-accent"
-                                                      d="M300 176 L700 176 C780 176 820 225 820 280 C820 335 780 390 700 390 L300 390 C220 390 180 335 180 280 C180 225 220 176 300 176 Z"></path>
+                                                      d="M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
 
                                                 <path class="track-edge"
                                                       d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z"></path>
@@ -2063,6 +2063,7 @@
             const canvas = document.getElementById("startDiagramCanvas");
             const board = document.getElementById("startDiagramBoard");
             const fixedLayer = board ? board.querySelector(".start-diagram-fixed-layer") : null;
+            const tokenLayer = board ? board.querySelector(".start-diagram-token-layer") : null;
             const zoomOutButton = document.getElementById("startDiagramZoomOut");
             const zoomInButton = document.getElementById("startDiagramZoomIn");
             const zoomResetButton = document.getElementById("startDiagramZoomReset");
@@ -2118,10 +2119,20 @@
                 board.style.width = scaledWidth + "px";
                 board.style.height = scaledHeight + "px";
                 board.style.transform = "";
+                board.dataset.startDiagramZoom = zoom.toFixed(4);
+                board.dataset.startDiagramBaseWidth = baseWidth.toFixed(2);
+                board.dataset.startDiagramBaseHeight = baseHeight.toFixed(2);
+                board.dataset.startDiagramScaledWidth = scaledWidth.toFixed(2);
+                board.dataset.startDiagramScaledHeight = scaledHeight.toFixed(2);
                 if (fixedLayer) {
                     fixedLayer.style.width = baseWidth + "px";
                     fixedLayer.style.height = baseHeight + "px";
                 }
+                if (tokenLayer) {
+                    tokenLayer.style.width = scaledWidth + "px";
+                    tokenLayer.style.height = scaledHeight + "px";
+                }
+                syncStartDiagramTokensForZoom();
 
                 updateZoomControls();
 
@@ -2157,6 +2168,10 @@
                 if (fixedLayer) {
                     fixedLayer.style.width = "";
                     fixedLayer.style.height = "";
+                }
+                if (tokenLayer) {
+                    tokenLayer.style.width = "";
+                    tokenLayer.style.height = "";
                 }
 
                 baseWidth = Math.max(1, Math.round(board.offsetWidth || viewport.clientWidth));
@@ -2287,9 +2302,86 @@
         return Number(String(value).replace("%", ""));
     }
 
+    function clampStartDiagramNumber(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
     function getStartDiagramTokens() {
         const board = document.getElementById("startDiagramBoard");
         return board ? Array.from(board.querySelectorAll(".start-token")) : [];
+    }
+
+    function getStartDiagramMetrics() {
+        const board = document.getElementById("startDiagramBoard");
+        const fixedLayer = board ? board.querySelector(".start-diagram-fixed-layer") : null;
+        const tokenLayer = board ? board.querySelector(".start-diagram-token-layer") : null;
+        const zoom = board ? Number(board.dataset.startDiagramZoom) : 1;
+        const safeZoom = Number.isFinite(zoom) && zoom > 0 ? zoom : 1;
+        const baseWidth = board ? Number(board.dataset.startDiagramBaseWidth) : 0;
+        const baseHeight = board ? Number(board.dataset.startDiagramBaseHeight) : 0;
+        const fallbackWidth = board && board.offsetWidth ? board.offsetWidth / safeZoom : 0;
+        const fallbackHeight = board && board.offsetHeight ? board.offsetHeight / safeZoom : 0;
+        const resolvedBaseWidth = Number.isFinite(baseWidth) && baseWidth > 0 ? baseWidth : fallbackWidth;
+        const resolvedBaseHeight = Number.isFinite(baseHeight) && baseHeight > 0 ? baseHeight : fallbackHeight;
+        const scaledWidth = Math.max(1, resolvedBaseWidth * safeZoom);
+        const scaledHeight = Math.max(1, resolvedBaseHeight * safeZoom);
+
+        return {
+            board: board,
+            fixedLayer: fixedLayer,
+            tokenLayer: tokenLayer,
+            zoom: safeZoom,
+            baseWidth: Math.max(1, resolvedBaseWidth || 1),
+            baseHeight: Math.max(1, resolvedBaseHeight || 1),
+            scaledWidth: scaledWidth,
+            scaledHeight: scaledHeight
+        };
+    }
+
+    function setStartDiagramTokenPosition(token, xPx, yPx, metrics, placed) {
+        if (!token || !metrics) {
+            return;
+        }
+
+        const tokenRect = token.getBoundingClientRect();
+        const tokenHalfWidth = (tokenRect.width || token.offsetWidth || 0) / 2;
+        const tokenHalfHeight = (tokenRect.height || token.offsetHeight || 0) / 2;
+        const minX = tokenHalfWidth;
+        const minY = tokenHalfHeight;
+        const maxX = Math.max(minX, metrics.scaledWidth - tokenHalfWidth);
+        const maxY = Math.max(minY, metrics.scaledHeight - tokenHalfHeight);
+        const safeX = clampStartDiagramNumber(xPx, minX, maxX);
+        const safeY = clampStartDiagramNumber(yPx, minY, maxY);
+
+        token.dataset.pixelX = safeX.toFixed(2);
+        token.dataset.pixelY = safeY.toFixed(2);
+        token.dataset.x = ((safeX / metrics.scaledWidth) * 100).toFixed(2);
+        token.dataset.y = ((safeY / metrics.scaledHeight) * 100).toFixed(2);
+        token.dataset.worldX = (safeX / metrics.zoom).toFixed(2);
+        token.dataset.worldY = (safeY / metrics.zoom).toFixed(2);
+        token.dataset.placed = placed ? "true" : "false";
+        token.style.left = safeX + "px";
+        token.style.top = safeY + "px";
+        token.style.transform = "translate(-50%, -50%)";
+        token.style.removeProperty("translate");
+    }
+
+    function getStartDiagramInitialPixelPosition(token, metrics) {
+        const initialX = Number(token.dataset.initialX);
+        const initialY = Number(token.dataset.initialY);
+        const fallbackX = Number(token.dataset.defaultX);
+        const fallbackY = Number(token.dataset.defaultY);
+        const xPercent = Number.isFinite(initialX) ? initialX : fallbackX;
+        const yPercent = Number.isFinite(initialY) ? initialY : fallbackY;
+
+        if (!Number.isFinite(xPercent) || !Number.isFinite(yPercent)) {
+            return null;
+        }
+
+        return {
+            x: (metrics.baseWidth * xPercent) / 100,
+            y: (metrics.baseHeight * yPercent) / 100
+        };
     }
 
     function initializeStartDiagramInitialPositions() {
@@ -2314,39 +2406,61 @@
 
             token.dataset.initialX = initialX.toFixed(2);
             token.dataset.initialY = initialY.toFixed(2);
-            token.dataset.x = initialX.toFixed(2);
-            token.dataset.y = initialY.toFixed(2);
-            token.style.left = initialX + "%";
-            token.style.top = initialY + "%";
+            token.dataset.placed = "false";
             token.style.transform = "translate(-50%, -50%)";
             token.classList.remove("is-dragging");
+        });
+    }
+
+    function syncStartDiagramTokensForZoom() {
+        const metrics = getStartDiagramMetrics();
+
+        if (!metrics.board) {
+            return;
+        }
+
+        initializeStartDiagramInitialPositions();
+        getStartDiagramTokens().forEach(function (token) {
+            if (token.dataset.placed === "true") {
+                const worldX = Number(token.dataset.worldX);
+                const worldY = Number(token.dataset.worldY);
+
+                if (Number.isFinite(worldX) && Number.isFinite(worldY)) {
+                    setStartDiagramTokenPosition(token, worldX * metrics.zoom, worldY * metrics.zoom, metrics, true);
+                    token.classList.remove("is-dragging");
+                    return;
+                }
+            }
+
+            const initialPosition = getStartDiagramInitialPixelPosition(token, metrics);
+            if (initialPosition) {
+                setStartDiagramTokenPosition(token, initialPosition.x, initialPosition.y, metrics, false);
+                token.classList.remove("is-dragging");
+            }
         });
     }
 
     function resetStartDiagramTokens() {
         try {
             initializeStartDiagramInitialPositions();
+            const metrics = getStartDiagramMetrics();
 
             getStartDiagramTokens().forEach(function (token) {
-                const initialX = Number(token.dataset.initialX);
-                const initialY = Number(token.dataset.initialY);
-                const fallbackX = Number(token.dataset.defaultX);
-                const fallbackY = Number(token.dataset.defaultY);
-                const resetX = Number.isFinite(initialX) ? initialX : fallbackX;
-                const resetY = Number.isFinite(initialY) ? initialY : fallbackY;
+                const initialPosition = getStartDiagramInitialPixelPosition(token, metrics);
 
-                if (!Number.isFinite(resetX) || !Number.isFinite(resetY)) {
+                if (!initialPosition) {
                     return;
                 }
 
-                token.dataset.x = resetX.toFixed(2);
-                token.dataset.y = resetY.toFixed(2);
-                token.style.left = resetX + "%";
-                token.style.top = resetY + "%";
-                token.style.transform = "translate(-50%, -50%)";
-                token.style.removeProperty("translate");
+                setStartDiagramTokenPosition(token, initialPosition.x, initialPosition.y, metrics, false);
                 token.classList.remove("is-dragging");
             });
+
+            const viewport = document.getElementById("startDiagramViewport");
+            if (viewport) {
+                viewport.scrollLeft = 0;
+                viewport.scrollTop = 0;
+            }
         } catch (error) {
             // スタート展開図の復元に失敗してもフォーム全体は止めない。
         }
@@ -2356,7 +2470,7 @@
         try {
             const board = document.getElementById("startDiagramBoard");
             const resetButton = document.getElementById("resetStartDiagram");
-            const dragBounds = board ? board.querySelector(".start-diagram-fixed-layer") : null;
+            const dragBounds = board ? board.querySelector(".start-diagram-token-layer") : null;
 
             if (!board) {
                 return;
@@ -2370,10 +2484,6 @@
             let activePointerId = null;
             let dragOffsetX = 0;
             let dragOffsetY = 0;
-
-            function clampNumber(value, min, max) {
-                return Math.min(Math.max(value, min), max);
-            }
 
             function findToken(target) {
                 if (!(target instanceof Element)) {
@@ -2404,10 +2514,36 @@
                 dragOffsetY = event.clientY - (tokenRect.top + tokenRect.height / 2);
             }
 
+            function autoScrollViewport(clientX, clientY) {
+                const viewport = document.getElementById("startDiagramViewport");
+
+                if (!viewport) {
+                    return;
+                }
+
+                const viewportRect = viewport.getBoundingClientRect();
+                const edgeSize = 42;
+                const scrollStep = 22;
+
+                if (clientX > viewportRect.right - edgeSize) {
+                    viewport.scrollLeft += scrollStep;
+                } else if (clientX < viewportRect.left + edgeSize) {
+                    viewport.scrollLeft -= scrollStep;
+                }
+
+                if (clientY > viewportRect.bottom - edgeSize) {
+                    viewport.scrollTop += scrollStep;
+                } else if (clientY < viewportRect.top + edgeSize) {
+                    viewport.scrollTop -= scrollStep;
+                }
+            }
+
             function moveToken(token, clientX, clientY) {
+                const metrics = getStartDiagramMetrics();
+                autoScrollViewport(clientX, clientY);
                 const boundsRect = (dragBounds || board).getBoundingClientRect();
 
-                if (!boundsRect.width || !boundsRect.height) {
+                if (!metrics.board || !boundsRect.width || !boundsRect.height) {
                     return;
                 }
 
@@ -2416,15 +2552,10 @@
                 const tokenHalfHeight = (tokenRect.height || token.offsetHeight || 0) / 2;
                 const rawX = clientX - dragOffsetX - boundsRect.left;
                 const rawY = clientY - dragOffsetY - boundsRect.top;
-                const clampedX = clampNumber(rawX, tokenHalfWidth, boundsRect.width - tokenHalfWidth);
-                const clampedY = clampNumber(rawY, tokenHalfHeight, boundsRect.height - tokenHalfHeight);
-                const xPercent = (clampedX / boundsRect.width) * 100;
-                const yPercent = (clampedY / boundsRect.height) * 100;
+                const clampedX = clampStartDiagramNumber(rawX, tokenHalfWidth, boundsRect.width - tokenHalfWidth);
+                const clampedY = clampStartDiagramNumber(rawY, tokenHalfHeight, boundsRect.height - tokenHalfHeight);
 
-                token.dataset.x = xPercent.toFixed(2);
-                token.dataset.y = yPercent.toFixed(2);
-                token.style.left = xPercent + "%";
-                token.style.top = yPercent + "%";
+                setStartDiagramTokenPosition(token, clampedX, clampedY, metrics, true);
             }
 
             function releasePointerCapture(token, pointerId) {
