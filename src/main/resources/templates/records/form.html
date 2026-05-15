@@ -383,11 +383,27 @@
                 #fff7fb;
         }
 
+        .start-diagram-course-layer,
+        .start-diagram-fixed-layer,
         .start-diagram-bg-layer,
         .start-diagram-token-layer,
         .start-diagram-overlay {
             position: absolute;
             inset: 0;
+        }
+
+        .start-diagram-course-layer {
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .start-diagram-fixed-layer {
+            z-index: 6;
+            right: auto;
+            bottom: auto;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
         .start-diagram-bg-layer {
@@ -499,10 +515,10 @@
         }
 
         .start-diagram-track .handicap-text {
-            font-size: 17px;
+            font-size: 14px;
             fill: rgba(255, 255, 255, 0.96);
             stroke: rgba(31, 47, 68, 0.42);
-            stroke-width: 2;
+            stroke-width: 1.6;
         }
 
         .start-diagram-track .track-goal-text {
@@ -1013,8 +1029,8 @@
             }
 
             .start-diagram-track .handicap-text {
-                font-size: 30px;
-                stroke-width: 3;
+                font-size: 16px;
+                stroke-width: 1.8;
             }
 
             .start-diagram-track .corner-label-text,
@@ -1327,9 +1343,10 @@
                             <div id="startDiagramViewport" class="start-diagram-viewport">
                                 <div id="startDiagramCanvas" class="start-diagram-canvas">
                                     <div id="startDiagramBoard" class="start-diagram-board">
-                                        <div class="start-diagram-bg-layer">
-                                            <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
-                                            <svg class="start-diagram-track" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="オートレース場を模したスタート展開図">
+                                        <div class="start-diagram-course-layer">
+                                            <div class="start-diagram-bg-layer">
+                                                <!-- 背景は SVG レイヤーとして分離。将来はこの SVG 差し替えだけでコース変更しやすい構造 -->
+                                                <svg class="start-diagram-track" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="オートレース場を模したスタート展開図">
                                                 <defs>
                                                     <linearGradient id="startTrackSurfaceGradient" x1="0" y1="0" x2="1" y2="1">
                                                         <stop offset="0%" stop-color="#708091"></stop>
@@ -1399,25 +1416,28 @@
                                                     <text class="corner-label-text" x="275" y="208">3コーナー</text>
                                                     <text class="corner-label-text" x="275" y="360">4コーナー</text>
                                                 </g>
-                                            </svg>
-                                        </div>
-
-                                        <div class="start-diagram-dock" aria-hidden="true"></div>
-                                        <div class="start-diagram-guide">上段の丸をドラッグしてコース上へ配置します</div>
-                                        <div class="start-diagram-control">
-                                            <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
-                                        </div>
-
-                                        <div class="start-diagram-token-layer">
-                                            <div th:each="num : ${#numbers.sequence(1, 8)}"
-                                                 th:class="'start-token car-' + ${num}"
-                                                 th:attr="data-default-x=${29.5 + (num - 1) * 6.25},data-default-y=12.7"
-                                                 th:style="'left:' + (${29.5 + (num - 1) * 6.25}) + '%; top:12.7%;'">
-                                                <span th:text="${num}">1</span>
+                                                </svg>
                                             </div>
                                         </div>
 
-                                        <div class="start-diagram-overlay"></div>
+                                        <div class="start-diagram-fixed-layer">
+                                            <div class="start-diagram-dock" aria-hidden="true"></div>
+                                            <div class="start-diagram-guide">上段の丸をドラッグしてコース上へ配置します</div>
+                                            <div class="start-diagram-control">
+                                                <button type="button" id="resetStartDiagram" class="btn btn-outline-secondary">初期位置に戻す</button>
+                                            </div>
+
+                                            <div class="start-diagram-token-layer">
+                                                <div th:each="num : ${#numbers.sequence(1, 8)}"
+                                                     th:class="'start-token car-' + ${num}"
+                                                     th:attr="data-default-x=${29.5 + (num - 1) * 6.25},data-default-y=12.7"
+                                                     th:style="'left:' + (${29.5 + (num - 1) * 6.25}) + '%; top:12.7%;'">
+                                                    <span th:text="${num}">1</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="start-diagram-overlay"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1988,6 +2008,7 @@
             const viewport = document.getElementById("startDiagramViewport");
             const canvas = document.getElementById("startDiagramCanvas");
             const board = document.getElementById("startDiagramBoard");
+            const fixedLayer = board ? board.querySelector(".start-diagram-fixed-layer") : null;
             const zoomOutButton = document.getElementById("startDiagramZoomOut");
             const zoomInButton = document.getElementById("startDiagramZoomIn");
             const zoomResetButton = document.getElementById("startDiagramZoomReset");
@@ -2033,7 +2054,7 @@
                 viewport.classList.toggle("is-zoomed", zoom > 1.01);
             }
 
-            function renderZoom(ratioX, ratioY, anchorViewportX, anchorViewportY) {
+            function renderZoom(nextScrollLeft, nextScrollTop) {
                 const scaledWidth = Math.max(1, baseWidth * zoom);
                 const scaledHeight = Math.max(1, baseHeight * zoom);
 
@@ -2043,54 +2064,50 @@
                 board.style.width = scaledWidth + "px";
                 board.style.height = scaledHeight + "px";
                 board.style.transform = "";
+                if (fixedLayer) {
+                    fixedLayer.style.width = baseWidth + "px";
+                    fixedLayer.style.height = baseHeight + "px";
+                }
 
                 updateZoomControls();
 
                 window.requestAnimationFrame(function () {
                     const maxScrollLeft = Math.max(0, scaledWidth - viewport.clientWidth);
                     const maxScrollTop = Math.max(0, scaledHeight - viewport.clientHeight);
-                    viewport.scrollLeft = clampNumber((scaledWidth * ratioX) - anchorViewportX, 0, maxScrollLeft);
-                    viewport.scrollTop = clampNumber((scaledHeight * ratioY) - anchorViewportY, 0, maxScrollTop);
+                    viewport.scrollLeft = clampNumber(nextScrollLeft, 0, maxScrollLeft);
+                    viewport.scrollTop = clampNumber(nextScrollTop, 0, maxScrollTop);
                 });
             }
 
-            function applyZoom(nextZoom, anchor) {
+            function applyZoom(nextZoom) {
                 if (!baseWidth || !baseHeight) {
                     return;
                 }
 
-                const previousZoom = zoom;
-                const previousWidth = Math.max(1, baseWidth * previousZoom);
-                const previousHeight = Math.max(1, baseHeight * previousZoom);
-                const viewportRect = viewport.getBoundingClientRect();
-                const anchorViewportX = anchor ? anchor.clientX - viewportRect.left : viewport.clientWidth / 2;
-                const anchorViewportY = anchor ? anchor.clientY - viewportRect.top : viewport.clientHeight / 2;
-                const ratioX = clampNumber((viewport.scrollLeft + anchorViewportX) / previousWidth, 0, 1);
-                const ratioY = clampNumber((viewport.scrollTop + anchorViewportY) / previousHeight, 0, 1);
+                const nextScrollLeft = viewport.scrollLeft;
+                const nextScrollTop = viewport.scrollTop;
 
                 zoom = clampZoom(nextZoom);
-                renderZoom(ratioX, ratioY, anchorViewportX, anchorViewportY);
+                renderZoom(nextScrollLeft, nextScrollTop);
             }
 
             function measureBaseSize() {
-                const previousWidth = baseWidth ? baseWidth * zoom : viewport.scrollWidth;
-                const previousHeight = baseHeight ? baseHeight * zoom : viewport.scrollHeight;
-                const ratioX = previousWidth > 0
-                    ? clampNumber((viewport.scrollLeft + viewport.clientWidth / 2) / previousWidth, 0, 1)
-                    : 0.5;
-                const ratioY = previousHeight > 0
-                    ? clampNumber((viewport.scrollTop + viewport.clientHeight / 2) / previousHeight, 0, 1)
-                    : 0.5;
+                const nextScrollLeft = viewport.scrollLeft;
+                const nextScrollTop = viewport.scrollTop;
 
                 canvas.style.width = "";
                 canvas.style.height = "";
                 board.style.width = "";
                 board.style.height = "";
                 board.style.transform = "";
+                if (fixedLayer) {
+                    fixedLayer.style.width = "";
+                    fixedLayer.style.height = "";
+                }
 
                 baseWidth = Math.max(1, Math.round(board.offsetWidth || viewport.clientWidth));
                 baseHeight = Math.max(1, Math.round(board.offsetHeight || baseWidth * 0.5625));
-                renderZoom(ratioX, ratioY, viewport.clientWidth / 2, viewport.clientHeight / 2);
+                renderZoom(nextScrollLeft, nextScrollTop);
             }
 
             function scheduleMeasureBaseSize() {
@@ -2149,10 +2166,7 @@
                     return;
                 }
                 event.preventDefault();
-                applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep), {
-                    clientX: event.clientX,
-                    clientY: event.clientY
-                });
+                applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep));
             }, { passive: false });
 
             viewport.addEventListener("pointerdown", function (event) {
@@ -2189,7 +2203,7 @@
                 }
 
                 event.preventDefault();
-                applyZoom(pinchStart.zoom * (currentPinch.distance / pinchStart.distance), currentPinch.midpoint);
+                applyZoom(pinchStart.zoom * (currentPinch.distance / pinchStart.distance));
             }, { passive: false });
 
             ["pointerup", "pointercancel", "pointerleave"].forEach(function (eventName) {
@@ -2240,6 +2254,7 @@
         try {
             const board = document.getElementById("startDiagramBoard");
             const resetButton = document.getElementById("resetStartDiagram");
+            const dragBounds = board ? board.querySelector(".start-diagram-fixed-layer") : null;
 
             if (!board) {
                 return;
@@ -2270,9 +2285,6 @@
                 if (!token || token.style.pointerEvents === "none") {
                     return false;
                 }
-                if (resetButton && resetButton.disabled) {
-                    return false;
-                }
                 return window.getComputedStyle(token).pointerEvents !== "none";
             }
 
@@ -2291,21 +2303,21 @@
             }
 
             function moveToken(token, clientX, clientY) {
-                const boardRect = board.getBoundingClientRect();
+                const boundsRect = (dragBounds || board).getBoundingClientRect();
 
-                if (!boardRect.width || !boardRect.height) {
+                if (!boundsRect.width || !boundsRect.height) {
                     return;
                 }
 
                 const tokenRect = token.getBoundingClientRect();
                 const tokenHalfWidth = (tokenRect.width || token.offsetWidth || 0) / 2;
                 const tokenHalfHeight = (tokenRect.height || token.offsetHeight || 0) / 2;
-                const rawX = clientX - dragOffsetX - boardRect.left;
-                const rawY = clientY - dragOffsetY - boardRect.top;
-                const clampedX = clampNumber(rawX, tokenHalfWidth, boardRect.width - tokenHalfWidth);
-                const clampedY = clampNumber(rawY, tokenHalfHeight, boardRect.height - tokenHalfHeight);
-                const xPercent = (clampedX / boardRect.width) * 100;
-                const yPercent = (clampedY / boardRect.height) * 100;
+                const rawX = clientX - dragOffsetX - boundsRect.left;
+                const rawY = clientY - dragOffsetY - boundsRect.top;
+                const clampedX = clampNumber(rawX, tokenHalfWidth, boundsRect.width - tokenHalfWidth);
+                const clampedY = clampNumber(rawY, tokenHalfHeight, boundsRect.height - tokenHalfHeight);
+                const xPercent = (clampedX / boundsRect.width) * 100;
+                const yPercent = (clampedY / boundsRect.height) * 100;
 
                 token.dataset.x = xPercent.toFixed(2);
                 token.dataset.y = yPercent.toFixed(2);
@@ -2466,24 +2478,38 @@
     }
 
     function setSectionDisabled(section, disabled) {
+        const isStartDiagramSection = section.dataset.sectionId === "start-diagram";
+
         section.querySelectorAll("input, select, textarea").forEach(function (field) {
             if (field.type === "hidden") {
                 return;
             }
             field.disabled = disabled;
         });
+
         const resetButton = section.querySelector("#resetStartDiagram");
         if (resetButton) {
-            resetButton.disabled = disabled;
+            resetButton.disabled = false;
         }
-        if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.setEnabled === "function") {
+
+        if (isStartDiagramSection
+            && window.AutoRaceStartDiagram
+            && typeof window.AutoRaceStartDiagram.setEnabled === "function") {
             try {
-                window.AutoRaceStartDiagram.setEnabled("startDiagramBoard", !disabled);
-                return;
+                window.AutoRaceStartDiagram.setEnabled("startDiagramBoard", true);
             } catch (error) {
                 // スタート展開図だけの問題でセクション操作を止めない。
             }
         }
+
+        if (isStartDiagramSection) {
+            section.querySelectorAll(".start-token").forEach(function (token) {
+                token.style.pointerEvents = "auto";
+                token.classList.remove("is-dragging");
+            });
+            return;
+        }
+
         section.querySelectorAll(".start-token").forEach(function (token) {
             token.style.pointerEvents = disabled ? "none" : "auto";
             token.classList.remove("is-dragging");
