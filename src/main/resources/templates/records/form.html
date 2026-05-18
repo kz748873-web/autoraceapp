@@ -377,6 +377,7 @@
             width: 100%;
             aspect-ratio: 16 / 9;
             min-height: 22rem;
+            overflow: visible;
             touch-action: pan-x pan-y;
             background:
                 linear-gradient(180deg, rgba(255, 245, 251, 0.98) 0 18%, rgba(255, 247, 251, 0.88) 18% 100%),
@@ -394,7 +395,13 @@
 
         .start-diagram-course-layer {
             z-index: 1;
+            right: auto;
+            bottom: auto;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
+            transform-origin: 0 0;
+            will-change: transform;
         }
 
         .start-diagram-fixed-layer {
@@ -403,6 +410,7 @@
             bottom: auto;
             width: 100%;
             height: 100%;
+            overflow: visible;
             pointer-events: none;
         }
 
@@ -530,7 +538,13 @@
 
         .start-diagram-token-layer {
             z-index: 7;
+            right: auto;
+            bottom: auto;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
             pointer-events: none;
+            touch-action: none;
         }
 
         .start-diagram-dock {
@@ -619,15 +633,15 @@
 
         .start-token {
             position: absolute;
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             border: 2px solid #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             color: #ffffff;
             box-shadow: 0 0.45rem 0.95rem rgba(15, 23, 42, 0.2);
             transform: translate(-50%, -50%);
@@ -636,6 +650,7 @@
             cursor: grab;
             z-index: 2;
             pointer-events: auto;
+            will-change: left, top;
         }
 
         .start-token::before {
@@ -961,7 +976,7 @@
                 aspect-ratio: 16 / 10.5;
                 height: auto;
                 min-height: 0;
-                overflow: hidden;
+                overflow: visible;
             }
 
             .start-diagram-bg-layer {
@@ -1006,13 +1021,13 @@
             }
 
             .start-token {
-                width: 36px;
-                height: 36px;
-                font-size: 0.8rem;
+                width: 38px;
+                height: 38px;
+                font-size: 0.82rem;
             }
 
             .start-token::before {
-                inset: -0.44rem;
+                inset: -0.5rem;
             }
 
             .trial-input-row {
@@ -1365,35 +1380,35 @@
 
                                                 <path class="track-surface" fill-rule="evenodd"
                                                       d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z
-                                                         M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
+                                                         M332 200 L668 200 C741 200 786 236 786 280 C786 324 741 366 668 366 L332 366 C259 366 214 324 214 280 C214 236 259 200 332 200 Z"></path>
 
                                                 <path class="track-inner"
-                                                      d="M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
+                                                      d="M332 200 L668 200 C741 200 786 236 786 280 C786 324 741 366 668 366 L332 366 C259 366 214 324 214 280 C214 236 259 200 332 200 Z"></path>
 
                                                 <path class="track-curb-base"
-                                                      d="M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
+                                                      d="M332 200 L668 200 C741 200 786 236 786 280 C786 324 741 366 668 366 L332 366 C259 366 214 324 214 280 C214 236 259 200 332 200 Z"></path>
                                                 <path class="track-curb-accent"
-                                                      d="M318 190 L682 190 C755 190 796 232 796 280 C796 328 755 376 682 376 L318 376 C245 376 204 328 204 280 C204 232 245 190 318 190 Z"></path>
+                                                      d="M332 200 L668 200 C741 200 786 236 786 280 C786 324 741 366 668 366 L332 366 C259 366 214 324 214 280 C214 236 259 200 332 200 Z"></path>
 
                                                 <path class="track-edge"
                                                       d="M250 116 L750 116 C855 116 925 190 925 280 C925 370 855 445 750 445 L250 445 C145 445 75 370 75 280 C75 190 145 116 250 116 Z"></path>
                                                 <path class="track-lane"
-                                                      d="M265 146 L735 146 C822 146 875 207 875 280 C875 353 822 418 735 418 L265 418 C178 418 125 353 125 280 C125 207 178 146 265 146 Z"></path>
+                                                      d="M274 158 L726 158 C810 158 862 213 862 280 C862 347 810 405 726 405 L274 405 C190 405 138 347 138 280 C138 213 190 158 274 158 Z"></path>
 
                                                 <g class="start-diagram-racing-layer">
                                                     <path class="track-rubber"
-                                                          d="M265 146 L735 146 C822 146 875 207 875 280 C875 353 822 418 735 418 L585 418"></path>
+                                                          d="M274 158 L726 158 C810 158 862 213 862 280 C862 347 810 405 726 405 L585 405"></path>
                                                 </g>
 
                                                 <g class="start-diagram-handicap-layer">
-                                                    <line class="handicap-line" x1="150" y1="187" x2="206" y2="218"></line>
-                                                    <line class="handicap-line" x1="136" y1="213" x2="195" y2="237"></line>
-                                                    <line class="handicap-line" x1="126" y1="240" x2="187" y2="257"></line>
-                                                    <line class="handicap-line" x1="118" y1="267" x2="181" y2="278"></line>
-                                                    <line class="handicap-line" x1="116" y1="295" x2="181" y2="299"></line>
-                                                    <line class="handicap-line" x1="121" y1="323" x2="187" y2="321"></line>
-                                                    <line class="handicap-line" x1="133" y1="350" x2="198" y2="341"></line>
-                                                    <line class="handicap-line is-main" x1="149" y1="376" x2="213" y2="360"></line>
+                                                    <line class="handicap-line" x1="150" y1="187" x2="220" y2="226"></line>
+                                                    <line class="handicap-line" x1="136" y1="213" x2="211" y2="244"></line>
+                                                    <line class="handicap-line" x1="126" y1="240" x2="203" y2="263"></line>
+                                                    <line class="handicap-line" x1="118" y1="267" x2="198" y2="283"></line>
+                                                    <line class="handicap-line" x1="116" y1="295" x2="198" y2="303"></line>
+                                                    <line class="handicap-line" x1="121" y1="323" x2="204" y2="325"></line>
+                                                    <line class="handicap-line" x1="133" y1="350" x2="215" y2="348"></line>
+                                                    <line class="handicap-line is-main" x1="149" y1="376" x2="230" y2="365"></line>
 
                                                     <text class="handicap-text" x="133" y="187">70m</text>
                                                     <text class="handicap-text" x="117" y="213">60m</text>
@@ -2062,6 +2077,7 @@
             const viewport = document.getElementById("startDiagramViewport");
             const canvas = document.getElementById("startDiagramCanvas");
             const board = document.getElementById("startDiagramBoard");
+            const courseLayer = board ? board.querySelector(".start-diagram-course-layer") : null;
             const fixedLayer = board ? board.querySelector(".start-diagram-fixed-layer") : null;
             const tokenLayer = board ? board.querySelector(".start-diagram-token-layer") : null;
             const zoomOutButton = document.getElementById("startDiagramZoomOut");
@@ -2116,14 +2132,20 @@
                 viewport.style.height = baseHeight + "px";
                 canvas.style.width = scaledWidth + "px";
                 canvas.style.height = scaledHeight + "px";
-                board.style.width = scaledWidth + "px";
-                board.style.height = scaledHeight + "px";
+                board.style.width = baseWidth + "px";
+                board.style.height = baseHeight + "px";
                 board.style.transform = "";
                 board.dataset.startDiagramZoom = zoom.toFixed(4);
                 board.dataset.startDiagramBaseWidth = baseWidth.toFixed(2);
                 board.dataset.startDiagramBaseHeight = baseHeight.toFixed(2);
                 board.dataset.startDiagramScaledWidth = scaledWidth.toFixed(2);
                 board.dataset.startDiagramScaledHeight = scaledHeight.toFixed(2);
+                if (courseLayer) {
+                    courseLayer.style.width = baseWidth + "px";
+                    courseLayer.style.height = baseHeight + "px";
+                    courseLayer.style.transformOrigin = "0 0";
+                    courseLayer.style.transform = "scale(" + zoom + ")";
+                }
                 if (fixedLayer) {
                     fixedLayer.style.width = baseWidth + "px";
                     fixedLayer.style.height = baseHeight + "px";
@@ -2144,15 +2166,25 @@
                 });
             }
 
-            function applyZoom(nextZoom) {
+            function applyZoom(nextZoom, focusClientX, focusClientY) {
                 if (!baseWidth || !baseHeight) {
                     return;
                 }
 
-                const nextScrollLeft = viewport.scrollLeft;
-                const nextScrollTop = viewport.scrollTop;
+                const previousZoom = zoom;
+                const viewportRect = viewport.getBoundingClientRect();
+                const focusOffsetX = Number.isFinite(focusClientX)
+                    ? clampNumber(focusClientX - viewportRect.left, 0, viewport.clientWidth)
+                    : viewport.clientWidth / 2;
+                const focusOffsetY = Number.isFinite(focusClientY)
+                    ? clampNumber(focusClientY - viewportRect.top, 0, viewport.clientHeight)
+                    : viewport.clientHeight / 2;
+                const focusWorldX = (viewport.scrollLeft + focusOffsetX) / previousZoom;
+                const focusWorldY = (viewport.scrollTop + focusOffsetY) / previousZoom;
 
                 zoom = clampZoom(nextZoom);
+                const nextScrollLeft = (focusWorldX * zoom) - focusOffsetX;
+                const nextScrollTop = (focusWorldY * zoom) - focusOffsetY;
                 renderZoom(nextScrollLeft, nextScrollTop);
             }
 
@@ -2165,6 +2197,12 @@
                 board.style.width = "";
                 board.style.height = "";
                 board.style.transform = "";
+                if (courseLayer) {
+                    courseLayer.style.width = "";
+                    courseLayer.style.height = "";
+                    courseLayer.style.transform = "";
+                    courseLayer.style.transformOrigin = "";
+                }
                 if (fixedLayer) {
                     fixedLayer.style.width = "";
                     fixedLayer.style.height = "";
@@ -2235,7 +2273,7 @@
                     return;
                 }
                 event.preventDefault();
-                applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep));
+                applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep), event.clientX, event.clientY);
             }, { passive: false });
 
             viewport.addEventListener("pointerdown", function (event) {
@@ -2250,6 +2288,13 @@
                     pinchStart = getPinchState();
                     if (pinchStart) {
                         event.preventDefault();
+                        if (typeof viewport.setPointerCapture === "function") {
+                            try {
+                                viewport.setPointerCapture(event.pointerId);
+                            } catch (error) {
+                                // Pinch zoom still works without capture when the browser declines it.
+                            }
+                        }
                     }
                 }
             }, { passive: false });
@@ -2272,14 +2317,32 @@
                 }
 
                 event.preventDefault();
-                applyZoom(pinchStart.zoom * (currentPinch.distance / pinchStart.distance));
+                applyZoom(
+                    pinchStart.zoom * (currentPinch.distance / pinchStart.distance),
+                    currentPinch.midpoint.clientX,
+                    currentPinch.midpoint.clientY
+                );
             }, { passive: false });
 
             ["pointerup", "pointercancel", "pointerleave"].forEach(function (eventName) {
                 viewport.addEventListener(eventName, function (event) {
                     touchPointers.delete(event.pointerId);
                     pinchStart = touchPointers.size >= 2 ? getPinchState() : null;
+                    if (typeof viewport.releasePointerCapture === "function"
+                        && typeof viewport.hasPointerCapture === "function"
+                        && viewport.hasPointerCapture(event.pointerId)) {
+                        try {
+                            viewport.releasePointerCapture(event.pointerId);
+                        } catch (error) {
+                            // Pointer capture may already be released by the browser.
+                        }
+                    }
                 });
+            });
+
+            board.addEventListener("start-diagram:reset", function () {
+                touchPointers.clear();
+                pinchStart = null;
             });
 
             if (window.ResizeObserver) {
@@ -2319,8 +2382,8 @@
         const safeZoom = Number.isFinite(zoom) && zoom > 0 ? zoom : 1;
         const baseWidth = board ? Number(board.dataset.startDiagramBaseWidth) : 0;
         const baseHeight = board ? Number(board.dataset.startDiagramBaseHeight) : 0;
-        const fallbackWidth = board && board.offsetWidth ? board.offsetWidth / safeZoom : 0;
-        const fallbackHeight = board && board.offsetHeight ? board.offsetHeight / safeZoom : 0;
+        const fallbackWidth = board && board.offsetWidth ? board.offsetWidth : 0;
+        const fallbackHeight = board && board.offsetHeight ? board.offsetHeight : 0;
         const resolvedBaseWidth = Number.isFinite(baseWidth) && baseWidth > 0 ? baseWidth : fallbackWidth;
         const resolvedBaseHeight = Number.isFinite(baseHeight) && baseHeight > 0 ? baseHeight : fallbackHeight;
         const scaledWidth = Math.max(1, resolvedBaseWidth * safeZoom);
@@ -2364,6 +2427,9 @@
         token.style.top = safeY + "px";
         token.style.transform = "translate(-50%, -50%)";
         token.style.removeProperty("translate");
+        token.style.removeProperty("right");
+        token.style.removeProperty("bottom");
+        token.style.removeProperty("margin");
     }
 
     function getStartDiagramInitialPixelPosition(token, metrics) {
@@ -2408,6 +2474,7 @@
             token.dataset.initialY = initialY.toFixed(2);
             token.dataset.placed = "false";
             token.style.transform = "translate(-50%, -50%)";
+            token.style.removeProperty("translate");
             token.classList.remove("is-dragging");
         });
     }
@@ -2442,8 +2509,13 @@
 
     function resetStartDiagramTokens() {
         try {
+            const board = document.getElementById("startDiagramBoard");
             initializeStartDiagramInitialPositions();
             const metrics = getStartDiagramMetrics();
+
+            if (board) {
+                board.dispatchEvent(new CustomEvent("start-diagram:reset"));
+            }
 
             getStartDiagramTokens().forEach(function (token) {
                 const initialPosition = getStartDiagramInitialPixelPosition(token, metrics);
@@ -2452,7 +2524,16 @@
                     return;
                 }
 
+                token.dataset.placed = "false";
+                delete token.dataset.worldX;
+                delete token.dataset.worldY;
+                delete token.dataset.dragX;
+                delete token.dataset.dragY;
                 setStartDiagramTokenPosition(token, initialPosition.x, initialPosition.y, metrics, false);
+                token.dataset.x = token.dataset.initialX || token.dataset.defaultX || token.dataset.x;
+                token.dataset.y = token.dataset.initialY || token.dataset.defaultY || token.dataset.y;
+                delete token.dataset.worldX;
+                delete token.dataset.worldY;
                 token.classList.remove("is-dragging");
             });
 
@@ -2484,6 +2565,9 @@
             let activePointerId = null;
             let dragOffsetX = 0;
             let dragOffsetY = 0;
+            let dragStartClientX = 0;
+            let dragStartClientY = 0;
+            let hasMovedToken = false;
 
             function findToken(target) {
                 if (!(target instanceof Element)) {
@@ -2514,7 +2598,7 @@
                 dragOffsetY = event.clientY - (tokenRect.top + tokenRect.height / 2);
             }
 
-            function autoScrollViewport(clientX, clientY) {
+            function autoScrollViewport(clientX, clientY, zoom) {
                 const viewport = document.getElementById("startDiagramViewport");
 
                 if (!viewport) {
@@ -2522,8 +2606,8 @@
                 }
 
                 const viewportRect = viewport.getBoundingClientRect();
-                const edgeSize = 42;
-                const scrollStep = 22;
+                const edgeSize = Math.min(78, Math.max(48, 38 * zoom));
+                const scrollStep = Math.min(48, Math.max(20, 18 * zoom));
 
                 if (clientX > viewportRect.right - edgeSize) {
                     viewport.scrollLeft += scrollStep;
@@ -2540,7 +2624,7 @@
 
             function moveToken(token, clientX, clientY) {
                 const metrics = getStartDiagramMetrics();
-                autoScrollViewport(clientX, clientY);
+                autoScrollViewport(clientX, clientY, metrics.zoom);
                 const boundsRect = (dragBounds || board).getBoundingClientRect();
 
                 if (!metrics.board || !boundsRect.width || !boundsRect.height) {
@@ -2584,12 +2668,18 @@
                 activePointerId = null;
                 dragOffsetX = 0;
                 dragOffsetY = 0;
+                dragStartClientX = 0;
+                dragStartClientY = 0;
+                hasMovedToken = false;
             }
 
             function beginDrag(token, event, pointerId) {
                 stopDragEvent(event);
                 activeToken = token;
                 activePointerId = pointerId;
+                dragStartClientX = event.clientX;
+                dragStartClientY = event.clientY;
+                hasMovedToken = false;
                 updateDragOffset(activeToken, event);
                 activeToken.classList.add("is-dragging");
 
@@ -2601,7 +2691,8 @@
                     }
                 }
 
-                moveToken(activeToken, event.clientX, event.clientY);
+                token.dataset.dragX = event.clientX.toFixed(2);
+                token.dataset.dragY = event.clientY.toFixed(2);
             }
 
             board.addEventListener("pointerdown", function (event) {
@@ -2623,6 +2714,10 @@
                 }
 
                 stopDragEvent(event);
+                if (!hasMovedToken && Math.hypot(event.clientX - dragStartClientX, event.clientY - dragStartClientY) < 2) {
+                    return;
+                }
+                hasMovedToken = true;
                 moveToken(activeToken, event.clientX, event.clientY);
             }, { capture: true, passive: false });
 
@@ -2666,6 +2761,10 @@
                 }
 
                 stopDragEvent(event);
+                if (!hasMovedToken && Math.hypot(event.clientX - dragStartClientX, event.clientY - dragStartClientY) < 2) {
+                    return;
+                }
+                hasMovedToken = true;
                 moveToken(activeToken, event.clientX, event.clientY);
             }, { passive: false });
 
@@ -2677,6 +2776,7 @@
                 finishDrag();
             }, { passive: false });
             window.addEventListener("blur", finishDrag);
+            board.addEventListener("start-diagram:reset", finishDrag);
 
             if (resetButton) {
                 resetButton.addEventListener("click", function (event) {
