@@ -556,12 +556,16 @@
             align-items: end;
         }
 
-        .prep-form-grid > .venue-choice-field {
-            grid-column: 1 / span 2;
+        .prep-form-grid > .prep-date-field {
+            grid-column: 1;
         }
 
-        .prep-form-grid > div:nth-child(2) {
-            grid-column: 3;
+        .prep-form-grid > .prep-race-field {
+            grid-column: 2;
+        }
+
+        .prep-form-grid > .venue-choice-field {
+            grid-column: 1 / span 2;
         }
 
         .prep-form-grid > .selection-summary-card {
@@ -636,6 +640,7 @@
             color: var(--home-strong-text);
         }
 
+        .prep-panel .form-control,
         .prep-panel .form-select,
         .prep-panel .btn {
             min-height: 3.15rem;
@@ -672,8 +677,8 @@
 
         .selection-summary-values {
             display: flex;
-            flex-direction: column;
-            gap: 0.28rem;
+            flex-wrap: wrap;
+            gap: 0.35rem 0.9rem;
             min-width: 0;
         }
 
@@ -1011,8 +1016,9 @@
                 grid-template-columns: 1fr;
             }
 
+            .prep-form-grid > .prep-date-field,
+            .prep-form-grid > .prep-race-field,
             .prep-form-grid > .venue-choice-field,
-            .prep-form-grid > div:nth-child(2),
             .prep-form-grid > .selection-summary-card,
             .prep-form-grid > .summary-note,
             .prep-form-grid > .action-grid {
@@ -1298,9 +1304,30 @@
                     <section id="prepSection" class="prep-panel">
                         <div class="panel-badge">前日予想準備枠</div>
                         <h2 class="section-title">予想準備</h2>
-                        <p class="section-copy">レース場とレース番号を選んで次に進めます。記録や確認へ進む前の状態をここで整えます。</p>
+                        <p class="section-copy">レース場とレース番号を選んで次に進めます。レース日も合わせて、記録や確認へ進む前の状態をここで整えます。</p>
 
                         <form method="get" th:action="@{/}" class="prep-form-grid mt-4">
+                            <div class="prep-date-field">
+                                <label for="raceDateInput" class="form-label fw-semibold">レース日</label>
+                                <input type="date"
+                                       id="raceDateInput"
+                                       name="date"
+                                       class="form-control"
+                                       th:value="${param.date != null and !#lists.isEmpty(param.date) ? param.date[0] : ''}">
+                            </div>
+
+                            <div class="prep-race-field">
+                                <label for="raceNumberSelect" class="form-label fw-semibold">レース番号</label>
+                                <select id="raceNumberSelect" name="raceNumber" class="form-select">
+                                    <option value="">選択してください</option>
+                                    <option
+                                        th:each="num : ${#numbers.sequence(1, 12)}"
+                                        th:value="${num}"
+                                        th:text="${num + 'レース'}"
+                                        th:selected="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) and param.raceNumber[0] == #strings.toString(num)}">1レース</option>
+                                </select>
+                            </div>
+
                             <div class="venue-choice-field">
                                 <h3 id="venueChoiceTitle" class="venue-choice-title">レース場を選択する</h3>
                                 <input type="hidden" id="venueInput" name="venue" th:value="${selectedVenue}">
@@ -1313,24 +1340,13 @@
                                 </div>
                             </div>
 
-                            <div>
-                                <label for="raceNumberSelect" class="form-label fw-semibold">レース番号</label>
-                                <select id="raceNumberSelect" name="raceNumber" class="form-select">
-                                    <option value="">選択してください</option>
-                                    <option
-                                        th:each="num : ${#numbers.sequence(1, 12)}"
-                                        th:value="${num}"
-                                        th:text="${num + 'レース'}"
-                                        th:selected="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) and param.raceNumber[0] == #strings.toString(num)}">1レース</option>
-                                </select>
-                            </div>
-
                             <div class="selection-summary-card">
+                                <div id="selectionSummary" class="selection-summary-text">選択中：</div>
                                 <div class="selection-summary-values">
+                                    <div id="selectorDateSummary" class="summary-value" th:text="${param.date != null and !#lists.isEmpty(param.date) ? #strings.replace(param.date[0], '-', '/') : '未選択'}">未選択</div>
                                     <div id="selectorVenueSummary" class="summary-value" th:text="${selectedVenue} ?: '未選択'">未選択</div>
                                     <div id="selectorRaceSummary" class="summary-value" th:text="${param.raceNumber != null and !#lists.isEmpty(param.raceNumber) ? param.raceNumber[0] + 'レース' : '未選択'}">未選択</div>
                                 </div>
-                                <div id="selectionSummary" class="selection-summary-text">レース場とレース番号を選ぶと、ここに現在の選択内容が表示されます。</div>
                             </div>
 
                             <div class="action-grid">
@@ -1528,18 +1544,31 @@
             };
         }
 
+        function formatRaceDateForDisplay(value) {
+            if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                return "未選択";
+            }
+            return value.replace(/-/g, "/");
+        }
+
         function updateSelectionSummary() {
             const venueContext = getSelectedVenueContext();
+            const raceDateInput = document.getElementById("raceDateInput");
             const raceNumberSelect = document.getElementById("raceNumberSelect");
             const summary = document.getElementById("selectionSummary");
+            const selectorDateSummary = document.getElementById("selectorDateSummary");
             const selectorVenueSummary = document.getElementById("selectorVenueSummary");
             const selectorRaceSummary = document.getElementById("selectorRaceSummary");
 
+            const dateText = formatRaceDateForDisplay(raceDateInput && raceDateInput.value ? raceDateInput.value : "");
             const venueText = venueContext.name || "未選択";
             const raceText = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value + "レース" : "未選択";
 
             if (summary) {
-                summary.textContent = venueText + " / " + raceText + " を選択中です。";
+                summary.textContent = "選択中：";
+            }
+            if (selectorDateSummary) {
+                selectorDateSummary.textContent = dateText;
             }
             if (selectorVenueSummary) {
                 selectorVenueSummary.textContent = venueText;
@@ -1569,7 +1598,9 @@
         function updateMenuContext() {
             const venueContext = getSelectedVenueContext();
             const menuVenueLabel = document.querySelector("[data-menu-venue-label]");
+            const raceDateInput = document.getElementById("raceDateInput");
             const raceNumberSelect = document.getElementById("raceNumberSelect");
+            const selectedRaceDate = raceDateInput && raceDateInput.value ? raceDateInput.value : "";
             const selectedRaceNumber = raceNumberSelect && raceNumberSelect.value ? raceNumberSelect.value : "";
 
             if (menuVenueLabel) {
@@ -1590,6 +1621,9 @@
                     nextUrl.search = "";
 
                     if (target === "new-record") {
+                        if (selectedRaceDate) {
+                            nextUrl.searchParams.set("date", selectedRaceDate);
+                        }
                         if (venueContext.themeKey) {
                             nextUrl.searchParams.set("place", venueContext.themeKey);
                         }
@@ -1913,6 +1947,7 @@
         function initializeHomePage() {
             const venueInput = document.getElementById("venueInput");
             const venueButtons = getVenueChoiceButtons();
+            const raceDateInput = document.getElementById("raceDateInput");
             const raceNumberSelect = document.getElementById("raceNumberSelect");
 
             if (venueButtons.length > 0) {
@@ -1944,6 +1979,17 @@
                 raceNumberSelect.addEventListener("change", function () {
                     updateSelectionSummary();
                     updateCurrentRaceDisplay();
+                    updateMenuContext();
+                });
+            }
+
+            if (raceDateInput) {
+                raceDateInput.addEventListener("input", function () {
+                    updateSelectionSummary();
+                    updateMenuContext();
+                });
+                raceDateInput.addEventListener("change", function () {
+                    updateSelectionSummary();
                     updateMenuContext();
                 });
             }
