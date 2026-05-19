@@ -343,12 +343,21 @@
 
         .start-diagram-viewport {
             width: 100%;
-            overflow: auto;
+            overflow-x: auto;
+            overflow-y: auto;
             overscroll-behavior: contain;
-            touch-action: none;
+            overscroll-behavior-x: contain;
+            overscroll-behavior-y: contain;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
             background: #fff7fb;
+            scroll-behavior: auto;
             scrollbar-color: rgba(233, 30, 122, 0.45) rgba(255, 247, 251, 0.95);
             scrollbar-width: thin;
+        }
+
+        .start-diagram-viewport.is-panning {
+            cursor: grabbing;
         }
 
         .start-diagram-viewport::-webkit-scrollbar {
@@ -369,7 +378,7 @@
             position: relative;
             width: 100%;
             min-width: 100%;
-            touch-action: none;
+            touch-action: pan-x pan-y;
         }
 
         .start-diagram-board {
@@ -378,7 +387,7 @@
             aspect-ratio: 16 / 9;
             min-height: 22rem;
             overflow: visible;
-            touch-action: none;
+            touch-action: pan-x pan-y;
             background:
                 linear-gradient(180deg, rgba(255, 245, 251, 0.98) 0 18%, rgba(255, 247, 251, 0.88) 18% 100%),
                 #fff7fb;
@@ -575,6 +584,7 @@
             right: 1.15rem;
             z-index: 6;
             pointer-events: auto;
+            touch-action: manipulation;
         }
 
         .start-diagram-control .btn {
@@ -586,6 +596,7 @@
             font-size: 0.84rem;
             font-weight: 800;
             box-shadow: 0 0.35rem 0.8rem rgba(197, 22, 46, 0.1);
+            touch-action: manipulation;
         }
 
         .start-diagram-guide {
@@ -2304,6 +2315,11 @@
                 return target instanceof Element && Boolean(target.closest(".start-token"));
             }
 
+            function isDiagramControlTarget(target) {
+                return target instanceof Element
+                    && Boolean(target.closest(".start-diagram-control, button, a, input, select, textarea"));
+            }
+
             function captureViewportPointer(pointerId) {
                 if (typeof viewport.setPointerCapture !== "function") {
                     return;
@@ -2330,6 +2346,18 @@
                 }
             }
 
+            function captureTrackedPointers() {
+                touchPointers.forEach(function (_, pointerId) {
+                    captureViewportPointer(pointerId);
+                });
+            }
+
+            function releaseTrackedPointers() {
+                touchPointers.forEach(function (_, pointerId) {
+                    releaseViewportPointer(pointerId);
+                });
+            }
+
             function beginPan(event) {
                 panStart = {
                     pointerId: event.pointerId,
@@ -2338,27 +2366,14 @@
                     scrollLeft: viewport.scrollLeft,
                     scrollTop: viewport.scrollTop
                 };
-            }
-
-            function continuePan(event) {
-                if (!panStart || panStart.pointerId !== event.pointerId || touchPointers.size !== 1 || pinchStart) {
-                    return;
-                }
-
-                const deltaX = event.clientX - panStart.clientX;
-                const deltaY = event.clientY - panStart.clientY;
-                if (Math.hypot(deltaX, deltaY) < 2) {
-                    return;
-                }
-
-                event.preventDefault();
-                setViewportScroll(panStart.scrollLeft - deltaX, panStart.scrollTop - deltaY);
+                viewport.classList.add("is-panning");
             }
 
             function clearTouchState() {
                 touchPointers.clear();
                 pinchStart = null;
                 panStart = null;
+                viewport.classList.remove("is-panning");
             }
 
             if (zoomOutButton) {
@@ -2386,7 +2401,9 @@
             }, { passive: false });
 
             viewport.addEventListener("pointerdown", function (event) {
-                if (event.pointerType !== "touch" || isTokenTarget(event.target)) {
+                if (event.pointerType !== "touch"
+                    || isTokenTarget(event.target)
+                    || isDiagramControlTarget(event.target)) {
                     return;
                 }
 
@@ -2394,16 +2411,17 @@
                     clientX: event.clientX,
                     clientY: event.clientY
                 });
-                captureViewportPointer(event.pointerId);
                 if (touchPointers.size === 1) {
                     beginPan(event);
                     return;
                 }
                 if (touchPointers.size === 2) {
                     panStart = null;
+                    viewport.classList.remove("is-panning");
                     pinchStart = getPinchState();
                     if (pinchStart) {
                         event.preventDefault();
+                        captureTrackedPointers();
                     }
                 }
             }, { passive: false });
@@ -2417,7 +2435,6 @@
                     clientY: event.clientY
                 });
                 if (touchPointers.size < 2) {
-                    continuePan(event);
                     return;
                 }
 
@@ -2444,23 +2461,13 @@
                     touchPointers.delete(event.pointerId);
                     if (panStart && panStart.pointerId === event.pointerId) {
                         panStart = null;
+                        viewport.classList.remove("is-panning");
                     }
                     if (touchPointers.size >= 2) {
                         pinchStart = getPinchState();
                     } else {
                         pinchStart = null;
-                        if (touchPointers.size === 1) {
-                            const remainingPointer = Array.from(touchPointers.entries())[0];
-                            if (remainingPointer) {
-                                panStart = {
-                                    pointerId: remainingPointer[0],
-                                    clientX: remainingPointer[1].clientX,
-                                    clientY: remainingPointer[1].clientY,
-                                    scrollLeft: viewport.scrollLeft,
-                                    scrollTop: viewport.scrollTop
-                                };
-                            }
-                        }
+                        releaseTrackedPointers();
                     }
                     releaseViewportPointer(event.pointerId);
                 });
