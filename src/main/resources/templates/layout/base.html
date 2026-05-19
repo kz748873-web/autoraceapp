@@ -119,25 +119,50 @@
             .site-header-brand {
                 display: flex;
                 align-items: center;
-                flex: 0 0 auto;
-                min-width: 11rem;
+                flex: 0 1 clamp(14.5rem, 28vw, 25rem);
+                min-width: 13rem;
                 padding-top: 0;
             }
 
             .site-header-brand-logo {
-                display: inline-flex;
+                position: relative;
+                display: block;
                 align-items: center;
-                width: clamp(12rem, 16vw, 15rem);
+                width: clamp(14.5rem, 28vw, 25rem);
                 max-width: 100%;
-                height: auto;
+                height: clamp(3.35rem, 4.8vw, 4.9rem);
+                overflow: hidden;
+                border-radius: 0.95rem;
+                background:
+                    linear-gradient(105deg, #020305 0%, #070b10 54%, #111827 100%),
+                    #020305;
+                box-shadow:
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                    inset 0 -0.22rem 0 rgba(197, 22, 46, 0.72),
+                    0 0.42rem 1rem rgba(15, 23, 42, 0.16);
+                isolation: isolate;
+            }
+
+            .site-header-brand-logo::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                z-index: 2;
+                pointer-events: none;
+                background:
+                    linear-gradient(90deg, transparent 0 54%, rgba(2, 3, 5, 0.08) 68%, rgba(2, 3, 5, 0.54) 100%),
+                    linear-gradient(165deg, transparent 55%, rgba(197, 22, 46, 0.36) 74%, transparent 76%);
             }
 
             .site-header-logo-image {
+                position: relative;
+                z-index: 1;
                 display: block;
                 width: 100%;
                 height: auto;
                 object-fit: contain;
                 object-position: left center;
+                transform: translateY(-24%);
             }
 
             .site-header-actions {
@@ -297,8 +322,8 @@
                 }
 
                 .site-header-brand-logo {
-                    width: clamp(10.75rem, 38vw, 13rem);
-                    height: auto;
+                    width: clamp(13rem, 50vw, 20rem);
+                    height: clamp(3.1rem, 10vw, 4.2rem);
                 }
 
                 .site-header-actions > .d-flex {
@@ -343,8 +368,8 @@
                 }
 
                 .site-header-brand-logo {
-                    width: clamp(10.75rem, 58vw, 12.75rem);
-                    height: auto;
+                    width: clamp(12.5rem, 72vw, 17.5rem);
+                    height: clamp(3rem, 16vw, 4rem);
                 }
 
                 .site-venue-switch {
