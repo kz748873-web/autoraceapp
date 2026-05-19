@@ -2152,8 +2152,10 @@
             function setViewportScroll(scrollLeft, scrollTop) {
                 const scaledWidth = Math.max(1, baseWidth * zoom);
                 const scaledHeight = Math.max(1, baseHeight * zoom);
-                const maxScrollLeft = Math.max(0, scaledWidth - viewport.clientWidth);
-                const maxScrollTop = Math.max(0, scaledHeight - viewport.clientHeight);
+                const layoutWidth = Math.max(baseWidth, scaledWidth);
+                const layoutHeight = Math.max(baseHeight, scaledHeight);
+                const maxScrollLeft = Math.max(0, layoutWidth - viewport.clientWidth);
+                const maxScrollTop = Math.max(0, layoutHeight - viewport.clientHeight);
 
                 viewport.scrollLeft = clampNumber(scrollLeft, 0, maxScrollLeft);
                 viewport.scrollTop = clampNumber(scrollTop, 0, maxScrollTop);
@@ -2175,18 +2177,22 @@
             function renderZoom(nextScrollLeft, nextScrollTop) {
                 const scaledWidth = Math.max(1, baseWidth * zoom);
                 const scaledHeight = Math.max(1, baseHeight * zoom);
+                const layoutWidth = Math.max(baseWidth, scaledWidth);
+                const layoutHeight = Math.max(baseHeight, scaledHeight);
 
                 viewport.style.height = baseHeight + "px";
-                canvas.style.width = scaledWidth + "px";
-                canvas.style.height = scaledHeight + "px";
-                board.style.width = scaledWidth + "px";
-                board.style.height = scaledHeight + "px";
+                canvas.style.width = layoutWidth + "px";
+                canvas.style.height = layoutHeight + "px";
+                board.style.width = layoutWidth + "px";
+                board.style.height = layoutHeight + "px";
                 board.style.transform = "";
                 board.dataset.startDiagramZoom = zoom.toFixed(4);
                 board.dataset.startDiagramBaseWidth = baseWidth.toFixed(2);
                 board.dataset.startDiagramBaseHeight = baseHeight.toFixed(2);
                 board.dataset.startDiagramScaledWidth = scaledWidth.toFixed(2);
                 board.dataset.startDiagramScaledHeight = scaledHeight.toFixed(2);
+                board.dataset.startDiagramLayoutWidth = layoutWidth.toFixed(2);
+                board.dataset.startDiagramLayoutHeight = layoutHeight.toFixed(2);
                 if (courseLayer) {
                     courseLayer.style.width = baseWidth + "px";
                     courseLayer.style.height = baseHeight + "px";
@@ -2194,12 +2200,12 @@
                     courseLayer.style.transform = "scale(" + zoom + ")";
                 }
                 if (fixedLayer) {
-                    fixedLayer.style.width = scaledWidth + "px";
-                    fixedLayer.style.height = scaledHeight + "px";
+                    fixedLayer.style.width = baseWidth + "px";
+                    fixedLayer.style.height = baseHeight + "px";
                 }
                 if (tokenLayer) {
-                    tokenLayer.style.width = scaledWidth + "px";
-                    tokenLayer.style.height = scaledHeight + "px";
+                    tokenLayer.style.width = layoutWidth + "px";
+                    tokenLayer.style.height = layoutHeight + "px";
                 }
                 syncStartDiagramTokensForZoom();
 
