@@ -345,7 +345,7 @@
             width: 100%;
             overflow: auto;
             overscroll-behavior: contain;
-            touch-action: pan-x pan-y;
+            touch-action: none;
             background: #fff7fb;
             scrollbar-color: rgba(233, 30, 122, 0.45) rgba(255, 247, 251, 0.95);
             scrollbar-width: thin;
@@ -369,7 +369,7 @@
             position: relative;
             width: 100%;
             min-width: 100%;
-            touch-action: pan-x pan-y;
+            touch-action: none;
         }
 
         .start-diagram-board {
@@ -378,7 +378,7 @@
             aspect-ratio: 16 / 9;
             min-height: 22rem;
             overflow: visible;
-            touch-action: pan-x pan-y;
+            touch-action: none;
             background:
                 linear-gradient(180deg, rgba(255, 245, 251, 0.98) 0 18%, rgba(255, 247, 251, 0.88) 18% 100%),
                 #fff7fb;
@@ -574,6 +574,7 @@
             top: 1rem;
             right: 1.15rem;
             z-index: 6;
+            pointer-events: auto;
         }
 
         .start-diagram-control .btn {
@@ -2099,23 +2100,52 @@
             }
             viewport.dataset.startDiagramZoomReady = "true";
 
-            const minZoom = 1;
-            const maxZoom = 2.4;
+            const minZoomFloor = 0.25;
+            const maxZoom = 1.8;
             const zoomStep = 0.15;
             const touchPointers = new Map();
+            let minZoom = 1;
             let zoom = 1;
             let baseWidth = 0;
             let baseHeight = 0;
             let pinchStart = null;
+            let panStart = null;
             let resizeFrame = 0;
+            let scrollFrame = 0;
+            let hasMeasuredBase = false;
 
             function clampNumber(value, min, max) {
                 return Math.min(Math.max(value, min), max);
             }
 
+            function resolveMinZoom() {
+                if (!baseWidth) {
+                    return 1;
+                }
+
+                const fitWidthZoom = viewport.clientWidth / baseWidth;
+                const safeFitWidthZoom = Number.isFinite(fitWidthZoom) && fitWidthZoom > 0 ? fitWidthZoom : 1;
+                return clampNumber(Math.min(1, safeFitWidthZoom), minZoomFloor, 1);
+            }
+
+            function updateZoomBounds() {
+                minZoom = resolveMinZoom();
+                zoom = clampZoom(zoom);
+            }
+
             function clampZoom(value) {
                 const numericValue = Number(value);
                 return clampNumber(Number.isFinite(numericValue) ? numericValue : 1, minZoom, maxZoom);
+            }
+
+            function setViewportScroll(scrollLeft, scrollTop) {
+                const scaledWidth = Math.max(1, baseWidth * zoom);
+                const scaledHeight = Math.max(1, baseHeight * zoom);
+                const maxScrollLeft = Math.max(0, scaledWidth - viewport.clientWidth);
+                const maxScrollTop = Math.max(0, scaledHeight - viewport.clientHeight);
+
+                viewport.scrollLeft = clampNumber(scrollLeft, 0, maxScrollLeft);
+                viewport.scrollTop = clampNumber(scrollTop, 0, maxScrollTop);
             }
 
             function updateZoomControls() {
@@ -2138,8 +2168,8 @@
                 viewport.style.height = baseHeight + "px";
                 canvas.style.width = scaledWidth + "px";
                 canvas.style.height = scaledHeight + "px";
-                board.style.width = baseWidth + "px";
-                board.style.height = baseHeight + "px";
+                board.style.width = scaledWidth + "px";
+                board.style.height = scaledHeight + "px";
                 board.style.transform = "";
                 board.dataset.startDiagramZoom = zoom.toFixed(4);
                 board.dataset.startDiagramBaseWidth = baseWidth.toFixed(2);
@@ -2153,8 +2183,8 @@
                     courseLayer.style.transform = "scale(" + zoom + ")";
                 }
                 if (fixedLayer) {
-                    fixedLayer.style.width = baseWidth + "px";
-                    fixedLayer.style.height = baseHeight + "px";
+                    fixedLayer.style.width = scaledWidth + "px";
+                    fixedLayer.style.height = scaledHeight + "px";
                 }
                 if (tokenLayer) {
                     tokenLayer.style.width = scaledWidth + "px";
@@ -2164,11 +2194,12 @@
 
                 updateZoomControls();
 
-                window.requestAnimationFrame(function () {
-                    const maxScrollLeft = Math.max(0, scaledWidth - viewport.clientWidth);
-                    const maxScrollTop = Math.max(0, scaledHeight - viewport.clientHeight);
-                    viewport.scrollLeft = clampNumber(nextScrollLeft, 0, maxScrollLeft);
-                    viewport.scrollTop = clampNumber(nextScrollTop, 0, maxScrollTop);
+                if (scrollFrame) {
+                    window.cancelAnimationFrame(scrollFrame);
+                }
+                scrollFrame = window.requestAnimationFrame(function () {
+                    scrollFrame = 0;
+                    setViewportScroll(nextScrollLeft, nextScrollTop);
                 });
             }
 
@@ -2188,10 +2219,17 @@
                 const focusWorldX = (viewport.scrollLeft + focusOffsetX) / previousZoom;
                 const focusWorldY = (viewport.scrollTop + focusOffsetY) / previousZoom;
 
+                updateZoomBounds();
                 zoom = clampZoom(nextZoom);
                 const nextScrollLeft = (focusWorldX * zoom) - focusOffsetX;
                 const nextScrollTop = (focusWorldY * zoom) - focusOffsetY;
                 renderZoom(nextScrollLeft, nextScrollTop);
+            }
+
+            function resetDiagramView() {
+                updateZoomBounds();
+                zoom = clampZoom(1);
+                renderZoom(0, 0);
             }
 
             function measureBaseSize() {
@@ -2220,6 +2258,13 @@
 
                 baseWidth = Math.max(1, Math.round(board.offsetWidth || viewport.clientWidth));
                 baseHeight = Math.max(1, Math.round(board.offsetHeight || baseWidth * 0.5625));
+                updateZoomBounds();
+                if (!hasMeasuredBase) {
+                    hasMeasuredBase = true;
+                    zoom = clampZoom(1);
+                    renderZoom(0, 0);
+                    return;
+                }
                 renderZoom(nextScrollLeft, nextScrollTop);
             }
 
@@ -2258,6 +2303,63 @@
                 return target instanceof Element && Boolean(target.closest(".start-token"));
             }
 
+            function captureViewportPointer(pointerId) {
+                if (typeof viewport.setPointerCapture !== "function") {
+                    return;
+                }
+
+                try {
+                    viewport.setPointerCapture(pointerId);
+                } catch (error) {
+                    // Pointer capture is optional; document-level pointer events still arrive on most browsers.
+                }
+            }
+
+            function releaseViewportPointer(pointerId) {
+                if (typeof viewport.releasePointerCapture !== "function"
+                    || typeof viewport.hasPointerCapture !== "function"
+                    || !viewport.hasPointerCapture(pointerId)) {
+                    return;
+                }
+
+                try {
+                    viewport.releasePointerCapture(pointerId);
+                } catch (error) {
+                    // Pointer capture may already be released by the browser.
+                }
+            }
+
+            function beginPan(event) {
+                panStart = {
+                    pointerId: event.pointerId,
+                    clientX: event.clientX,
+                    clientY: event.clientY,
+                    scrollLeft: viewport.scrollLeft,
+                    scrollTop: viewport.scrollTop
+                };
+            }
+
+            function continuePan(event) {
+                if (!panStart || panStart.pointerId !== event.pointerId || touchPointers.size !== 1 || pinchStart) {
+                    return;
+                }
+
+                const deltaX = event.clientX - panStart.clientX;
+                const deltaY = event.clientY - panStart.clientY;
+                if (Math.hypot(deltaX, deltaY) < 2) {
+                    return;
+                }
+
+                event.preventDefault();
+                setViewportScroll(panStart.scrollLeft - deltaX, panStart.scrollTop - deltaY);
+            }
+
+            function clearTouchState() {
+                touchPointers.clear();
+                pinchStart = null;
+                panStart = null;
+            }
+
             if (zoomOutButton) {
                 zoomOutButton.addEventListener("click", function () {
                     applyZoom(zoom - zoomStep);
@@ -2286,21 +2388,21 @@
                 if (event.pointerType !== "touch" || isTokenTarget(event.target)) {
                     return;
                 }
+
                 touchPointers.set(event.pointerId, {
                     clientX: event.clientX,
                     clientY: event.clientY
                 });
+                captureViewportPointer(event.pointerId);
+                if (touchPointers.size === 1) {
+                    beginPan(event);
+                    return;
+                }
                 if (touchPointers.size === 2) {
+                    panStart = null;
                     pinchStart = getPinchState();
                     if (pinchStart) {
                         event.preventDefault();
-                        if (typeof viewport.setPointerCapture === "function") {
-                            try {
-                                viewport.setPointerCapture(event.pointerId);
-                            } catch (error) {
-                                // Pinch zoom still works without capture when the browser declines it.
-                            }
-                        }
                     }
                 }
             }, { passive: false });
@@ -2313,12 +2415,18 @@
                     clientX: event.clientX,
                     clientY: event.clientY
                 });
-                if (!pinchStart || touchPointers.size < 2) {
+                if (touchPointers.size < 2) {
+                    continuePan(event);
                     return;
                 }
 
+                panStart = null;
+                if (!pinchStart) {
+                    pinchStart = getPinchState();
+                }
+
                 const currentPinch = getPinchState();
-                if (!currentPinch) {
+                if (!pinchStart || !currentPinch) {
                     return;
                 }
 
@@ -2333,22 +2441,35 @@
             ["pointerup", "pointercancel", "pointerleave"].forEach(function (eventName) {
                 viewport.addEventListener(eventName, function (event) {
                     touchPointers.delete(event.pointerId);
-                    pinchStart = touchPointers.size >= 2 ? getPinchState() : null;
-                    if (typeof viewport.releasePointerCapture === "function"
-                        && typeof viewport.hasPointerCapture === "function"
-                        && viewport.hasPointerCapture(event.pointerId)) {
-                        try {
-                            viewport.releasePointerCapture(event.pointerId);
-                        } catch (error) {
-                            // Pointer capture may already be released by the browser.
+                    if (panStart && panStart.pointerId === event.pointerId) {
+                        panStart = null;
+                    }
+                    if (touchPointers.size >= 2) {
+                        pinchStart = getPinchState();
+                    } else {
+                        pinchStart = null;
+                        if (touchPointers.size === 1) {
+                            const remainingPointer = Array.from(touchPointers.entries())[0];
+                            if (remainingPointer) {
+                                panStart = {
+                                    pointerId: remainingPointer[0],
+                                    clientX: remainingPointer[1].clientX,
+                                    clientY: remainingPointer[1].clientY,
+                                    scrollLeft: viewport.scrollLeft,
+                                    scrollTop: viewport.scrollTop
+                                };
+                            }
                         }
                     }
+                    releaseViewportPointer(event.pointerId);
                 });
             });
 
-            board.addEventListener("start-diagram:reset", function () {
-                touchPointers.clear();
-                pinchStart = null;
+            board.addEventListener("start-diagram:reset", function (event) {
+                clearTouchState();
+                if (event.detail && event.detail.resetView) {
+                    resetDiagramView();
+                }
             });
 
             if (window.ResizeObserver) {
@@ -2451,8 +2572,8 @@
         }
 
         return {
-            x: (metrics.baseWidth * xPercent) / 100,
-            y: (metrics.baseHeight * yPercent) / 100
+            x: ((metrics.baseWidth * xPercent) / 100) * metrics.zoom,
+            y: ((metrics.baseHeight * yPercent) / 100) * metrics.zoom
         };
     }
 
@@ -2520,7 +2641,11 @@
             const metrics = getStartDiagramMetrics();
 
             if (board) {
-                board.dispatchEvent(new CustomEvent("start-diagram:reset"));
+                board.dispatchEvent(new CustomEvent("start-diagram:reset", {
+                    detail: {
+                        resetView: true
+                    }
+                }));
             }
 
             getStartDiagramTokens().forEach(function (token) {
