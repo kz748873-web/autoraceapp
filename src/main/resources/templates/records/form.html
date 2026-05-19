@@ -2230,6 +2230,7 @@
                 updateZoomBounds();
                 zoom = clampZoom(1);
                 renderZoom(0, 0);
+                setViewportScroll(0, 0);
             }
 
             function measureBaseSize() {
@@ -2554,6 +2555,8 @@
         token.style.top = safeY + "px";
         token.style.transform = "translate(-50%, -50%)";
         token.style.removeProperty("translate");
+        token.style.removeProperty("margin-left");
+        token.style.removeProperty("margin-top");
         token.style.removeProperty("right");
         token.style.removeProperty("bottom");
         token.style.removeProperty("margin");
@@ -2602,6 +2605,8 @@
             token.dataset.placed = "false";
             token.style.transform = "translate(-50%, -50%)";
             token.style.removeProperty("translate");
+            token.style.removeProperty("margin-left");
+            token.style.removeProperty("margin-top");
             token.classList.remove("is-dragging");
         });
     }
@@ -2638,7 +2643,6 @@
         try {
             const board = document.getElementById("startDiagramBoard");
             initializeStartDiagramInitialPositions();
-            const metrics = getStartDiagramMetrics();
 
             if (board) {
                 board.dispatchEvent(new CustomEvent("start-diagram:reset", {
@@ -2647,6 +2651,16 @@
                     }
                 }));
             }
+
+            if (window.AutoRaceStartDiagram && typeof window.AutoRaceStartDiagram.reset === "function") {
+                try {
+                    window.AutoRaceStartDiagram.reset("startDiagramBoard");
+                } catch (error) {
+                    // 既存ドラッグ状態の解除に失敗しても、この関数内で配置を復元する。
+                }
+            }
+
+            const metrics = getStartDiagramMetrics();
 
             getStartDiagramTokens().forEach(function (token) {
                 const initialPosition = getStartDiagramInitialPixelPosition(token, metrics);
@@ -2665,6 +2679,8 @@
                 token.dataset.y = token.dataset.initialY || token.dataset.defaultY || token.dataset.y;
                 delete token.dataset.worldX;
                 delete token.dataset.worldY;
+                delete token.dataset.pixelX;
+                delete token.dataset.pixelY;
                 token.classList.remove("is-dragging");
             });
 
@@ -2672,6 +2688,10 @@
             if (viewport) {
                 viewport.scrollLeft = 0;
                 viewport.scrollTop = 0;
+                window.requestAnimationFrame(function () {
+                    viewport.scrollLeft = 0;
+                    viewport.scrollTop = 0;
+                });
             }
         } catch (error) {
             // スタート展開図の復元に失敗してもフォーム全体は止めない。
