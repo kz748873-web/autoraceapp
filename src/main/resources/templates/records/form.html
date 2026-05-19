@@ -2523,12 +2523,20 @@
         const safeZoom = Number.isFinite(zoom) && zoom > 0 ? zoom : 1;
         const baseWidth = board ? Number(board.dataset.startDiagramBaseWidth) : 0;
         const baseHeight = board ? Number(board.dataset.startDiagramBaseHeight) : 0;
+        const layoutWidth = board ? Number(board.dataset.startDiagramLayoutWidth) : 0;
+        const layoutHeight = board ? Number(board.dataset.startDiagramLayoutHeight) : 0;
         const fallbackWidth = board && board.offsetWidth ? board.offsetWidth : 0;
         const fallbackHeight = board && board.offsetHeight ? board.offsetHeight : 0;
         const resolvedBaseWidth = Number.isFinite(baseWidth) && baseWidth > 0 ? baseWidth : fallbackWidth;
         const resolvedBaseHeight = Number.isFinite(baseHeight) && baseHeight > 0 ? baseHeight : fallbackHeight;
         const scaledWidth = Math.max(1, resolvedBaseWidth * safeZoom);
         const scaledHeight = Math.max(1, resolvedBaseHeight * safeZoom);
+        const resolvedLayoutWidth = Number.isFinite(layoutWidth) && layoutWidth > 0
+            ? layoutWidth
+            : Math.max(resolvedBaseWidth, scaledWidth);
+        const resolvedLayoutHeight = Number.isFinite(layoutHeight) && layoutHeight > 0
+            ? layoutHeight
+            : Math.max(resolvedBaseHeight, scaledHeight);
 
         return {
             board: board,
@@ -2538,7 +2546,9 @@
             baseWidth: Math.max(1, resolvedBaseWidth || 1),
             baseHeight: Math.max(1, resolvedBaseHeight || 1),
             scaledWidth: scaledWidth,
-            scaledHeight: scaledHeight
+            scaledHeight: scaledHeight,
+            layoutWidth: Math.max(1, resolvedLayoutWidth || 1),
+            layoutHeight: Math.max(1, resolvedLayoutHeight || 1)
         };
     }
 
@@ -2550,19 +2560,26 @@
         const tokenRect = token.getBoundingClientRect();
         const tokenHalfWidth = (tokenRect.width || token.offsetWidth || 0) / 2;
         const tokenHalfHeight = (tokenRect.height || token.offsetHeight || 0) / 2;
+        const boundsWidth = placed ? metrics.scaledWidth : metrics.baseWidth;
+        const boundsHeight = placed ? metrics.scaledHeight : metrics.baseHeight;
         const minX = tokenHalfWidth;
         const minY = tokenHalfHeight;
-        const maxX = Math.max(minX, metrics.scaledWidth - tokenHalfWidth);
-        const maxY = Math.max(minY, metrics.scaledHeight - tokenHalfHeight);
+        const maxX = Math.max(minX, boundsWidth - tokenHalfWidth);
+        const maxY = Math.max(minY, boundsHeight - tokenHalfHeight);
         const safeX = clampStartDiagramNumber(xPx, minX, maxX);
         const safeY = clampStartDiagramNumber(yPx, minY, maxY);
 
         token.dataset.pixelX = safeX.toFixed(2);
         token.dataset.pixelY = safeY.toFixed(2);
-        token.dataset.x = ((safeX / metrics.scaledWidth) * 100).toFixed(2);
-        token.dataset.y = ((safeY / metrics.scaledHeight) * 100).toFixed(2);
-        token.dataset.worldX = (safeX / metrics.zoom).toFixed(2);
-        token.dataset.worldY = (safeY / metrics.zoom).toFixed(2);
+        token.dataset.x = ((safeX / boundsWidth) * 100).toFixed(2);
+        token.dataset.y = ((safeY / boundsHeight) * 100).toFixed(2);
+        if (placed) {
+            token.dataset.worldX = (safeX / metrics.zoom).toFixed(2);
+            token.dataset.worldY = (safeY / metrics.zoom).toFixed(2);
+        } else {
+            delete token.dataset.worldX;
+            delete token.dataset.worldY;
+        }
         token.dataset.placed = placed ? "true" : "false";
         token.style.left = safeX + "px";
         token.style.top = safeY + "px";
@@ -2588,8 +2605,8 @@
         }
 
         return {
-            x: ((metrics.baseWidth * xPercent) / 100) * metrics.zoom,
-            y: ((metrics.baseHeight * yPercent) / 100) * metrics.zoom
+            x: (metrics.baseWidth * xPercent) / 100,
+            y: (metrics.baseHeight * yPercent) / 100
         };
     }
 
