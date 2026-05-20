@@ -230,6 +230,11 @@
             letter-spacing: 0;
         }
 
+        .record-form-hero-copy {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
         .record-form-actions .btn,
         .record-submit-actions .btn {
             display: inline-flex;
@@ -238,6 +243,41 @@
             min-height: 3rem;
             font-weight: 800;
             line-height: 1.25;
+        }
+
+        .record-current-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.65rem;
+            max-width: 36rem;
+        }
+
+        .record-current-item {
+            min-width: 0;
+            padding: 0.72rem 0.85rem;
+            border: 1px solid color-mix(in srgb, var(--border-color) 82%, white);
+            border-left: 0.25rem solid var(--main-color);
+            border-radius: 0.82rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .record-current-label {
+            display: block;
+            color: var(--sub);
+            font-size: 0.78rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .record-current-value {
+            display: block;
+            min-width: 0;
+            margin-top: 0.18rem;
+            color: var(--accent-color);
+            font-size: 1rem;
+            font-weight: 900;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
         }
 
         .section-shell {
@@ -266,6 +306,8 @@
             gap: 1rem;
             padding: 1.5rem 1.5rem 1rem;
             border-bottom: 1px solid var(--card);
+            background:
+                linear-gradient(90deg, color-mix(in srgb, var(--surface-tint) 56%, white) 0%, #ffffff 76%);
         }
 
         .section-header > div:first-child {
@@ -275,6 +317,11 @@
         .section-header h2 {
             color: var(--accent-color);
             line-height: 1.45;
+        }
+
+        .section-badge {
+            border-radius: 0.72rem;
+            letter-spacing: 0;
         }
 
         .section-subtitle {
@@ -302,18 +349,31 @@
         .section-actions {
             display: flex;
             flex-wrap: wrap;
+            align-items: center;
             gap: 0.75rem;
             padding: 0 1.5rem 1.25rem;
+            background: #ffffff;
         }
 
         .section-actions .btn {
             min-height: 2.7rem;
+            padding-left: 1.05rem;
+            padding-right: 1.05rem;
             font-weight: 800;
             line-height: 1.25;
         }
 
+        .section-actions .js-section-save {
+            min-width: 11.5rem;
+            box-shadow: 0 0.55rem 1.1rem rgba(15, 23, 42, 0.08);
+        }
+
+        .section-actions .js-section-edit {
+            min-width: 7.25rem;
+        }
+
         .section-action-note {
-            width: 100%;
+            flex: 1 1 18rem;
             color: var(--sub);
             font-size: 0.88rem;
             line-height: 1.6;
@@ -329,9 +389,27 @@
             background: var(--soft-surface);
         }
 
+        .sub-block-heading {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .sub-block-heading h3 {
+            color: var(--accent-color);
+            line-height: 1.45;
+        }
+
         .section-shell:not([data-section-id="start-diagram"]) .sub-block {
             border-color: color-mix(in srgb, var(--border-color) 78%, white);
             background: linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 58%, white) 0%, #ffffff 100%);
+        }
+
+        .race-info-panel {
+            border-left: 0.32rem solid #c5162e;
         }
 
         .record-form-page .form-label {
@@ -1094,6 +1172,10 @@
                 justify-content: flex-start;
             }
 
+            .record-current-grid {
+                max-width: none;
+            }
+
             .program-table-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -1118,6 +1200,15 @@
             .record-submit-actions .btn {
                 width: 100%;
                 min-height: 3.05rem;
+            }
+
+            .record-current-grid {
+                grid-template-columns: 1fr;
+                gap: 0.55rem;
+            }
+
+            .record-current-item {
+                padding: 0.68rem 0.78rem;
             }
 
             .site-header .container {
@@ -1186,6 +1277,7 @@
             }
 
             .section-actions {
+                align-items: stretch;
                 gap: 0.55rem;
             }
 
@@ -1197,11 +1289,17 @@
 
             .section-actions .js-section-save {
                 flex: 1 1 100%;
+                min-width: 0;
             }
 
             .section-actions .js-section-edit {
-                flex: 1 1 calc(50% - 0.3rem);
+                flex: 1 1 100%;
                 min-width: 0;
+            }
+
+            .section-action-note {
+                flex-basis: 100%;
+                font-size: 0.84rem;
             }
 
             .section-shell:not([data-section-id="start-diagram"]) .sub-block.p-4 {
@@ -1428,12 +1526,30 @@
 
     <main class="container py-4 py-md-5 flex-grow-1">
         <div class="record-form-hero d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-            <div>
+            <div class="record-form-hero-copy">
                 <h1 class="record-form-title fw-bold mb-2">レース記録を登録する</h1>
                 <p class="section-subtitle mb-0">
                     前日予想から当日予想、結果と考察までを順番に入力できます。<br>
                     入力しやすさを優先し、スマホでもPCでも迷いにくい構成にしています。
                 </p>
+                <div class="record-current-grid mt-3" aria-label="現在編集中のレース情報">
+                    <div class="record-current-item">
+                        <span class="record-current-label">レース場</span>
+                        <span class="record-current-value" data-form-summary-venue th:text="${initialVenue}">未選択</span>
+                    </div>
+                    <div class="record-current-item">
+                        <span class="record-current-label">レース番号</span>
+                        <span class="record-current-value"
+                              data-form-summary-race-number
+                              th:text="${record != null and record.raceNumber != null ? record.raceNumber + 'レース' : '未選択'}">未選択</span>
+                    </div>
+                    <div class="record-current-item">
+                        <span class="record-current-label">レース日</span>
+                        <span class="record-current-value"
+                              data-form-summary-race-date
+                              th:text="${record != null and !#strings.isEmpty(record.raceDate) ? record.raceDate : '未入力'}">未入力</span>
+                    </div>
+                </div>
             </div>
             <div class="record-form-actions d-flex flex-column flex-sm-row gap-2">
                 <button type="submit" form="raceRecordForm" class="btn btn-primary btn-lg">この内容で登録する</button>
@@ -1447,8 +1563,8 @@
                 <div class="section-header">
                     <div>
                         <div class="section-badge mb-2">1. 前日予想</div>
-                        <h2 class="h4 fw-bold mb-2">レース情報と注目選手を先に整理する</h2>
-                        <p class="section-subtitle mb-0">開催情報、前日段階の予想、注目選手をまとめて入力します。</p>
+                        <h2 class="h4 fw-bold mb-2">前日予想を整理する</h2>
+                        <p class="section-subtitle mb-0">レース情報、番組表、注目選手、前日メモを上から順番に整えます。</p>
                     </div>
                     <div class="section-pill js-section-status">編集中</div>
                 </div>
@@ -1458,66 +1574,55 @@
                     <div class="section-action-note">入力途中でもこの項目だけ保存できます。あとで編集に戻せます。</div>
                 </div>
                 <div class="section-body">
-                    <div class="row g-4">
-                        <div class="col-lg-7">
-                            <div class="sub-block p-4 h-100">
-                                <h3 class="h5 fw-bold mb-3">基本情報</h3>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="raceDate" class="form-label fw-semibold">レース日</label>
-                                        <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="venue" class="form-label fw-semibold">レース場</label>
-                                        <select id="venue" th:field="*{venue}" class="form-select form-select-lg">
-                                            <option value="">選択してください</option>
-                                            <option value="川口">川口</option>
-                                            <option value="伊勢崎">伊勢崎</option>
-                                            <option value="浜松">浜松</option>
-                                            <option value="飯塚">飯塚</option>
-                                            <option value="山陽">山陽</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="raceNumber" class="form-label fw-semibold">レース番号</label>
-                                        <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg">
-                                            <option value="">選択してください</option>
-                                            <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="raceScheduleType" class="form-label fw-semibold">開催区分</label>
-                                        <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
-                                            <option value="">選択してください</option>
-                                            <option value="デイレース">デイレース</option>
-                                            <option value="ナイター">ナイター</option>
-                                            <option value="ミッドナイト">ミッドナイト</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="handicapInfo" class="form-label fw-semibold">ハンデ情報</label>
-                                        <input type="text" id="handicapInfo" th:field="*{handicapInfo}" class="form-control form-control-lg" placeholder="例: 0mオープン">
-                                    </div>
-                                </div>
+                    <div class="sub-block p-4 race-info-panel">
+                        <div class="sub-block-heading">
+                            <div>
+                                <h3 class="h5 fw-bold mb-1">レース情報</h3>
+                                <p class="section-subtitle mb-0">TOPページで選んだ条件を確認しながら、必要な情報を補足します。</p>
                             </div>
+                            <div class="summary-pill">現在編集中</div>
                         </div>
-                        <div class="col-lg-5">
-                            <div class="sub-block p-4 h-100">
-                                <h3 class="h5 fw-bold mb-3">前日予想メモ</h3>
-                                <div class="mb-3">
-                                    <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
-                                    <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control" rows="5" placeholder="例: 蒼井ハヤトのスタート先行を本線に考える"></textarea>
-                                </div>
-                                <div>
-                                    <label for="preRaceNote" class="form-label fw-semibold">前日メモ</label>
-                                    <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 橘ミナトは気配が良く、白石ルイは展開待ち。"></textarea>
-                                </div>
+                        <div class="row g-3">
+                            <div class="col-md-6 col-xl-3">
+                                <label for="raceDate" class="form-label fw-semibold">レース日</label>
+                                <input type="date" id="raceDate" th:field="*{raceDate}" class="form-control form-control-lg">
+                            </div>
+                            <div class="col-md-6 col-xl-3">
+                                <label for="venue" class="form-label fw-semibold">レース場</label>
+                                <select id="venue" th:field="*{venue}" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option value="川口">川口</option>
+                                    <option value="伊勢崎">伊勢崎</option>
+                                    <option value="浜松">浜松</option>
+                                    <option value="飯塚">飯塚</option>
+                                    <option value="山陽">山陽</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-xl-2">
+                                <label for="raceNumber" class="form-label fw-semibold">レース番号</label>
+                                <select id="raceNumber" th:field="*{raceNumber}" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option th:each="num : ${#numbers.sequence(1, 12)}" th:value="${num}" th:text="${num + 'レース'}">1レース</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-xl-2">
+                                <label for="raceScheduleType" class="form-label fw-semibold">開催区分</label>
+                                <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
+                                    <option value="">選択してください</option>
+                                    <option value="デイレース">デイレース</option>
+                                    <option value="ナイター">ナイター</option>
+                                    <option value="ミッドナイト">ミッドナイト</option>
+                                </select>
+                            </div>
+                            <div class="col-xl-2">
+                                <label for="handicapInfo" class="form-label fw-semibold">ハンデ情報</label>
+                                <input type="text" id="handicapInfo" th:field="*{handicapInfo}" class="form-control form-control-lg" placeholder="例: 0mオープン">
                             </div>
                         </div>
                     </div>
 
                     <div class="sub-block p-4 mt-4">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                        <div class="sub-block-heading">
                             <div>
                                 <h3 class="h5 fw-bold mb-1">番組表</h3>
                                 <p class="section-subtitle mb-0">出走表を見る感覚で、各号車の選手名を先に整理できます。</p>
@@ -1593,7 +1698,7 @@
                     </div>
 
                     <div class="sub-block p-4 mt-4">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                        <div class="sub-block-heading">
                             <div>
                                 <h3 class="h5 fw-bold mb-1">注目選手</h3>
                                 <p class="section-subtitle mb-0">印と車番を先に入れておくと、当日予想の試走タイム表示にも連動します。</p>
@@ -1705,6 +1810,26 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="sub-block p-4 mt-4">
+                        <div class="sub-block-heading">
+                            <div>
+                                <h3 class="h5 fw-bold mb-1">前日予想</h3>
+                                <p class="section-subtitle mb-0">番組表と注目選手を見比べながら、前日の見立てを文章で残します。</p>
+                            </div>
+                            <div class="summary-pill">判断メモ</div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-lg-6">
+                                <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
+                                <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control" rows="5" placeholder="例: 蒼井ハヤトのスタート先行を本線に考える"></textarea>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="preRaceNote" class="form-label fw-semibold">前日メモ</label>
+                                <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 橘ミナトは気配が良く、白石ルイは展開待ち。"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -1712,8 +1837,8 @@
                 <div class="section-header">
                     <div>
                         <div class="section-badge mb-2">2. スタート展開図</div>
-                        <h2 class="h4 fw-bold mb-2">並びとスタート想定を見える化する</h2>
-                        <p class="section-subtitle mb-0">車番をドラッグして、想定する位置関係をざっくり残せます。</p>
+                        <h2 class="h4 fw-bold mb-2">スタート展開図</h2>
+                        <p class="section-subtitle mb-0">並びとスタート想定を見える化し、展開の比較材料として残します。</p>
                     </div>
                     <div class="section-pill js-section-status">編集中</div>
                 </div>
@@ -1857,8 +1982,8 @@
                 <div class="section-header">
                     <div>
                         <div class="section-badge mb-2">3. 当日予想</div>
-                        <h2 class="h4 fw-bold mb-2">天候・試走・購入内容を入力する</h2>
-                        <p class="section-subtitle mb-0">当日の見立てを入力しながら、試走タイム順位と購入合計をその場で確認できます。</p>
+                        <h2 class="h4 fw-bold mb-2">当日予想を整える</h2>
+                        <p class="section-subtitle mb-0">天候、走路、試走、購入内容を見比べながら最終判断を整理します。</p>
                     </div>
                     <div class="section-pill js-section-status">編集中</div>
                 </div>
@@ -2142,8 +2267,8 @@
                 <div class="section-header">
                     <div>
                         <div class="section-badge mb-2">4. レース結果・比較・考察</div>
-                        <h2 class="h4 fw-bold mb-2">レース結果と比較・考察を残して次回の判断材料にする</h2>
-                        <p class="section-subtitle mb-0">実際の結果、予想との比較、振り返りを簡潔に残せます。</p>
+                        <h2 class="h4 fw-bold mb-2">レース結果と比較・考察</h2>
+                        <p class="section-subtitle mb-0">実際の結果と予想の差分を残し、次回の判断材料につなげます。</p>
                     </div>
                     <div class="section-pill js-section-status">編集中</div>
                 </div>
@@ -2222,6 +2347,7 @@
     function applyRecordFormVenueContext(venueName) {
         const selectedVenueName = recordFormVenueThemeMap[venueName] ? venueName : "";
         const label = document.querySelector("[data-form-menu-venue-label]");
+        const summaryVenue = document.querySelector("[data-form-summary-venue]");
 
         Object.keys(recordFormVenueThemeMap).forEach(function (key) {
             document.body.classList.remove(recordFormVenueThemeMap[key]);
@@ -2233,6 +2359,10 @@
 
         if (label) {
             label.textContent = selectedVenueName || "未選択";
+        }
+
+        if (summaryVenue) {
+            summaryVenue.textContent = selectedVenueName || "未選択";
         }
 
         document.querySelectorAll("[data-form-menu-param-target]").forEach(function (link) {
@@ -2253,6 +2383,39 @@
                 return;
             }
         });
+    }
+
+    function formatRecordFormRaceNumber(value) {
+        return value ? value + "レース" : "未選択";
+    }
+
+    function updateRecordFormRaceSummary() {
+        const raceDateField = document.getElementById("raceDate");
+        const raceNumberField = document.getElementById("raceNumber");
+        const raceDateLabel = document.querySelector("[data-form-summary-race-date]");
+        const raceNumberLabel = document.querySelector("[data-form-summary-race-number]");
+
+        if (raceDateLabel) {
+            raceDateLabel.textContent = raceDateField && raceDateField.value ? raceDateField.value : "未入力";
+        }
+        if (raceNumberLabel) {
+            raceNumberLabel.textContent = formatRecordFormRaceNumber(raceNumberField ? raceNumberField.value : "");
+        }
+    }
+
+    function initializeRecordFormRaceSummary() {
+        const raceDateField = document.getElementById("raceDate");
+        const raceNumberField = document.getElementById("raceNumber");
+
+        updateRecordFormRaceSummary();
+
+        if (raceDateField) {
+            raceDateField.addEventListener("input", updateRecordFormRaceSummary);
+            raceDateField.addEventListener("change", updateRecordFormRaceSummary);
+        }
+        if (raceNumberField) {
+            raceNumberField.addEventListener("change", updateRecordFormRaceSummary);
+        }
     }
 
     function initializeRecordFormHeader() {
@@ -3458,6 +3621,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         initializeRecordFormHeader();
         initializeRecordFormPrefillFromParams();
+        initializeRecordFormRaceSummary();
 
         const form = document.getElementById("raceRecordForm");
         const trialInputs = document.querySelectorAll(".js-trial-time");
