@@ -3638,6 +3638,9 @@
             });
 
             form.addEventListener("submit", function (event) {
+                if (form.dataset.skipSubmitConfirm === "true") {
+                    return;
+                }
                 if (!window.confirm("この内容で登録しますか？")) {
                     event.preventDefault();
                 }
@@ -3657,13 +3660,29 @@
             const saveButton = section.querySelector(".js-section-save");
             const editButton = section.querySelector(".js-section-edit");
 
-            if (localStorage.getItem(storageKey)) {
+            if (sectionId === "pre-race") {
+                localStorage.removeItem(storageKey);
+            } else if (localStorage.getItem(storageKey)) {
                 updateSectionStatus(section, true);
                 setSectionDisabled(section, true);
             }
 
             if (saveButton) {
                 saveButton.addEventListener("click", function () {
+                    if (sectionId === "pre-race") {
+                        if (!window.confirm("前日予想を保存して一覧へ移動しますか？")) {
+                            return;
+                        }
+                        localStorage.removeItem(storageKey);
+                        form.dataset.skipSubmitConfirm = "true";
+                        if (typeof form.requestSubmit === "function") {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                        return;
+                    }
+
                     if (!window.confirm("このセクションを保存状態にしますか？")) {
                         return;
                     }

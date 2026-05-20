@@ -185,7 +185,7 @@
                         <span class="record-status-badge">入力済み</span>
                         <span class="record-status-badge is-draft">途中入力</span>
                     </div>
-                    <p class="record-status-help mb-0">開催日やレース場が未入力でも一覧に残り、後からそのまま編集できます。スマホでは必要な情報だけを表示して、操作ボタンを大きめにしています。</p>
+                    <p class="record-status-help mb-0">前日予想だけの保存でも一覧に残り、後からそのまま編集できます。スマホでは必要な情報だけを表示して、操作ボタンを大きめにしています。</p>
                 </div>
             </div>
         </section>
@@ -210,7 +210,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="record : ${records}" th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null}">
+                                <tr th:each="record : ${records}" th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.weatherCondition) or #strings.isEmpty(record.trackCondition) or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)}">
                                     <td>
                                         <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '入力済み'">入力済み</span>
                                     </td>
@@ -219,7 +219,7 @@
                                     <td th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</td>
                                     <td th:text="${#strings.isEmpty(record.weatherCondition) ? '未入力' : record.weatherCondition}">晴れ</td>
                                     <td th:text="${#strings.isEmpty(record.trackCondition) ? '未入力' : record.trackCondition}">良走路</td>
-                                    <td th:text="${#strings.isEmpty(record.primaryFeaturedRiderName) ? '未設定' : record.primaryFeaturedRiderName}">蒼井ハヤト</td>
+                                    <td th:text="${!#strings.isEmpty(record.primaryFeaturedRiderName) ? record.primaryFeaturedRiderName : (!#strings.isEmpty(record.featuredRider) ? record.featuredRider : '未設定')}">蒼井ハヤト</td>
                                     <td th:text="${#strings.isEmpty(record.betType) ? '未入力' : record.betType}">3連単</td>
                                     <td th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</td>
                                     <td>
@@ -241,7 +241,10 @@
                 </div>
 
                 <div class="d-grid gap-3 d-md-none">
-                    <article th:each="record : ${records}" class="record-mobile-card p-3 shadow-sm" th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null}">
+                    <article th:each="record : ${records}" class="record-mobile-card p-3 shadow-sm" th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.weatherCondition) or #strings.isEmpty(record.trackCondition) or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)}">
+                        <div class="mb-3">
+                            <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '入力済み'">入力済み</span>
+                        </div>
                         <div class="record-mobile-summary mb-3">
                             <div class="record-mobile-field">
                                 <div class="record-mobile-field-label">開催日</div>
