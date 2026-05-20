@@ -61,6 +61,14 @@ public class RaceRecordService {
         record.setVenue("");
         record.setRaceScheduleType("");
         record.setHandicapInfo("");
+        record.setProgramRider1Name("");
+        record.setProgramRider2Name("");
+        record.setProgramRider3Name("");
+        record.setProgramRider4Name("");
+        record.setProgramRider5Name("");
+        record.setProgramRider6Name("");
+        record.setProgramRider7Name("");
+        record.setProgramRider8Name("");
         record.setWeatherCondition("");
         record.setTemperature("");
         record.setHumidity("");
@@ -128,6 +136,14 @@ public class RaceRecordService {
         return contains(record.getFeaturedRider1Name(), keyword)
                 || contains(record.getFeaturedRider2Name(), keyword)
                 || contains(record.getFeaturedRider3Name(), keyword)
+                || contains(record.getProgramRider1Name(), keyword)
+                || contains(record.getProgramRider2Name(), keyword)
+                || contains(record.getProgramRider3Name(), keyword)
+                || contains(record.getProgramRider4Name(), keyword)
+                || contains(record.getProgramRider5Name(), keyword)
+                || contains(record.getProgramRider6Name(), keyword)
+                || contains(record.getProgramRider7Name(), keyword)
+                || contains(record.getProgramRider8Name(), keyword)
                 || contains(record.getFeaturedRider(), keyword);
     }
 
@@ -142,6 +158,14 @@ public class RaceRecordService {
         record.setTrackCondition(trimToEmpty(record.getTrackCondition()));
         record.setRaceScheduleType(trimToEmpty(record.getRaceScheduleType()));
         record.setHandicapInfo(trimToEmpty(record.getHandicapInfo()));
+        record.setProgramRider1Name(trimToEmpty(record.getProgramRider1Name()));
+        record.setProgramRider2Name(trimToEmpty(record.getProgramRider2Name()));
+        record.setProgramRider3Name(trimToEmpty(record.getProgramRider3Name()));
+        record.setProgramRider4Name(trimToEmpty(record.getProgramRider4Name()));
+        record.setProgramRider5Name(trimToEmpty(record.getProgramRider5Name()));
+        record.setProgramRider6Name(trimToEmpty(record.getProgramRider6Name()));
+        record.setProgramRider7Name(trimToEmpty(record.getProgramRider7Name()));
+        record.setProgramRider8Name(trimToEmpty(record.getProgramRider8Name()));
 
         record.setFeaturedRider1Name(trimToEmpty(record.getFeaturedRider1Name()));
         record.setFeaturedRider1Mark(trimToEmpty(record.getFeaturedRider1Mark()));

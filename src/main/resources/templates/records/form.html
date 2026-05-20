@@ -12,6 +12,14 @@
             --main-color-text: #ffffff;
             --header-strong-text: var(--theme-text, #213d60);
             --header-muted-text: var(--sub, #52657a);
+            --brand: color-mix(in srgb, var(--main-color) 34%, white);
+            --brand-strong: color-mix(in srgb, var(--main-color) 76%, white);
+            --btn-on-brand: var(--main-color-text);
+            --card: var(--border-color);
+            --deep: var(--accent-color);
+            --theme-text: var(--accent-color);
+            --soft-surface: color-mix(in srgb, var(--surface-tint) 78%, white);
+            --section-badge-bg: var(--surface-tint);
         }
 
         body.record-form-page.theme-kawaguchi {
@@ -208,11 +216,46 @@
             font-weight: 800;
         }
 
+        .record-form-hero {
+            padding: clamp(1rem, 2.4vw, 1.35rem);
+            border: 1px solid color-mix(in srgb, var(--border-color) 82%, white);
+            border-radius: 1.1rem;
+            background:
+                linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--surface-tint) 64%, white) 100%);
+            box-shadow: 0 0.8rem 1.7rem rgba(15, 23, 42, 0.06);
+        }
+
+        .record-form-title {
+            color: var(--accent-color);
+            letter-spacing: 0;
+        }
+
+        .record-form-actions .btn,
+        .record-submit-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
         .section-shell {
-            border: 1px solid var(--card);
-            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid color-mix(in srgb, var(--border-color) 88%, white);
+            border-radius: 1.1rem;
             background: #ffffff;
             box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.06);
+        }
+
+        .section-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 0.26rem;
+            background: linear-gradient(90deg, #111827 0%, #c5162e 34%, var(--main-color) 100%);
+            pointer-events: none;
         }
 
         .section-header {
@@ -223,6 +266,15 @@
             gap: 1rem;
             padding: 1.5rem 1.5rem 1rem;
             border-bottom: 1px solid var(--card);
+        }
+
+        .section-header > div:first-child {
+            min-width: 0;
+        }
+
+        .section-header h2 {
+            color: var(--accent-color);
+            line-height: 1.45;
         }
 
         .section-subtitle {
@@ -254,6 +306,12 @@
             padding: 0 1.5rem 1.25rem;
         }
 
+        .section-actions .btn {
+            min-height: 2.7rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
         .section-action-note {
             width: 100%;
             color: var(--sub);
@@ -269,6 +327,50 @@
             border: 1px solid var(--card);
             border-radius: 1.2rem;
             background: var(--soft-surface);
+        }
+
+        .section-shell:not([data-section-id="start-diagram"]) .sub-block {
+            border-color: color-mix(in srgb, var(--border-color) 78%, white);
+            background: linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 58%, white) 0%, #ffffff 100%);
+        }
+
+        .record-form-page .form-label {
+            color: color-mix(in srgb, var(--accent-color) 86%, #111827);
+            line-height: 1.45;
+        }
+
+        .record-form-page .form-control,
+        .record-form-page .form-select {
+            min-height: 3rem;
+            border-color: color-mix(in srgb, var(--border-color) 82%, white);
+            border-radius: 0.78rem;
+            color: #111827;
+            box-shadow: none;
+        }
+
+        .record-form-page textarea.form-control {
+            min-height: auto;
+            line-height: 1.65;
+        }
+
+        .record-form-page .form-control:focus,
+        .record-form-page .form-select:focus {
+            border-color: var(--main-color);
+            box-shadow: 0 0 0 0.22rem color-mix(in srgb, var(--main-color) 20%, transparent);
+        }
+
+        .record-form-page .form-control:disabled,
+        .record-form-page .form-select:disabled {
+            background-color: color-mix(in srgb, var(--surface-tint) 72%, white);
+            color: #334155;
+            opacity: 1;
+        }
+
+        .record-form-page .input-group-text {
+            border-color: color-mix(in srgb, var(--border-color) 82%, white);
+            background: color-mix(in srgb, var(--surface-tint) 70%, white);
+            color: var(--accent-color);
+            font-weight: 800;
         }
 
         .field-caption {
@@ -719,17 +821,78 @@
         .car-7 { background: #f97316; color: #ffffff; }
         .car-8 { background: #ec4899; color: #111111; }
 
+        .program-table-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .program-lane-card {
+            display: grid;
+            gap: 0.8rem;
+            padding: 1rem;
+            border: 1px solid color-mix(in srgb, var(--border-color) 82%, white);
+            border-radius: 0.95rem;
+            background: #ffffff;
+            box-shadow: 0 0.45rem 1rem rgba(15, 23, 42, 0.045);
+        }
+
+        .program-lane-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+
+        .program-lane-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 999px;
+            border: 2px solid transparent;
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1;
+            box-shadow: 0 0.45rem 0.9rem rgba(15, 23, 42, 0.12);
+        }
+
+        .program-lane-label {
+            min-width: 0;
+            color: var(--sub);
+            font-size: 0.86rem;
+            font-weight: 800;
+            line-height: 1.45;
+        }
+
+        .program-lane-card.lane-1 .program-lane-number { background: #ffffff; color: #111827; border-color: #334155; }
+        .program-lane-card.lane-2 .program-lane-number { background: #111111; color: #ffffff; border-color: #111111; }
+        .program-lane-card.lane-3 .program-lane-number { background: #e11d2f; color: #ffffff; border-color: #e11d2f; }
+        .program-lane-card.lane-4 .program-lane-number { background: #1d4ed8; color: #ffffff; border-color: #1d4ed8; }
+        .program-lane-card.lane-5 .program-lane-number { background: #facc15; color: #111111; border-color: #d9a90f; }
+        .program-lane-card.lane-6 .program-lane-number { background: #16a34a; color: #ffffff; border-color: #16a34a; }
+        .program-lane-card.lane-7 .program-lane-number { background: #f97316; color: #ffffff; border-color: #f97316; }
+        .program-lane-card.lane-8 .program-lane-number { background: #ec4899; color: #111111; border-color: #db2777; }
+
+        .program-rider-input {
+            font-weight: 700;
+        }
+
         .trial-input-card,
         .bet-line-card,
         .summary-card {
-            border: 1px solid var(--card);
-            border-radius: 1rem;
+            border: 1px solid color-mix(in srgb, var(--border-color) 80%, white);
+            border-radius: 0.9rem;
             background: #ffffff;
+            box-shadow: 0 0.45rem 1.1rem rgba(15, 23, 42, 0.045);
         }
 
         .trial-input-row {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) auto auto;
+            grid-template-columns: minmax(0, 1fr) auto;
             gap: 0.55rem;
             align-items: center;
         }
@@ -740,7 +903,8 @@
             gap: 0.45rem;
             min-height: 2rem;
             margin-top: 0.75rem;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .trial-mark-badge,
@@ -803,7 +967,7 @@
             min-height: 2.8rem;
             border-radius: 999px;
             font-weight: 700;
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 82%, white);
             background: #ffffff;
             color: var(--deep);
         }
@@ -823,7 +987,7 @@
 
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
             gap: 1rem;
         }
 
@@ -845,6 +1009,39 @@
 
         .summary-value.is-negative {
             color: #b91c1c;
+        }
+
+        .record-submit-panel {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem;
+            border: 1px solid color-mix(in srgb, var(--border-color) 84%, white);
+            border-left: 0.32rem solid #c5162e;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 0.9rem 1.7rem rgba(15, 23, 42, 0.07);
+        }
+
+        .record-submit-title {
+            color: var(--accent-color);
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1.45;
+        }
+
+        .record-submit-note {
+            color: var(--sub);
+            font-size: 0.92rem;
+            line-height: 1.65;
+        }
+
+        .record-submit-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.65rem;
         }
 
         @media (max-width: 991.98px) {
@@ -897,12 +1094,32 @@
                 justify-content: flex-start;
             }
 
+            .program-table-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .start-diagram-board {
                 min-height: 19rem;
             }
         }
 
         @media (max-width: 767.98px) {
+            .record-form-hero {
+                padding: 1rem;
+                border-radius: 0.95rem;
+            }
+
+            .record-form-title {
+                font-size: 1.65rem;
+                line-height: 1.35;
+            }
+
+            .record-form-actions .btn,
+            .record-submit-actions .btn {
+                width: 100%;
+                min-height: 3.05rem;
+            }
+
             .site-header .container {
                 padding-top: 0.66rem !important;
                 padding-bottom: 0.56rem !important;
@@ -956,9 +1173,63 @@
                 padding-right: 1rem;
             }
 
+            .section-header {
+                gap: 0.75rem;
+                padding-top: 1.2rem;
+                padding-bottom: 0.9rem;
+            }
+
+            .section-pill {
+                width: 100%;
+                justify-content: center;
+                border-radius: 0.75rem;
+            }
+
+            .section-actions {
+                gap: 0.55rem;
+            }
+
             .section-actions .btn {
-                flex: 1 1 calc(33.333% - 0.5rem);
+                min-height: 2.8rem;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            .section-actions .js-section-save {
+                flex: 1 1 100%;
+            }
+
+            .section-actions .js-section-edit {
+                flex: 1 1 calc(50% - 0.3rem);
                 min-width: 0;
+            }
+
+            .section-shell:not([data-section-id="start-diagram"]) .sub-block.p-4 {
+                padding: 1rem !important;
+            }
+
+            .program-table-grid {
+                gap: 0.75rem;
+            }
+
+            .program-lane-card {
+                padding: 0.9rem;
+            }
+
+            .program-lane-number {
+                width: 2.75rem;
+                height: 2.75rem;
+                font-size: 1.2rem;
+            }
+
+            .program-lane-label {
+                font-size: 0.8rem;
+            }
+
+            .summary-pill {
+                width: 100%;
+                justify-content: flex-start;
+                border-radius: 0.75rem;
             }
 
             .summary-grid {
@@ -1054,6 +1325,23 @@
                 justify-content: flex-start;
             }
 
+            .trial-mark-badge,
+            .trial-rank-badge,
+            .summary-pill {
+                min-height: 1.9rem;
+                padding: 0.28rem 0.65rem;
+                font-size: 0.84rem;
+            }
+
+            .record-submit-panel {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .record-submit-actions {
+                justify-content: stretch;
+            }
+
             .start-diagram-label {
                 font-size: 0.76rem;
                 padding: 0.2rem 0.5rem;
@@ -1089,6 +1377,12 @@
                 max-width: 9.6rem;
                 font-size: 0.72rem;
                 line-height: 1.35;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .program-table-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1133,15 +1427,15 @@
     </header>
 
     <main class="container py-4 py-md-5 flex-grow-1">
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+        <div class="record-form-hero d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
             <div>
-                <h1 class="fw-bold mb-2">レース記録を登録する</h1>
+                <h1 class="record-form-title fw-bold mb-2">レース記録を登録する</h1>
                 <p class="section-subtitle mb-0">
                     前日予想から当日予想、結果と考察までを順番に入力できます。<br>
                     入力しやすさを優先し、スマホでもPCでも迷いにくい構成にしています。
                 </p>
             </div>
-            <div class="d-flex flex-column flex-sm-row gap-2">
+            <div class="record-form-actions d-flex flex-column flex-sm-row gap-2">
                 <button type="submit" form="raceRecordForm" class="btn btn-primary btn-lg">この内容で登録する</button>
                 <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">一覧へ戻る</a>
             </div>
@@ -1161,7 +1455,6 @@
                 <div class="section-actions">
                     <button type="button" class="btn btn-primary js-section-save">この項目を保存</button>
                     <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
-                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
                     <div class="section-action-note">入力途中でもこの項目だけ保存できます。あとで編集に戻せます。</div>
                 </div>
                 <div class="section-body">
@@ -1219,6 +1512,82 @@
                                     <label for="preRaceNote" class="form-label fw-semibold">前日メモ</label>
                                     <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 橘ミナトは気配が良く、白石ルイは展開待ち。"></textarea>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sub-block p-4 mt-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                            <div>
+                                <h3 class="h5 fw-bold mb-1">番組表</h3>
+                                <p class="section-subtitle mb-0">出走表を見る感覚で、各号車の選手名を先に整理できます。</p>
+                            </div>
+                            <div class="summary-pill">1〜8号車</div>
+                        </div>
+                        <div class="program-table-grid">
+                            <div class="program-lane-card lane-1">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">1</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider1Name" class="visually-hidden">1号車 選手名</label>
+                                <input type="text" id="programRider1Name" th:field="*{programRider1Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-2">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">2</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider2Name" class="visually-hidden">2号車 選手名</label>
+                                <input type="text" id="programRider2Name" th:field="*{programRider2Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-3">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">3</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider3Name" class="visually-hidden">3号車 選手名</label>
+                                <input type="text" id="programRider3Name" th:field="*{programRider3Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-4">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">4</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider4Name" class="visually-hidden">4号車 選手名</label>
+                                <input type="text" id="programRider4Name" th:field="*{programRider4Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-5">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">5</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider5Name" class="visually-hidden">5号車 選手名</label>
+                                <input type="text" id="programRider5Name" th:field="*{programRider5Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-6">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">6</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider6Name" class="visually-hidden">6号車 選手名</label>
+                                <input type="text" id="programRider6Name" th:field="*{programRider6Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-7">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">7</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider7Name" class="visually-hidden">7号車 選手名</label>
+                                <input type="text" id="programRider7Name" th:field="*{programRider7Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
+                            </div>
+                            <div class="program-lane-card lane-8">
+                                <div class="program-lane-head">
+                                    <span class="program-lane-number">8</span>
+                                    <span class="program-lane-label">選手名</span>
+                                </div>
+                                <label for="programRider8Name" class="visually-hidden">8号車 選手名</label>
+                                <input type="text" id="programRider8Name" th:field="*{programRider8Name}" class="form-control form-control-lg program-rider-input" placeholder="選手名を入力">
                             </div>
                         </div>
                     </div>
@@ -1351,7 +1720,6 @@
                 <div class="section-actions">
                     <button type="button" class="btn btn-primary js-section-save">この項目を保存</button>
                     <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
-                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
                     <div class="section-action-note">入力途中でもこの項目だけ保存できます。あとで編集に戻せます。</div>
                 </div>
                 <div class="section-body">
@@ -1497,7 +1865,6 @@
                 <div class="section-actions">
                     <button type="button" class="btn btn-primary js-section-save">この項目を保存</button>
                     <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
-                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
                     <div class="section-action-note">入力途中でもこの項目だけ保存できます。あとで編集に戻せます。</div>
                 </div>
                 <div class="section-body">
@@ -1783,7 +2150,6 @@
                 <div class="section-actions">
                     <button type="button" class="btn btn-primary js-section-save">この項目を保存</button>
                     <button type="button" class="btn btn-outline-secondary js-section-edit">編集</button>
-                    <button type="button" class="btn btn-outline-danger js-section-delete">削除</button>
                     <div class="section-action-note">入力途中でもこの項目だけ保存できます。あとで編集に戻せます。</div>
                 </div>
                 <div class="section-body">
@@ -1824,6 +2190,17 @@
                     </div>
                 </div>
             </section>
+
+            <div class="record-submit-panel">
+                <div>
+                    <div class="record-submit-title">入力内容を確認して登録</div>
+                    <div class="record-submit-note">前日予想、当日予想、結果と考察をまとめて記録します。</div>
+                </div>
+                <div class="record-submit-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">この内容で登録する</button>
+                    <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">一覧へ戻る</a>
+                </div>
+            </div>
         </form>
     </main>
 
@@ -3115,7 +3492,6 @@
             const storageKey = sectionStoragePrefix + sectionId;
             const saveButton = section.querySelector(".js-section-save");
             const editButton = section.querySelector(".js-section-edit");
-            const deleteButton = section.querySelector(".js-section-delete");
 
             if (localStorage.getItem(storageKey)) {
                 updateSectionStatus(section, true);
@@ -3141,20 +3517,6 @@
                     localStorage.removeItem(storageKey);
                     updateSectionStatus(section, false);
                     setSectionDisabled(section, false);
-                });
-            }
-
-            if (deleteButton) {
-                deleteButton.addEventListener("click", function () {
-                    if (!window.confirm("このセクションの入力内容を削除しますか？")) {
-                        return;
-                    }
-                    localStorage.removeItem(storageKey);
-                    clearSection(section);
-                    updateSectionStatus(section, false);
-                    setSectionDisabled(section, false);
-                    updateTrialTimeAssist();
-                    updateBetSummary();
                 });
             }
         });

@@ -26,6 +26,15 @@ public class RaceRecord {
     private String raceScheduleType;
     private String handicapInfo;
 
+    private String programRider1Name;
+    private String programRider2Name;
+    private String programRider3Name;
+    private String programRider4Name;
+    private String programRider5Name;
+    private String programRider6Name;
+    private String programRider7Name;
+    private String programRider8Name;
+
     private String featuredRider1Name;
     private Integer featuredRider1Number;
     private String featuredRider1Mark;
@@ -121,6 +130,22 @@ public class RaceRecord {
     public void setRaceScheduleType(String raceScheduleType) { this.raceScheduleType = raceScheduleType; }
     public String getHandicapInfo() { return handicapInfo; }
     public void setHandicapInfo(String handicapInfo) { this.handicapInfo = handicapInfo; }
+    public String getProgramRider1Name() { return programRider1Name; }
+    public void setProgramRider1Name(String programRider1Name) { this.programRider1Name = programRider1Name; }
+    public String getProgramRider2Name() { return programRider2Name; }
+    public void setProgramRider2Name(String programRider2Name) { this.programRider2Name = programRider2Name; }
+    public String getProgramRider3Name() { return programRider3Name; }
+    public void setProgramRider3Name(String programRider3Name) { this.programRider3Name = programRider3Name; }
+    public String getProgramRider4Name() { return programRider4Name; }
+    public void setProgramRider4Name(String programRider4Name) { this.programRider4Name = programRider4Name; }
+    public String getProgramRider5Name() { return programRider5Name; }
+    public void setProgramRider5Name(String programRider5Name) { this.programRider5Name = programRider5Name; }
+    public String getProgramRider6Name() { return programRider6Name; }
+    public void setProgramRider6Name(String programRider6Name) { this.programRider6Name = programRider6Name; }
+    public String getProgramRider7Name() { return programRider7Name; }
+    public void setProgramRider7Name(String programRider7Name) { this.programRider7Name = programRider7Name; }
+    public String getProgramRider8Name() { return programRider8Name; }
+    public void setProgramRider8Name(String programRider8Name) { this.programRider8Name = programRider8Name; }
     public String getFeaturedRider1Name() { return featuredRider1Name; }
     public void setFeaturedRider1Name(String featuredRider1Name) { this.featuredRider1Name = featuredRider1Name; }
     public Integer getFeaturedRider1Number() { return featuredRider1Number; }
