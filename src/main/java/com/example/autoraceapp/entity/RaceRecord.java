@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -49,6 +50,9 @@ public class RaceRecord {
 
     private String preRacePrediction;
     private String preRaceNote;
+
+    @Column(length = 4000)
+    private String startLineupPositions;
 
     private String weatherCondition;
     private String temperature;
@@ -168,6 +172,8 @@ public class RaceRecord {
     public void setPreRacePrediction(String preRacePrediction) { this.preRacePrediction = preRacePrediction; }
     public String getPreRaceNote() { return preRaceNote; }
     public void setPreRaceNote(String preRaceNote) { this.preRaceNote = preRaceNote; }
+    public String getStartLineupPositions() { return startLineupPositions; }
+    public void setStartLineupPositions(String startLineupPositions) { this.startLineupPositions = startLineupPositions; }
     public String getWeatherCondition() { return weatherCondition; }
     public void setWeatherCondition(String weatherCondition) { this.weatherCondition = weatherCondition; }
     public String getTemperature() { return temperature; }

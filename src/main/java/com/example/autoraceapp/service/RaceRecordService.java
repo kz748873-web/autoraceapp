@@ -85,6 +85,7 @@ public class RaceRecordService {
 
         record.setPreRacePrediction("");
         record.setPreRaceNote("");
+        record.setStartLineupPositions("");
 
         record.setTrialTime1("");
         record.setTrialTime2("");
@@ -176,6 +177,7 @@ public class RaceRecordService {
 
         record.setPreRacePrediction(trimToEmpty(record.getPreRacePrediction()));
         record.setPreRaceNote(trimToEmpty(record.getPreRaceNote()));
+        record.setStartLineupPositions(trimToEmpty(record.getStartLineupPositions()));
 
         record.setTrialTime1(trimToEmpty(record.getTrialTime1()));
         record.setTrialTime2(trimToEmpty(record.getTrialTime2()));

@@ -1559,6 +1559,7 @@
 
         <form id="raceRecordForm" th:action="@{/records}" th:object="${record}" method="post" class="d-grid gap-4" novalidate>
             <input type="hidden" th:field="*{id}">
+            <input type="hidden" id="startLineupPositions" th:field="*{startLineupPositions}">
             <section class="section-shell" data-section-id="pre-race">
                 <div class="section-header">
                     <div>
@@ -2343,6 +2344,7 @@
         "飯塚": "theme-iizuka",
         "山陽": "theme-sanyo"
     };
+    const startDiagramSectionStateKey = "__startDiagramState";
 
     function applyRecordFormVenueContext(venueName) {
         const selectedVenueName = recordFormVenueThemeMap[venueName] ? venueName : "";
@@ -3581,6 +3583,221 @@
         });
     }
 
+    function enableFormFieldsForSubmit(form) {
+        if (!form) {
+            return;
+        }
+
+        form.querySelectorAll("input, select, textarea").forEach(function (field) {
+            field.disabled = false;
+        });
+    }
+
+    function getStartLineupPositionsField() {
+        return document.getElementById("startLineupPositions");
+    }
+
+    function stringifyStartDiagramState(state) {
+        try {
+            return JSON.stringify(state || { version: 1, positions: {} });
+        } catch (error) {
+            return "";
+        }
+    }
+
+    function writeStartLineupPositionsField(state) {
+        const field = getStartLineupPositionsField();
+
+        if (!field) {
+            return;
+        }
+
+        field.value = stringifyStartDiagramState(state);
+    }
+
+    function readStartLineupPositionsField() {
+        const field = getStartLineupPositionsField();
+
+        if (!field || !field.value) {
+            return null;
+        }
+
+        try {
+            const savedState = JSON.parse(field.value);
+            return savedState && typeof savedState === "object" ? savedState : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getStoredNumber(value) {
+        const numericValue = Number(value);
+        return Number.isFinite(numericValue) ? numericValue : null;
+    }
+
+    function getStartDiagramTokenNumber(token, fallbackNumber) {
+        const classMatch = String(token.className || "").match(/\bcar-(\d+)\b/);
+        if (classMatch) {
+            const classNumber = Number.parseInt(classMatch[1], 10);
+            if (Number.isInteger(classNumber) && classNumber >= 1 && classNumber <= 8) {
+                return classNumber;
+            }
+        }
+
+        const textNumber = Number.parseInt((token.textContent || "").trim(), 10);
+        if (Number.isInteger(textNumber) && textNumber >= 1 && textNumber <= 8) {
+            return textNumber;
+        }
+
+        return fallbackNumber;
+    }
+
+    function serializeStartDiagramState() {
+        if (!document.getElementById("startDiagramBoard")) {
+            return readStartLineupPositionsField() || { version: 1, positions: {} };
+        }
+
+        initializeStartDiagramInitialPositions();
+
+        const positions = {};
+
+        getStartDiagramTokens().forEach(function (token, index) {
+            const x = getStoredNumber(token.dataset.x);
+            const y = getStoredNumber(token.dataset.y);
+            const initialX = getStoredNumber(token.dataset.initialX);
+            const initialY = getStoredNumber(token.dataset.initialY);
+            const worldX = getStoredNumber(token.dataset.worldX);
+            const worldY = getStoredNumber(token.dataset.worldY);
+            const movedFromInitial = x !== null && y !== null && initialX !== null && initialY !== null
+                && (Math.abs(x - initialX) > 0.05 || Math.abs(y - initialY) > 0.05);
+            const tokenNumber = getStartDiagramTokenNumber(token, index + 1);
+
+            if (x === null || y === null) {
+                return;
+            }
+
+            positions[String(tokenNumber)] = {
+                number: tokenNumber,
+                x: x,
+                y: y,
+                placed: token.dataset.placed === "true" || worldX !== null || worldY !== null || movedFromInitial
+            };
+
+            if (worldX !== null) {
+                positions[String(tokenNumber)].worldX = worldX;
+            }
+            if (worldY !== null) {
+                positions[String(tokenNumber)].worldY = worldY;
+            }
+        });
+
+        return {
+            version: 1,
+            positions: positions
+        };
+    }
+
+    function syncStartLineupPositionsField() {
+        const state = serializeStartDiagramState();
+        writeStartLineupPositionsField(state);
+        return state;
+    }
+
+    function getStartDiagramSavedTokenStates(savedState) {
+        if (!savedState || typeof savedState !== "object") {
+            return [];
+        }
+
+        if (Array.isArray(savedState.tokens)) {
+            return savedState.tokens;
+        }
+
+        if (!savedState.positions || typeof savedState.positions !== "object") {
+            return [];
+        }
+
+        return Object.keys(savedState.positions).map(function (tokenNumber) {
+            const tokenState = savedState.positions[tokenNumber];
+
+            if (!tokenState || typeof tokenState !== "object") {
+                return null;
+            }
+
+            return Object.assign({ number: Number.parseInt(tokenNumber, 10) }, tokenState);
+        }).filter(Boolean);
+    }
+
+    function restoreStartDiagramState(savedState) {
+        try {
+            const savedTokenStates = getStartDiagramSavedTokenStates(savedState);
+
+            if (!savedTokenStates.length) {
+                return false;
+            }
+
+            initializeStartDiagramInitialPositions();
+
+            const metrics = getStartDiagramMetrics();
+            const savedTokens = new Map();
+            let restoredAny = false;
+
+            savedTokenStates.forEach(function (tokenState) {
+                const tokenNumber = Number.parseInt(tokenState.number, 10);
+                if (Number.isInteger(tokenNumber) && tokenNumber >= 1 && tokenNumber <= 8) {
+                    savedTokens.set(tokenNumber, tokenState);
+                }
+            });
+
+            getStartDiagramTokens().forEach(function (token, index) {
+                const tokenNumber = getStartDiagramTokenNumber(token, index + 1);
+                const tokenState = savedTokens.get(tokenNumber);
+
+                if (!tokenState) {
+                    return;
+                }
+
+                const placed = tokenState.placed === true || tokenState.placed === "true";
+                const xPercent = getStoredNumber(tokenState.x);
+                const yPercent = getStoredNumber(tokenState.y);
+                const worldX = getStoredNumber(tokenState.worldX);
+                const worldY = getStoredNumber(tokenState.worldY);
+                let xPx = null;
+                let yPx = null;
+
+                if (xPercent !== null && yPercent !== null) {
+                    xPx = ((placed ? metrics.scaledWidth : metrics.baseWidth) * xPercent) / 100;
+                    yPx = ((placed ? metrics.scaledHeight : metrics.baseHeight) * yPercent) / 100;
+                } else if (placed && worldX !== null && worldY !== null) {
+                    xPx = worldX * metrics.zoom;
+                    yPx = worldY * metrics.zoom;
+                }
+
+                if (xPx === null || yPx === null) {
+                    return;
+                }
+
+                setStartDiagramTokenPosition(token, xPx, yPx, metrics, placed);
+                token.classList.remove("is-dragging");
+                restoredAny = true;
+            });
+
+            return restoredAny;
+        } catch (error) {
+            // 保存済みの展開図データが古くてもフォーム全体は止めない。
+            return false;
+        }
+    }
+
+    function restoreStartDiagramStateFromRecordField() {
+        const restored = restoreStartDiagramState(readStartLineupPositionsField());
+
+        if (restored) {
+            syncStartLineupPositionsField();
+        }
+
+        return restored;
+    }
+
     function serializeSection(section) {
         const payload = {};
         section.querySelectorAll("input, select, textarea").forEach(function (field) {
@@ -3589,7 +3806,72 @@
             }
             payload[field.name] = field.value;
         });
+
+        if (section.dataset.sectionId === "start-diagram") {
+            payload[startDiagramSectionStateKey] = syncStartLineupPositionsField();
+        }
+
         return payload;
+    }
+
+    function restoreSection(section, payload) {
+        if (!payload || typeof payload !== "object") {
+            return;
+        }
+
+        section.querySelectorAll("input, select, textarea").forEach(function (field) {
+            if (!field.name || !Object.prototype.hasOwnProperty.call(payload, field.name)) {
+                return;
+            }
+            field.value = payload[field.name] == null ? "" : payload[field.name];
+        });
+
+        if (section.dataset.sectionId === "start-diagram") {
+            if (restoreStartDiagramState(payload[startDiagramSectionStateKey])) {
+                syncStartLineupPositionsField();
+            }
+        }
+    }
+
+    function getSectionStorageItem(storageKey) {
+        try {
+            return window.localStorage.getItem(storageKey);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function setSectionStorageItem(storageKey, value) {
+        try {
+            window.localStorage.setItem(storageKey, value);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function removeSectionStorageItem(storageKey) {
+        try {
+            window.localStorage.removeItem(storageKey);
+        } catch (error) {
+            return;
+        }
+    }
+
+    function readSavedSectionPayload(storageKey) {
+        const rawPayload = getSectionStorageItem(storageKey);
+
+        if (!rawPayload) {
+            return null;
+        }
+
+        try {
+            const payload = JSON.parse(rawPayload);
+            return payload && typeof payload === "object" ? payload : null;
+        } catch (error) {
+            removeSectionStorageItem(storageKey);
+            return null;
+        }
     }
 
     function clearSection(section) {
@@ -3628,7 +3910,11 @@
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
         const betTypeSelects = Array.from(document.querySelectorAll(".js-bet-type-select"));
-        const sectionStoragePrefix = "autoraceapp-record-section-";
+        const recordIdField = form ? form.querySelector("[name='id']") : null;
+        const recordStorageId = recordIdField && recordIdField.value
+            ? "record-" + recordIdField.value
+            : "new-" + window.location.pathname + window.location.search;
+        const sectionStoragePrefix = "autoraceapp-record-section-" + recordStorageId + "-";
 
         if (form) {
             form.addEventListener("keydown", function (event) {
@@ -3639,19 +3925,37 @@
 
             form.addEventListener("submit", function (event) {
                 if (form.dataset.skipSubmitConfirm === "true") {
+                    syncStartLineupPositionsField();
+                    enableFormFieldsForSubmit(form);
                     return;
                 }
                 if (!window.confirm("この内容で登録しますか？")) {
                     event.preventDefault();
+                    return;
                 }
+                syncStartLineupPositionsField();
+                enableFormFieldsForSubmit(form);
             });
         }
 
+        let restoredRecordStartDiagram = false;
+
+        function restoreStartDiagramFromRecord() {
+            restoredRecordStartDiagram = restoreStartDiagramStateFromRecordField() || restoredRecordStartDiagram;
+        }
+
         initializeStartDiagramInteractions();
+        restoreStartDiagramFromRecord();
         if (typeof window.requestAnimationFrame === "function") {
-            window.requestAnimationFrame(initializeStartDiagramInteractions);
+            window.requestAnimationFrame(function () {
+                initializeStartDiagramInteractions();
+                restoreStartDiagramFromRecord();
+            });
         } else {
-            window.setTimeout(initializeStartDiagramInteractions, 0);
+            window.setTimeout(function () {
+                initializeStartDiagramInteractions();
+                restoreStartDiagramFromRecord();
+            }, 0);
         }
 
         document.querySelectorAll("[data-section-id]").forEach(function (section) {
@@ -3659,10 +3963,13 @@
             const storageKey = sectionStoragePrefix + sectionId;
             const saveButton = section.querySelector(".js-section-save");
             const editButton = section.querySelector(".js-section-edit");
+            const savedPayload = sectionId === "pre-race" ? null : readSavedSectionPayload(storageKey);
+            const useSavedPayload = savedPayload && !(sectionId === "start-diagram" && restoredRecordStartDiagram);
 
             if (sectionId === "pre-race") {
-                localStorage.removeItem(storageKey);
-            } else if (localStorage.getItem(storageKey)) {
+                removeSectionStorageItem(storageKey);
+            } else if (useSavedPayload) {
+                restoreSection(section, savedPayload);
                 updateSectionStatus(section, true);
                 setSectionDisabled(section, true);
             }
@@ -3673,11 +3980,16 @@
                         if (!window.confirm("前日予想を保存して一覧へ移動しますか？")) {
                             return;
                         }
-                        localStorage.removeItem(storageKey);
+                        if (!form) {
+                            return;
+                        }
+                        removeSectionStorageItem(storageKey);
                         form.dataset.skipSubmitConfirm = "true";
                         if (typeof form.requestSubmit === "function") {
                             form.requestSubmit();
                         } else {
+                            syncStartLineupPositionsField();
+                            enableFormFieldsForSubmit(form);
                             form.submit();
                         }
                         return;
@@ -3686,7 +3998,10 @@
                     if (!window.confirm("このセクションを保存状態にしますか？")) {
                         return;
                     }
-                    localStorage.setItem(storageKey, JSON.stringify(serializeSection(section)));
+                    if (!setSectionStorageItem(storageKey, JSON.stringify(serializeSection(section)))) {
+                        window.alert("このブラウザでは一時保存を利用できません。");
+                        return;
+                    }
                     updateSectionStatus(section, true);
                     setSectionDisabled(section, true);
                 });
@@ -3697,7 +4012,7 @@
                     if (!window.confirm("このセクションを編集できる状態に戻しますか？")) {
                         return;
                     }
-                    localStorage.removeItem(storageKey);
+                    removeSectionStorageItem(storageKey);
                     updateSectionStatus(section, false);
                     setSectionDisabled(section, false);
                 });
