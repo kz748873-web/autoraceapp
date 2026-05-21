@@ -1532,28 +1532,6 @@
                     前日予想から当日予想、結果と考察までを順番に入力できます。<br>
                     入力しやすさを優先し、スマホでもPCでも迷いにくい構成にしています。
                 </p>
-                <div class="record-current-grid mt-3" aria-label="現在編集中のレース情報">
-                    <div class="record-current-item">
-                        <span class="record-current-label">レース場</span>
-                        <span class="record-current-value" data-form-summary-venue th:text="${initialVenue}">未選択</span>
-                    </div>
-                    <div class="record-current-item">
-                        <span class="record-current-label">レース番号</span>
-                        <span class="record-current-value"
-                              data-form-summary-race-number
-                              th:text="${record != null and record.raceNumber != null ? record.raceNumber + 'レース' : '未選択'}">未選択</span>
-                    </div>
-                    <div class="record-current-item">
-                        <span class="record-current-label">レース日</span>
-                        <span class="record-current-value"
-                              data-form-summary-race-date
-                              th:text="${record != null and !#strings.isEmpty(record.raceDate) ? record.raceDate : '未入力'}">未入力</span>
-                    </div>
-                </div>
-            </div>
-            <div class="record-form-actions d-flex flex-column flex-sm-row gap-2">
-                <button type="submit" form="raceRecordForm" class="btn btn-primary btn-lg">この内容で登録する</button>
-                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">一覧へ戻る</a>
             </div>
         </div>
 
