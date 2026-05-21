@@ -2446,8 +2446,18 @@
         return true;
     }
 
+    function isRecordFormEditMode() {
+        const form = document.getElementById("raceRecordForm");
+        const recordIdField = form ? form.querySelector("[name='id']") : null;
+        return !!(recordIdField && recordIdField.value);
+    }
+
     function initializeRecordFormPrefillFromParams() {
         try {
+            if (isRecordFormEditMode()) {
+                return;
+            }
+
             const params = new URLSearchParams(window.location.search || "");
             const raceDateField = document.getElementById("raceDate");
             const venueField = document.getElementById("venue");
