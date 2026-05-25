@@ -1535,7 +1535,7 @@
             </div>
         </div>
 
-        <form id="raceRecordForm" th:action="@{/records}" th:object="${record}" method="post" class="d-grid gap-4" novalidate>
+        <form id="raceRecordForm" th:action="@{/records}" th:object="${record}" method="post" class="d-grid gap-4" th:attr="data-section-save-url=@{/records/section},data-record-base-url=@{/records}" novalidate>
             <input type="hidden" th:field="*{id}">
             <input type="hidden" id="startLineupPositions" th:field="*{startLineupPositions}">
             <section class="section-shell" data-section-id="pre-race">
@@ -3888,6 +3888,73 @@
         status.classList.toggle("is-saved", saved);
     }
 
+    function buildRecordFormData(form) {
+        const disabledFields = [];
+
+        syncStartLineupPositionsField();
+        updateBetSummary();
+
+        form.querySelectorAll("input, select, textarea").forEach(function (field) {
+            if (field.disabled) {
+                disabledFields.push(field);
+                field.disabled = false;
+            }
+        });
+
+        try {
+            return new FormData(form);
+        } finally {
+            disabledFields.forEach(function (field) {
+                field.disabled = true;
+            });
+        }
+    }
+
+    function updateRecordIdAfterSectionSave(form, recordId) {
+        if (!recordId) {
+            return;
+        }
+
+        const recordIdField = form.querySelector("[name='id']");
+        const wasNewRecord = recordIdField && !recordIdField.value;
+
+        if (recordIdField) {
+            recordIdField.value = String(recordId);
+        }
+
+        if (wasNewRecord && form.dataset.recordBaseUrl && window.history && typeof window.history.replaceState === "function") {
+            const recordBaseUrl = form.dataset.recordBaseUrl.replace(/\/$/, "");
+            window.history.replaceState(window.history.state, "", recordBaseUrl + "/" + encodeURIComponent(recordId) + "/edit");
+        }
+    }
+
+    function saveCurrentRecordSection(form) {
+        const sectionSaveUrl = form.dataset.sectionSaveUrl;
+
+        if (!sectionSaveUrl || !window.fetch || !window.URLSearchParams) {
+            return Promise.reject(new Error("section save is unavailable"));
+        }
+
+        const requestBody = new URLSearchParams(buildRecordFormData(form));
+
+        return window.fetch(sectionSaveUrl, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+            body: requestBody
+        }).then(function (response) {
+            if (!response.ok) {
+                throw new Error("section save failed");
+            }
+            return response.json();
+        }).then(function (payload) {
+            updateRecordIdAfterSectionSave(form, payload.id);
+            return payload;
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         initializeRecordFormHeader();
         initializeRecordFormPrefillFromParams();
@@ -3951,47 +4018,31 @@
             const storageKey = sectionStoragePrefix + sectionId;
             const saveButton = section.querySelector(".js-section-save");
             const editButton = section.querySelector(".js-section-edit");
-            const savedPayload = sectionId === "pre-race" ? null : readSavedSectionPayload(storageKey);
-            const useSavedPayload = savedPayload && !(sectionId === "start-diagram" && restoredRecordStartDiagram);
-
-            if (sectionId === "pre-race") {
-                removeSectionStorageItem(storageKey);
-            } else if (useSavedPayload) {
-                restoreSection(section, savedPayload);
-                updateSectionStatus(section, true);
-                setSectionDisabled(section, true);
-            }
+            removeSectionStorageItem(storageKey);
 
             if (saveButton) {
                 saveButton.addEventListener("click", function () {
-                    if (sectionId === "pre-race") {
-                        if (!window.confirm("前日予想を保存して一覧へ移動しますか？")) {
-                            return;
-                        }
-                        if (!form) {
-                            return;
-                        }
-                        removeSectionStorageItem(storageKey);
-                        form.dataset.skipSubmitConfirm = "true";
-                        if (typeof form.requestSubmit === "function") {
-                            form.requestSubmit();
-                        } else {
-                            syncStartLineupPositionsField();
-                            enableFormFieldsForSubmit(form);
-                            form.submit();
-                        }
+                    if (!window.confirm("この項目を現在のレース記録に保存しますか？")) {
                         return;
                     }
 
-                    if (!window.confirm("このセクションを保存状態にしますか？")) {
+                    if (!form) {
                         return;
                     }
-                    if (!setSectionStorageItem(storageKey, JSON.stringify(serializeSection(section)))) {
-                        window.alert("このブラウザでは一時保存を利用できません。");
-                        return;
-                    }
-                    updateSectionStatus(section, true);
-                    setSectionDisabled(section, true);
+
+                    saveButton.disabled = true;
+                    saveCurrentRecordSection(form)
+                        .then(function () {
+                            removeSectionStorageItem(storageKey);
+                            updateSectionStatus(section, true);
+                            setSectionDisabled(section, true);
+                        })
+                        .catch(function () {
+                            window.alert("保存に失敗しました。時間を置いてもう一度お試しください。");
+                        })
+                        .finally(function () {
+                            saveButton.disabled = false;
+                        });
                 });
             }
 

@@ -1,5 +1,7 @@
 package com.example.autoraceapp.controller;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.autoraceapp.entity.RaceRecord;
 import com.example.autoraceapp.service.RaceRecordService;
@@ -56,6 +59,13 @@ public class RaceRecordController {
     public String saveRecord(@ModelAttribute RaceRecord record) {
         raceRecordService.save(record);
         return "redirect:/records";
+    }
+
+    @PostMapping("/section")
+    @ResponseBody
+    public Map<String, Long> saveRecordSection(@ModelAttribute RaceRecord record) {
+        RaceRecord savedRecord = raceRecordService.save(record);
+        return Map.of("id", savedRecord.getId());
     }
 
     @PostMapping("/{id}/delete")

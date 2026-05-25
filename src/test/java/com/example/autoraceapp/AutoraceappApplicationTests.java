@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.autoraceapp.entity.RaceRecord;
 import com.example.autoraceapp.repository.RaceRecordRepository;
 
@@ -27,6 +29,9 @@ class AutoRaceAppApplicationTests {
 
 	@Autowired
 	private RaceRecordRepository raceRecordRepository;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	void contextLoads() {
@@ -134,6 +139,101 @@ class AutoRaceAppApplicationTests {
 		assertEquals(300, updatedRecord.getTotalBetAmount());
 		assertEquals(700, updatedRecord.getProfitLoss());
 		assertTrue(raceRecordRepository.existsById(record.getId()));
+	}
+
+	@Test
+	void sectionSaveKeepsAllStepsOnSameRecord() throws Exception {
+		String savedStartDiagram = "{\"version\":1,\"positions\":{\"2\":{\"number\":2,\"x\":21.5,\"y\":45.25,\"placed\":true}}}";
+		long countBefore = raceRecordRepository.count();
+
+		MvcResult preRaceSaveResult = mockMvc.perform(post("/records/section")
+						.param("raceDate", "2026-05-25")
+						.param("venue", "\u5ddd\u53e3")
+						.param("raceNumber", "1")
+						.param("preRacePrediction", "pre-race step saved")
+						.param("preRaceNote", "pre-race note saved"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith("application/json"))
+				.andReturn();
+
+		Long recordId = objectMapper.readTree(preRaceSaveResult.getResponse().getContentAsString()).get("id").asLong();
+		assertEquals(countBefore + 1, raceRecordRepository.count());
+
+		mockMvc.perform(post("/records/section")
+						.param("id", recordId.toString())
+						.param("raceDate", "2026-05-25")
+						.param("venue", "\u5ddd\u53e3")
+						.param("raceNumber", "1")
+						.param("preRacePrediction", "pre-race step saved")
+						.param("preRaceNote", "pre-race note saved")
+						.param("startLineupPositions", savedStartDiagram)
+						.param("weatherCondition", "\u6674\u308c")
+						.param("trackCondition", "\u826f\u8d70\u8def")
+						.param("trialTime1", "3.39")
+						.param("raceOverallNote", "same-day step saved")
+						.param("betLine1Type", "3\u9023\u5358")
+						.param("betLine1Count", "4")
+						.param("betLine1Amount", "400")
+						.param("finalPrediction", "same-day final saved")
+						.param("predictionNote", "same-day note saved"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith("application/json"));
+
+		assertEquals(countBefore + 1, raceRecordRepository.count());
+
+		mockMvc.perform(post("/records/section")
+						.param("id", recordId.toString())
+						.param("raceDate", "2026-05-25")
+						.param("venue", "\u5ddd\u53e3")
+						.param("raceNumber", "1")
+						.param("preRacePrediction", "pre-race step saved")
+						.param("preRaceNote", "pre-race note saved")
+						.param("startLineupPositions", savedStartDiagram)
+						.param("weatherCondition", "\u6674\u308c")
+						.param("trackCondition", "\u826f\u8d70\u8def")
+						.param("trialTime1", "3.39")
+						.param("raceOverallNote", "same-day step saved")
+						.param("betLine1Type", "3\u9023\u5358")
+						.param("betLine1Count", "4")
+						.param("betLine1Amount", "400")
+						.param("finalPrediction", "same-day final saved")
+						.param("predictionNote", "same-day note saved")
+						.param("raceResult", "result step saved")
+						.param("resultComparison", "comparison step saved")
+						.param("reviewNote", "review step saved")
+						.param("note", "next note saved"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith("application/json"));
+
+		assertEquals(countBefore + 1, raceRecordRepository.count());
+
+		RaceRecord savedRecord = raceRecordRepository.findById(recordId).orElseThrow();
+		assertEquals("pre-race step saved", savedRecord.getPreRacePrediction());
+		assertEquals(savedStartDiagram, savedRecord.getStartLineupPositions());
+		assertEquals("same-day step saved", savedRecord.getRaceOverallNote());
+		assertEquals("result step saved", savedRecord.getRaceResult());
+		assertEquals("comparison step saved", savedRecord.getResultComparison());
+		assertEquals("review step saved", savedRecord.getReviewNote());
+
+		mockMvc.perform(get("/records/{id}/edit", recordId))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("pre-race step saved")))
+				.andExpect(content().string(containsString("same-day step saved")))
+				.andExpect(content().string(containsString("result step saved")))
+				.andExpect(content().string(containsString("comparison step saved")))
+				.andExpect(content().string(containsString("review step saved")))
+				.andExpect(content().string(containsString("21.5")))
+				.andExpect(content().string(containsString("45.25")));
+
+		mockMvc.perform(get("/records/{id}", recordId))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("pre-race step saved")))
+				.andExpect(content().string(containsString("same-day step saved")))
+				.andExpect(content().string(containsString("result step saved")))
+				.andExpect(content().string(containsString("comparison step saved")))
+				.andExpect(content().string(containsString("review step saved")))
+				.andExpect(content().string(containsString("21.5")))
+				.andExpect(content().string(containsString("45.25")));
 	}
 
 	@Test
