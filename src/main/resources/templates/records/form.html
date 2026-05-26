@@ -2641,7 +2641,7 @@
     }
 
     function getBetLineChoiceGroups(line) {
-        const groups = String(line || "").trim().split("-").map(function (group) {
+        const groups = String(line || "").trim().split(/[-－ー−]/).map(function (group) {
             const digits = [];
             String(group || "").replace(/[1-8]/g, function (digit) {
                 if (!digits.includes(digit)) {
@@ -2655,29 +2655,46 @@
         return groups.length >= 2 && groups.every(function (group) { return group.length > 0; }) ? groups : [];
     }
 
-    function countDistinctBetChoices(groups, index, usedDigits) {
+    function collectDistinctBetChoices(groups, index, usedDigits, currentDigits, choices, unordered) {
         if (index >= groups.length) {
-            return 1;
+            const keyDigits = unordered ? currentDigits.slice().sort() : currentDigits;
+            choices.add(keyDigits.join("-"));
+            return;
         }
 
-        return groups[index].reduce(function (total, digit) {
+        groups[index].forEach(function (digit) {
             if (usedDigits.has(digit)) {
-                return total;
+                return;
             }
             usedDigits.add(digit);
-            const count = countDistinctBetChoices(groups, index + 1, usedDigits);
+            currentDigits.push(digit);
+            collectDistinctBetChoices(groups, index + 1, usedDigits, currentDigits, choices, unordered);
+            currentDigits.pop();
             usedDigits.delete(digit);
-            return total + count;
-        }, 0);
+        });
     }
 
-    function countBetMarkPoints(value) {
+    function isUnorderedBetType(betType) {
+        return ["3連複", "2連複", "ワイド"].includes(betType);
+    }
+
+    function countDistinctBetChoices(groups, betType) {
+        const choices = new Set();
+        collectDistinctBetChoices(groups, 0, new Set(), [], choices, isUnorderedBetType(betType));
+        return choices.size;
+    }
+
+    function countBetMarkPoints(value, betType) {
+        if (betType === "フリー入力") {
+            return 0;
+        }
+
         return String(value || "").split(/[\n,、;；\/\s]+/).reduce(function (total, line) {
             const groups = getBetLineChoiceGroups(line);
             if (!groups.length) {
                 return total;
             }
-            return total + countDistinctBetChoices(groups, 0, new Set());
+            return total + countDistinctBetChoices(groups, betType);
         }, 0);
     }
 
@@ -2707,6 +2724,7 @@
     function getBetLineFieldIds(lineNumber) {
         return {
             mark: lineNumber === 1 ? "finalPrediction" : "betLine" + lineNumber + "Marks",
+            type: "betLine" + lineNumber + "Type",
             count: "betLine" + lineNumber + "Count",
             amount: "betLine" + lineNumber + "Amount",
             unit: lineNumber === 1 ? "betUnitAmount" : "betLine" + lineNumber + "UnitAmount",
@@ -2717,11 +2735,13 @@
     function updateBetLineCalculation(lineNumber) {
         const fieldIds = getBetLineFieldIds(lineNumber);
         const markInput = document.getElementById(fieldIds.mark);
+        const typeField = document.getElementById(fieldIds.type);
         const countField = document.getElementById(fieldIds.count);
         const amountField = document.getElementById(fieldIds.amount);
         const unitInput = document.getElementById(fieldIds.unit);
         const formulaPreview = document.getElementById(fieldIds.preview);
-        const calculatedPoints = markInput ? countBetMarkPoints(markInput.value) : 0;
+        const betType = typeField ? typeField.value : "";
+        const calculatedPoints = markInput ? countBetMarkPoints(markInput.value, betType) : 0;
 
         if (countField && calculatedPoints > 0) {
             countField.value = calculatedPoints;
@@ -4474,6 +4494,10 @@
 
         betCalculationInputs.forEach(function (field) {
             field.addEventListener("input", updateBetSummary);
+            field.addEventListener("change", updateBetSummary);
+        });
+
+        betTypeSelects.forEach(function (field) {
             field.addEventListener("change", updateBetSummary);
         });
 
