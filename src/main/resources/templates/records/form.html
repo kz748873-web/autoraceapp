@@ -2084,63 +2084,73 @@
                         <div class="bet-total-panel mb-3">
                             <div class="summary-label">よく使う賭け式をすぐ入れる</div>
                             <div class="bet-type-quick-grid">
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="単勝">単勝</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="複勝">複勝</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="2連単">2連単</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="2連複">2連複</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="拡連複">拡連複</button>
                                 <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="3連単">3連単</button>
                                 <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="3連複">3連複</button>
+                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="2連単">2連単</button>
+                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="2連複">2連複</button>
+                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="ワイド">ワイド</button>
+                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="フリー入力">フリー入力</button>
                                 <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="">クリア</button>
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-lg-4">
+                            <div class="col-xl-6">
                                 <div class="bet-line-card is-simple p-3 h-100">
-                                    <div class="bet-line-title mb-3">購入行 1</div>
+                                    <div class="bet-line-title mb-3">購入内容と最終予想</div>
                                     <div class="mb-3">
                                         <label for="betLine1Type" class="form-label fw-semibold">賭け式</label>
                                         <select id="betLine1Type" th:field="*{betLine1Type}" class="form-select form-select-lg js-bet-type-select">
                                             <option value="">選択してください</option>
-                                            <option value="単勝">単勝</option>
-                                            <option value="複勝">複勝</option>
-                                            <option value="2連単">2連単</option>
-                                            <option value="2連複">2連複</option>
-                                            <option value="拡連複">拡連複</option>
                                             <option value="3連単">3連単</option>
                                             <option value="3連複">3連複</option>
+                                            <option value="2連単">2連単</option>
+                                            <option value="2連複">2連複</option>
+                                            <option value="ワイド">ワイド</option>
+                                            <option value="フリー入力">フリー入力</option>
                                         </select>
+                                        <p class="field-caption mb-0">フリー入力は独自表記をそのまま残したいときに使います。</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="finalPrediction" class="form-label fw-semibold">買い目</label>
+                                        <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg js-bet-mark-input" placeholder="例: 1-678-678 / 16-1678-1678">
+                                        <p class="field-caption mb-0">ハイフン区切りで入力すると、計算できる範囲で点数を反映します。</p>
                                     </div>
                                     <div class="row g-3">
-                                        <div class="col-6">
+                                        <div class="col-md-4">
                                             <label for="betLine1Count" class="form-label fw-semibold">点数</label>
-                                            <input type="number" min="0" id="betLine1Count" th:field="*{betLine1Count}" class="form-control form-control-lg" placeholder="6">
+                                            <input type="number" min="0" id="betLine1Count" th:field="*{betLine1Count}" class="form-control form-control-lg js-bet-point-count" placeholder="6">
                                         </div>
-                                        <div class="col-6">
-                                            <label for="betLine1Amount" class="form-label fw-semibold">金額</label>
+                                        <div class="col-md-4">
+                                            <label for="betUnitAmount" class="form-label fw-semibold">1点あたり</label>
                                             <div class="input-group input-group-lg">
-                                                <input type="number" min="0" id="betLine1Amount" th:field="*{betLine1Amount}" class="form-control js-bet-amount" placeholder="600">
+                                                <input type="number" min="0" step="100" id="betUnitAmount" class="form-control js-bet-unit-amount" value="100" placeholder="100">
+                                                <span class="input-group-text">円</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="betLine1Amount" class="form-label fw-semibold">合計購入金額</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="number" min="0" id="betLine1Amount" th:field="*{betLine1Amount}" class="form-control js-bet-amount js-primary-bet-amount" placeholder="600" readonly>
                                                 <span class="input-group-text">円</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="field-caption mb-0">1行ごとに入力していくと、あとで見返しやすくなります。</p>
+                                    <div id="betFormulaPreview" class="bet-total-panel mt-3">0点 × 100円 = 0円</div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xl-3 col-md-6">
                                 <div class="bet-line-card is-simple p-3 h-100">
                                     <div class="bet-line-title mb-3">購入行 2</div>
                                     <div class="mb-3">
                                         <label for="betLine2Type" class="form-label fw-semibold">賭け式</label>
                                         <select id="betLine2Type" th:field="*{betLine2Type}" class="form-select form-select-lg js-bet-type-select">
                                             <option value="">選択してください</option>
-                                            <option value="単勝">単勝</option>
-                                            <option value="複勝">複勝</option>
-                                            <option value="2連単">2連単</option>
-                                            <option value="2連複">2連複</option>
-                                            <option value="拡連複">拡連複</option>
                                             <option value="3連単">3連単</option>
                                             <option value="3連複">3連複</option>
+                                            <option value="2連単">2連単</option>
+                                            <option value="2連複">2連複</option>
+                                            <option value="ワイド">ワイド</option>
+                                            <option value="フリー入力">フリー入力</option>
                                         </select>
                                     </div>
                                     <div class="row g-3">
@@ -2159,20 +2169,19 @@
                                     <p class="field-caption mb-0">買い方を分けたいときだけ2行目を使えば十分です。</p>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xl-3 col-md-6">
                                 <div class="bet-line-card is-simple p-3 h-100">
                                     <div class="bet-line-title mb-3">購入行 3</div>
                                     <div class="mb-3">
                                         <label for="betLine3Type" class="form-label fw-semibold">賭け式</label>
                                         <select id="betLine3Type" th:field="*{betLine3Type}" class="form-select form-select-lg js-bet-type-select">
                                             <option value="">選択してください</option>
-                                            <option value="単勝">単勝</option>
-                                            <option value="複勝">複勝</option>
-                                            <option value="2連単">2連単</option>
-                                            <option value="2連複">2連複</option>
-                                            <option value="拡連複">拡連複</option>
                                             <option value="3連単">3連単</option>
                                             <option value="3連複">3連複</option>
+                                            <option value="2連単">2連単</option>
+                                            <option value="2連複">2連複</option>
+                                            <option value="ワイド">ワイド</option>
+                                            <option value="フリー入力">フリー入力</option>
                                         </select>
                                     </div>
                                     <div class="row g-3">
@@ -2194,14 +2203,7 @@
                         </div>
 
                         <div class="row g-3 mt-1">
-                            <div class="col-lg-4">
-                                <div class="bet-line-card p-3 h-100">
-                                    <label for="finalPrediction" class="form-label fw-semibold">最終予想</label>
-                                    <input type="text" id="finalPrediction" th:field="*{finalPrediction}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤトの押し切り本線">
-                                    <p class="field-caption mb-0">最終的な軸や買い方の結論を短くまとめます。</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="bet-line-card p-3 h-100">
                                     <label for="payoutAmount" class="form-label fw-semibold">払戻金額</label>
                                     <div class="input-group input-group-lg">
@@ -2211,7 +2213,7 @@
                                     <p class="field-caption mb-0">レース後に入力すると収支が自動で反映されます。</p>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="summary-card p-3 h-100">
                                     <div class="summary-grid">
                                         <div>
@@ -2234,7 +2236,7 @@
                             <div class="col-12">
                                 <div class="bet-line-card p-3">
                                     <label for="predictionNote" class="form-label fw-semibold">購入理由・最終メモ</label>
-                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: 拡連複は押さえ、3連単は蒼井ハヤトの先行パターン中心。"></textarea>
+                                    <textarea id="predictionNote" th:field="*{predictionNote}" class="form-control" rows="4" placeholder="例: ワイドは押さえ、3連単は蒼井ハヤトの先行パターン中心。"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -2611,7 +2613,103 @@
         return Number.isFinite(parsed) ? parsed : 0;
     }
 
+    function getBetLineChoiceGroups(line) {
+        const groups = String(line || "").trim().split("-").map(function (group) {
+            const digits = [];
+            String(group || "").replace(/[1-8]/g, function (digit) {
+                if (!digits.includes(digit)) {
+                    digits.push(digit);
+                }
+                return digit;
+            });
+            return digits;
+        });
+
+        return groups.length >= 2 && groups.every(function (group) { return group.length > 0; }) ? groups : [];
+    }
+
+    function countDistinctBetChoices(groups, index, usedDigits) {
+        if (index >= groups.length) {
+            return 1;
+        }
+
+        return groups[index].reduce(function (total, digit) {
+            if (usedDigits.has(digit)) {
+                return total;
+            }
+            usedDigits.add(digit);
+            const count = countDistinctBetChoices(groups, index + 1, usedDigits);
+            usedDigits.delete(digit);
+            return total + count;
+        }, 0);
+    }
+
+    function countBetMarkPoints(value) {
+        return String(value || "").split(/[\n,、;；\/\s]+/).reduce(function (total, line) {
+            const groups = getBetLineChoiceGroups(line);
+            if (!groups.length) {
+                return total;
+            }
+            return total + countDistinctBetChoices(groups, 0, new Set());
+        }, 0);
+    }
+
+    function getBetUnitAmountValue(unitInput, countField, amountField) {
+        if (!unitInput) {
+            return 100;
+        }
+
+        if (unitInput.dataset.initialized !== "true") {
+            const currentCount = parseIntegerValue(countField ? countField.value : 0);
+            const currentAmount = parseIntegerValue(amountField ? amountField.value : 0);
+
+            if (currentCount > 0 && currentAmount > 0) {
+                unitInput.value = Math.max(100, Math.round((currentAmount / currentCount) / 100) * 100);
+            } else if (!unitInput.value) {
+                unitInput.value = 100;
+            }
+            unitInput.dataset.initialized = "true";
+        }
+
+        const rawUnit = parseIntegerValue(unitInput.value);
+        const normalizedUnit = rawUnit > 0 ? Math.max(100, Math.round(rawUnit / 100) * 100) : 100;
+        unitInput.value = normalizedUnit;
+        return normalizedUnit;
+    }
+
+    function updatePrimaryBetLineFromMarks() {
+        const markInput = document.getElementById("finalPrediction");
+        const countField = document.getElementById("betLine1Count");
+        const amountField = document.getElementById("betLine1Amount");
+        const unitInput = document.getElementById("betUnitAmount");
+        const formulaPreview = document.getElementById("betFormulaPreview");
+        const calculatedPoints = markInput ? countBetMarkPoints(markInput.value) : 0;
+
+        if (countField && calculatedPoints > 0) {
+            countField.value = calculatedPoints;
+            countField.readOnly = true;
+        } else if (countField) {
+            countField.readOnly = false;
+        }
+
+        const unitAmount = getBetUnitAmountValue(unitInput, countField, amountField);
+        const pointCount = parseIntegerValue(countField ? countField.value : 0);
+        const totalAmount = pointCount * unitAmount;
+
+        if (amountField) {
+            amountField.value = totalAmount > 0 ? totalAmount : "";
+        }
+
+        if (formulaPreview) {
+            formulaPreview.textContent = pointCount.toLocaleString("ja-JP") + "点 × "
+                + unitAmount.toLocaleString("ja-JP") + "円 = "
+                + totalAmount.toLocaleString("ja-JP") + "円";
+        }
+    }
+
     function updateBetSummary() {
+        updatePrimaryBetLineFromMarks();
+
         const total = Array.from(document.querySelectorAll(".js-bet-amount")).reduce(function (sum, input) {
             return sum + parseIntegerValue(input.value);
         }, 0);
@@ -4125,6 +4223,7 @@
         const trialInputs = document.querySelectorAll(".js-trial-time");
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
+        const primaryBetInputs = document.querySelectorAll(".js-bet-mark-input, .js-bet-unit-amount, .js-bet-point-count, #betLine1Type");
         const betTypeSelects = Array.from(document.querySelectorAll(".js-bet-type-select"));
         const resetAfterPreRaceButton = document.querySelector(".js-reset-after-pre-race");
         const recordIdField = form ? form.querySelector("[name='id']") : null;
@@ -4263,6 +4362,11 @@
         });
 
         betInputs.forEach(function (field) {
+            field.addEventListener("input", updateBetSummary);
+            field.addEventListener("change", updateBetSummary);
+        });
+
+        primaryBetInputs.forEach(function (field) {
             field.addEventListener("input", updateBetSummary);
             field.addEventListener("change", updateBetSummary);
         });
