@@ -2138,7 +2138,7 @@
                                     <div id="betFormulaPreview" class="bet-total-panel mt-3">0点 × 100円 = 0円</div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-6" data-bet-extra-line="2" hidden>
                                 <div class="bet-line-card is-simple p-3 h-100">
                                     <div class="bet-line-title mb-3">購入行 2</div>
                                     <div class="mb-3">
@@ -2169,7 +2169,7 @@
                                     <p class="field-caption mb-0">買い方を分けたいときだけ2行目を使えば十分です。</p>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-6" data-bet-extra-line="3" hidden>
                                 <div class="bet-line-card is-simple p-3 h-100">
                                     <div class="bet-line-title mb-3">購入行 3</div>
                                     <div class="mb-3">
@@ -2200,6 +2200,9 @@
                                     <p class="field-caption mb-0">予備の買い方があるときだけ3行目を使えます。</p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-outline-primary btn-lg js-add-bet-line">購入行を追加</button>
                         </div>
 
                         <div class="row g-3 mt-1">
@@ -4214,6 +4217,58 @@
         updateBetSummary();
     }
 
+    function getBetExtraLineElements() {
+        return Array.from(document.querySelectorAll("[data-bet-extra-line]"));
+    }
+
+    function isBetLineVisibleField(field) {
+        const extraLine = field.closest("[data-bet-extra-line]");
+        return !extraLine || !extraLine.hidden;
+    }
+
+    function betLineHasValue(line) {
+        return Array.from(line.querySelectorAll("input, select, textarea")).some(function (field) {
+            return String(field.value || "").trim() !== "";
+        });
+    }
+
+    function updateAddBetLineButton(button) {
+        if (!button) {
+            return;
+        }
+        button.hidden = !getBetExtraLineElements().some(function (line) {
+            return line.hidden;
+        });
+    }
+
+    function initializeBetLineVisibility(button) {
+        getBetExtraLineElements().forEach(function (line) {
+            if (betLineHasValue(line)) {
+                line.hidden = false;
+            }
+        });
+        updateAddBetLineButton(button);
+    }
+
+    function showNextBetLine(button) {
+        const nextLine = getBetExtraLineElements().find(function (line) {
+            return line.hidden;
+        });
+
+        if (!nextLine) {
+            updateAddBetLineButton(button);
+            return;
+        }
+
+        nextLine.hidden = false;
+        updateAddBetLineButton(button);
+
+        const firstField = nextLine.querySelector("select, input, textarea");
+        if (firstField) {
+            firstField.focus();
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         initializeRecordFormHeader();
         initializeRecordFormPrefillFromParams();
@@ -4225,6 +4280,7 @@
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
         const primaryBetInputs = document.querySelectorAll(".js-bet-mark-input, .js-bet-unit-amount, .js-bet-point-count, #betLine1Type");
         const betTypeSelects = Array.from(document.querySelectorAll(".js-bet-type-select"));
+        const addBetLineButton = document.querySelector(".js-add-bet-line");
         const resetAfterPreRaceButton = document.querySelector(".js-reset-after-pre-race");
         const recordIdField = form ? form.querySelector("[name='id']") : null;
         const recordStorageId = recordIdField && recordIdField.value
@@ -4271,6 +4327,14 @@
                     }
                     resetAfterPreRaceSections(sectionStoragePrefix);
                 });
+            });
+        }
+
+        initializeBetLineVisibility(addBetLineButton);
+
+        if (addBetLineButton) {
+            addBetLineButton.addEventListener("click", function () {
+                showNextBetLine(addBetLineButton);
             });
         }
 
@@ -4373,9 +4437,10 @@
 
         document.querySelectorAll(".js-bet-type-quick").forEach(function (button, index) {
             button.addEventListener("click", function () {
-                const targetSelect = betTypeSelects.find(function (select) {
+                const visibleBetTypeSelects = betTypeSelects.filter(isBetLineVisibleField);
+                const targetSelect = visibleBetTypeSelects.find(function (select) {
                     return !select.value;
-                }) || betTypeSelects[0];
+                }) || visibleBetTypeSelects[0] || betTypeSelects[0];
 
                 if (!targetSelect) {
                     return;
