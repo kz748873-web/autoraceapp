@@ -77,9 +77,11 @@ public class RaceRecord {
     private Integer betLine1Count;
     private Integer betLine1Amount;
     private String betLine2Type;
+    private String betLine2Marks;
     private Integer betLine2Count;
     private Integer betLine2Amount;
     private String betLine3Type;
+    private String betLine3Marks;
     private Integer betLine3Count;
     private Integer betLine3Amount;
     private Integer payoutAmount;
@@ -214,12 +216,16 @@ public class RaceRecord {
     public void setBetLine1Amount(Integer betLine1Amount) { this.betLine1Amount = betLine1Amount; }
     public String getBetLine2Type() { return betLine2Type; }
     public void setBetLine2Type(String betLine2Type) { this.betLine2Type = betLine2Type; }
+    public String getBetLine2Marks() { return betLine2Marks; }
+    public void setBetLine2Marks(String betLine2Marks) { this.betLine2Marks = betLine2Marks; }
     public Integer getBetLine2Count() { return betLine2Count; }
     public void setBetLine2Count(Integer betLine2Count) { this.betLine2Count = betLine2Count; }
     public Integer getBetLine2Amount() { return betLine2Amount; }
     public void setBetLine2Amount(Integer betLine2Amount) { this.betLine2Amount = betLine2Amount; }
     public String getBetLine3Type() { return betLine3Type; }
     public void setBetLine3Type(String betLine3Type) { this.betLine3Type = betLine3Type; }
+    public String getBetLine3Marks() { return betLine3Marks; }
+    public void setBetLine3Marks(String betLine3Marks) { this.betLine3Marks = betLine3Marks; }
     public Integer getBetLine3Count() { return betLine3Count; }
     public void setBetLine3Count(Integer betLine3Count) { this.betLine3Count = betLine3Count; }
     public Integer getBetLine3Amount() { return betLine3Amount; }

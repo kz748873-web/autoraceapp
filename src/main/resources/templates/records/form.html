@@ -2094,9 +2094,9 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-xl-6">
+                            <div class="col-12">
                                 <div class="bet-line-card is-simple p-3 h-100">
-                                    <div class="bet-line-title mb-3">購入内容と最終予想</div>
+                                    <div class="bet-line-title mb-3">購入行 1</div>
                                     <div class="mb-3">
                                         <label for="betLine1Type" class="form-label fw-semibold">賭け式</label>
                                         <select id="betLine1Type" th:field="*{betLine1Type}" class="form-select form-select-lg js-bet-type-select">
@@ -2123,7 +2123,7 @@
                                         <div class="col-md-4">
                                             <label for="betUnitAmount" class="form-label fw-semibold">1点あたり</label>
                                             <div class="input-group input-group-lg">
-                                                <input type="number" min="0" step="100" id="betUnitAmount" class="form-control js-bet-unit-amount" value="100" placeholder="100">
+                                                <input type="number" min="0" step="100" id="betUnitAmount" class="form-control js-bet-unit-amount" data-bet-line-unit="1" value="100" placeholder="100">
                                                 <span class="input-group-text">円</span>
                                             </div>
                                         </div>
@@ -2138,7 +2138,7 @@
                                     <div id="betFormulaPreview" class="bet-total-panel mt-3">0点 × 100円 = 0円</div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6" data-bet-extra-line="2" hidden>
+                            <div class="col-12" data-bet-extra-line="2" hidden>
                                 <div class="bet-line-card is-simple p-3 h-100">
                                     <div class="bet-line-title mb-3">購入行 2</div>
                                     <div class="mb-3">
@@ -2153,23 +2153,35 @@
                                             <option value="フリー入力">フリー入力</option>
                                         </select>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="betLine2Marks" class="form-label fw-semibold">買い目</label>
+                                        <input type="text" id="betLine2Marks" th:field="*{betLine2Marks}" class="form-control form-control-lg js-bet-mark-input" data-bet-line-mark="2" placeholder="例: 2-45 / 3-678-678">
+                                        <p class="field-caption mb-0">追加行も同じ形式で点数と金額を計算できます。</p>
+                                    </div>
                                     <div class="row g-3">
-                                        <div class="col-6">
+                                        <div class="col-md-4">
                                             <label for="betLine2Count" class="form-label fw-semibold">点数</label>
-                                            <input type="number" min="0" id="betLine2Count" th:field="*{betLine2Count}" class="form-control form-control-lg" placeholder="3">
+                                            <input type="number" min="0" id="betLine2Count" th:field="*{betLine2Count}" class="form-control form-control-lg js-bet-point-count" placeholder="3">
                                         </div>
-                                        <div class="col-6">
-                                            <label for="betLine2Amount" class="form-label fw-semibold">金額</label>
+                                        <div class="col-md-4">
+                                            <label for="betLine2UnitAmount" class="form-label fw-semibold">1点あたり</label>
                                             <div class="input-group input-group-lg">
-                                                <input type="number" min="0" id="betLine2Amount" th:field="*{betLine2Amount}" class="form-control js-bet-amount" placeholder="300">
+                                                <input type="number" min="0" step="100" id="betLine2UnitAmount" class="form-control js-bet-unit-amount" data-bet-line-unit="2" value="100" placeholder="100">
+                                                <span class="input-group-text">円</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="betLine2Amount" class="form-label fw-semibold">合計購入金額</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="number" min="0" id="betLine2Amount" th:field="*{betLine2Amount}" class="form-control js-bet-amount" placeholder="300" readonly>
                                                 <span class="input-group-text">円</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="field-caption mb-0">買い方を分けたいときだけ2行目を使えば十分です。</p>
+                                    <div id="betLine2FormulaPreview" class="bet-total-panel mt-3">0点 × 100円 = 0円</div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6" data-bet-extra-line="3" hidden>
+                            <div class="col-12" data-bet-extra-line="3" hidden>
                                 <div class="bet-line-card is-simple p-3 h-100">
                                     <div class="bet-line-title mb-3">購入行 3</div>
                                     <div class="mb-3">
@@ -2184,20 +2196,32 @@
                                             <option value="フリー入力">フリー入力</option>
                                         </select>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="betLine3Marks" class="form-label fw-semibold">買い目</label>
+                                        <input type="text" id="betLine3Marks" th:field="*{betLine3Marks}" class="form-control form-control-lg js-bet-mark-input" data-bet-line-mark="3" placeholder="例: 5-127 / 16-1678-1678">
+                                        <p class="field-caption mb-0">押さえや別案の買い目を同じ形で整理できます。</p>
+                                    </div>
                                     <div class="row g-3">
-                                        <div class="col-6">
+                                        <div class="col-md-4">
                                             <label for="betLine3Count" class="form-label fw-semibold">点数</label>
-                                            <input type="number" min="0" id="betLine3Count" th:field="*{betLine3Count}" class="form-control form-control-lg" placeholder="2">
+                                            <input type="number" min="0" id="betLine3Count" th:field="*{betLine3Count}" class="form-control form-control-lg js-bet-point-count" placeholder="2">
                                         </div>
-                                        <div class="col-6">
-                                            <label for="betLine3Amount" class="form-label fw-semibold">金額</label>
+                                        <div class="col-md-4">
+                                            <label for="betLine3UnitAmount" class="form-label fw-semibold">1点あたり</label>
                                             <div class="input-group input-group-lg">
-                                                <input type="number" min="0" id="betLine3Amount" th:field="*{betLine3Amount}" class="form-control js-bet-amount" placeholder="200">
+                                                <input type="number" min="0" step="100" id="betLine3UnitAmount" class="form-control js-bet-unit-amount" data-bet-line-unit="3" value="100" placeholder="100">
+                                                <span class="input-group-text">円</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="betLine3Amount" class="form-label fw-semibold">合計購入金額</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="number" min="0" id="betLine3Amount" th:field="*{betLine3Amount}" class="form-control js-bet-amount" placeholder="200" readonly>
                                                 <span class="input-group-text">円</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="field-caption mb-0">予備の買い方があるときだけ3行目を使えます。</p>
+                                    <div id="betLine3FormulaPreview" class="bet-total-panel mt-3">0点 × 100円 = 0円</div>
                                 </div>
                             </div>
                         </div>
@@ -2680,12 +2704,23 @@
         return normalizedUnit;
     }
 
-    function updatePrimaryBetLineFromMarks() {
-        const markInput = document.getElementById("finalPrediction");
-        const countField = document.getElementById("betLine1Count");
-        const amountField = document.getElementById("betLine1Amount");
-        const unitInput = document.getElementById("betUnitAmount");
-        const formulaPreview = document.getElementById("betFormulaPreview");
+    function getBetLineFieldIds(lineNumber) {
+        return {
+            mark: lineNumber === 1 ? "finalPrediction" : "betLine" + lineNumber + "Marks",
+            count: "betLine" + lineNumber + "Count",
+            amount: "betLine" + lineNumber + "Amount",
+            unit: lineNumber === 1 ? "betUnitAmount" : "betLine" + lineNumber + "UnitAmount",
+            preview: lineNumber === 1 ? "betFormulaPreview" : "betLine" + lineNumber + "FormulaPreview"
+        };
+    }
+
+    function updateBetLineCalculation(lineNumber) {
+        const fieldIds = getBetLineFieldIds(lineNumber);
+        const markInput = document.getElementById(fieldIds.mark);
+        const countField = document.getElementById(fieldIds.count);
+        const amountField = document.getElementById(fieldIds.amount);
+        const unitInput = document.getElementById(fieldIds.unit);
+        const formulaPreview = document.getElementById(fieldIds.preview);
         const calculatedPoints = markInput ? countBetMarkPoints(markInput.value) : 0;
 
         if (countField && calculatedPoints > 0) {
@@ -2710,8 +2745,12 @@
         }
     }
 
+    function updateBetLineCalculations() {
+        [1, 2, 3].forEach(updateBetLineCalculation);
+    }
+
     function updateBetSummary() {
-        updatePrimaryBetLineFromMarks();
+        updateBetLineCalculations();
 
         const total = Array.from(document.querySelectorAll(".js-bet-amount")).reduce(function (sum, input) {
             return sum + parseIntegerValue(input.value);
@@ -4228,6 +4267,9 @@
 
     function betLineHasValue(line) {
         return Array.from(line.querySelectorAll("input, select, textarea")).some(function (field) {
+            if (field.classList.contains("js-bet-unit-amount")) {
+                return false;
+            }
             return String(field.value || "").trim() !== "";
         });
     }
@@ -4278,7 +4320,7 @@
         const trialInputs = document.querySelectorAll(".js-trial-time");
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
-        const primaryBetInputs = document.querySelectorAll(".js-bet-mark-input, .js-bet-unit-amount, .js-bet-point-count, #betLine1Type");
+        const betCalculationInputs = document.querySelectorAll(".js-bet-mark-input, .js-bet-unit-amount, .js-bet-point-count");
         const betTypeSelects = Array.from(document.querySelectorAll(".js-bet-type-select"));
         const addBetLineButton = document.querySelector(".js-add-bet-line");
         const resetAfterPreRaceButton = document.querySelector(".js-reset-after-pre-race");
@@ -4430,7 +4472,7 @@
             field.addEventListener("change", updateBetSummary);
         });
 
-        primaryBetInputs.forEach(function (field) {
+        betCalculationInputs.forEach(function (field) {
             field.addEventListener("input", updateBetSummary);
             field.addEventListener("change", updateBetSummary);
         });

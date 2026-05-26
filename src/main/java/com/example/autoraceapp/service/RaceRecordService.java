@@ -100,7 +100,9 @@ public class RaceRecordService {
         record.setRaceOverallNote("");
         record.setBetLine1Type("");
         record.setBetLine2Type("");
+        record.setBetLine2Marks("");
         record.setBetLine3Type("");
+        record.setBetLine3Marks("");
         record.setFinalPrediction("");
         record.setPredictionNote("");
         record.setRaceResult("");
@@ -192,7 +194,9 @@ public class RaceRecordService {
         record.setRaceOverallNote(trimToEmpty(record.getRaceOverallNote()));
         record.setBetLine1Type(trimToEmpty(record.getBetLine1Type()));
         record.setBetLine2Type(trimToEmpty(record.getBetLine2Type()));
+        record.setBetLine2Marks(trimToEmpty(record.getBetLine2Marks()));
         record.setBetLine3Type(trimToEmpty(record.getBetLine3Type()));
+        record.setBetLine3Marks(trimToEmpty(record.getBetLine3Marks()));
         record.setBetType(trimToEmpty(record.getBetType()));
         record.setFinalPrediction(trimToEmpty(record.getFinalPrediction()));
         record.setPredictionNote(trimToEmpty(record.getPredictionNote()));
