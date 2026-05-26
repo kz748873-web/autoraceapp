@@ -2302,10 +2302,29 @@
                 </div>
                 <div class="record-submit-actions">
                     <button type="submit" class="btn btn-primary btn-lg">この内容で登録する</button>
+                    <button type="button" class="btn btn-outline-danger btn-lg js-reset-after-pre-race">リセット</button>
                     <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">一覧へ戻る</a>
                 </div>
             </div>
         </form>
+
+        <div class="modal fade" id="recordConfirmModal" tabindex="-1" aria-labelledby="recordConfirmModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title h5" id="recordConfirmModalTitle">確認</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="recordConfirmModalMessage" class="mb-0" style="white-space: pre-line;">この内容でよろしいですか？</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" id="recordConfirmModalCancel" data-bs-dismiss="modal">キャンセル</button>
+                        <button type="button" class="btn btn-primary" id="recordConfirmModalConfirm">実行する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <div th:replace="~{layout/footer :: siteFooter}"></div>
@@ -3955,6 +3974,148 @@
         });
     }
 
+    function getRecordListUrl(form) {
+        return form && form.dataset.recordBaseUrl ? form.dataset.recordBaseUrl : "/records";
+    }
+
+    function showRecordConfirmModal(options) {
+        const dialogOptions = options || {};
+        const title = dialogOptions.title || "確認";
+        const message = dialogOptions.message || "この内容でよろしいですか？";
+        const confirmText = dialogOptions.confirmText || "実行する";
+        const cancelText = dialogOptions.cancelText || "キャンセル";
+        const fallbackConfirm = function () {
+            return Promise.resolve(window.confirm(message));
+        };
+        const modalElement = document.getElementById("recordConfirmModal");
+
+        if (!modalElement || !window.bootstrap || !window.bootstrap.Modal) {
+            return fallbackConfirm();
+        }
+
+        const titleElement = document.getElementById("recordConfirmModalTitle");
+        const messageElement = document.getElementById("recordConfirmModalMessage");
+        const confirmButton = document.getElementById("recordConfirmModalConfirm");
+        const cancelButton = document.getElementById("recordConfirmModalCancel");
+
+        if (!confirmButton) {
+            return fallbackConfirm();
+        }
+
+        if (titleElement) {
+            titleElement.textContent = title;
+        }
+        if (messageElement) {
+            messageElement.textContent = message;
+        }
+        confirmButton.textContent = confirmText;
+        if (cancelButton) {
+            cancelButton.textContent = cancelText;
+        }
+
+        let modalInstance;
+        try {
+            modalInstance = typeof window.bootstrap.Modal.getOrCreateInstance === "function"
+                ? window.bootstrap.Modal.getOrCreateInstance(modalElement, { backdrop: "static" })
+                : new window.bootstrap.Modal(modalElement, { backdrop: "static" });
+        } catch (error) {
+            return fallbackConfirm();
+        }
+
+        return new Promise(function (resolve) {
+            let resolved = false;
+            let confirmedOnHide = false;
+
+            function cleanup() {
+                confirmButton.removeEventListener("click", onConfirm);
+                modalElement.removeEventListener("hidden.bs.modal", onHidden);
+            }
+
+            function finish(confirmed) {
+                if (resolved) {
+                    return;
+                }
+                resolved = true;
+                cleanup();
+                resolve(confirmed);
+            }
+
+            function onConfirm() {
+                confirmedOnHide = true;
+                try {
+                    modalInstance.hide();
+                } catch (error) {
+                    finish(true);
+                }
+            }
+
+            function onHidden() {
+                finish(confirmedOnHide);
+            }
+
+            confirmButton.addEventListener("click", onConfirm);
+            modalElement.addEventListener("hidden.bs.modal", onHidden);
+
+            try {
+                modalInstance.show();
+            } catch (error) {
+                finish(window.confirm(message));
+            }
+        });
+    }
+
+    function submitRecordFormAfterConfirm(form) {
+        form.dataset.skipSubmitConfirm = "true";
+
+        if (typeof form.requestSubmit === "function") {
+            form.requestSubmit();
+            return;
+        }
+
+        syncStartLineupPositionsField();
+        enableFormFieldsForSubmit(form);
+        form.submit();
+    }
+
+    function showSectionSavedChoice(form) {
+        return showRecordConfirmModal({
+            title: "保存しました",
+            message: "保存しました。\nこのまま次の入力を続けますか？",
+            confirmText: "一覧で確認する",
+            cancelText: "続けて入力する"
+        }).then(function (openList) {
+            if (openList) {
+                window.location.assign(getRecordListUrl(form));
+            }
+        });
+    }
+
+    function resetAfterPreRaceSections(sectionStoragePrefix) {
+        ["same-day", "result-review"].forEach(function (sectionId) {
+            const section = document.querySelector("[data-section-id='" + sectionId + "']");
+            if (!section) {
+                return;
+            }
+
+            clearSection(section);
+            removeSectionStorageItem(sectionStoragePrefix + sectionId);
+            updateSectionStatus(section, false);
+            setSectionDisabled(section, false);
+        });
+
+        const startDiagramSection = document.querySelector("[data-section-id='start-diagram']");
+        if (startDiagramSection) {
+            removeSectionStorageItem(sectionStoragePrefix + "start-diagram");
+            updateSectionStatus(startDiagramSection, false);
+            setSectionDisabled(startDiagramSection, false);
+        }
+
+        resetStartDiagramTokens();
+        syncStartLineupPositionsField();
+        updateTrialTimeAssist();
+        updateBetSummary();
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         initializeRecordFormHeader();
         initializeRecordFormPrefillFromParams();
@@ -3965,6 +4126,7 @@
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
         const betTypeSelects = Array.from(document.querySelectorAll(".js-bet-type-select"));
+        const resetAfterPreRaceButton = document.querySelector(".js-reset-after-pre-race");
         const recordIdField = form ? form.querySelector("[name='id']") : null;
         const recordStorageId = recordIdField && recordIdField.value
             ? "record-" + recordIdField.value
@@ -3984,12 +4146,32 @@
                     enableFormFieldsForSubmit(form);
                     return;
                 }
-                if (!window.confirm("この内容で登録しますか？")) {
-                    event.preventDefault();
-                    return;
-                }
-                syncStartLineupPositionsField();
-                enableFormFieldsForSubmit(form);
+                event.preventDefault();
+                showRecordConfirmModal({
+                    title: "登録確認",
+                    message: "この内容で登録しますか？",
+                    confirmText: "登録する"
+                }).then(function (confirmed) {
+                    if (!confirmed) {
+                        return;
+                    }
+                    submitRecordFormAfterConfirm(form);
+                });
+            });
+        }
+
+        if (resetAfterPreRaceButton) {
+            resetAfterPreRaceButton.addEventListener("click", function () {
+                showRecordConfirmModal({
+                    title: "リセット確認",
+                    message: "入力内容をリセットしますか？\n前日予想まで戻ります。",
+                    confirmText: "リセットする"
+                }).then(function (confirmed) {
+                    if (!confirmed) {
+                        return;
+                    }
+                    resetAfterPreRaceSections(sectionStoragePrefix);
+                });
             });
         }
 
@@ -4022,38 +4204,51 @@
 
             if (saveButton) {
                 saveButton.addEventListener("click", function () {
-                    if (!window.confirm("この項目を現在のレース記録に保存しますか？")) {
-                        return;
-                    }
-
                     if (!form) {
                         return;
                     }
 
-                    saveButton.disabled = true;
-                    saveCurrentRecordSection(form)
-                        .then(function () {
-                            removeSectionStorageItem(storageKey);
-                            updateSectionStatus(section, true);
-                            setSectionDisabled(section, true);
-                        })
-                        .catch(function () {
-                            window.alert("保存に失敗しました。時間を置いてもう一度お試しください。");
-                        })
-                        .finally(function () {
-                            saveButton.disabled = false;
-                        });
+                    showRecordConfirmModal({
+                        title: "項目保存",
+                        message: "この項目を現在のレース記録に保存しますか？",
+                        confirmText: "保存する"
+                    }).then(function (confirmed) {
+                        if (!confirmed) {
+                            return;
+                        }
+
+                        saveButton.disabled = true;
+                        saveCurrentRecordSection(form)
+                            .then(function () {
+                                removeSectionStorageItem(storageKey);
+                                updateSectionStatus(section, true);
+                                setSectionDisabled(section, true);
+                                return showSectionSavedChoice(form);
+                            })
+                            .catch(function () {
+                                window.alert("保存に失敗しました。時間を置いてもう一度お試しください。");
+                            })
+                            .finally(function () {
+                                saveButton.disabled = false;
+                            });
+                    });
                 });
             }
 
             if (editButton) {
                 editButton.addEventListener("click", function () {
-                    if (!window.confirm("このセクションを編集できる状態に戻しますか？")) {
-                        return;
-                    }
-                    removeSectionStorageItem(storageKey);
-                    updateSectionStatus(section, false);
-                    setSectionDisabled(section, false);
+                    showRecordConfirmModal({
+                        title: "編集確認",
+                        message: "このセクションを編集できる状態に戻しますか？",
+                        confirmText: "編集する"
+                    }).then(function (confirmed) {
+                        if (!confirmed) {
+                            return;
+                        }
+                        removeSectionStorageItem(storageKey);
+                        updateSectionStatus(section, false);
+                        setSectionDisabled(section, false);
+                    });
                 });
             }
         });
