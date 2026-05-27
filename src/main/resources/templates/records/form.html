@@ -1035,27 +1035,6 @@
             color: var(--deep);
         }
 
-        .bet-type-quick-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 0.55rem;
-        }
-
-        .bet-type-chip {
-            min-height: 2.8rem;
-            border-radius: 999px;
-            font-weight: 700;
-            border: 1px solid color-mix(in srgb, var(--border-color) 82%, white);
-            background: #ffffff;
-            color: var(--deep);
-        }
-
-        .bet-type-chip:hover,
-        .bet-type-chip:focus {
-            background: var(--soft-surface);
-            color: var(--deep);
-        }
-
         .bet-total-panel {
             border: 1px dashed var(--card);
             border-radius: 1rem;
@@ -1332,10 +1311,6 @@
 
             .summary-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .bet-type-quick-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .section-shell[data-section-id="start-diagram"] .sub-block {
@@ -2077,21 +2052,9 @@
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                             <div>
                                 <h3 class="h5 fw-bold mb-1">購入内容と最終予想</h3>
-                                <p class="section-subtitle mb-0">賭け式はよく使う種類をすぐ選べるようにしています。金額は入れたその場で合計へ反映されます。</p>
+                                <p class="section-subtitle mb-0">金額は入れたその場で合計へ反映されます。</p>
                             </div>
                             <div class="summary-pill">入力ストレスを軽くする</div>
-                        </div>
-                        <div class="bet-total-panel mb-3">
-                            <div class="summary-label">よく使う賭け式をすぐ入れる</div>
-                            <div class="bet-type-quick-grid">
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="3連単">3連単</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="3連複">3連複</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="2連単">2連単</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="2連複">2連複</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="ワイド">ワイド</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="フリー入力">フリー入力</button>
-                                <button type="button" class="btn bet-type-chip js-bet-type-quick" data-bet-type="">クリア</button>
-                            </div>
                         </div>
                         <div class="row g-3">
                             <div class="col-12">
@@ -4280,11 +4243,6 @@
         return Array.from(document.querySelectorAll("[data-bet-extra-line]"));
     }
 
-    function isBetLineVisibleField(field) {
-        const extraLine = field.closest("[data-bet-extra-line]");
-        return !extraLine || !extraLine.hidden;
-    }
-
     function betLineHasValue(line) {
         return Array.from(line.querySelectorAll("input, select, textarea")).some(function (field) {
             if (field.classList.contains("js-bet-unit-amount")) {
@@ -4499,26 +4457,6 @@
 
         betTypeSelects.forEach(function (field) {
             field.addEventListener("change", updateBetSummary);
-        });
-
-        document.querySelectorAll(".js-bet-type-quick").forEach(function (button, index) {
-            button.addEventListener("click", function () {
-                const visibleBetTypeSelects = betTypeSelects.filter(isBetLineVisibleField);
-                const targetSelect = visibleBetTypeSelects.find(function (select) {
-                    return !select.value;
-                }) || visibleBetTypeSelects[0] || betTypeSelects[0];
-
-                if (!targetSelect) {
-                    return;
-                }
-
-                targetSelect.value = button.dataset.betType;
-                targetSelect.dispatchEvent(new Event("change", { bubbles: true }));
-
-                if (button.dataset.betType) {
-                    targetSelect.focus();
-                }
-            });
         });
 
         updateTrialTimeAssist();
