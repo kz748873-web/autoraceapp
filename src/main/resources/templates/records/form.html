@@ -1029,8 +1029,8 @@
 
         .trial-input-row {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 0.65rem;
+            grid-template-columns: minmax(7.2rem, 1fr) max-content;
+            gap: 0.5rem;
             align-items: stretch;
         }
 
@@ -1040,7 +1040,7 @@
             align-self: stretch;
             flex-direction: column;
             gap: 0.45rem;
-            min-width: 3.2rem;
+            min-width: 2.45rem;
             min-height: 0;
             margin-top: 0;
             flex-wrap: nowrap;
@@ -1068,8 +1068,8 @@
         .trial-mark-badge,
         .trial-rank-badge {
             min-height: 1.55rem;
-            padding: 0.18rem 0.48rem;
-            font-size: 0.78rem;
+            padding: 0.18rem 0.42rem;
+            font-size: 0.76rem;
             line-height: 1;
             white-space: nowrap;
         }
@@ -1082,9 +1082,12 @@
         }
 
         .trial-input-card .js-trial-time {
-            min-width: 0;
+            min-width: 7.2rem;
             width: 100%;
+            padding-right: 0.45rem;
+            padding-left: 0.45rem;
             font-weight: 800;
+            font-variant-numeric: tabular-nums;
             text-align: center;
         }
 
@@ -1467,11 +1470,12 @@
             }
 
             .trial-input-row {
-                grid-template-columns: minmax(0, 1fr) auto;
+                grid-template-columns: minmax(7.2rem, 1fr) max-content;
             }
 
             .trial-input-meta {
                 align-items: flex-end;
+                min-width: 2.45rem;
                 justify-content: center;
             }
 
@@ -1481,6 +1485,17 @@
                 min-height: 1.9rem;
                 padding: 0.28rem 0.65rem;
                 font-size: 0.84rem;
+            }
+
+            .trial-mark-badge,
+            .trial-rank-badge {
+                min-height: 1.5rem;
+                padding: 0.16rem 0.4rem;
+                font-size: 0.75rem;
+            }
+
+            .trial-input-card .js-trial-time {
+                min-width: 7.2rem;
             }
 
             .record-submit-panel {
@@ -2096,7 +2111,7 @@
                                     <div class="summary-pill">速い順に自動順位</div>
                                 </div>
                                 <div class="row g-3">
-                                    <div class="col-md-6 col-xl-3" th:each="entry : ${record.trialTimeEntries}">
+                                    <div class="col-md-6 col-xl-4 col-xxl-3" th:each="entry : ${record.trialTimeEntries}">
                                         <div class="trial-input-card p-3 h-100" th:classappend="${'lane-' + entry.laneNumber}">
                                             <label th:for="${entry.fieldName}" class="form-label fw-semibold">
                                                 <span class="trial-lane-number" th:text="${entry.laneNumber}">1</span>
