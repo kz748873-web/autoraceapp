@@ -968,21 +968,83 @@
             box-shadow: 0 0.45rem 1.1rem rgba(15, 23, 42, 0.045);
         }
 
+        .trial-input-card {
+            position: relative;
+            overflow: hidden;
+            border-left: 0.28rem solid var(--trial-lane-color, var(--card));
+            background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+        }
+
+        .trial-input-card.lane-1 { --trial-lane-color: #334155; }
+        .trial-input-card.lane-2 { --trial-lane-color: #111111; }
+        .trial-input-card.lane-3 { --trial-lane-color: #e11d2f; }
+        .trial-input-card.lane-4 { --trial-lane-color: #1d4ed8; }
+        .trial-input-card.lane-5 { --trial-lane-color: #d9a90f; }
+        .trial-input-card.lane-6 { --trial-lane-color: #16a34a; }
+        .trial-input-card.lane-7 { --trial-lane-color: #f97316; }
+        .trial-input-card.lane-8 { --trial-lane-color: #db2777; }
+
+        .trial-input-card .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin-bottom: 0.65rem;
+            color: var(--deep);
+        }
+
+        .trial-lane-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            border: 1px solid var(--trial-lane-color, var(--card));
+            font-size: 0.92rem;
+            font-weight: 900;
+        }
+
+        .trial-input-card.lane-1 .trial-lane-number { background: #ffffff; color: #111827; border-color: #334155; }
+        .trial-input-card.lane-2 .trial-lane-number { background: #111111; color: #ffffff; border-color: #111111; }
+        .trial-input-card.lane-3 .trial-lane-number { background: #e11d2f; color: #ffffff; border-color: #e11d2f; }
+        .trial-input-card.lane-4 .trial-lane-number { background: #1d4ed8; color: #ffffff; border-color: #1d4ed8; }
+        .trial-input-card.lane-5 .trial-lane-number { background: #facc15; color: #111111; border-color: #d9a90f; }
+        .trial-input-card.lane-6 .trial-lane-number { background: #16a34a; color: #ffffff; border-color: #16a34a; }
+        .trial-input-card.lane-7 .trial-lane-number { background: #f97316; color: #ffffff; border-color: #f97316; }
+        .trial-input-card.lane-8 .trial-lane-number { background: #ec4899; color: #111111; border-color: #db2777; }
+
+        .trial-program-rider-name {
+            min-width: 0;
+            overflow: hidden;
+            color: var(--deep);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .trial-program-rider-name.is-empty {
+            color: var(--sub);
+            font-weight: 700;
+        }
+
         .trial-input-row {
             display: grid;
             grid-template-columns: minmax(0, 1fr) auto;
-            gap: 0.55rem;
-            align-items: center;
+            gap: 0.65rem;
+            align-items: stretch;
         }
 
         .trial-input-meta {
             display: flex;
-            align-items: center;
+            align-items: flex-end;
+            align-self: stretch;
+            flex-direction: column;
             gap: 0.45rem;
-            min-height: 2rem;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
+            min-width: 3.2rem;
+            min-height: 0;
+            margin-top: 0;
+            flex-wrap: nowrap;
+            justify-content: center;
         }
 
         .trial-mark-badge,
@@ -1003,6 +1065,15 @@
             color: var(--accent-strong);
         }
 
+        .trial-mark-badge,
+        .trial-rank-badge {
+            min-height: 1.55rem;
+            padding: 0.18rem 0.48rem;
+            font-size: 0.78rem;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
         .trial-rank-badge,
         .summary-pill {
             background: var(--soft-surface);
@@ -1012,11 +1083,16 @@
 
         .trial-input-card .js-trial-time {
             min-width: 0;
+            width: 100%;
+            font-weight: 800;
+            text-align: center;
         }
 
         .trial-rider-note {
+            display: flex;
+            align-items: center;
             min-height: 1.4rem;
-            margin-top: 0.55rem;
+            margin-top: 0.6rem;
             font-size: 0.82rem;
             color: var(--sub);
         }
@@ -1391,11 +1467,12 @@
             }
 
             .trial-input-row {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr) auto;
             }
 
             .trial-input-meta {
-                justify-content: flex-start;
+                align-items: flex-end;
+                justify-content: center;
             }
 
             .trial-mark-badge,
@@ -2020,8 +2097,12 @@
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-md-6 col-xl-3" th:each="entry : ${record.trialTimeEntries}">
-                                        <div class="trial-input-card p-3 h-100">
-                                            <label th:for="${entry.fieldName}" class="form-label fw-semibold" th:text="${entry.laneNumber == 1 ? '1 白' : (entry.laneNumber == 2 ? '2 黒' : (entry.laneNumber == 3 ? '3 赤' : (entry.laneNumber == 4 ? '4 青' : (entry.laneNumber == 5 ? '5 黄' : (entry.laneNumber == 6 ? '6 緑' : (entry.laneNumber == 7 ? '7 オレンジ' : '8 ピンク'))))))}">1 白</label>
+                                        <div class="trial-input-card p-3 h-100" th:classappend="${'lane-' + entry.laneNumber}">
+                                            <label th:for="${entry.fieldName}" class="form-label fw-semibold">
+                                                <span class="trial-lane-number" th:text="${entry.laneNumber}">1</span>
+                                                <span class="trial-program-rider-name js-trial-program-rider-name"
+                                                      th:attr="data-lane=${entry.laneNumber}">選手名未入力</span>
+                                            </label>
                                             <div class="trial-input-row">
                                                 <input type="text"
                                                        th:id="${entry.fieldName}"
@@ -2526,8 +2607,24 @@
         return riderMap;
     }
 
+    function buildProgramRiderMap() {
+        const riderMap = new Map();
+
+        [1, 2, 3, 4, 5, 6, 7, 8].forEach(function (lane) {
+            const nameField = document.getElementById("programRider" + lane + "Name");
+            const name = nameField ? nameField.value.trim() : "";
+
+            if (name) {
+                riderMap.set(lane, name);
+            }
+        });
+
+        return riderMap;
+    }
+
     function updateTrialTimeAssist() {
         const riderMap = buildFeaturedRiderMap();
+        const programRiderMap = buildProgramRiderMap();
         const cards = Array.from(document.querySelectorAll(".trial-input-card"));
         const rankedItems = [];
 
@@ -2535,12 +2632,19 @@
             const input = card.querySelector(".js-trial-time");
             const lane = Number.parseInt(input.dataset.lane, 10);
             const parsedTime = parseTrialTimeValue(input.value);
+            const programRiderName = card.querySelector(".js-trial-program-rider-name");
+            const programName = programRiderMap.get(lane) || "";
 
             if (parsedTime !== null) {
                 rankedItems.push({
                     lane: lane,
                     value: parsedTime
                 });
+            }
+
+            if (programRiderName) {
+                programRiderName.textContent = programName || "選手名未入力";
+                programRiderName.classList.toggle("is-empty", !programName);
             }
 
             const riderInfo = riderMap.get(lane);
@@ -4295,6 +4399,7 @@
 
         const form = document.getElementById("raceRecordForm");
         const trialInputs = document.querySelectorAll(".js-trial-time");
+        const programRiderFields = document.querySelectorAll(".program-rider-input");
         const featuredFields = document.querySelectorAll("[id^='featuredRider'][id$='Number'], [id^='featuredRider'][id$='Mark'], [id^='featuredRider'][id$='Name']");
         const betInputs = document.querySelectorAll(".js-bet-amount, .js-payout-amount");
         const betCalculationInputs = document.querySelectorAll(".js-bet-mark-input, .js-bet-unit-amount, .js-bet-point-count");
@@ -4437,6 +4542,11 @@
 
         trialInputs.forEach(function (input) {
             input.addEventListener("input", updateTrialTimeAssist);
+        });
+
+        programRiderFields.forEach(function (field) {
+            field.addEventListener("input", updateTrialTimeAssist);
+            field.addEventListener("change", updateTrialTimeAssist);
         });
 
         featuredFields.forEach(function (field) {
