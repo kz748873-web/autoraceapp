@@ -1047,6 +1047,13 @@
             justify-content: center;
         }
 
+        .trial-rank-row {
+            display: flex;
+            grid-column: 1;
+            justify-content: center;
+            min-height: 1.65rem;
+        }
+
         .trial-mark-badge,
         .trial-rank-badge,
         .summary-pill {
@@ -2127,6 +2134,8 @@
                                                        th:attr="data-lane=${entry.laneNumber}">
                                                 <div class="trial-input-meta">
                                                     <span class="trial-mark-badge d-none js-trial-mark"></span>
+                                                </div>
+                                                <div class="trial-rank-row">
                                                     <span class="trial-rank-badge d-none js-trial-rank"></span>
                                                 </div>
                                             </div>
