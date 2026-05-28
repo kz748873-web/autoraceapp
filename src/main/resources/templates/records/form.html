@@ -1789,14 +1789,14 @@
                                 <h3 class="h5 fw-bold mb-1">注目選手</h3>
                                 <p class="section-subtitle mb-0">印と車番を先に入れておくと、当日予想の試走タイム表示にも連動します。</p>
                             </div>
-                            <div class="summary-pill">印は ◎ / ○ / △ / 穴</div>
+                            <div class="summary-pill">本命 / 対抗 / 連下 / 穴</div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-lg-4">
+                            <div class="col-md-6">
                                 <div class="bet-line-card p-3 h-100">
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label for="featuredRider1Name" class="form-label fw-semibold">注目選手 1</label>
+                                            <label for="featuredRider1Name" class="form-label fw-semibold">注目選手1：本命</label>
                                             <input type="text" id="featuredRider1Name" th:field="*{featuredRider1Name}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト">
                                         </div>
                                         <div class="col-6">
@@ -1826,11 +1826,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-md-6">
                                 <div class="bet-line-card p-3 h-100">
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label for="featuredRider2Name" class="form-label fw-semibold">注目選手 2</label>
+                                            <label for="featuredRider2Name" class="form-label fw-semibold">注目選手2：対抗</label>
                                             <input type="text" id="featuredRider2Name" th:field="*{featuredRider2Name}" class="form-control form-control-lg" placeholder="例: 橘ミナト">
                                         </div>
                                         <div class="col-6">
@@ -1860,11 +1860,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-md-6">
                                 <div class="bet-line-card p-3 h-100">
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label for="featuredRider3Name" class="form-label fw-semibold">注目選手 3</label>
+                                            <label for="featuredRider3Name" class="form-label fw-semibold">注目選手3：連下</label>
                                             <input type="text" id="featuredRider3Name" th:field="*{featuredRider3Name}" class="form-control form-control-lg" placeholder="例: 白石ルイ">
                                         </div>
                                         <div class="col-6">
@@ -1894,6 +1894,40 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="bet-line-card p-3 h-100">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label for="featuredRider4Name" class="form-label fw-semibold">注目選手4：穴</label>
+                                            <input type="text" id="featuredRider4Name" class="form-control form-control-lg js-featured-rider4-part" placeholder="例: 佐伯レイ">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="featuredRider4Number" class="form-label fw-semibold">車番（1 白〜8 ピンク）</label>
+                                            <select id="featuredRider4Number" class="form-select form-select-lg js-featured-rider4-part">
+                                                <option value="">選択</option>
+                                                <option value="1">1 白</option>
+                                                <option value="2">2 黒</option>
+                                                <option value="3">3 赤</option>
+                                                <option value="4">4 青</option>
+                                                <option value="5">5 黄</option>
+                                                <option value="6">6 緑</option>
+                                                <option value="7">7 オレンジ</option>
+                                                <option value="8">8 ピンク</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="featuredRider4Mark" class="form-label fw-semibold">印</label>
+                                            <select id="featuredRider4Mark" class="form-select form-select-lg js-featured-rider4-part">
+                                                <option value="">選択</option>
+                                                <option value="◎">◎</option>
+                                                <option value="○">○</option>
+                                                <option value="△">△</option>
+                                                <option value="穴" selected>穴</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1905,7 +1939,7 @@
                             </div>
                             <div class="summary-pill">判断メモ</div>
                         </div>
-                        <input type="hidden" th:field="*{preRacePrediction}">
+                        <input type="hidden" th:field="*{preRacePrediction}" data-featured-rider4-storage>
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="preRaceNote" class="form-label fw-semibold">前日予想メモ</label>
@@ -2727,10 +2761,124 @@
         return Number.isFinite(normalized) ? normalized : null;
     }
 
+    function getFeaturedRider4Controls() {
+        return {
+            storage: document.querySelector("[data-featured-rider4-storage]"),
+            name: document.getElementById("featuredRider4Name"),
+            number: document.getElementById("featuredRider4Number"),
+            mark: document.getElementById("featuredRider4Mark")
+        };
+    }
+
+    function readFeaturedRider4Line(value, label) {
+        const match = String(value || "").match(new RegExp(label + "[：:]\\s*([^\\n]+)"));
+        return match ? match[1].trim() : "";
+    }
+
+    function isStructuredFeaturedRider4(value) {
+        return /(?:^|\n)注目選手4[：:]/.test(String(value || ""));
+    }
+
+    function setFeaturedRider4ControlValue(control, value) {
+        if (control) {
+            control.value = value || "";
+        }
+    }
+
+    function initializeFeaturedRider4Controls() {
+        const controls = getFeaturedRider4Controls();
+        const storage = controls.storage;
+
+        if (!storage) {
+            return;
+        }
+
+        const savedValue = storage.value || "";
+        storage.dataset.featuredRider4Dirty = "false";
+        storage.dataset.featuredRider4PreserveRaw = "false";
+
+        if (!savedValue) {
+            return;
+        }
+
+        if (!isStructuredFeaturedRider4(savedValue)) {
+            storage.dataset.featuredRider4PreserveRaw = "true";
+            return;
+        }
+
+        setFeaturedRider4ControlValue(controls.name, readFeaturedRider4Line(savedValue, "選手名"));
+        setFeaturedRider4ControlValue(controls.number, readFeaturedRider4Line(savedValue, "車番").replace(/号車$/, ""));
+        setFeaturedRider4ControlValue(controls.mark, readFeaturedRider4Line(savedValue, "印"));
+        storage.dataset.featuredRider4PreserveRaw = "true";
+    }
+
+    function markFeaturedRider4Dirty() {
+        const storage = document.querySelector("[data-featured-rider4-storage]");
+
+        if (storage) {
+            storage.dataset.featuredRider4Dirty = "true";
+            storage.dataset.featuredRider4PreserveRaw = "false";
+        }
+    }
+
+    function syncFeaturedRider4Storage() {
+        const controls = getFeaturedRider4Controls();
+        const storage = controls.storage;
+
+        if (!storage) {
+            return;
+        }
+
+        if (storage.dataset.featuredRider4PreserveRaw === "true" && storage.dataset.featuredRider4Dirty !== "true") {
+            return;
+        }
+
+        const name = controls.name ? controls.name.value.trim() : "";
+        const number = controls.number ? controls.number.value : "";
+        const mark = controls.mark ? controls.mark.value : "";
+        const hasInput = name || number || (mark && mark !== "穴");
+
+        if (!hasInput) {
+            storage.value = "";
+            return;
+        }
+
+        const lines = ["注目選手4：穴"];
+
+        if (name) {
+            lines.push("選手名：" + name);
+        }
+        if (number) {
+            lines.push("車番：" + number + "号車");
+        }
+        if (mark) {
+            lines.push("印：" + mark);
+        }
+
+        storage.value = lines.join("\n");
+    }
+
+    function initializeFeaturedRider4InputEvents() {
+        initializeFeaturedRider4Controls();
+
+        document.querySelectorAll(".js-featured-rider4-part").forEach(function (field) {
+            field.addEventListener("input", function () {
+                markFeaturedRider4Dirty();
+                syncFeaturedRider4Storage();
+                updateTrialTimeAssist();
+            });
+            field.addEventListener("change", function () {
+                markFeaturedRider4Dirty();
+                syncFeaturedRider4Storage();
+                updateTrialTimeAssist();
+            });
+        });
+    }
+
     function buildFeaturedRiderMap() {
         const riderMap = new Map();
 
-        [1, 2, 3].forEach(function (index) {
+        [1, 2, 3, 4].forEach(function (index) {
             const numberField = document.getElementById("featuredRider" + index + "Number");
             const markField = document.getElementById("featuredRider" + index + "Mark");
             const nameField = document.getElementById("featuredRider" + index + "Name");
@@ -4475,6 +4623,7 @@
 
         syncStartLineupPositionsField();
         syncRaceResultField();
+        syncFeaturedRider4Storage();
         updateBetSummary();
 
         form.querySelectorAll("input, select, textarea").forEach(function (field) {
@@ -4638,6 +4787,7 @@
 
         syncStartLineupPositionsField();
         syncRaceResultField();
+        syncFeaturedRider4Storage();
         updateBetSummary();
         enableFormFieldsForSubmit(form);
         form.submit();
@@ -4764,6 +4914,7 @@
                 if (form.dataset.skipSubmitConfirm === "true") {
                     syncStartLineupPositionsField();
                     syncRaceResultField();
+                    syncFeaturedRider4Storage();
                     updateBetSummary();
                     enableFormFieldsForSubmit(form);
                     return;
@@ -4799,6 +4950,7 @@
 
         initializeBetLineVisibility(addBetLineButton);
         initializeRaceResultInputEvents();
+        initializeFeaturedRider4InputEvents();
 
         if (addBetLineButton) {
             addBetLineButton.addEventListener("click", function () {
