@@ -1650,7 +1650,7 @@
                     <div>
                         <div class="section-badge mb-2">1. 前日予想</div>
                         <h2 class="h4 fw-bold mb-2">前日予想を整理する</h2>
-                        <p class="section-subtitle mb-0">レース情報、番組表、注目選手、前日メモを上から順番に整えます。</p>
+                        <p class="section-subtitle mb-0">レース情報、番組表、注目選手、前日予想メモを上から順番に整えます。</p>
                     </div>
                     <div class="section-pill js-section-status">編集中</div>
                 </div>
@@ -1900,18 +1900,15 @@
                     <div class="sub-block p-4 mt-4">
                         <div class="sub-block-heading">
                             <div>
-                                <h3 class="h5 fw-bold mb-1">前日予想</h3>
-                                <p class="section-subtitle mb-0">番組表と注目選手を見比べながら、前日の見立てを文章で残します。</p>
+                                <h3 class="h5 fw-bold mb-1">前日予想メモ</h3>
+                                <p class="section-subtitle mb-0">番組表と注目選手を見比べながら、前日の見立てをまとめて残します。</p>
                             </div>
                             <div class="summary-pill">判断メモ</div>
                         </div>
+                        <input type="hidden" th:field="*{preRacePrediction}">
                         <div class="row g-3">
-                            <div class="col-lg-6">
-                                <label for="preRacePrediction" class="form-label fw-semibold">前日予想</label>
-                                <textarea id="preRacePrediction" th:field="*{preRacePrediction}" class="form-control" rows="5" placeholder="例: 蒼井ハヤトのスタート先行を本線に考える"></textarea>
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="preRaceNote" class="form-label fw-semibold">前日メモ</label>
+                            <div class="col-12">
+                                <label for="preRaceNote" class="form-label fw-semibold">前日予想メモ</label>
                                 <textarea id="preRaceNote" th:field="*{preRaceNote}" class="form-control" rows="5" placeholder="例: 橘ミナトは気配が良く、白石ルイは展開待ち。"></textarea>
                             </div>
                         </div>
