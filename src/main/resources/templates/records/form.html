@@ -1119,6 +1119,27 @@
             }
         }
 
+        .race-result-entry {
+            border: 1px solid var(--card);
+            border-radius: 0.9rem;
+            background: var(--soft-surface);
+            padding: 1rem;
+        }
+
+        .race-result-entry .field-caption {
+            margin-top: 0.35rem;
+        }
+
+        .race-result-mode-block[hidden] {
+            display: none !important;
+        }
+
+        .race-result-free-input {
+            min-height: 7rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
         .bet-line-card .form-label {
             margin-bottom: 0.4rem;
         }
@@ -2310,16 +2331,6 @@
 
                         <div class="row g-3 mt-1">
                             <div class="col-lg-6">
-                                <div class="bet-line-card p-3 h-100">
-                                    <label for="payoutAmount" class="form-label fw-semibold">払戻金額</label>
-                                    <div class="input-group input-group-lg">
-                                        <input type="number" min="0" id="payoutAmount" th:field="*{payoutAmount}" class="form-control js-payout-amount" placeholder="0">
-                                        <span class="input-group-text">円</span>
-                                    </div>
-                                    <p class="field-caption mb-0">レース後に入力すると収支が自動で反映されます。</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
                                 <div class="summary-card p-3 h-100">
                                     <div class="summary-grid">
                                         <div>
@@ -2368,8 +2379,110 @@
                     <div class="row g-4">
                         <div class="col-lg-4">
                             <div class="sub-block p-4 h-100">
-                                <label for="raceResult" class="form-label fw-semibold">レース結果</label>
-                                <input type="text" id="raceResult" th:field="*{raceResult}" class="form-control form-control-lg mb-3" placeholder="例: 1着 蒼井ハヤト / 2着 橘ミナト / 3着 白石ルイ">
+                                <input type="hidden" id="raceResult" th:field="*{raceResult}" data-race-result-field>
+
+                                <div class="race-result-entry mb-3">
+                                    <div class="mb-3">
+                                        <div class="form-label fw-semibold mb-1">レース結果</div>
+                                        <p class="field-caption mb-0">着順と競争タイムを結果として整理します。</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-6 col-md-3 col-lg-6">
+                                            <label for="raceResultFirstPlace" class="form-label fw-semibold">1着</label>
+                                            <select id="raceResultFirstPlace" class="form-select form-select-lg js-race-result-part">
+                                                <option value="">選択</option>
+                                                <option value="1">1号車</option>
+                                                <option value="2">2号車</option>
+                                                <option value="3">3号車</option>
+                                                <option value="4">4号車</option>
+                                                <option value="5">5号車</option>
+                                                <option value="6">6号車</option>
+                                                <option value="7">7号車</option>
+                                                <option value="8">8号車</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 col-md-3 col-lg-6">
+                                            <label for="raceResultSecondPlace" class="form-label fw-semibold">2着</label>
+                                            <select id="raceResultSecondPlace" class="form-select form-select-lg js-race-result-part">
+                                                <option value="">選択</option>
+                                                <option value="1">1号車</option>
+                                                <option value="2">2号車</option>
+                                                <option value="3">3号車</option>
+                                                <option value="4">4号車</option>
+                                                <option value="5">5号車</option>
+                                                <option value="6">6号車</option>
+                                                <option value="7">7号車</option>
+                                                <option value="8">8号車</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 col-md-3 col-lg-6">
+                                            <label for="raceResultThirdPlace" class="form-label fw-semibold">3着</label>
+                                            <select id="raceResultThirdPlace" class="form-select form-select-lg js-race-result-part">
+                                                <option value="">選択</option>
+                                                <option value="1">1号車</option>
+                                                <option value="2">2号車</option>
+                                                <option value="3">3号車</option>
+                                                <option value="4">4号車</option>
+                                                <option value="5">5号車</option>
+                                                <option value="6">6号車</option>
+                                                <option value="7">7号車</option>
+                                                <option value="8">8号車</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 col-md-3 col-lg-6">
+                                            <label for="raceCompetitionTime" class="form-label fw-semibold">競争タイム</label>
+                                            <input type="text" id="raceCompetitionTime" class="form-control form-control-lg js-race-result-part" placeholder="3.363">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="race-result-entry mb-3">
+                                    <label for="resultPayoutMode" class="form-label fw-semibold">払戻内容</label>
+                                    <select id="resultPayoutMode" class="form-select form-select-lg js-race-result-part mb-3">
+                                        <option value="simple">簡易入力</option>
+                                        <option value="detail">詳細入力</option>
+                                        <option value="free">自由入力</option>
+                                    </select>
+
+                                    <div class="race-result-mode-block" data-result-payout-mode="simple">
+                                        <label for="resultPayoutSimple" class="form-label fw-semibold">簡易入力</label>
+                                        <input type="text" id="resultPayoutSimple" class="form-control form-control-lg js-race-result-part" placeholder="例: 3連単 3-1-2 780円">
+                                    </div>
+
+                                    <div class="race-result-mode-block" data-result-payout-mode="detail" hidden>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="resultPayoutBetType" class="form-label fw-semibold">賭け式</label>
+                                                <select id="resultPayoutBetType" class="form-select form-select-lg js-race-result-part">
+                                                    <option value="">選択</option>
+                                                    <option value="3連単">3連単</option>
+                                                    <option value="3連複">3連複</option>
+                                                    <option value="2連単">2連単</option>
+                                                    <option value="2連複">2連複</option>
+                                                    <option value="ワイド">ワイド</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="resultPayoutMarks" class="form-label fw-semibold">買い目</label>
+                                                <input type="text" id="resultPayoutMarks" class="form-control form-control-lg js-race-result-part" placeholder="3-1-2">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="race-result-mode-block" data-result-payout-mode="free" hidden>
+                                        <label for="resultPayoutFree" class="form-label fw-semibold">自由入力</label>
+                                        <textarea id="resultPayoutFree" class="form-control race-result-free-input js-race-result-part" rows="4" placeholder="例:&#10;3連単 3-1-2 780円&#10;2連単 3-1 530円&#10;ワイド 1-3 180円"></textarea>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="payoutAmount" class="form-label fw-semibold">払戻金額</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="number" min="0" id="payoutAmount" th:field="*{payoutAmount}" class="form-control js-payout-amount js-race-result-part" placeholder="0">
+                                            <span class="input-group-text">円</span>
+                                        </div>
+                                        <p class="field-caption mb-0">入力すると収支にも反映されます。自由入力では合計額を入れてください。</p>
+                                    </div>
+                                </div>
 
                                 <label for="resultComparison" class="form-label fw-semibold">予想との比較</label>
                                 <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control" rows="6" placeholder="例: 本線は的中、押さえは不要だった。"></textarea>
@@ -2903,6 +3016,192 @@
         if (profitLoss) {
             profitLoss.value = profit;
         }
+    }
+
+    function getRaceResultControls() {
+        return {
+            field: document.querySelector("[data-race-result-field]"),
+            first: document.getElementById("raceResultFirstPlace"),
+            second: document.getElementById("raceResultSecondPlace"),
+            third: document.getElementById("raceResultThirdPlace"),
+            time: document.getElementById("raceCompetitionTime"),
+            mode: document.getElementById("resultPayoutMode"),
+            simple: document.getElementById("resultPayoutSimple"),
+            betType: document.getElementById("resultPayoutBetType"),
+            marks: document.getElementById("resultPayoutMarks"),
+            free: document.getElementById("resultPayoutFree"),
+            payout: document.getElementById("payoutAmount")
+        };
+    }
+
+    function readRaceResultLine(value, label) {
+        const match = String(value || "").match(new RegExp(label + "[：:]\\s*([^\\n]+)"));
+        return match ? match[1].trim() : "";
+    }
+
+    function readRaceResultBlock(value, label) {
+        const match = String(value || "").match(new RegExp(label + "[：:]\\s*([\\s\\S]*)"));
+        return match ? match[1].replace(/\n(?:払戻金額|賭け式|買い目)[：:][\s\S]*$/, "").trim() : "";
+    }
+
+    function readRaceResultLane(value, label) {
+        const lineValue = readRaceResultLine(value, label);
+        const match = lineValue.match(/[1-8]/);
+        return match ? match[0] : "";
+    }
+
+    function isStructuredRaceResult(value) {
+        return /(?:^|\n)(1着|2着|3着|競争タイム|払戻形式|払戻内容|賭け式|買い目|払戻金額)[：:]/.test(String(value || ""));
+    }
+
+    function setRaceResultControlValue(control, value) {
+        if (control) {
+            control.value = value || "";
+        }
+    }
+
+    function updateRaceResultPayoutMode() {
+        const controls = getRaceResultControls();
+        const mode = controls.mode ? controls.mode.value : "simple";
+
+        document.querySelectorAll("[data-result-payout-mode]").forEach(function (block) {
+            block.hidden = block.dataset.resultPayoutMode !== mode;
+        });
+    }
+
+    function initializeRaceResultControls() {
+        const controls = getRaceResultControls();
+        const field = controls.field;
+
+        if (!field) {
+            return;
+        }
+
+        const savedValue = field.value || "";
+        field.dataset.raceResultDirty = "false";
+        field.dataset.raceResultPreserveRaw = "false";
+
+        if (!savedValue) {
+            updateRaceResultPayoutMode();
+            return;
+        }
+
+        if (!isStructuredRaceResult(savedValue)) {
+            setRaceResultControlValue(controls.mode, "free");
+            setRaceResultControlValue(controls.free, savedValue);
+            field.dataset.raceResultPreserveRaw = "true";
+            updateRaceResultPayoutMode();
+            return;
+        }
+
+        setRaceResultControlValue(controls.first, readRaceResultLane(savedValue, "1着"));
+        setRaceResultControlValue(controls.second, readRaceResultLane(savedValue, "2着"));
+        setRaceResultControlValue(controls.third, readRaceResultLane(savedValue, "3着"));
+        setRaceResultControlValue(controls.time, readRaceResultLine(savedValue, "競争タイム"));
+
+        const savedMode = readRaceResultLine(savedValue, "払戻形式");
+        if (savedMode === "詳細入力") {
+            setRaceResultControlValue(controls.mode, "detail");
+            setRaceResultControlValue(controls.betType, readRaceResultLine(savedValue, "賭け式"));
+            setRaceResultControlValue(controls.marks, readRaceResultLine(savedValue, "買い目"));
+        } else if (savedMode === "自由入力") {
+            setRaceResultControlValue(controls.mode, "free");
+            setRaceResultControlValue(controls.free, readRaceResultBlock(savedValue, "払戻内容"));
+        } else {
+            setRaceResultControlValue(controls.mode, "simple");
+            setRaceResultControlValue(controls.simple, readRaceResultLine(savedValue, "払戻内容"));
+        }
+
+        field.dataset.raceResultPreserveRaw = "true";
+        updateRaceResultPayoutMode();
+    }
+
+    function markRaceResultDirty() {
+        const field = document.querySelector("[data-race-result-field]");
+
+        if (field) {
+            field.dataset.raceResultDirty = "true";
+            field.dataset.raceResultPreserveRaw = "false";
+        }
+    }
+
+    function syncRaceResultField() {
+        const controls = getRaceResultControls();
+        const field = controls.field;
+
+        if (!field) {
+            return;
+        }
+
+        if (field.dataset.raceResultPreserveRaw === "true" && field.dataset.raceResultDirty !== "true") {
+            return;
+        }
+
+        const lines = [];
+        const payoutAmount = controls.payout && controls.payout.value ? controls.payout.value.trim() : "";
+
+        if (controls.first && controls.first.value) {
+            lines.push("1着：" + controls.first.value + "号車");
+        }
+        if (controls.second && controls.second.value) {
+            lines.push("2着：" + controls.second.value + "号車");
+        }
+        if (controls.third && controls.third.value) {
+            lines.push("3着：" + controls.third.value + "号車");
+        }
+        if (controls.time && controls.time.value.trim()) {
+            lines.push("競争タイム：" + controls.time.value.trim());
+        }
+
+        const mode = controls.mode ? controls.mode.value : "simple";
+        const hasSimplePayout = controls.simple && controls.simple.value.trim();
+        const hasDetailPayout = (controls.betType && controls.betType.value)
+            || (controls.marks && controls.marks.value.trim());
+        const hasFreePayout = controls.free && controls.free.value.trim();
+
+        if (mode === "detail" && (hasDetailPayout || payoutAmount)) {
+            lines.push("払戻形式：詳細入力");
+            if (controls.betType && controls.betType.value) {
+                lines.push("賭け式：" + controls.betType.value);
+            }
+            if (controls.marks && controls.marks.value.trim()) {
+                lines.push("買い目：" + controls.marks.value.trim());
+            }
+        } else if (mode === "free" && (hasFreePayout || payoutAmount)) {
+            lines.push("払戻形式：自由入力");
+            if (controls.free && controls.free.value.trim()) {
+                lines.push("払戻内容：\n" + controls.free.value.trim());
+            }
+        } else if (mode === "simple" && (hasSimplePayout || payoutAmount)) {
+            lines.push("払戻形式：簡易入力");
+            if (controls.simple && controls.simple.value.trim()) {
+                lines.push("払戻内容：" + controls.simple.value.trim());
+            }
+        }
+
+        if (payoutAmount) {
+            const payoutNumber = Number(payoutAmount);
+            const payoutLabel = Number.isFinite(payoutNumber) ? payoutNumber.toLocaleString("ja-JP") : payoutAmount;
+            lines.push("払戻金額：" + payoutLabel + "円");
+        }
+
+        field.value = lines.join("\n");
+    }
+
+    function initializeRaceResultInputEvents() {
+        initializeRaceResultControls();
+
+        document.querySelectorAll(".js-race-result-part").forEach(function (field) {
+            field.addEventListener("input", function () {
+                markRaceResultDirty();
+                syncRaceResultField();
+            });
+            field.addEventListener("change", function () {
+                markRaceResultDirty();
+                updateRaceResultPayoutMode();
+                syncRaceResultField();
+            });
+        });
     }
 
     function initializeStartDiagramZoom() {
@@ -4146,6 +4445,11 @@
     function clearSection(section) {
         section.querySelectorAll("input, select, textarea").forEach(function (field) {
             if (field.type === "hidden") {
+                if (field.matches("[data-race-result-field]")) {
+                    field.value = "";
+                    field.dataset.raceResultDirty = "false";
+                    field.dataset.raceResultPreserveRaw = "false";
+                }
                 return;
             }
             if (field.tagName === "SELECT") {
@@ -4173,6 +4477,7 @@
         const disabledFields = [];
 
         syncStartLineupPositionsField();
+        syncRaceResultField();
         updateBetSummary();
 
         form.querySelectorAll("input, select, textarea").forEach(function (field) {
@@ -4335,6 +4640,8 @@
         }
 
         syncStartLineupPositionsField();
+        syncRaceResultField();
+        updateBetSummary();
         enableFormFieldsForSubmit(form);
         form.submit();
     }
@@ -4374,6 +4681,7 @@
 
         resetStartDiagramTokens();
         syncStartLineupPositionsField();
+        updateRaceResultPayoutMode();
         updateTrialTimeAssist();
         updateBetSummary();
     }
@@ -4458,6 +4766,8 @@
             form.addEventListener("submit", function (event) {
                 if (form.dataset.skipSubmitConfirm === "true") {
                     syncStartLineupPositionsField();
+                    syncRaceResultField();
+                    updateBetSummary();
                     enableFormFieldsForSubmit(form);
                     return;
                 }
@@ -4491,6 +4801,7 @@
         }
 
         initializeBetLineVisibility(addBetLineButton);
+        initializeRaceResultInputEvents();
 
         if (addBetLineButton) {
             addBetLineButton.addEventListener("click", function () {
