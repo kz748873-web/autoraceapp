@@ -1107,6 +1107,18 @@
             color: var(--sub);
         }
 
+        .trial-overall-note-input {
+            min-height: 8.25rem;
+            line-height: 1.65;
+            resize: vertical;
+        }
+
+        @media (min-width: 768px) {
+            .trial-overall-note-field {
+                margin-inline: -0.25rem;
+            }
+        }
+
         .bet-line-card .form-label {
             margin-bottom: 0.4rem;
         }
@@ -2145,9 +2157,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-3">
+                                <div class="mt-3 trial-overall-note-field">
                                     <label for="raceOverallNote" class="form-label fw-semibold">試走から見た全体メモ</label>
-                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control" rows="4" placeholder="例: 蒼井ハヤトが先手なら押し切り、白石ルイは後半追い込み。"></textarea>
+                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control trial-overall-note-input" rows="5" placeholder="例:&#10;・スタート先行&#10;・試走気配良い&#10;・雨巧者注意"></textarea>
                                 </div>
                             </div>
                         </div>
