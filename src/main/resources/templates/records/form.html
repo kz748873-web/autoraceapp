@@ -2408,7 +2408,7 @@
                 </div>
                 <div class="section-body">
                     <div class="row g-4">
-                        <div class="col-lg-4">
+                        <div class="col-md-4">
                             <div class="sub-block p-4 h-100">
                                 <input type="hidden" id="raceResult" th:field="*{raceResult}" data-race-result-field>
 
@@ -2418,7 +2418,7 @@
                                         <p class="field-caption mb-0">着順と競争タイムを結果として整理します。</p>
                                     </div>
                                     <div class="row g-3">
-                                        <div class="col-6 col-md-3 col-lg-6">
+                                        <div class="col-6">
                                             <label for="raceResultFirstPlace" class="form-label fw-semibold">1着</label>
                                             <select id="raceResultFirstPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2432,7 +2432,7 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
-                                        <div class="col-6 col-md-3 col-lg-6">
+                                        <div class="col-6">
                                             <label for="raceResultSecondPlace" class="form-label fw-semibold">2着</label>
                                             <select id="raceResultSecondPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2446,7 +2446,7 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
-                                        <div class="col-6 col-md-3 col-lg-6">
+                                        <div class="col-6">
                                             <label for="raceResultThirdPlace" class="form-label fw-semibold">3着</label>
                                             <select id="raceResultThirdPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2460,7 +2460,7 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
-                                        <div class="col-6 col-md-3 col-lg-6">
+                                        <div class="col-6">
                                             <label for="raceCompetitionTime" class="form-label fw-semibold">競争タイム</label>
                                             <input type="text" id="raceCompetitionTime" class="form-control form-control-lg js-race-result-part" placeholder="3.363">
                                         </div>
@@ -2482,7 +2482,7 @@
 
                                     <div class="race-result-mode-block" data-result-payout-mode="detail" hidden>
                                         <div class="row g-3">
-                                            <div class="col-md-6">
+                                            <div class="col-12">
                                                 <label for="resultPayoutBetType" class="form-label fw-semibold">賭け式</label>
                                                 <select id="resultPayoutBetType" class="form-select form-select-lg js-race-result-part">
                                                     <option value="">選択</option>
@@ -2493,7 +2493,7 @@
                                                     <option value="ワイド">ワイド</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-12">
                                                 <label for="resultPayoutMarks" class="form-label fw-semibold">買い目</label>
                                                 <input type="text" id="resultPayoutMarks" class="form-control form-control-lg js-race-result-part" placeholder="3-1-2">
                                             </div>
@@ -2519,7 +2519,7 @@
                                 <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control" rows="6" placeholder="例: 本線は的中、押さえは不要だった。"></textarea>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-md-4">
                             <div class="sub-block p-4 h-100">
                                 <label for="reviewNote" class="form-label fw-semibold">振り返りメモ</label>
                                 <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control mb-3" rows="8" placeholder="例: 試走順位と実戦結果の差が大きく、展開読みをもっと重視したい。"></textarea>
@@ -2528,7 +2528,7 @@
                                 <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト">
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-md-4">
                             <div class="sub-block p-4 h-100">
                                 <label for="note" class="form-label fw-semibold">次回につなげるメモ</label>
                                 <textarea id="note" th:field="*{note}" class="form-control mb-3" rows="5" placeholder="例: 湿走路では橘ミナトの評価を上げる。"></textarea>
