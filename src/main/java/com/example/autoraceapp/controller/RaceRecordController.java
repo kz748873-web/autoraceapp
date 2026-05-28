@@ -78,8 +78,10 @@ public class RaceRecordController {
     public String showDetail(@PathVariable Long id, Model model) {
         RaceRecord record = raceRecordService.findById(id);
         if (record == null) {
-            return "redirect:/records";
+            model.addAttribute("record", null);
+            return "records/detail";
         }
+        model.addAttribute("selectedVenue", record.getVenue());
         model.addAttribute("record", record);
         return "records/detail";
     }

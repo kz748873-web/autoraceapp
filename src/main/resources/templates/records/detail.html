@@ -3,6 +3,121 @@
 <head>
     <th:block th:replace="~{layout/base :: commonHead('レース記録詳細 | オートレース予想補助アプリ')}"></th:block>
     <style>
+        body.record-detail-page {
+            --accent-color: #84acd9;
+            --surface-tint: #edf5fd;
+            --theme-text: var(--accent-color);
+            --brand-strong: var(--accent-color);
+            --section-badge-bg: var(--surface-tint);
+            --soft-surface: color-mix(in srgb, var(--surface-tint) 78%, white);
+        }
+
+        body.record-detail-page.theme-kawaguchi {
+            --accent-color: #d96aa0;
+            --surface-tint: #fcedf5;
+            --theme-text: #a8336d;
+        }
+
+        body.record-detail-page.theme-isesaki {
+            --accent-color: #7bc77b;
+            --surface-tint: #eef9ee;
+            --theme-text: #2f7d32;
+        }
+
+        body.record-detail-page.theme-hamamatsu {
+            --accent-color: #f2b15d;
+            --surface-tint: #fff5e6;
+            --theme-text: #9a5b00;
+        }
+
+        body.record-detail-page.theme-iizuka {
+            --accent-color: #8b80d8;
+            --surface-tint: #f1effd;
+            --theme-text: #4b3aa5;
+        }
+
+        body.record-detail-page.theme-sanyo {
+            --accent-color: #58b8c6;
+            --surface-tint: #e9f8fb;
+            --theme-text: #207988;
+        }
+
+        .record-detail-section {
+            background: var(--surface);
+            border: 1px solid var(--card);
+            border-radius: 1.35rem;
+            box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
+            overflow: hidden;
+        }
+
+        .record-detail-section::before {
+            content: "";
+            display: block;
+            height: 0.28rem;
+            background: linear-gradient(90deg, var(--brand-strong), rgba(255, 255, 255, 0));
+        }
+
+        .record-detail-field {
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            padding: 1rem;
+            background: var(--soft-surface);
+            height: 100%;
+        }
+
+        .record-detail-label {
+            color: var(--sub);
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .record-detail-value {
+            color: var(--deep);
+            font-weight: 700;
+            line-height: 1.75;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .record-detail-value.is-muted {
+            color: var(--sub);
+            font-weight: 600;
+        }
+
+        .record-detail-car-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 999px;
+            border: 2px solid #ffffff;
+            font-weight: 800;
+            box-shadow: 0 0.35rem 0.75rem rgba(15, 23, 42, 0.16);
+        }
+
+        .record-detail-car-badge.car-1 { background: #ffffff; color: #0f172a; border-color: #334155; }
+        .record-detail-car-badge.car-2 { background: #111111; color: #ffffff; }
+        .record-detail-car-badge.car-3 { background: #e11d2f; color: #ffffff; }
+        .record-detail-car-badge.car-4 { background: #1d4ed8; color: #ffffff; }
+        .record-detail-car-badge.car-5 { background: #facc15; color: #111111; }
+        .record-detail-car-badge.car-6 { background: #16a34a; color: #ffffff; }
+        .record-detail-car-badge.car-7 { background: #f97316; color: #ffffff; }
+        .record-detail-car-badge.car-8 { background: #ec4899; color: #111111; }
+
+        .record-detail-result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 575.98px) {
+            .record-detail-result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .trial-time-card {
             border: 1px solid var(--card);
             border-radius: 1rem;
@@ -306,7 +421,9 @@
         }
     </style>
 </head>
-<body>
+<body class="record-detail-page"
+      th:with="detailVenue=${record != null and !#strings.isEmpty(record.venue) ? record.venue : ''}"
+      th:classappend="${detailVenue == '川口'} ? ' theme-kawaguchi' : (${detailVenue == '伊勢崎'} ? ' theme-isesaki' : (${detailVenue == '浜松'} ? ' theme-hamamatsu' : (${detailVenue == '飯塚'} ? ' theme-iizuka' : (${detailVenue == '山陽'} ? ' theme-sanyo' : ''))))">
     <div class="app-shell d-flex flex-column">
     <div th:replace="~{layout/header :: siteHeader}"></div>
     <main class="container py-4 py-md-5 flex-grow-1">
@@ -317,42 +434,93 @@
             </div>
             <div class="d-flex flex-column flex-sm-row gap-2">
                 <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4">一覧へ戻る</a>
+                <a th:if="${record != null}" th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-primary btn-lg px-4">編集する</a>
                 <a th:href="@{/records/new}" class="btn btn-primary btn-lg px-4">新しく記録する</a>
             </div>
         </div>
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-            <div class="card-body p-4 p-md-5">
+        <section th:if="${record == null}" class="record-detail-section mb-4">
+            <div class="p-4 p-md-5 text-center">
+                <h2 class="h4 fw-bold mb-2">記録が見つかりません</h2>
+                <p class="text-secondary mb-4">指定されたレース記録は削除されたか、まだ保存されていない可能性があります。</p>
+                <a th:href="@{/records}" class="btn btn-outline-primary btn-lg px-4">一覧へ戻る</a>
+            </div>
+        </section>
+
+        <th:block th:if="${record != null}">
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
                 <div class="mb-4">
-                    <h2 class="h3 fw-bold mb-2">1. 前日予想</h2>
-                    <p class="text-secondary mb-0">レース前日に整理した注目選手や予想内容を確認できます。</p>
+                    <div class="section-badge mb-2">1. 基本情報</div>
+                    <h2 class="h3 fw-bold mb-2">基本情報</h2>
+                    <p class="text-secondary mb-0">開催日、レース場、番組種別を確認します。</p>
                 </div>
-
-                <h3 class="h4 fw-bold mb-3">基本情報</h3>
-                <div class="row g-4 mb-4">
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">開催日</div><div class="fw-semibold" th:text="${record.raceDate} ?: '未入力'">2026-04-02</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">レース場</div><div class="fw-semibold" th:text="${record.venue} ?: '未入力'">川口</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">レース番号</div><div class="fw-semibold" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</div></div></div>
-                </div>
-
-                <h3 class="h4 fw-bold mb-3">注目選手</h3>
-                <div class="row g-4 mb-4">
-                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手1</div><div class="fw-semibold mb-2" th:text="${record.featuredRider1Name} ?: '未入力'">蒼井ハヤト</div><div class="small mb-1"><span class="text-secondary">車番:</span> <span class="fw-semibold" th:text="${record.featuredRider1Number == null ? '未入力' : (record.featuredRider1Number == 1 ? '1 白' : (record.featuredRider1Number == 2 ? '2 黒' : (record.featuredRider1Number == 3 ? '3 赤' : (record.featuredRider1Number == 4 ? '4 青' : (record.featuredRider1Number == 5 ? '5 黄' : (record.featuredRider1Number == 6 ? '6 緑' : (record.featuredRider1Number == 7 ? '7 オレンジ' : '8 ピンク')))))))}">1 白</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider1Mark} ?: '未入力'">◎</span></div></div></div>
-                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手2</div><div class="fw-semibold mb-2" th:text="${record.featuredRider2Name} ?: '未入力'">橘ミナト</div><div class="small mb-1"><span class="text-secondary">車番:</span> <span class="fw-semibold" th:text="${record.featuredRider2Number == null ? '未入力' : (record.featuredRider2Number == 1 ? '1 白' : (record.featuredRider2Number == 2 ? '2 黒' : (record.featuredRider2Number == 3 ? '3 赤' : (record.featuredRider2Number == 4 ? '4 青' : (record.featuredRider2Number == 5 ? '5 黄' : (record.featuredRider2Number == 6 ? '6 緑' : (record.featuredRider2Number == 7 ? '7 オレンジ' : '8 ピンク')))))))}">3 赤</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider2Mark} ?: '未入力'">○</span></div></div></div>
-                    <div class="col-md-4"><div class="border rounded-4 p-3 bg-light h-100"><div class="text-secondary small mb-2">注目選手3</div><div class="fw-semibold mb-2" th:text="${record.featuredRider3Name} ?: '未入力'">白石ルイ</div><div class="small mb-1"><span class="text-secondary">車番:</span> <span class="fw-semibold" th:text="${record.featuredRider3Number == null ? '未入力' : (record.featuredRider3Number == 1 ? '1 白' : (record.featuredRider3Number == 2 ? '2 黒' : (record.featuredRider3Number == 3 ? '3 赤' : (record.featuredRider3Number == 4 ? '4 青' : (record.featuredRider3Number == 5 ? '5 黄' : (record.featuredRider3Number == 6 ? '6 緑' : (record.featuredRider3Number == 7 ? '7 オレンジ' : '8 ピンク')))))))}">5 黄</span></div><div class="small"><span class="text-secondary">印:</span> <span class="fw-semibold" th:text="${record.featuredRider3Mark} ?: '未入力'">△</span></div></div></div>
-                </div>
-
                 <div class="row g-4">
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">前日予想メモ</div><div class="fw-semibold" th:text="${record.preRacePrediction} ?: '未入力'">ハンデと試走気配から内線中心で組み立てたい。</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">補足メモ</div><div class="fw-semibold" th:text="${record.preRaceNote} ?: '未入力'">前日の気配や気になる点をメモ。</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">開催日</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">レース場</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">レース番号</div><div class="record-detail-value" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</div></div></div>
+                    <div class="col-md-6"><div class="record-detail-field"><div class="record-detail-label">開催区分</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.raceScheduleType) ? '未入力' : record.raceScheduleType}">デイレース</div></div></div>
+                    <div class="col-md-6"><div class="record-detail-field"><div class="record-detail-label">ハンデ情報</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.handicapInfo) ? '未入力' : record.handicapInfo}">0m / 10m</div></div></div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-            <div class="card-body p-4 p-md-5 record-detail-start-diagram">
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
                 <div class="mb-4">
-                    <h2 class="h3 fw-bold mb-2">2. スタート展開図</h2>
+                    <div class="section-badge mb-2">2. 番組表</div>
+                    <h2 class="h3 fw-bold mb-2">番組表</h2>
+                    <p class="text-secondary mb-0">1号車から8号車までの選手名を確認します。</p>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-1">1</span><div><div class="record-detail-label">1号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider1Name) ? '未入力' : record.programRider1Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-2">2</span><div><div class="record-detail-label">2号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider2Name) ? '未入力' : record.programRider2Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-3">3</span><div><div class="record-detail-label">3号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider3Name) ? '未入力' : record.programRider3Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-4">4</span><div><div class="record-detail-label">4号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider4Name) ? '未入力' : record.programRider4Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-5">5</span><div><div class="record-detail-label">5号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider5Name) ? '未入力' : record.programRider5Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-6">6</span><div><div class="record-detail-label">6号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider6Name) ? '未入力' : record.programRider6Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-7">7</span><div><div class="record-detail-label">7号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider7Name) ? '未入力' : record.programRider7Name}">選手名</div></div></div></div>
+                    <div class="col-sm-6 col-lg-3"><div class="record-detail-field d-flex align-items-center gap-3"><span class="record-detail-car-badge car-8">8</span><div><div class="record-detail-label">8号車</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.programRider8Name) ? '未入力' : record.programRider8Name}">選手名</div></div></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
+                <div class="mb-4">
+                    <div class="section-badge mb-2">3. 注目選手</div>
+                    <h2 class="h3 fw-bold mb-2">注目選手</h2>
+                    <p class="text-secondary mb-0">本命、対抗、連下、穴の4枠を確認します。</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6"><div class="record-detail-field"><div class="record-detail-label">注目選手1：本命</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.featuredRider1Name) ? '未入力' : record.featuredRider1Name}">選手名</div><div class="small text-secondary">車番: <span class="fw-semibold" th:text="${record.featuredRider1Number != null ? record.featuredRider1Number + '号車' : '未入力'}">1号車</span></div><div class="small text-secondary">印: <span class="fw-semibold" th:text="${#strings.isEmpty(record.featuredRider1Mark) ? '未入力' : record.featuredRider1Mark}">◎</span></div></div></div>
+                    <div class="col-md-6"><div class="record-detail-field"><div class="record-detail-label">注目選手2：対抗</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.featuredRider2Name) ? '未入力' : record.featuredRider2Name}">選手名</div><div class="small text-secondary">車番: <span class="fw-semibold" th:text="${record.featuredRider2Number != null ? record.featuredRider2Number + '号車' : '未入力'}">2号車</span></div><div class="small text-secondary">印: <span class="fw-semibold" th:text="${#strings.isEmpty(record.featuredRider2Mark) ? '未入力' : record.featuredRider2Mark}">○</span></div></div></div>
+                    <div class="col-md-6"><div class="record-detail-field"><div class="record-detail-label">注目選手3：連下</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.featuredRider3Name) ? '未入力' : record.featuredRider3Name}">選手名</div><div class="small text-secondary">車番: <span class="fw-semibold" th:text="${record.featuredRider3Number != null ? record.featuredRider3Number + '号車' : '未入力'}">3号車</span></div><div class="small text-secondary">印: <span class="fw-semibold" th:text="${#strings.isEmpty(record.featuredRider3Mark) ? '未入力' : record.featuredRider3Mark}">△</span></div></div></div>
+                    <div class="col-md-6"><div class="record-detail-field" data-featured-rider4-card th:attr="data-featured-rider4-raw=${record.preRacePrediction}"><div class="record-detail-label">注目選手4：穴</div><div class="record-detail-value mb-2" data-featured-rider4-name>未入力</div><div class="small text-secondary">車番: <span class="fw-semibold" data-featured-rider4-number>未入力</span></div><div class="small text-secondary">印: <span class="fw-semibold" data-featured-rider4-mark>未入力</span></div></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
+                <div class="mb-4">
+                    <div class="section-badge mb-2">4. 前日メモ</div>
+                    <h2 class="h3 fw-bold mb-2">前日予想メモ</h2>
+                    <p class="text-secondary mb-0">前日に残した判断メモを確認します。</p>
+                </div>
+                <div class="record-detail-field">
+                    <div class="record-detail-label">前日予想メモ</div>
+                    <div class="record-detail-value"
+                         th:text="${!#strings.isEmpty(record.preRaceNote) ? record.preRaceNote : (!#strings.isEmpty(record.preRacePrediction) and !#strings.contains(record.preRacePrediction, '注目選手4') ? record.preRacePrediction : '未入力')}">前日メモ</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5 record-detail-start-diagram">
+                <div class="mb-4">
+                    <div class="section-badge mb-2">5. スタート展開図</div>
+                    <h2 class="h3 fw-bold mb-2">スタート展開図</h2>
                     <p class="text-secondary mb-0">前日予想で保存したスタート位置と展開メモを確認できます。</p>
                 </div>
 
@@ -457,72 +625,114 @@
                 <p class="text-secondary small mt-3 mb-0"
                    th:if="${#strings.isEmpty(record.startLineupPositions)}">保存されたスタート展開図はありません。</p>
             </div>
-        </div>
+        </section>
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-            <div class="card-body p-4 p-md-5">
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
                 <div class="mb-4">
-                    <h2 class="h3 fw-bold mb-2">3. 当日予想</h2>
-                    <p class="text-secondary mb-0">当日の天候や試走タイム、購入内容をまとめて確認できます。</p>
+                    <div class="section-badge mb-2">6. 当日予想</div>
+                    <h2 class="h3 fw-bold mb-2">当日予想</h2>
+                    <p class="text-secondary mb-0">当日の気象と走路、試走から見た全体メモを確認します。</p>
                 </div>
-
-                <h3 class="h4 fw-bold mb-3">当日コンディション</h3>
                 <div class="row g-4 mb-4">
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">天気</div><div class="fw-semibold" th:text="${record.weatherCondition} ?: '未入力'">晴れ</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">気温</div><div class="fw-semibold" th:text="${record.temperature} ?: '未入力'">20℃</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">湿度</div><div class="fw-semibold" th:text="${record.humidity} ?: '未入力'">60%</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">風速</div><div class="fw-semibold" th:text="${record.windSpeed} ?: '未入力'">3m</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">走路温度</div><div class="fw-semibold" th:text="${record.trackTemperature} ?: '未入力'">26℃</div></div></div>
-                    <div class="col-md-4"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">走路状況</div><div class="fw-semibold" th:text="${record.trackCondition} ?: '未入力'">良走路</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">天気</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.weatherCondition) ? '未入力' : record.weatherCondition}">晴れ</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">気温</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.temperature) ? '未入力' : record.temperature + '℃'}">20℃</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">湿度</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.humidity) ? '未入力' : record.humidity + '%'}">60%</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">風速</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.windSpeed) ? '未入力' : record.windSpeed + 'm'}">3m</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">走路温度</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.trackTemperature) ? '未入力' : record.trackTemperature + '℃'}">26℃</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">走路状況</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.trackCondition) ? '未入力' : record.trackCondition}">良走路</div></div></div>
                 </div>
+                <div class="row g-4">
+                    <div class="col-lg-6"><div class="record-detail-field"><div class="record-detail-label">気になる選手の試走タイムメモ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.featuredTrialTimeNote) ? '未入力' : record.featuredTrialTimeNote}">試走メモ</div></div></div>
+                    <div class="col-lg-6"><div class="record-detail-field"><div class="record-detail-label">試走から見た全体メモ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.raceOverallNote) ? '未入力' : record.raceOverallNote}">全体メモ</div></div></div>
+                </div>
+            </div>
+        </section>
 
-                <h3 class="h4 fw-bold mb-3">全車試走タイム</h3>
-                <div class="row g-4 mb-4">
-                    <div class="col-md-3 col-sm-6" th:each="entry : ${record.trialTimeEntries}">
-                        <div class="trial-time-card p-3 h-100">
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
+                <div class="mb-4">
+                    <div class="section-badge mb-2">7. 全車試走タイム</div>
+                    <h2 class="h3 fw-bold mb-2">全車試走タイム</h2>
+                    <p class="text-secondary mb-0">保存された試走タイムと自動順位を確認します。</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-sm-6 col-lg-3" th:each="entry : ${record.trialTimeEntries}">
+                        <div class="trial-time-card p-3 h-100" th:attr="data-trial-lane=${entry.laneNumber}">
                             <div class="text-secondary small mb-1" th:text="${entry.laneNumber == 1 ? '1 白' : (entry.laneNumber == 2 ? '2 黒' : (entry.laneNumber == 3 ? '3 赤' : (entry.laneNumber == 4 ? '4 青' : (entry.laneNumber == 5 ? '5 黄' : (entry.laneNumber == 6 ? '6 緑' : (entry.laneNumber == 7 ? '7 オレンジ' : '8 ピンク'))))))}">1 白</div>
                             <div class="fw-semibold fs-5" th:text="${#strings.isEmpty(entry.time) ? '未入力' : entry.time}">3.34</div>
                             <div class="trial-time-meta">
                                 <span th:if="${entry.hasFeaturedMark}" class="trial-mark-badge" th:text="${entry.featuredMark}">◎</span>
                                 <span th:if="${entry.hasFeaturedMark and !#strings.isEmpty(entry.featuredRiderName)}" class="small text-secondary" th:text="${entry.featuredRiderName}">蒼井ハヤト</span>
+                                <span class="trial-mark-badge d-none" data-featured-rider4-trial-mark></span>
+                                <span class="small text-secondary d-none" data-featured-rider4-trial-name></span>
                                 <span th:if="${entry.hasRank}" class="trial-rank-badge" th:text="${entry.rank + '位'}">1位</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row g-4 mb-4">
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">気になる選手の試走タイムメモ</div><div class="fw-semibold" th:text="${record.featuredTrialTimeNote} ?: '未入力'">5 黄の試走タイムが良く、上積みがありそう。</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">レース全体メモ</div><div class="fw-semibold" th:text="${record.raceOverallNote} ?: '未入力'">外枠勢の進み方次第で展開が変わりそう。</div></div></div>
-                </div>
-
-                <h3 class="h4 fw-bold mb-3">購入内容と最終予想</h3>
-                <div class="row g-4">
-                    <div class="col-md-3"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">賭け式</div><div class="fw-semibold" th:text="${record.betType} ?: '未入力'">3連単</div></div></div>
-                    <div class="col-md-3"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">何点買いか</div><div class="fw-semibold" th:text="${record.betCount != null ? record.betCount + '点' : '未入力'}">6点</div></div></div>
-                    <div class="col-md-3"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">1点あたり金額</div><div class="fw-semibold" th:text="${record.unitBetAmount != null ? record.unitBetAmount + '円' : '未入力'}">100円</div></div></div>
-                    <div class="col-md-3"><div class="border rounded-3 p-3 bg-light h-100"><div class="text-secondary small mb-1">購入金額</div><div class="fw-semibold" th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">最終予想</div><div class="fw-semibold fs-5" th:text="${record.finalPrediction} ?: '未入力'">1-3-5 / 5-1-3</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">予想追加メモ</div><div class="fw-semibold" th:text="${record.predictionNote} ?: '未入力'">試走後に5 黄中心へ変更した。</div></div></div>
-                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-            <div class="card-body p-4 p-md-5">
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
                 <div class="mb-4">
-                    <h2 class="h3 fw-bold mb-2">4. レース結果・比較・考察</h2>
-                    <p class="text-secondary mb-0">レース結果と予想の差を見ながら、次回に活かす振り返りを確認できます。</p>
+                    <div class="section-badge mb-2">8. 購入内容・最終予想</div>
+                    <h2 class="h3 fw-bold mb-2">購入内容・最終予想</h2>
+                    <p class="text-secondary mb-0">購入行と最終予想を確認します。</p>
                 </div>
-
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行1</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.betLine1Type) ? '未入力' : record.betLine1Type}">3連単</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.finalPrediction) ? '未入力' : record.finalPrediction}">1-3-5</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine1Count != null ? record.betLine1Count + '点' : '未入力'}">6点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine1Amount != null ? record.betLine1Amount + '円' : '未入力'}">600円</span></div></div></div>
+                    <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行2</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.betLine2Type) ? '未入力' : record.betLine2Type}">2連単</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.betLine2Marks) ? '未入力' : record.betLine2Marks}">3-1</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine2Count != null ? record.betLine2Count + '点' : '未入力'}">3点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine2Amount != null ? record.betLine2Amount + '円' : '未入力'}">300円</span></div></div></div>
+                    <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行3</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.betLine3Type) ? '未入力' : record.betLine3Type}">ワイド</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.betLine3Marks) ? '未入力' : record.betLine3Marks}">1-3</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine3Count != null ? record.betLine3Count + '点' : '未入力'}">2点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine3Amount != null ? record.betLine3Amount + '円' : '未入力'}">200円</span></div></div></div>
+                </div>
                 <div class="row g-4">
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">レース結果</div><div class="fw-semibold" th:text="${record.raceResult} ?: '未入力'">結果は 5-1-3。</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">比較</div><div class="fw-semibold" th:text="${record.resultComparison} ?: '未入力'">本命は合っていたが、2着評価がずれていた。</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">考察</div><div class="fw-semibold" th:text="${record.reviewNote} ?: '未入力'">走路変化をもう少し重く見る必要があった。</div></div></div>
-                    <div class="col-12"><div class="border rounded-3 p-3 bg-light"><div class="text-secondary small mb-2">備考</div><div class="fw-semibold" th:text="${record.note} ?: '未入力'">次回は風向きと試走の関係も確認したい。</div></div></div>
+                    <div class="col-md-4"><div class="record-detail-field"><div class="record-detail-label">合計購入金額</div><div class="record-detail-value" th:text="${record.totalBetAmount != null ? record.totalBetAmount + '円' : (record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力')}">1,100円</div></div></div>
+                    <div class="col-md-8"><div class="record-detail-field"><div class="record-detail-label">予想追加メモ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.predictionNote) ? '未入力' : record.predictionNote}">予想メモ</div></div></div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
+                <div class="mb-4">
+                    <div class="section-badge mb-2">9. レース結果</div>
+                    <h2 class="h3 fw-bold mb-2">レース結果</h2>
+                    <p class="text-secondary mb-0">着順、競争タイム、払戻内容を確認します。</p>
+                </div>
+                <div data-race-result-card th:attr="data-race-result-raw=${record.raceResult}">
+                    <div class="record-detail-result-grid mb-4">
+                        <div class="record-detail-field"><div class="record-detail-label">1着</div><div class="record-detail-value" data-race-result-first>未入力</div></div>
+                        <div class="record-detail-field"><div class="record-detail-label">2着</div><div class="record-detail-value" data-race-result-second>未入力</div></div>
+                        <div class="record-detail-field"><div class="record-detail-label">3着</div><div class="record-detail-value" data-race-result-third>未入力</div></div>
+                        <div class="record-detail-field"><div class="record-detail-label">競争タイム</div><div class="record-detail-value" data-race-result-time>未入力</div></div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-lg-8"><div class="record-detail-field"><div class="record-detail-label">払戻内容</div><div class="record-detail-value" data-race-result-payout>未入力</div></div></div>
+                        <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">払戻金額</div><div class="record-detail-value" th:text="${record.payoutAmount != null ? record.payoutAmount + '円' : '未入力'}">780円</div></div></div>
+                        <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">収支</div><div class="record-detail-value" th:text="${record.profitLoss != null ? record.profitLoss + '円' : '未入力'}">180円</div></div></div>
+                        <div class="col-lg-8 js-race-result-raw-card"><div class="record-detail-field"><div class="record-detail-label">レース結果メモ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.raceResult) ? '未入力' : record.raceResult}">結果メモ</div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="record-detail-section mb-4">
+            <div class="p-4 p-md-5">
+                <div class="mb-4">
+                    <div class="section-badge mb-2">10. 比較・考察</div>
+                    <h2 class="h3 fw-bold mb-2">比較・考察</h2>
+                    <p class="text-secondary mb-0">予想との差分、振り返り、次回メモを確認します。</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-6"><div class="record-detail-field"><div class="record-detail-label">予想との比較</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.resultComparison) ? '未入力' : record.resultComparison}">比較</div></div></div>
+                    <div class="col-lg-6"><div class="record-detail-field"><div class="record-detail-label">振り返りメモ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.reviewNote) ? '未入力' : record.reviewNote}">振り返り</div></div></div>
+                    <div class="col-lg-6"><div class="record-detail-field"><div class="record-detail-label">今回の中心選手まとめ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.featuredRider) ? '未入力' : record.featuredRider}">中心選手</div></div></div>
+                    <div class="col-lg-6"><div class="record-detail-field"><div class="record-detail-label">次回につなげるメモ</div><div class="record-detail-value" th:text="${#strings.isEmpty(record.note) ? '未入力' : record.note}">次回メモ</div></div></div>
+                </div>
+            </div>
+        </section>
+        </th:block>
     </main>
     <div th:replace="~{layout/footer :: siteFooter}"></div>
     <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
@@ -531,6 +741,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             try {
+                initializeRecordDetailStructuredDisplays();
+
                 const board = document.getElementById("detailStartDiagramBoard");
 
                 if (!board) {
@@ -597,6 +809,147 @@
             }
 
             return null;
+        }
+
+        function initializeRecordDetailStructuredDisplays() {
+            initializeFeaturedRider4Display();
+            initializeRaceResultDisplay();
+        }
+
+        function setRecordDetailText(target, value) {
+            if (!target) {
+                return;
+            }
+
+            const displayValue = String(value || "").trim();
+            target.textContent = displayValue || "未入力";
+            target.classList.toggle("is-muted", !displayValue);
+        }
+
+        function readRecordDetailLine(value, label) {
+            const lines = String(value || "").split(/\r?\n/);
+            const labelPattern = new RegExp("^" + label + "[：:]\\s*(.*)$");
+
+            for (const line of lines) {
+                const match = line.match(labelPattern);
+                if (match) {
+                    return match[1].trim();
+                }
+            }
+
+            return "";
+        }
+
+        function readRecordDetailBlock(value, label) {
+            const rawValue = String(value || "");
+            const marker = label + "：";
+            const alternateMarker = label + ":";
+            let markerIndex = rawValue.indexOf(marker);
+            let markerLength = marker.length;
+
+            if (markerIndex < 0) {
+                markerIndex = rawValue.indexOf(alternateMarker);
+                markerLength = alternateMarker.length;
+            }
+
+            if (markerIndex < 0) {
+                return "";
+            }
+
+            return rawValue.slice(markerIndex + markerLength)
+                .replace(/\n(?:払戻金額|賭け式|買い目)[：:][\s\S]*$/, "")
+                .trim();
+        }
+
+        function isStructuredFeaturedRider4(value) {
+            return /(?:^|\n)注目選手4[：:]/.test(String(value || ""));
+        }
+
+        function initializeFeaturedRider4Display() {
+            const card = document.querySelector("[data-featured-rider4-card]");
+
+            if (!card) {
+                return;
+            }
+
+            const rawValue = card.dataset.featuredRider4Raw || "";
+
+            if (!isStructuredFeaturedRider4(rawValue)) {
+                return;
+            }
+
+            const name = readRecordDetailLine(rawValue, "選手名");
+            const number = readRecordDetailLine(rawValue, "車番").replace(/号車$/, "");
+            const mark = readRecordDetailLine(rawValue, "印");
+
+            setRecordDetailText(card.querySelector("[data-featured-rider4-name]"), name);
+            setRecordDetailText(card.querySelector("[data-featured-rider4-number]"), number ? number + "号車" : "");
+            setRecordDetailText(card.querySelector("[data-featured-rider4-mark]"), mark);
+
+            if (!number) {
+                return;
+            }
+
+            const trialCard = document.querySelector("[data-trial-lane='" + number + "']");
+
+            if (!trialCard) {
+                return;
+            }
+
+            const trialMark = trialCard.querySelector("[data-featured-rider4-trial-mark]");
+            const trialName = trialCard.querySelector("[data-featured-rider4-trial-name]");
+
+            if (trialMark && mark) {
+                trialMark.textContent = mark;
+                trialMark.classList.remove("d-none");
+            }
+            if (trialName && name) {
+                trialName.textContent = name;
+                trialName.classList.remove("d-none");
+            }
+        }
+
+        function isStructuredRaceResult(value) {
+            return /(?:^|\n)(1着|2着|3着|競争タイム|払戻形式|払戻内容|賭け式|買い目|払戻金額)[：:]/.test(String(value || ""));
+        }
+
+        function initializeRaceResultDisplay() {
+            const card = document.querySelector("[data-race-result-card]");
+
+            if (!card) {
+                return;
+            }
+
+            const rawValue = card.dataset.raceResultRaw || "";
+
+            if (!isStructuredRaceResult(rawValue)) {
+                return;
+            }
+
+            setRecordDetailText(card.querySelector("[data-race-result-first]"), readRecordDetailLine(rawValue, "1着"));
+            setRecordDetailText(card.querySelector("[data-race-result-second]"), readRecordDetailLine(rawValue, "2着"));
+            setRecordDetailText(card.querySelector("[data-race-result-third]"), readRecordDetailLine(rawValue, "3着"));
+            setRecordDetailText(card.querySelector("[data-race-result-time]"), readRecordDetailLine(rawValue, "競争タイム"));
+
+            const payoutMode = readRecordDetailLine(rawValue, "払戻形式");
+            let payoutText = "";
+
+            if (payoutMode === "詳細入力") {
+                const betType = readRecordDetailLine(rawValue, "賭け式");
+                const marks = readRecordDetailLine(rawValue, "買い目");
+                payoutText = [betType, marks].filter(Boolean).join(" ");
+            } else if (payoutMode === "自由入力") {
+                payoutText = readRecordDetailBlock(rawValue, "払戻内容");
+            } else {
+                payoutText = readRecordDetailLine(rawValue, "払戻内容");
+            }
+
+            setRecordDetailText(card.querySelector("[data-race-result-payout]"), payoutText);
+
+            const rawCard = card.querySelector(".js-race-result-raw-card");
+            if (rawCard) {
+                rawCard.classList.add("d-none");
+            }
         }
     </script>
 </body>
