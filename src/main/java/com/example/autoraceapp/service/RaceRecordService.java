@@ -1,5 +1,6 @@
 package com.example.autoraceapp.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -115,6 +116,7 @@ public class RaceRecordService {
     }
 
     public RaceRecord save(RaceRecord raceRecord) {
+        keepCreatedAtOnUpdate(raceRecord);
         normalizeRecord(raceRecord);
         calculateBetAmounts(raceRecord);
         setLegacyFeaturedRider(raceRecord);
@@ -128,6 +130,16 @@ public class RaceRecordService {
         if (raceRecordRepository.existsById(id)) {
             raceRecordRepository.deleteById(id);
         }
+    }
+
+    private void keepCreatedAtOnUpdate(RaceRecord record) {
+        if (record.getId() == null || record.getCreatedAt() != null) {
+            return;
+        }
+
+        raceRecordRepository.findById(record.getId())
+                .map(RaceRecord::getCreatedAt)
+                .ifPresent(record::setCreatedAt);
     }
 
     private boolean matchesFeaturedRider(RaceRecord record, String searchValue) {
@@ -276,6 +288,7 @@ public class RaceRecordService {
 
         RaceRecord first = new RaceRecord(1L, "2026-03-31", "川口", 8, "晴れ", "22", "48", "31", "良走路",
                 "◎ 蒼井ハヤト / ○ 橘ミナト / △ 白石ルイ", "3連単", "1-3-5 / 1-5-3", "スタート力を重視したレースだった。");
+        first.setCreatedAt(LocalDateTime.of(2026, 3, 31, 14, 32));
         first.setRaceScheduleType("デイレース");
         first.setHandicapInfo("0m / 10m / 20m");
         first.setFeaturedRider1Name("蒼井ハヤト");
@@ -313,6 +326,7 @@ public class RaceRecordService {
 
         RaceRecord second = new RaceRecord(2L, "2026-03-30", "飯塚", 10, "曇り", "18", "62", "24", "湿走路",
                 "◎ 田中ソウタ / ▲ 鳴海カイト / ○ 北原レイ", "2連単", "2-6 / 2-1", "試走上位を見て軸を決めて押さえた。");
+        second.setCreatedAt(LocalDateTime.of(2026, 3, 30, 13, 8));
         second.setRaceScheduleType("ナイター");
         second.setHandicapInfo("0m / 10m / 10m");
         second.setFeaturedRider1Name("田中ソウタ");

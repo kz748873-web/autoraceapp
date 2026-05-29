@@ -1,6 +1,8 @@
 package com.example.autoraceapp.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -19,6 +22,8 @@ public class RaceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private LocalDateTime createdAt;
 
     private String raceDate;
     private String venue;
@@ -124,8 +129,17 @@ public class RaceRecord {
         this.note = note;
     }
 
+    @PrePersist
+    private void setCreatedAtOnCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public String getRaceDate() { return raceDate; }
     public void setRaceDate(String raceDate) { this.raceDate = raceDate; }
     public String getVenue() { return venue; }
@@ -258,6 +272,16 @@ public class RaceRecord {
     public void setFeaturedRider(String featuredRider) { this.featuredRider = featuredRider; }
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }
+
+    @Transient
+    public String getCreatedDateDisplay() {
+        return createdAt == null ? "" : createdAt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+    }
+
+    @Transient
+    public String getCreatedTimeDisplay() {
+        return createdAt == null ? "" : createdAt.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
 
     @Transient
     public List<TrialTimeEntry> getTrialTimeEntries() {

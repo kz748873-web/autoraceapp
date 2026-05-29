@@ -151,6 +151,27 @@
             color: #8a4d00;
         }
 
+        .record-status-badge.is-pending {
+            background: color-mix(in srgb, #3b82f6 14%, white);
+            border-color: color-mix(in srgb, #3b82f6 36%, white);
+            color: #1d4d82;
+        }
+
+        .record-created-date,
+        .record-list-value {
+            color: var(--deep);
+            font-weight: 900;
+            line-height: 1.35;
+        }
+
+        .record-created-time,
+        .record-list-muted {
+            color: var(--sub);
+            font-size: 0.92rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
         .record-table {
             --bs-table-hover-bg: color-mix(in srgb, var(--soft-surface) 75%, white);
         }
@@ -264,6 +285,38 @@
             font-weight: 900;
             line-height: 1.25;
             overflow-wrap: anywhere;
+        }
+
+        .record-mobile-summary {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+        }
+
+        .record-mobile-field {
+            border: 1px solid var(--card);
+            border-radius: 0.85rem;
+            background: var(--soft-surface);
+            padding: 0.75rem 0.85rem;
+        }
+
+        .record-mobile-label {
+            color: var(--sub);
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .record-mobile-value {
+            color: var(--deep);
+            font-size: 1.06rem;
+            font-weight: 900;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        .record-mobile-value.is-muted {
+            color: var(--sub);
         }
 
         .record-mobile-date {
@@ -391,7 +444,8 @@
                         </div>
                     </div>
                     <div class="record-status-legend" aria-label="記録状態">
-                        <span class="record-status-badge">完了</span>
+                        <span class="record-status-badge">記録完了</span>
+                        <span class="record-status-badge is-pending">結果未入力</span>
                         <span class="record-status-badge is-draft">途中入力</span>
                     </div>
                     <button class="btn btn-outline-secondary record-search-toggle d-md-none"
@@ -448,11 +502,11 @@
                         <table class="table table-hover align-middle record-table mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">状態</th>
-                                    <th scope="col">レース</th>
-                                    <th scope="col">天候・走路</th>
-                                    <th scope="col">注目選手</th>
-                                    <th scope="col">購入・結果</th>
+                                    <th scope="col">作成日</th>
+                                    <th scope="col">状況</th>
+                                    <th scope="col">開催日</th>
+                                    <th scope="col">レース場</th>
+                                    <th scope="col">レース番号</th>
                                     <th scope="col">操作</th>
                                 </tr>
                             </thead>
@@ -460,33 +514,24 @@
                                 <tr th:each="record : ${records}"
                                     class="record-row"
                                     th:classappend="${record.venue == '川口'} ? ' venue-kawaguchi' : (${record.venue == '伊勢崎'} ? ' venue-isesaki' : (${record.venue == '浜松'} ? ' venue-hamamatsu' : (${record.venue == '飯塚'} ? ' venue-iizuka' : (${record.venue == '山陽'} ? ' venue-sanyo' : ''))))"
-                                    th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)},
-                                             featuredName=${!#strings.isEmpty(record.primaryFeaturedRiderName) ? record.primaryFeaturedRiderName : (!#strings.isEmpty(record.featuredRider) ? record.featuredRider : '未設定')}">
+                                    th:with="statusLabel=${(#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null) ? '途中入力' : (#strings.isEmpty(record.raceResult) ? '結果未入力' : '記録完了')}">
                                     <td>
-                                        <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '完了'">完了</span>
+                                        <div class="record-created-date" th:text="${#strings.isEmpty(record.createdDateDisplay) ? '未記録' : record.createdDateDisplay}">2026/05/07</div>
+                                        <div class="record-created-time" th:if="${!#strings.isEmpty(record.createdTimeDisplay)}" th:text="${record.createdTimeDisplay}">14:32</div>
                                     </td>
                                     <td>
-                                        <div class="record-race-title">
-                                            <span th:text="${#strings.isEmpty(record.venue) ? 'レース場未入力' : record.venue}">川口</span>
-                                            <span class="record-race-number" th:text="${record.raceNumber != null ? record.raceNumber + 'R' : 'R未入力'}">8R</span>
-                                        </div>
-                                        <div class="record-race-date" th:text="${#strings.isEmpty(record.raceDate) ? '日付未入力' : record.raceDate}">2026-04-02</div>
+                                        <span class="record-status-badge"
+                                              th:classappend="${statusLabel == '途中入力'} ? ' is-draft' : (${statusLabel == '結果未入力'} ? ' is-pending' : '')"
+                                              th:text="${statusLabel}">記録完了</span>
                                     </td>
                                     <td>
-                                        <div class="record-chip-stack">
-                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.weatherCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.weatherCondition) ? '天気未入力' : record.weatherCondition}">晴れ</span>
-                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.trackCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.trackCondition) ? '走路未入力' : record.trackCondition}">良走路</span>
-                                        </div>
+                                        <div class="record-list-value" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</div>
                                     </td>
                                     <td>
-                                        <span class="record-data-chip" th:classappend="${featuredName == '未設定'} ? ' is-muted' : ''" th:text="${featuredName}">蒼井ハヤト</span>
+                                        <div class="record-list-value" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</div>
                                     </td>
                                     <td>
-                                        <div class="record-chip-stack">
-                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.betType)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.betType) ? '賭け式未入力' : record.betType}">3連単</span>
-                                            <span class="record-data-chip" th:classappend="${record.purchaseAmount == null} ? ' is-muted' : ''" th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '金額未入力'}">600円</span>
-                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.raceResult)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.raceResult) ? '結果未入力' : '結果あり'}">結果あり</span>
-                                        </div>
+                                        <div class="record-list-value" th:text="${record.raceNumber != null ? record.raceNumber + 'R' : '未入力'}">8R</div>
                                     </td>
                                     <td>
                                         <div class="record-action-group">
@@ -507,26 +552,31 @@
                     <article th:each="record : ${records}"
                              class="record-mobile-card p-3 shadow-sm"
                              th:classappend="${record.venue == '川口'} ? ' venue-kawaguchi' : (${record.venue == '伊勢崎'} ? ' venue-isesaki' : (${record.venue == '浜松'} ? ' venue-hamamatsu' : (${record.venue == '飯塚'} ? ' venue-iizuka' : (${record.venue == '山陽'} ? ' venue-sanyo' : ''))))"
-                             th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)},
-                                      featuredName=${!#strings.isEmpty(record.primaryFeaturedRiderName) ? record.primaryFeaturedRiderName : (!#strings.isEmpty(record.featuredRider) ? record.featuredRider : '未設定')}">
+                             th:with="statusLabel=${(#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null) ? '途中入力' : (#strings.isEmpty(record.raceResult) ? '結果未入力' : '記録完了')}">
                         <div class="record-mobile-head mb-3">
                             <div>
-                                <div class="record-mobile-date" th:text="${#strings.isEmpty(record.raceDate) ? '日付未入力' : record.raceDate}">2026-04-02</div>
-                                <h2 class="record-mobile-title mb-0">
-                                    <span th:text="${#strings.isEmpty(record.venue) ? 'レース場未入力' : record.venue}">川口</span>
-                                    <span th:text="${record.raceNumber != null ? record.raceNumber + 'R' : 'R未入力'}">8R</span>
-                                </h2>
+                                <div class="record-mobile-label">作成日</div>
+                                <div class="record-created-date" th:text="${#strings.isEmpty(record.createdDateDisplay) ? '未記録' : record.createdDateDisplay}">2026/05/07</div>
+                                <div class="record-created-time" th:if="${!#strings.isEmpty(record.createdTimeDisplay)}" th:text="${record.createdTimeDisplay}">14:32</div>
                             </div>
-                            <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '完了'">完了</span>
+                            <span class="record-status-badge"
+                                  th:classappend="${statusLabel == '途中入力'} ? ' is-draft' : (${statusLabel == '結果未入力'} ? ' is-pending' : '')"
+                                  th:text="${statusLabel}">記録完了</span>
                         </div>
 
-                        <div class="record-chip-stack mb-3">
-                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.weatherCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.weatherCondition) ? '天気未入力' : record.weatherCondition}">晴れ</span>
-                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.trackCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.trackCondition) ? '走路未入力' : record.trackCondition}">良走路</span>
-                            <span class="record-data-chip" th:classappend="${featuredName == '未設定'} ? ' is-muted' : ''" th:text="${featuredName}">蒼井ハヤト</span>
-                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.betType)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.betType) ? '賭け式未入力' : record.betType}">3連単</span>
-                            <span class="record-data-chip" th:classappend="${record.purchaseAmount == null} ? ' is-muted' : ''" th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '金額未入力'}">600円</span>
-                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.raceResult)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.raceResult) ? '結果未入力' : '結果あり'}">結果あり</span>
+                        <div class="record-mobile-summary mb-3">
+                            <div class="record-mobile-field">
+                                <div class="record-mobile-label">開催日</div>
+                                <div class="record-mobile-value" th:classappend="${#strings.isEmpty(record.raceDate)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</div>
+                            </div>
+                            <div class="record-mobile-field">
+                                <div class="record-mobile-label">レース場</div>
+                                <div class="record-mobile-value" th:classappend="${#strings.isEmpty(record.venue)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</div>
+                            </div>
+                            <div class="record-mobile-field">
+                                <div class="record-mobile-label">レース番号</div>
+                                <div class="record-mobile-value" th:classappend="${record.raceNumber == null} ? ' is-muted' : ''" th:text="${record.raceNumber != null ? record.raceNumber + 'R' : '未入力'}">8R</div>
+                            </div>
                         </div>
 
                         <div class="record-mobile-actions">
