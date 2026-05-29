@@ -27,15 +27,15 @@ public class RaceRecordController {
 
     @GetMapping
     public String showList(
+            @RequestParam(required = false) String raceDate,
             @RequestParam(required = false) String venue,
-            @RequestParam(required = false) String weatherCondition,
-            @RequestParam(required = false) String featuredRider,
+            @RequestParam(required = false) String raceNumber,
             Model model) {
 
-        model.addAttribute("records", raceRecordService.findRecords(venue, weatherCondition, featuredRider));
+        model.addAttribute("records", raceRecordService.findRecords(raceDate, venue, raceNumber));
+        model.addAttribute("selectedRaceDate", raceDate);
         model.addAttribute("selectedVenue", venue);
-        model.addAttribute("weatherCondition", weatherCondition);
-        model.addAttribute("featuredRider", featuredRider);
+        model.addAttribute("selectedRaceNumber", raceNumber);
         return "records/list";
     }
 

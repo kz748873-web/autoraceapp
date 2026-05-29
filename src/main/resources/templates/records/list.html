@@ -1,227 +1,493 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{layout/base :: commonHead('レース記録一覧 | オートレース予想補助アプリ')}"></th:block>
+    <th:block th:replace="~{layout/base :: commonHead('記録一覧 | オートレース予想補助アプリ')}"></th:block>
     <style>
-        .record-mobile-card,
-        .record-status-card {
-            border: 1px solid var(--card);
-            border-radius: 1.2rem;
-            background: #ffffff;
+        body.record-list-page {
+            --accent-color: #84acd9;
+            --surface-tint: #edf5fd;
+            --theme-text: #17304f;
+            --brand-strong: var(--accent-color);
+            --section-badge-bg: var(--surface-tint);
+            --soft-surface: color-mix(in srgb, var(--surface-tint) 78%, white);
         }
 
-        .record-status-card {
-            background: var(--soft-surface);
+        body.record-list-page.theme-kawaguchi {
+            --accent-color: #d96aa0;
+            --surface-tint: #fcedf5;
+            --theme-text: #a8336d;
         }
 
-        .record-status-badge {
+        body.record-list-page.theme-isesaki {
+            --accent-color: #7bc77b;
+            --surface-tint: #eef9ee;
+            --theme-text: #2f7d32;
+        }
+
+        body.record-list-page.theme-hamamatsu {
+            --accent-color: #f2b15d;
+            --surface-tint: #fff5e6;
+            --theme-text: #9a5b00;
+        }
+
+        body.record-list-page.theme-iizuka {
+            --accent-color: #8b80d8;
+            --surface-tint: #f1effd;
+            --theme-text: #4b3aa5;
+        }
+
+        body.record-list-page.theme-sanyo {
+            --accent-color: #58b8c6;
+            --surface-tint: #e9f8fb;
+            --theme-text: #207988;
+        }
+
+        .record-list-hero {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .record-list-title {
+            font-size: clamp(1.8rem, 5vw, 2.35rem);
+            line-height: 1.2;
+        }
+
+        .record-list-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+        }
+
+        .record-list-actions .btn,
+        .record-search-actions .btn {
+            min-height: 3rem;
+            border-radius: 0.9rem;
+            font-weight: 800;
+        }
+
+        .record-summary-strip {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .record-count-pill,
+        .record-filter-chip,
+        .record-status-badge,
+        .record-data-chip {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 6.4rem;
-            padding: 0.4rem 0.85rem;
+            gap: 0.35rem;
             border-radius: 999px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            background: var(--section-badge-bg);
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .record-count-pill {
+            min-height: 2.55rem;
+            padding: 0.5rem 0.85rem;
+            background: #ffffff;
+            border: 1px solid color-mix(in srgb, var(--brand-strong) 54%, white);
             color: var(--deep);
         }
 
-        .record-status-badge.is-draft {
-            background: color-mix(in srgb, #f59e0b 18%, white);
-            color: #9a5b00;
-        }
-
-        .record-status-help {
+        .record-filter-chip {
+            min-height: 2.35rem;
+            padding: 0.45rem 0.75rem;
+            background: var(--soft-surface);
+            border: 1px solid var(--card);
             color: var(--sub);
-            line-height: 1.75;
+            font-size: 0.92rem;
         }
 
-        .record-action-group {
+        .record-filter-chip strong {
+            color: var(--deep);
+        }
+
+        .record-search-panel,
+        .record-list-panel {
+            background: var(--surface);
+            border: 1px solid var(--card);
+            border-radius: 1rem;
+            box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
+            overflow: hidden;
+        }
+
+        .record-search-panel::before,
+        .record-list-panel::before {
+            content: "";
+            display: block;
+            height: 0.28rem;
+            background: linear-gradient(90deg, var(--brand-strong), rgba(255, 255, 255, 0));
+        }
+
+        .record-search-toggle {
+            min-height: 3rem;
+            border-radius: 0.9rem;
+            font-weight: 800;
+        }
+
+        .record-status-legend {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
 
-        .record-search-toggle {
-            min-height: 3rem;
-            border-radius: 1rem;
-            font-weight: 700;
+        .record-status-badge {
+            min-width: 5.8rem;
+            min-height: 2.35rem;
+            padding: 0.42rem 0.78rem;
+            background: var(--section-badge-bg);
+            border: 1px solid color-mix(in srgb, var(--brand-strong) 52%, white);
+            color: var(--deep);
+            font-size: 0.9rem;
         }
 
-        .record-search-summary {
+        .record-status-badge.is-draft {
+            background: color-mix(in srgb, #f59e0b 18%, white);
+            border-color: color-mix(in srgb, #f59e0b 46%, white);
+            color: #8a4d00;
+        }
+
+        .record-table {
+            --bs-table-hover-bg: color-mix(in srgb, var(--soft-surface) 75%, white);
+        }
+
+        .record-table th {
             color: var(--sub);
-            line-height: 1.75;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .record-table td {
+            vertical-align: middle;
+        }
+
+        .record-row,
+        .record-mobile-card {
+            --record-accent: var(--brand-strong);
+        }
+
+        .record-row.venue-kawaguchi,
+        .record-mobile-card.venue-kawaguchi { --record-accent: #d96aa0; }
+
+        .record-row.venue-isesaki,
+        .record-mobile-card.venue-isesaki { --record-accent: #7bc77b; }
+
+        .record-row.venue-hamamatsu,
+        .record-mobile-card.venue-hamamatsu { --record-accent: #f2b15d; }
+
+        .record-row.venue-iizuka,
+        .record-mobile-card.venue-iizuka { --record-accent: #8b80d8; }
+
+        .record-row.venue-sanyo,
+        .record-mobile-card.venue-sanyo { --record-accent: #58b8c6; }
+
+        .record-row td:first-child {
+            border-left: 0.32rem solid var(--record-accent);
+        }
+
+        .record-race-title {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.45rem;
+            color: var(--deep);
+            font-weight: 900;
+        }
+
+        .record-race-number {
+            color: var(--theme-text);
+            font-size: 1.02rem;
+        }
+
+        .record-race-date {
+            color: var(--sub);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        .record-data-chip {
+            min-height: 2.1rem;
+            padding: 0.36rem 0.65rem;
+            background: var(--soft-surface);
+            border: 1px solid var(--card);
+            color: var(--deep);
+            font-size: 0.88rem;
+            white-space: nowrap;
+        }
+
+        .record-data-chip.is-muted {
+            color: var(--sub);
+            background: #ffffff;
+        }
+
+        .record-chip-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        .record-action-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        .record-action-group .btn,
+        .record-action-group button {
+            min-height: 2.55rem;
+            border-radius: 0.8rem;
+            font-weight: 800;
+        }
+
+        .record-mobile-card {
+            border: 1px solid var(--card);
+            border-left: 0.4rem solid var(--record-accent);
+            border-radius: 1rem;
+            background: #ffffff;
+        }
+
+        .record-mobile-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .record-mobile-title {
+            color: var(--deep);
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .record-mobile-date {
+            color: var(--sub);
+            font-size: 0.92rem;
+            font-weight: 800;
+            margin-bottom: 0.2rem;
         }
 
         .record-mobile-actions {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.55rem;
         }
 
-        .record-mobile-summary {
+        .record-mobile-actions form {
             display: grid;
-            gap: 0.75rem;
-        }
-
-        .record-mobile-field {
-            border: 1px solid var(--card);
-            border-radius: 1rem;
-            padding: 0.9rem 1rem;
-            background: var(--soft-surface);
-        }
-
-        .record-mobile-field-label {
-            font-size: 0.78rem;
-            color: var(--sub);
-            margin-bottom: 0.25rem;
-        }
-
-        .record-mobile-field-value {
-            font-weight: 700;
-            color: var(--deep);
-            font-size: 1.02rem;
         }
 
         .record-mobile-action-btn {
-            min-height: 3rem;
-            font-weight: 700;
+            min-height: 3.15rem;
             border-radius: 0.9rem;
+            font-weight: 900;
+        }
+
+        .record-mobile-action-btn.is-primary {
+            grid-column: 1 / -1;
+        }
+
+        .record-empty-state {
+            display: grid;
+            place-items: center;
+            gap: 0.85rem;
+            padding: 2.5rem 1rem;
+            text-align: center;
+        }
+
+        .record-empty-state p {
+            color: var(--sub);
+            max-width: 34rem;
+        }
+
+        @media (min-width: 576px) {
+            .record-list-actions {
+                grid-template-columns: repeat(2, minmax(0, auto));
+                justify-content: start;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .record-list-hero {
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: end;
+            }
+
+            .record-list-actions {
+                justify-content: end;
+            }
         }
 
         @media (max-width: 575.98px) {
+            .record-search-panel,
+            .record-list-panel,
             .record-mobile-card {
-                border-radius: 1rem;
+                border-radius: 0.85rem;
             }
 
-            .record-mobile-action-btn {
-                min-height: 3rem;
+            .record-mobile-head {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .record-status-badge {
+                justify-self: start;
+            }
+
+            .record-data-chip {
+                white-space: normal;
+                justify-content: flex-start;
             }
         }
     </style>
 </head>
-<body>
+<body class="record-list-page"
+      th:classappend="${selectedVenue == '川口'} ? ' theme-kawaguchi' : (${selectedVenue == '伊勢崎'} ? ' theme-isesaki' : (${selectedVenue == '浜松'} ? ' theme-hamamatsu' : (${selectedVenue == '飯塚'} ? ' theme-iizuka' : (${selectedVenue == '山陽'} ? ' theme-sanyo' : ''))))">
     <div class="app-shell d-flex flex-column">
     <div th:replace="~{layout/header :: siteHeader}"></div>
     <main class="container py-4 py-md-5 flex-grow-1">
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+        <div class="record-list-hero mb-4">
             <div>
-                <h1 class="fw-bold mb-2">レース記録一覧</h1>
-                <p class="text-secondary mb-0">記録済みのデータだけでなく、途中入力のレースも一覧で確認しながら管理できます。</p>
+                <h1 class="record-list-title fw-bold mb-2">記録一覧</h1>
+                <p class="text-secondary mb-0">開催日・レース場・レース番号で、保存済み記録を探せます。</p>
             </div>
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <a th:href="@{/records/new}" class="btn btn-primary btn-lg">新しく記録する</a>
-                <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">ホームへ戻る</a>
+            <div class="record-list-actions">
+                <a th:href="@{/records/new}" class="btn btn-primary btn-lg px-4">新しく記録する</a>
+                <a th:href="@{/}" class="btn btn-outline-secondary btn-lg px-4">ホームへ戻る</a>
             </div>
         </div>
 
-        <section class="row g-4 mb-4 align-items-stretch">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-body p-4">
-                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
-                            <div>
-                                <h2 class="h5 fw-bold mb-1">検索</h2>
-                                <p class="record-search-summary mb-0">スマホでは必要なときだけ検索条件を開けるようにしています。</p>
-                            </div>
-                            <button class="btn btn-outline-secondary record-search-toggle d-md-none"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#recordSearchCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="recordSearchCollapse">
-                                検索条件を開く
-                            </button>
-                        </div>
-                        <div id="recordSearchCollapse"
-                             class="collapse d-md-block"
-                             th:classappend="${!#strings.isEmpty(selectedVenue) or !#strings.isEmpty(weatherCondition) or !#strings.isEmpty(featuredRider)} ? ' show' : ''">
-                        <form method="get" th:action="@{/records}">
-                            <div class="row g-3 align-items-end">
-                                <div class="col-md-4">
-                                    <label for="venue" class="form-label fw-semibold">レース場</label>
-                                    <select id="venue" name="venue" class="form-select form-select-lg">
-                                        <option value="">すべて</option>
-                                        <option value="川口" th:selected="${selectedVenue == '川口'}">川口</option>
-                                        <option value="伊勢崎" th:selected="${selectedVenue == '伊勢崎'}">伊勢崎</option>
-                                        <option value="浜松" th:selected="${selectedVenue == '浜松'}">浜松</option>
-                                        <option value="飯塚" th:selected="${selectedVenue == '飯塚'}">飯塚</option>
-                                        <option value="山陽" th:selected="${selectedVenue == '山陽'}">山陽</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="weatherCondition" class="form-label fw-semibold">天気</label>
-                                    <select id="weatherCondition" name="weatherCondition" class="form-select form-select-lg">
-                                        <option value="">すべて</option>
-                                        <option value="晴れ" th:selected="${weatherCondition == '晴れ'}">晴れ</option>
-                                        <option value="曇り" th:selected="${weatherCondition == '曇り'}">曇り</option>
-                                        <option value="小雨" th:selected="${weatherCondition == '小雨'}">小雨</option>
-                                        <option value="雨" th:selected="${weatherCondition == '雨'}">雨</option>
-                                        <option value="雪" th:selected="${weatherCondition == '雪'}">雪</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="featuredRider" class="form-label fw-semibold">注目選手</label>
-                                    <input type="text" id="featuredRider" name="featuredRider" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト" th:value="${featuredRider}">
-                                </div>
-
-                                <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-2">
-                                    <button type="submit" class="btn btn-primary btn-lg">検索する</button>
-                                    <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg">条件をリセット</a>
-                                </div>
-                            </div>
-                        </form>
+        <section class="record-search-panel mb-4">
+            <div class="p-3 p-md-4">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+                    <div>
+                        <h2 class="h5 fw-bold mb-2">検索</h2>
+                        <p class="text-secondary mb-2">開催日・レース場・レース番号で記録を絞り込めます。</p>
+                        <div class="record-summary-strip">
+                            <span class="record-count-pill">
+                                <strong th:text="${#lists.size(records)}">0</strong>
+                                <span>件表示</span>
+                            </span>
+                            <span class="record-filter-chip"
+                                  th:if="${#strings.isEmpty(selectedRaceDate) and #strings.isEmpty(selectedVenue) and #strings.isEmpty(selectedRaceNumber)}">全件</span>
+                            <span class="record-filter-chip" th:if="${!#strings.isEmpty(selectedRaceDate)}">
+                                <span>日付</span>
+                                <strong th:text="${selectedRaceDate}">2026-05-25</strong>
+                            </span>
+                            <span class="record-filter-chip" th:if="${!#strings.isEmpty(selectedVenue)}">
+                                <span>場</span>
+                                <strong th:text="${selectedVenue}">川口</strong>
+                            </span>
+                            <span class="record-filter-chip" th:if="${!#strings.isEmpty(selectedRaceNumber)}">
+                                <span>レース</span>
+                                <strong th:text="${selectedRaceNumber + 'R'}">8R</strong>
+                            </span>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="record-status-card p-4 h-100">
-                    <h2 class="h5 fw-bold mb-3">一覧の見方</h2>
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                        <span class="record-status-badge">入力済み</span>
+                    <div class="record-status-legend" aria-label="記録状態">
+                        <span class="record-status-badge">完了</span>
                         <span class="record-status-badge is-draft">途中入力</span>
                     </div>
-                    <p class="record-status-help mb-0">前日予想だけの保存でも一覧に残り、後からそのまま編集できます。スマホでは必要な情報だけを表示して、操作ボタンを大きめにしています。</p>
+                    <button class="btn btn-outline-secondary record-search-toggle d-md-none"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#recordSearchCollapse"
+                            aria-expanded="false"
+                            aria-controls="recordSearchCollapse">
+                        検索条件
+                    </button>
+                </div>
+
+                <div id="recordSearchCollapse"
+                     class="collapse d-md-block"
+                     th:classappend="${!#strings.isEmpty(selectedRaceDate) or !#strings.isEmpty(selectedVenue) or !#strings.isEmpty(selectedRaceNumber)} ? ' show' : ''">
+                    <form method="get" th:action="@{/records}">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label for="raceDate" class="form-label fw-semibold">開催日</label>
+                                <input type="date" id="raceDate" name="raceDate" class="form-control form-control-lg" th:value="${selectedRaceDate}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="venue" class="form-label fw-semibold">レース場</label>
+                                <select id="venue" name="venue" class="form-select form-select-lg">
+                                    <option value="">すべて</option>
+                                    <option value="川口" th:selected="${selectedVenue == '川口'}">川口</option>
+                                    <option value="伊勢崎" th:selected="${selectedVenue == '伊勢崎'}">伊勢崎</option>
+                                    <option value="浜松" th:selected="${selectedVenue == '浜松'}">浜松</option>
+                                    <option value="飯塚" th:selected="${selectedVenue == '飯塚'}">飯塚</option>
+                                    <option value="山陽" th:selected="${selectedVenue == '山陽'}">山陽</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="raceNumber" class="form-label fw-semibold">レース番号</label>
+                                <input type="number" id="raceNumber" name="raceNumber" class="form-control form-control-lg" min="1" max="12" inputmode="numeric" placeholder="例: 8" th:value="${selectedRaceNumber}">
+                            </div>
+
+                            <div class="col-12 record-search-actions d-grid d-sm-flex gap-2 mt-2">
+                                <button type="submit" class="btn btn-primary btn-lg px-4">検索</button>
+                                <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4">リセット</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
 
-        <section class="card border-0 shadow-sm rounded-4">
-            <div class="card-body p-4">
-                <div class="d-none d-md-block">
+        <section class="record-list-panel">
+            <div class="p-3 p-md-4">
+                <div class="d-none d-md-block" th:unless="${#lists.isEmpty(records)}">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-hover align-middle record-table mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">状態</th>
-                                    <th scope="col">開催日</th>
-                                    <th scope="col">レース場</th>
-                                    <th scope="col">レース番号</th>
-                                    <th scope="col">天気</th>
-                                    <th scope="col">走路状況</th>
-                                    <th scope="col">注目選手（本命印）</th>
-                                    <th scope="col">賭け式</th>
-                                    <th scope="col">購入金額</th>
+                                    <th scope="col">レース</th>
+                                    <th scope="col">天候・走路</th>
+                                    <th scope="col">注目選手</th>
+                                    <th scope="col">購入・結果</th>
                                     <th scope="col">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="record : ${records}" th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.weatherCondition) or #strings.isEmpty(record.trackCondition) or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)}">
+                                <tr th:each="record : ${records}"
+                                    class="record-row"
+                                    th:classappend="${record.venue == '川口'} ? ' venue-kawaguchi' : (${record.venue == '伊勢崎'} ? ' venue-isesaki' : (${record.venue == '浜松'} ? ' venue-hamamatsu' : (${record.venue == '飯塚'} ? ' venue-iizuka' : (${record.venue == '山陽'} ? ' venue-sanyo' : ''))))"
+                                    th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)},
+                                             featuredName=${!#strings.isEmpty(record.primaryFeaturedRiderName) ? record.primaryFeaturedRiderName : (!#strings.isEmpty(record.featuredRider) ? record.featuredRider : '未設定')}">
                                     <td>
-                                        <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '入力済み'">入力済み</span>
+                                        <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '完了'">完了</span>
                                     </td>
-                                    <td th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</td>
-                                    <td th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</td>
-                                    <td th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</td>
-                                    <td th:text="${#strings.isEmpty(record.weatherCondition) ? '未入力' : record.weatherCondition}">晴れ</td>
-                                    <td th:text="${#strings.isEmpty(record.trackCondition) ? '未入力' : record.trackCondition}">良走路</td>
-                                    <td th:text="${!#strings.isEmpty(record.primaryFeaturedRiderName) ? record.primaryFeaturedRiderName : (!#strings.isEmpty(record.featuredRider) ? record.featuredRider : '未設定')}">蒼井ハヤト</td>
-                                    <td th:text="${#strings.isEmpty(record.betType) ? '未入力' : record.betType}">3連単</td>
-                                    <td th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力'}">600円</td>
+                                    <td>
+                                        <div class="record-race-title">
+                                            <span th:text="${#strings.isEmpty(record.venue) ? 'レース場未入力' : record.venue}">川口</span>
+                                            <span class="record-race-number" th:text="${record.raceNumber != null ? record.raceNumber + 'R' : 'R未入力'}">8R</span>
+                                        </div>
+                                        <div class="record-race-date" th:text="${#strings.isEmpty(record.raceDate) ? '日付未入力' : record.raceDate}">2026-04-02</div>
+                                    </td>
+                                    <td>
+                                        <div class="record-chip-stack">
+                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.weatherCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.weatherCondition) ? '天気未入力' : record.weatherCondition}">晴れ</span>
+                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.trackCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.trackCondition) ? '走路未入力' : record.trackCondition}">良走路</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="record-data-chip" th:classappend="${featuredName == '未設定'} ? ' is-muted' : ''" th:text="${featuredName}">蒼井ハヤト</span>
+                                    </td>
+                                    <td>
+                                        <div class="record-chip-stack">
+                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.betType)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.betType) ? '賭け式未入力' : record.betType}">3連単</span>
+                                            <span class="record-data-chip" th:classappend="${record.purchaseAmount == null} ? ' is-muted' : ''" th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '金額未入力'}">600円</span>
+                                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.raceResult)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.raceResult) ? '結果未入力' : '結果あり'}">結果あり</span>
+                                        </div>
+                                    </td>
                                     <td>
                                         <div class="record-action-group">
                                             <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">内容を見る</a>
@@ -232,42 +498,54 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr th:if="${#lists.isEmpty(records)}">
-                                    <td colspan="10" class="text-center text-secondary py-4">条件に合うレース記録がありません。</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="d-grid gap-3 d-md-none">
-                    <article th:each="record : ${records}" class="record-mobile-card p-3 shadow-sm" th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.weatherCondition) or #strings.isEmpty(record.trackCondition) or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)}">
-                        <div class="mb-3">
-                            <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '入力済み'">入力済み</span>
+                <div class="d-grid gap-3 d-md-none" th:unless="${#lists.isEmpty(records)}">
+                    <article th:each="record : ${records}"
+                             class="record-mobile-card p-3 shadow-sm"
+                             th:classappend="${record.venue == '川口'} ? ' venue-kawaguchi' : (${record.venue == '伊勢崎'} ? ' venue-isesaki' : (${record.venue == '浜松'} ? ' venue-hamamatsu' : (${record.venue == '飯塚'} ? ' venue-iizuka' : (${record.venue == '山陽'} ? ' venue-sanyo' : ''))))"
+                             th:with="isDraft=${#strings.isEmpty(record.raceDate) or #strings.isEmpty(record.venue) or record.raceNumber == null or #strings.isEmpty(record.betType) or #strings.isEmpty(record.raceResult)},
+                                      featuredName=${!#strings.isEmpty(record.primaryFeaturedRiderName) ? record.primaryFeaturedRiderName : (!#strings.isEmpty(record.featuredRider) ? record.featuredRider : '未設定')}">
+                        <div class="record-mobile-head mb-3">
+                            <div>
+                                <div class="record-mobile-date" th:text="${#strings.isEmpty(record.raceDate) ? '日付未入力' : record.raceDate}">2026-04-02</div>
+                                <h2 class="record-mobile-title mb-0">
+                                    <span th:text="${#strings.isEmpty(record.venue) ? 'レース場未入力' : record.venue}">川口</span>
+                                    <span th:text="${record.raceNumber != null ? record.raceNumber + 'R' : 'R未入力'}">8R</span>
+                                </h2>
+                            </div>
+                            <span class="record-status-badge" th:classappend="${isDraft} ? ' is-draft' : ''" th:text="${isDraft} ? '途中入力' : '完了'">完了</span>
                         </div>
-                        <div class="record-mobile-summary mb-3">
-                            <div class="record-mobile-field">
-                                <div class="record-mobile-field-label">開催日</div>
-                                <div class="record-mobile-field-value" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">2026-04-02</div>
-                            </div>
-                            <div class="record-mobile-field">
-                                <div class="record-mobile-field-label">レース場</div>
-                                <div class="record-mobile-field-value" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">川口</div>
-                            </div>
-                            <div class="record-mobile-field">
-                                <div class="record-mobile-field-label">レース番号</div>
-                                <div class="record-mobile-field-value" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">8レース</div>
-                            </div>
+
+                        <div class="record-chip-stack mb-3">
+                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.weatherCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.weatherCondition) ? '天気未入力' : record.weatherCondition}">晴れ</span>
+                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.trackCondition)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.trackCondition) ? '走路未入力' : record.trackCondition}">良走路</span>
+                            <span class="record-data-chip" th:classappend="${featuredName == '未設定'} ? ' is-muted' : ''" th:text="${featuredName}">蒼井ハヤト</span>
+                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.betType)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.betType) ? '賭け式未入力' : record.betType}">3連単</span>
+                            <span class="record-data-chip" th:classappend="${record.purchaseAmount == null} ? ' is-muted' : ''" th:text="${record.purchaseAmount != null ? record.purchaseAmount + '円' : '金額未入力'}">600円</span>
+                            <span class="record-data-chip" th:classappend="${#strings.isEmpty(record.raceResult)} ? ' is-muted' : ''" th:text="${#strings.isEmpty(record.raceResult) ? '結果未入力' : '結果あり'}">結果あり</span>
                         </div>
+
                         <div class="record-mobile-actions">
-                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary record-mobile-action-btn">内容を見る</a>
+                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary record-mobile-action-btn is-primary">内容を見る</a>
                             <a th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-outline-secondary record-mobile-action-btn">編集</a>
-                            <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この記録を削除しますか？');" class="d-grid">
+                            <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この記録を削除しますか？');">
                                 <button type="submit" class="btn btn-outline-danger record-mobile-action-btn">削除</button>
                             </form>
                         </div>
                     </article>
-                    <div th:if="${#lists.isEmpty(records)}" class="text-center text-secondary py-4">条件に合うレース記録がありません。</div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(records)}" class="record-empty-state">
+                    <h2 class="h4 fw-bold mb-0">該当する記録がありません</h2>
+                    <p class="mb-2">条件を変えるか、新しく記録してください。</p>
+                    <div class="d-grid d-sm-flex gap-2">
+                        <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4">条件をリセット</a>
+                        <a th:href="@{/records/new}" class="btn btn-primary btn-lg px-4">新しく記録する</a>
+                    </div>
                 </div>
             </div>
         </section>

@@ -18,7 +18,7 @@ public class RaceRecordService {
         this.raceRecordRepository = raceRecordRepository;
     }
 
-    public List<RaceRecord> findRecords(String venue, String weatherCondition, String featuredRider) {
+    public List<RaceRecord> findRecords(String raceDate, String venue, String raceNumber) {
         List<RaceRecord> records = raceRecordRepository.findAll();
         if (records.isEmpty()) {
             records = createDummyRecords();
@@ -26,13 +26,13 @@ public class RaceRecordService {
 
         List<RaceRecord> filteredRecords = new ArrayList<>();
         for (RaceRecord record : records) {
+            if (!isMatch(record.getRaceDate(), raceDate)) {
+                continue;
+            }
             if (!isMatch(record.getVenue(), venue)) {
                 continue;
             }
-            if (!isMatch(record.getWeatherCondition(), weatherCondition)) {
-                continue;
-            }
-            if (!matchesFeaturedRider(record, featuredRider)) {
+            if (!matchesRaceNumber(record, raceNumber)) {
                 continue;
             }
             filteredRecords.add(record);
@@ -148,6 +148,21 @@ public class RaceRecordService {
                 || contains(record.getProgramRider7Name(), keyword)
                 || contains(record.getProgramRider8Name(), keyword)
                 || contains(record.getFeaturedRider(), keyword);
+    }
+
+    private boolean matchesRaceNumber(RaceRecord record, String searchValue) {
+        if (searchValue == null || searchValue.isBlank()) {
+            return true;
+        }
+        if (record.getRaceNumber() == null) {
+            return false;
+        }
+
+        try {
+            return record.getRaceNumber().equals(Integer.valueOf(searchValue.trim()));
+        } catch (NumberFormatException ex) {
+            return false;
+        }
     }
 
     private void normalizeRecord(RaceRecord record) {
