@@ -52,6 +52,12 @@
             line-height: 1.2;
         }
 
+        .record-list-lead {
+            color: var(--sub);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
         .record-list-actions {
             display: grid;
             grid-template-columns: 1fr;
@@ -60,8 +66,8 @@
 
         .record-list-actions .btn,
         .record-search-actions .btn {
-            min-height: 3rem;
-            border-radius: 0.9rem;
+            min-height: 3.15rem;
+            border-radius: 0.75rem;
             font-weight: 800;
         }
 
@@ -110,7 +116,7 @@
         .record-list-panel {
             background: var(--surface);
             border: 1px solid var(--card);
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
             overflow: hidden;
         }
@@ -125,8 +131,35 @@
 
         .record-search-toggle {
             min-height: 3rem;
-            border-radius: 0.9rem;
+            border-radius: 0.75rem;
             font-weight: 800;
+        }
+
+        .record-list-panel-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .record-list-panel-title {
+            color: var(--deep);
+            font-size: 1.15rem;
+            font-weight: 900;
+            line-height: 1.35;
+            margin: 0;
+        }
+
+        .record-list-panel-meta {
+            color: var(--sub);
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .record-list-panel-meta strong {
+            color: var(--deep);
+            font-size: 1.08rem;
         }
 
         .record-status-legend {
@@ -178,8 +211,13 @@
 
         .record-table th {
             color: var(--sub);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             white-space: nowrap;
+        }
+
+        .record-table th,
+        .record-table td {
+            padding: 0.85rem 0.75rem;
         }
 
         .record-table td {
@@ -253,22 +291,30 @@
         }
 
         .record-action-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.45rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(5.2rem, 1fr));
+            gap: 0.5rem;
+            min-width: 17rem;
+        }
+
+        .record-action-group form {
+            display: grid;
         }
 
         .record-action-group .btn,
         .record-action-group button {
-            min-height: 2.55rem;
-            border-radius: 0.8rem;
+            min-height: 2.75rem;
+            width: 100%;
+            border-radius: 0.65rem;
+            font-size: 0.95rem;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         .record-mobile-card {
             border: 1px solid var(--card);
             border-left: 0.4rem solid var(--record-accent);
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             background: #ffffff;
         }
 
@@ -294,22 +340,30 @@
         }
 
         .record-mobile-field {
+            display: grid;
+            grid-template-columns: minmax(5.25rem, 7rem) minmax(0, 1fr);
+            align-items: center;
+            gap: 0.75rem;
             border: 1px solid var(--card);
-            border-radius: 0.85rem;
+            border-radius: 0.65rem;
             background: var(--soft-surface);
-            padding: 0.75rem 0.85rem;
+            padding: 0.8rem 0.9rem;
         }
 
         .record-mobile-label {
             color: var(--sub);
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             font-weight: 800;
+            margin-bottom: 0;
+        }
+
+        .record-mobile-head .record-mobile-label {
             margin-bottom: 0.25rem;
         }
 
         .record-mobile-value {
             color: var(--deep);
-            font-size: 1.06rem;
+            font-size: 1.12rem;
             font-weight: 900;
             line-height: 1.35;
             overflow-wrap: anywhere;
@@ -329,7 +383,7 @@
         .record-mobile-actions {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.55rem;
+            gap: 0.65rem;
         }
 
         .record-mobile-actions form {
@@ -337,8 +391,13 @@
         }
 
         .record-mobile-action-btn {
-            min-height: 3.15rem;
-            border-radius: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.25rem;
+            width: 100%;
+            border-radius: 0.7rem;
+            font-size: 1.02rem;
             font-weight: 900;
         }
 
@@ -381,7 +440,7 @@
             .record-search-panel,
             .record-list-panel,
             .record-mobile-card {
-                border-radius: 0.85rem;
+                border-radius: 0.75rem;
             }
 
             .record-mobile-head {
@@ -398,6 +457,12 @@
                 justify-content: flex-start;
             }
         }
+
+        @media (max-width: 379.98px) {
+            .record-mobile-actions {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body class="record-list-page"
@@ -408,7 +473,7 @@
         <div class="record-list-hero mb-4">
             <div>
                 <h1 class="record-list-title fw-bold mb-2">記録一覧</h1>
-                <p class="text-secondary mb-0">開催日・レース場・レース番号で、保存済み記録を探せます。</p>
+                <p class="record-list-lead mb-0">開催日・レース場・レース番号で、保存済み記録を探せます。</p>
             </div>
             <div class="record-list-actions">
                 <a th:href="@{/records/new}" class="btn btn-primary btn-lg px-4">新しく記録する</a>
@@ -442,11 +507,6 @@
                                 <strong th:text="${selectedRaceNumber + 'R'}">8R</strong>
                             </span>
                         </div>
-                    </div>
-                    <div class="record-status-legend" aria-label="記録状態">
-                        <span class="record-status-badge">記録完了</span>
-                        <span class="record-status-badge is-pending">結果未入力</span>
-                        <span class="record-status-badge is-draft">途中入力</span>
                     </div>
                     <button class="btn btn-outline-secondary record-search-toggle d-md-none"
                             type="button"
@@ -497,6 +557,14 @@
 
         <section class="record-list-panel">
             <div class="p-3 p-md-4">
+                <div class="record-list-panel-header" th:unless="${#lists.isEmpty(records)}">
+                    <h2 class="record-list-panel-title">保存済み記録</h2>
+                    <p class="record-list-panel-meta">
+                        <strong th:text="${#lists.size(records)}">0</strong>
+                        <span>件</span>
+                    </p>
+                </div>
+
                 <div class="d-none d-md-block" th:unless="${#lists.isEmpty(records)}">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle record-table mb-0">
@@ -535,9 +603,9 @@
                                     </td>
                                     <td>
                                         <div class="record-action-group">
-                                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary btn-sm">内容を見る</a>
+                                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-primary btn-sm">内容を見る</a>
                                             <a th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-outline-secondary btn-sm">編集</a>
-                                            <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この記録を削除しますか？');">
+                                            <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この保存済み記録を削除しますか？');">
                                                 <button type="submit" class="btn btn-outline-danger btn-sm">削除</button>
                                             </form>
                                         </div>
@@ -580,9 +648,9 @@
                         </div>
 
                         <div class="record-mobile-actions">
-                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-outline-primary record-mobile-action-btn is-primary">内容を見る</a>
+                            <a th:href="@{/records/{id}(id=${record.id})}" class="btn btn-primary record-mobile-action-btn is-primary">内容を見る</a>
                             <a th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-outline-secondary record-mobile-action-btn">編集</a>
-                            <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この記録を削除しますか？');">
+                            <form th:action="@{/records/{id}/delete(id=${record.id})}" method="post" onsubmit="return window.confirm('この保存済み記録を削除しますか？');">
                                 <button type="submit" class="btn btn-outline-danger record-mobile-action-btn">削除</button>
                             </form>
                         </div>

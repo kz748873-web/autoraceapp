@@ -2170,6 +2170,10 @@
                                         <input type="text" id="featuredTrialTimeNote" th:field="*{featuredTrialTimeNote}" class="form-control form-control-lg" placeholder="例: 橘ミナトは試走の伸びが良い">
                                     </div>
                                 </div>
+                                <div class="mt-3 trial-overall-note-field">
+                                    <label for="raceOverallNote" class="form-label fw-semibold">試走から見た全体メモ</label>
+                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control trial-overall-note-input" rows="5" placeholder="例:&#10;・スタート先行&#10;・試走気配良い&#10;・雨巧者注意"></textarea>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xl-7">
@@ -2208,10 +2212,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mt-3 trial-overall-note-field">
-                                    <label for="raceOverallNote" class="form-label fw-semibold">試走から見た全体メモ</label>
-                                    <textarea id="raceOverallNote" th:field="*{raceOverallNote}" class="form-control trial-overall-note-input" rows="5" placeholder="例:&#10;・スタート先行&#10;・試走気配良い&#10;・雨巧者注意"></textarea>
                                 </div>
                             </div>
                         </div>
