@@ -3,6 +3,73 @@
 <head>
     <th:block th:replace="~{layout/base :: commonHead('用語集 | オートレース予想補助アプリ')}"></th:block>
     <style>
+        body.glossary-page {
+            --glossary-panel-radius: 0.75rem;
+            --glossary-control-radius: 0.72rem;
+        }
+
+        .glossary-hero {
+            border: 1px solid var(--card);
+            border-left: 0.32rem solid #c5162e;
+            border-radius: var(--glossary-panel-radius);
+            background:
+                linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--soft-surface) 80%, white) 100%);
+            box-shadow: 0 0.7rem 1.4rem rgba(17, 24, 39, 0.07);
+        }
+
+        .glossary-title {
+            color: var(--deep);
+            font-size: clamp(1.75rem, 5vw, 2.35rem);
+            line-height: 1.25;
+        }
+
+        .glossary-hero-actions {
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .glossary-hero-actions .btn,
+        .glossary-search-actions .btn,
+        .glossary-card-actions .btn,
+        .glossary-add-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.05rem;
+            border-radius: var(--glossary-control-radius);
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .glossary-quick-guide {
+            display: grid;
+            gap: 0.65rem;
+            margin-top: 1rem;
+        }
+
+        .glossary-guide-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 0.65rem;
+            align-items: start;
+            padding: 0.85rem;
+            border: 1px solid color-mix(in srgb, var(--card) 82%, white);
+            border-radius: var(--glossary-panel-radius);
+            background: rgba(255, 255, 255, 0.86);
+        }
+
+        .glossary-guide-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            background: var(--section-badge-bg);
+            color: var(--deep);
+            font-weight: 900;
+        }
+
         .glossary-layout {
             display: grid;
             gap: 1.5rem;
@@ -15,7 +82,7 @@
 
         .glossary-item {
             border: 1px solid var(--card);
-            border-radius: 1.25rem;
+            border-radius: var(--glossary-panel-radius);
             background: #ffffff;
             box-shadow: 0 0.6rem 1.2rem rgba(18, 61, 106, 0.08);
         }
@@ -37,6 +104,7 @@
 
         .glossary-help {
             color: var(--sub);
+            font-size: 1rem;
             line-height: 1.75;
         }
 
@@ -48,7 +116,7 @@
         .glossary-summary,
         .glossary-search-panel {
             border: 1px solid var(--card);
-            border-radius: 1rem;
+            border-radius: var(--glossary-panel-radius);
             background: var(--soft-surface);
         }
 
@@ -57,8 +125,8 @@
         }
 
         .glossary-check {
-            width: 1.25rem;
-            height: 1.25rem;
+            width: 1.35rem;
+            height: 1.35rem;
         }
 
         .glossary-meta {
@@ -94,17 +162,21 @@
 
         .glossary-field-block {
             border: 1px solid var(--card);
-            border-radius: 1rem;
+            border-radius: var(--glossary-panel-radius);
             background: var(--soft-surface);
             padding: 1rem;
         }
 
         .glossary-form-control {
             min-height: 3.1rem;
+            border-radius: var(--glossary-control-radius);
+            font-size: 1rem;
         }
 
         .glossary-textarea {
             min-height: 8rem;
+            border-radius: var(--glossary-control-radius);
+            line-height: 1.65;
         }
 
         .glossary-empty {
@@ -127,7 +199,7 @@
 
         .glossary-search-note {
             border: 1px dashed var(--card);
-            border-radius: 1rem;
+            border-radius: var(--glossary-panel-radius);
             background: #ffffff;
             padding: 1rem;
         }
@@ -145,7 +217,104 @@
             font-size: 0.9rem;
         }
 
+        .glossary-kana-filter {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid color-mix(in srgb, var(--card) 76%, white);
+        }
+
+        .glossary-kana-title {
+            color: var(--deep);
+            font-weight: 800;
+            margin-bottom: 0.65rem;
+        }
+
+        .glossary-kana-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.5rem;
+        }
+
+        .glossary-kana-button {
+            min-height: 2.85rem;
+            border-radius: var(--glossary-control-radius);
+            font-weight: 800;
+        }
+
+        .glossary-kana-button.is-active {
+            background: var(--brand-strong) !important;
+            border-color: var(--brand-strong) !important;
+            color: var(--btn-on-brand) !important;
+        }
+
+        .glossary-pin-panel {
+            border: 1px solid color-mix(in srgb, #c5162e 18%, var(--card));
+            border-left: 0.28rem solid #c5162e;
+            border-radius: var(--glossary-panel-radius);
+            background:
+                linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--soft-surface) 76%, white) 100%);
+            box-shadow: 0 0.5rem 1.1rem rgba(17, 24, 39, 0.06);
+        }
+
+        .glossary-pin-panel[hidden],
+        .glossary-filter-empty[hidden],
+        .glossary-pin-alert[hidden] {
+            display: none !important;
+        }
+
+        .glossary-pin-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .glossary-pin-list {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .glossary-pin-chip {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 0.75rem;
+            border: 1px solid color-mix(in srgb, var(--card) 80%, white);
+            border-radius: var(--glossary-control-radius);
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .glossary-pin-term {
+            color: var(--deep);
+            font-weight: 900;
+            overflow-wrap: anywhere;
+        }
+
+        .glossary-pin-alert {
+            margin-top: 0.65rem;
+            color: #8a4d00;
+            font-weight: 800;
+        }
+
         @media (min-width: 992px) {
+            .glossary-hero {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: end;
+                gap: 1.5rem;
+            }
+
+            .glossary-hero-actions {
+                grid-template-columns: repeat(2, minmax(0, auto));
+            }
+
+            .glossary-quick-guide {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
             .glossary-layout {
                 grid-template-columns: minmax(22rem, 25rem) minmax(0, 1fr);
                 align-items: start;
@@ -167,9 +336,21 @@
             .glossary-card-grid {
                 grid-template-columns: minmax(15rem, 0.75fr) minmax(0, 1fr) minmax(0, 1fr);
             }
+
+            .glossary-kana-buttons {
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+            }
         }
 
         @media (max-width: 991.98px) {
+            .glossary-results-wrap {
+                order: 1;
+            }
+
+            .glossary-panel {
+                order: 2;
+            }
+
             .glossary-sticky {
                 position: static;
             }
@@ -184,22 +365,82 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 575.98px) {
+            .glossary-item-header,
+            .glossary-card-actions {
+                align-items: stretch;
+                justify-content: stretch;
+            }
+
+            .glossary-card-actions {
+                display: grid;
+            }
+
+            .glossary-meta {
+                display: grid;
+                gap: 0.5rem;
+            }
+
+            .glossary-kana-buttons {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .glossary-pin-chip {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="glossary-page">
     <div class="app-shell d-flex flex-column">
         <div th:replace="~{layout/header :: siteHeader}"></div>
         <main class="container py-4 py-md-5 flex-grow-1">
+            <section class="glossary-hero p-4 p-md-5 mb-4">
+                <div>
+                    <span class="section-badge mb-2">Prediction Pit 用語集</span>
+                    <h1 class="glossary-title fw-bold mb-2">オートレースの言葉を、少しずつ自分のものにする</h1>
+                    <p class="glossary-help mb-0">分からない言葉を検索し、意味を読んで、自分のメモとして残せます。予想前の確認や、レース後の振り返りに使いやすいページです。</p>
+                    <div class="glossary-quick-guide" aria-label="用語ページの使い方">
+                        <div class="glossary-guide-item">
+                            <span class="glossary-guide-number">1</span>
+                            <div>
+                                <div class="fw-bold">まず検索</div>
+                                <div class="glossary-help mb-0">気になる言葉を入れて、意味を探します。</div>
+                            </div>
+                        </div>
+                        <div class="glossary-guide-item">
+                            <span class="glossary-guide-number">2</span>
+                            <div>
+                                <div class="fw-bold">意味を確認</div>
+                                <div class="glossary-help mb-0">初心者でも読み返しやすいように整理します。</div>
+                            </div>
+                        </div>
+                        <div class="glossary-guide-item">
+                            <span class="glossary-guide-number">3</span>
+                            <div>
+                                <div class="fw-bold">自分メモへ</div>
+                                <div class="glossary-help mb-0">予想で気づいたことを残せます。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glossary-hero-actions">
+                    <a href="#glossarySearch" class="btn btn-primary btn-lg px-4">用語を探す</a>
+                    <a href="#glossaryAddPanel" class="btn btn-outline-secondary btn-lg px-4">用語を追加</a>
+                </div>
+            </section>
+
             <div class="glossary-layout justify-content-center">
-                <div class="glossary-panel">
+                <div class="glossary-panel" id="glossaryAddPanel">
                     <div class="page-card p-4 p-md-5 glossary-sticky">
                         <span class="section-badge mb-2">用語追加</span>
-                        <h1 class="section-title mb-2">自分の用語メモを増やす</h1>
-                        <p class="glossary-help mb-4">オートレース用語を、自分の言葉で少しずつ積み上げていくための入力エリアです。あとで見返しやすいように、意味とメモを分けて残せます。</p>
+                        <h2 class="section-title mb-2">自分の用語メモを増やす</h2>
+                        <p class="glossary-help mb-4">覚えたい言葉を追加できます。意味は短く、自分のメモには「どんな時に使うか」を残すと、あとで見返しやすくなります。</p>
 
                         <div class="glossary-summary p-3 mb-4">
-                            <div class="fw-semibold mb-2">このページでできること</div>
-                            <div class="glossary-help mb-0">用語の追加、検索、チェック管理、メモ更新を一つの画面で進められます。確認できた用語にはチェックを入れて、ToDoリストのように整理できます。</div>
+                            <div class="fw-semibold mb-2">追加のコツ</div>
+                            <div class="glossary-help mb-0">最初は「試走」「走路」「オッズ」など、よく見る言葉から増やすと迷いにくくなります。</div>
                         </div>
 
                         <form th:action="@{/glossaries}" method="post" th:object="${newTerm}" class="vstack gap-3">
@@ -215,46 +456,74 @@
                                 <label for="memo" class="form-label fw-semibold">自分のメモ</label>
                                 <textarea id="memo" th:field="*{memo}" class="form-control glossary-textarea" rows="4" placeholder="覚え方、気づき、予想に活かせそうな点を残せます"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-lg">用語を追加する</button>
+                            <button type="submit" class="btn btn-primary btn-lg glossary-add-submit">用語を追加する</button>
                         </form>
                     </div>
                 </div>
 
                 <div class="glossary-results-wrap">
-                    <section class="page-card p-4 p-md-5 mb-4 glossary-search-panel">
+                    <section id="glossarySearch" class="page-card p-4 p-md-5 mb-4 glossary-search-panel">
                         <span class="section-badge mb-2">用語検索</span>
                         <h2 class="section-title mb-2">知りたい言葉をすぐ探す</h2>
-                        <p class="glossary-help mb-4">用語、意味、自分のメモをまとめて検索できます。探したあと、そのままカードを更新できる流れにしています。</p>
+                        <p class="glossary-help mb-4">用語、意味、自分のメモをまとめて検索できます。読み方に迷った時は、まずここから探してください。</p>
                         <div class="glossary-search-grid">
                             <form th:action="@{/glossaries}" method="get" class="row g-3 align-items-end">
                                 <div class="col-12">
                                     <label for="q" class="form-label fw-semibold">検索キーワード</label>
                                     <input id="q" type="text" name="q" th:value="${query}" class="form-control form-control-lg glossary-form-control" placeholder="例: オッズ / 走路 / スタート">
                                 </div>
-                                <div class="col-12 d-flex flex-column flex-sm-row gap-2">
+                                <div class="col-12 d-flex flex-column flex-sm-row gap-2 glossary-search-actions">
                                     <button type="submit" class="btn btn-outline-primary btn-lg">検索</button>
                                     <a th:href="@{/glossaries}" class="btn btn-outline-secondary btn-lg">条件をリセット</a>
                                 </div>
                             </form>
                             <div class="glossary-search-note">
                                 <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                                    <span class="glossary-count-chip" th:text="${#lists.size(terms)} + '件'">0件</span>
+                                    <span class="glossary-count-chip" data-glossary-count th:text="${#lists.size(terms)} + '件'">0件</span>
                                     <span class="fw-semibold">表示中の用語</span>
                                 </div>
-                                <div class="glossary-help mb-0">チェック済みのカードは ToDo を終えたメモとして残せます。気になる言葉だけ探して、意味や自分メモをその場で更新できます。</div>
+                                <div class="glossary-help mb-0">意味が分かったカードは「確認できた」にチェックできます。あとから意味や自分メモを更新できます。</div>
+                            </div>
+                        </div>
+                        <div class="glossary-kana-filter" data-glossary-kana-filter>
+                            <div class="glossary-kana-title">行で絞り込む</div>
+                            <div class="glossary-kana-buttons" role="group" aria-label="用語の行検索">
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button is-active" data-kana-row="all">すべて</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="a">あ行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="k">か行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="s">さ行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="t">た行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="n">な行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="h">は行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="m">ま行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="y">や行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="r">ら行</button>
+                                <button type="button" class="btn btn-outline-secondary glossary-kana-button" data-kana-row="w">わ行</button>
                             </div>
                         </div>
                     </section>
 
-                    <section class="glossary-list">
-                        <article th:each="term : ${terms}" class="glossary-item p-4" th:classappend="${term.checked} ? ' is-checked' : ''">
+                    <section class="glossary-pin-panel p-3 p-md-4 mb-4" data-glossary-pin-panel hidden>
+                        <div class="glossary-pin-header">
+                            <div>
+                                <div class="fw-bold">固定用語</div>
+                                <div class="glossary-help mb-0">よく見る言葉を5つまで上に置けます。</div>
+                            </div>
+                            <span class="glossary-count-chip" data-glossary-pin-count>0/5</span>
+                        </div>
+                        <div class="glossary-pin-list" data-glossary-pin-list></div>
+                        <div class="glossary-pin-alert" data-glossary-pin-alert role="status" aria-live="polite" hidden>固定できる用語は5つまでです</div>
+                    </section>
+
+                    <section class="glossary-list" data-glossary-list>
+                        <article th:each="term : ${terms}" class="glossary-item p-4" th:classappend="${term.checked} ? ' is-checked' : ''" th:attr="data-term-id=${term.id}">
                             <form th:action="@{/glossaries/{id}(id=${term.id})}" method="post" class="vstack gap-3">
                                 <input type="hidden" name="q" th:value="${query}">
 
                                 <div class="glossary-item-header">
                                     <div class="glossary-meta">
                                         <span class="glossary-card-badge">用語カード</span>
-                                        <span class="text-secondary">あとで見返しやすいように、ここで更新できます。</span>
+                                        <span class="text-secondary">意味とメモをあとから直せます。</span>
                                     </div>
                                     <div class="form-check fs-5 mb-0">
                                         <input class="form-check-input glossary-check" type="checkbox" name="checked" value="true" th:checked="${term.checked}" th:id="${'checked-' + term.id}">
@@ -280,12 +549,18 @@
                                 </div>
 
                                 <div class="glossary-card-actions">
+                                    <button type="button" class="btn btn-outline-secondary js-glossary-pin" aria-pressed="false">固定する</button>
                                     <button type="submit" class="btn btn-primary">このカードを更新</button>
                                 </div>
                             </form>
                         </article>
 
-                        <div th:if="${#lists.isEmpty(terms)}" class="page-card p-4 p-md-5 glossary-empty">
+                        <div class="page-card p-4 p-md-5 glossary-empty glossary-filter-empty" data-glossary-filter-empty hidden>
+                            <div class="fw-bold mb-2">この行に当てはまる用語がありません</div>
+                            <div class="glossary-help">別の行を選ぶか、検索条件を変えてください。</div>
+                        </div>
+
+                        <div th:if="${#lists.isEmpty(terms)}" class="page-card p-4 p-md-5 glossary-empty" data-glossary-empty>
                             <div class="fw-bold mb-2">見つかる用語がありませんでした</div>
                             <div class="glossary-help">検索条件を変えるか、左側の入力欄から新しい用語を追加してください。</div>
                         </div>
@@ -297,5 +572,352 @@
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                initializeGlossaryPageTools();
+            } catch (error) {
+                if (window.console && typeof window.console.warn === "function") {
+                    window.console.warn("Glossary page tools could not start.", error);
+                }
+            }
+        });
+
+        function initializeGlossaryPageTools() {
+            const list = document.querySelector("[data-glossary-list]");
+            if (!list) {
+                return;
+            }
+
+            const items = Array.from(list.querySelectorAll("[data-term-id]"));
+            if (!items.length) {
+                return;
+            }
+
+            const countChip = document.querySelector("[data-glossary-count]");
+            const filterEmpty = document.querySelector("[data-glossary-filter-empty]");
+            const kanaButtons = Array.from(document.querySelectorAll("[data-kana-row]"));
+            const collator = getGlossaryCollator();
+            let activeKanaRow = "all";
+
+            items.forEach(function (item) {
+                item.dataset.kanaRow = getKanaRow(getGlossaryItemTerm(item));
+            });
+
+            sortGlossaryItems(items, list, collator);
+            initializeGlossaryPins(items);
+            updateGlossaryVisibleItems();
+
+            kanaButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const selectedRow = button.dataset.kanaRow || "all";
+                    activeKanaRow = selectedRow;
+
+                    kanaButtons.forEach(function (candidate) {
+                        const isActive = candidate === button;
+                        candidate.classList.toggle("is-active", isActive);
+                        candidate.setAttribute("aria-pressed", isActive ? "true" : "false");
+                    });
+
+                    updateGlossaryVisibleItems();
+                });
+            });
+
+            function updateGlossaryVisibleItems() {
+                let visibleCount = 0;
+
+                items.forEach(function (item) {
+                    const itemRow = item.dataset.kanaRow || "";
+                    const shouldShow = activeKanaRow === "all" || itemRow === activeKanaRow;
+                    item.hidden = !shouldShow;
+                    if (shouldShow) {
+                        visibleCount += 1;
+                    }
+                });
+
+                if (countChip) {
+                    countChip.textContent = visibleCount + "件";
+                }
+
+                if (filterEmpty) {
+                    filterEmpty.hidden = visibleCount !== 0 || activeKanaRow === "all";
+                }
+            }
+        }
+
+        function getGlossaryCollator() {
+            try {
+                return new Intl.Collator("ja-JP", {
+                    numeric: true,
+                    sensitivity: "base"
+                });
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function sortGlossaryItems(items, list, collator) {
+            const referenceNode = list.querySelector("[data-glossary-filter-empty]")
+                || list.querySelector("[data-glossary-empty]");
+
+            items.sort(function (left, right) {
+                const leftTerm = getGlossaryItemTerm(left);
+                const rightTerm = getGlossaryItemTerm(right);
+                const leftKey = getGlossarySortKey(leftTerm);
+                const rightKey = getGlossarySortKey(rightTerm);
+                const leftRowIndex = getKanaRowIndex(getKanaRow(leftTerm));
+                const rightRowIndex = getKanaRowIndex(getKanaRow(rightTerm));
+
+                if (leftRowIndex !== rightRowIndex) {
+                    return leftRowIndex - rightRowIndex;
+                }
+
+                if (collator) {
+                    return collator.compare(leftKey, rightKey);
+                }
+
+                return leftKey.localeCompare(rightKey);
+            }).forEach(function (item) {
+                list.insertBefore(item, referenceNode);
+            });
+        }
+
+        function getGlossaryItemTerm(item) {
+            if (!item) {
+                return "";
+            }
+
+            const input = item.querySelector("input[name='term']");
+            return input && input.value ? input.value.trim() : "";
+        }
+
+        function getGlossarySortKey(term) {
+            const reading = getGlossaryReading(term || "");
+            return normalizeKana(reading || term || "").toLowerCase();
+        }
+
+        function getGlossaryReading(term) {
+            const value = String(term || "").trim();
+            const readings = [
+                ["オッズ", "おっず"],
+                ["試走", "しそう"],
+                ["走路状況", "そうろじょうきょう"],
+                ["走路", "そうろ"],
+                ["スタート", "すたーと"],
+                ["ハンデ", "はんで"],
+                ["湿走路", "しっそうろ"],
+                ["良走路", "りょうそうろ"],
+                ["斑走路", "ぶちそうろ"],
+                ["車券", "しゃけん"],
+                ["選手", "せんしゅ"],
+                ["発走", "はっそう"],
+                ["本走", "ほんそう"],
+                ["展開", "てんかい"],
+                ["配当", "はいとう"],
+                ["予想", "よそう"],
+                ["雨", "あめ"],
+                ["風", "かぜ"]
+            ];
+
+            for (let index = 0; index < readings.length; index += 1) {
+                const pair = readings[index];
+                if (value.indexOf(pair[0]) === 0) {
+                    return pair[1] + value.slice(pair[0].length);
+                }
+            }
+
+            return value;
+        }
+
+        function normalizeKana(value) {
+            return String(value || "")
+                .normalize("NFKC")
+                .replace(/[\u30a1-\u30f6]/g, function (character) {
+                    return String.fromCharCode(character.charCodeAt(0) - 0x60);
+                });
+        }
+
+        function getKanaRow(term) {
+            const key = getGlossarySortKey(term);
+            const first = key.charAt(0);
+            const rows = {
+                a: "あいうえおぁぃぅぇぉゔ",
+                k: "かきくけこがぎぐげご",
+                s: "さしすせそざじずぜぞ",
+                t: "たちつてとだぢづでどっ",
+                n: "なにぬねの",
+                h: "はひふへほばびぶべぼぱぴぷぺぽ",
+                m: "まみむめも",
+                y: "やゆよゃゅょ",
+                r: "らりるれろ",
+                w: "わをん"
+            };
+
+            return Object.keys(rows).find(function (row) {
+                return rows[row].indexOf(first) !== -1;
+            }) || "";
+        }
+
+        function getKanaRowIndex(row) {
+            const order = ["a", "k", "s", "t", "n", "h", "m", "y", "r", "w", ""];
+            const index = order.indexOf(row);
+            return index === -1 ? order.length : index;
+        }
+
+        function initializeGlossaryPins(items) {
+            const storageKey = "prediction-pit-glossary-pinned-term-ids";
+            const maxPinnedTerms = 5;
+            const pinPanel = document.querySelector("[data-glossary-pin-panel]");
+            const pinList = document.querySelector("[data-glossary-pin-list]");
+            const pinCount = document.querySelector("[data-glossary-pin-count]");
+            const pinAlert = document.querySelector("[data-glossary-pin-alert]");
+            const itemById = new Map();
+            let pinnedIds = readPinnedTermIds(storageKey).slice(0, maxPinnedTerms);
+
+            items.forEach(function (item) {
+                const termId = item.dataset.termId;
+                if (!termId) {
+                    return;
+                }
+
+                itemById.set(String(termId), item);
+
+                const button = item.querySelector(".js-glossary-pin");
+                if (!button) {
+                    return;
+                }
+
+                button.addEventListener("click", function () {
+                    togglePinnedTerm(String(termId));
+                });
+            });
+
+            renderPinnedTerms();
+
+            function togglePinnedTerm(termId) {
+                if (!termId) {
+                    return;
+                }
+
+                if (pinnedIds.indexOf(termId) !== -1) {
+                    pinnedIds = pinnedIds.filter(function (id) {
+                        return id !== termId;
+                    });
+                    writePinnedTermIds(storageKey, pinnedIds);
+                    renderPinnedTerms();
+                    return;
+                }
+
+                if (pinnedIds.length >= maxPinnedTerms) {
+                    showPinnedLimitMessage();
+                    return;
+                }
+
+                pinnedIds.push(termId);
+                writePinnedTermIds(storageKey, pinnedIds);
+                renderPinnedTerms();
+            }
+
+            function renderPinnedTerms() {
+                updatePinButtons();
+
+                if (pinCount) {
+                    pinCount.textContent = pinnedIds.length + "/" + maxPinnedTerms;
+                }
+
+                if (!pinPanel || !pinList) {
+                    return;
+                }
+
+                pinList.textContent = "";
+
+                const visiblePinnedItems = pinnedIds
+                    .map(function (id) {
+                        return itemById.get(id);
+                    })
+                    .filter(function (item) {
+                        return Boolean(item);
+                    });
+
+                pinPanel.hidden = visiblePinnedItems.length === 0;
+
+                visiblePinnedItems.forEach(function (item) {
+                    const termId = String(item.dataset.termId || "");
+                    const termText = getGlossaryItemTerm(item) || "用語";
+                    const chip = document.createElement("div");
+                    const label = document.createElement("span");
+                    const button = document.createElement("button");
+
+                    chip.className = "glossary-pin-chip";
+                    label.className = "glossary-pin-term";
+                    label.textContent = termText;
+
+                    button.type = "button";
+                    button.className = "btn btn-outline-secondary btn-sm";
+                    button.textContent = "解除";
+                    button.addEventListener("click", function () {
+                        togglePinnedTerm(termId);
+                    });
+
+                    chip.appendChild(label);
+                    chip.appendChild(button);
+                    pinList.appendChild(chip);
+                });
+            }
+
+            function updatePinButtons() {
+                items.forEach(function (item) {
+                    const termId = String(item.dataset.termId || "");
+                    const button = item.querySelector(".js-glossary-pin");
+                    const isPinned = pinnedIds.indexOf(termId) !== -1;
+
+                    if (!button) {
+                        return;
+                    }
+
+                    button.textContent = isPinned ? "固定解除" : "固定する";
+                    button.setAttribute("aria-pressed", isPinned ? "true" : "false");
+                    button.classList.toggle("btn-outline-secondary", !isPinned);
+                    button.classList.toggle("btn-outline-danger", isPinned);
+                });
+            }
+
+            function showPinnedLimitMessage() {
+                if (!pinAlert) {
+                    return;
+                }
+
+                pinAlert.hidden = false;
+                window.setTimeout(function () {
+                    pinAlert.hidden = true;
+                }, 3500);
+            }
+        }
+
+        function readPinnedTermIds(storageKey) {
+            try {
+                const rawValue = window.localStorage.getItem(storageKey);
+                const parsedValue = rawValue ? JSON.parse(rawValue) : [];
+
+                if (!Array.isArray(parsedValue)) {
+                    return [];
+                }
+
+                return Array.from(new Set(parsedValue.map(function (id) {
+                    return String(id || "");
+                }).filter(Boolean)));
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function writePinnedTermIds(storageKey, pinnedIds) {
+            try {
+                window.localStorage.setItem(storageKey, JSON.stringify(pinnedIds));
+            } catch (error) {
+                return;
+            }
+        }
+    </script>
 </body>
 </html>
