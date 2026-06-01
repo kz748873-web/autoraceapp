@@ -57,6 +57,66 @@
             background: linear-gradient(90deg, var(--brand-strong), rgba(255, 255, 255, 0));
         }
 
+        .record-detail-hero {
+            padding: clamp(1rem, 2.4vw, 1.35rem);
+            border: 1px solid var(--card);
+            border-radius: 1.1rem;
+            background:
+                linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--surface-tint) 64%, white) 100%);
+            box-shadow: 0 0.8rem 1.7rem rgba(15, 23, 42, 0.06);
+        }
+
+        .record-detail-title {
+            color: var(--theme-text);
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+            line-height: 1.35;
+            letter-spacing: 0;
+        }
+
+        .record-detail-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .record-detail-current-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.65rem;
+            max-width: 36rem;
+        }
+
+        .record-detail-current-item {
+            min-width: 0;
+            padding: 0.72rem 0.85rem;
+            border: 1px solid color-mix(in srgb, var(--brand-strong) 26%, white);
+            border-left: 0.25rem solid var(--brand-strong);
+            border-radius: 0.82rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .record-detail-current-label {
+            display: block;
+            color: var(--sub);
+            font-size: 0.78rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .record-detail-current-value {
+            display: block;
+            min-width: 0;
+            margin-top: 0.18rem;
+            color: var(--theme-text);
+            font-size: 1rem;
+            font-weight: 900;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
         .record-detail-field {
             border: 1px solid var(--card);
             border-radius: 1rem;
@@ -124,6 +184,39 @@
             background: var(--soft-surface);
         }
 
+        .trial-time-head {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+            margin-bottom: 0.85rem;
+        }
+
+        .trial-time-head > div {
+            min-width: 0;
+        }
+
+        .trial-time-rider {
+            color: var(--deep);
+            font-weight: 800;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .trial-time-rider.is-empty {
+            color: var(--sub);
+            font-weight: 700;
+        }
+
+        .trial-time-value {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding-top: 0.65rem;
+            border-top: 1px solid color-mix(in srgb, var(--card) 70%, white);
+        }
+
         .trial-time-meta {
             display: flex;
             flex-wrap: wrap;
@@ -187,6 +280,18 @@
         .record-detail-start-diagram .start-diagram-viewport::-webkit-scrollbar-thumb {
             background: rgba(233, 30, 122, 0.45);
             border-radius: 999px;
+        }
+
+        .record-detail-start-diagram .start-diagram-readonly-note {
+            padding: 0.72rem 0.9rem;
+            border-bottom: 1px solid #f2dbe8;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(197, 22, 46, 0.08), transparent 32%),
+                linear-gradient(180deg, rgba(255, 246, 251, 0.98), rgba(255, 249, 252, 0.94));
+            color: #23415f;
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.6;
         }
 
         .record-detail-start-diagram .start-diagram-canvas {
@@ -418,6 +523,32 @@
                 width: 38px;
                 height: 38px;
             }
+
+            .record-detail-hero,
+            .record-detail-section {
+                border-radius: 0.95rem;
+            }
+
+            .record-detail-current-grid {
+                grid-template-columns: 1fr;
+                max-width: none;
+            }
+
+            .record-detail-actions {
+                width: 100%;
+            }
+
+            .record-detail-actions .btn {
+                width: 100%;
+            }
+
+            .record-detail-field {
+                padding: 0.9rem;
+            }
+
+            .record-detail-value {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -427,12 +558,26 @@
     <div class="app-shell d-flex flex-column">
     <div th:replace="~{layout/header :: siteHeader}"></div>
     <main class="container py-4 py-md-5 flex-grow-1">
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-            <div>
-                <h1 class="h2 fw-bold mb-2">レース記録詳細</h1>
-                <p class="text-secondary mb-0">前日予想から当日予想、レース後の振り返りまでをまとめて確認できます。</p>
+        <div class="record-detail-hero d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+            <div class="flex-grow-1">
+                <h1 class="record-detail-title fw-bold mb-2">レース記録詳細</h1>
+                <p class="text-secondary mb-3">前日予想から当日予想、レース後の振り返りまでを保存内容の流れで確認できます。</p>
+                <div th:if="${record != null}" class="record-detail-current-grid">
+                    <div class="record-detail-current-item">
+                        <span class="record-detail-current-label">開催日</span>
+                        <span class="record-detail-current-value" th:text="${#strings.isEmpty(record.raceDate) ? '未入力' : record.raceDate}">未入力</span>
+                    </div>
+                    <div class="record-detail-current-item">
+                        <span class="record-detail-current-label">レース場</span>
+                        <span class="record-detail-current-value" th:text="${#strings.isEmpty(record.venue) ? '未入力' : record.venue}">未入力</span>
+                    </div>
+                    <div class="record-detail-current-item">
+                        <span class="record-detail-current-label">レース番号</span>
+                        <span class="record-detail-current-value" th:text="${record.raceNumber != null ? record.raceNumber + 'レース' : '未入力'}">未入力</span>
+                    </div>
+                </div>
             </div>
-            <div class="d-flex flex-column flex-sm-row gap-2">
+            <div class="record-detail-actions d-flex flex-column flex-sm-row gap-2">
                 <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4">一覧へ戻る</a>
                 <a th:if="${record != null}" th:href="@{/records/{id}/edit(id=${record.id})}" class="btn btn-primary btn-lg px-4">編集する</a>
                 <a th:href="@{/records/new}" class="btn btn-primary btn-lg px-4">新しく記録する</a>
@@ -525,6 +670,7 @@
                 </div>
 
                 <div class="start-diagram-shell">
+                    <div class="start-diagram-readonly-note">保存済みのスタート配置を表示しています。修正するときは「編集する」から記録編集へ進んでください。</div>
                     <div class="start-diagram-viewport">
                         <div class="start-diagram-canvas">
                             <div id="detailStartDiagramBoard"
@@ -657,10 +803,23 @@
                     <p class="text-secondary mb-0">保存された試走タイムと自動順位を確認します。</p>
                 </div>
                 <div class="row g-4">
-                    <div class="col-sm-6 col-lg-3" th:each="entry : ${record.trialTimeEntries}">
+                    <div class="col-sm-6 col-lg-3"
+                         th:each="entry : ${record.trialTimeEntries}"
+                         th:with="programName=${entry.laneNumber == 1 ? record.programRider1Name : (entry.laneNumber == 2 ? record.programRider2Name : (entry.laneNumber == 3 ? record.programRider3Name : (entry.laneNumber == 4 ? record.programRider4Name : (entry.laneNumber == 5 ? record.programRider5Name : (entry.laneNumber == 6 ? record.programRider6Name : (entry.laneNumber == 7 ? record.programRider7Name : record.programRider8Name))))))}">
                         <div class="trial-time-card p-3 h-100" th:attr="data-trial-lane=${entry.laneNumber}">
-                            <div class="text-secondary small mb-1" th:text="${entry.laneNumber == 1 ? '1 白' : (entry.laneNumber == 2 ? '2 黒' : (entry.laneNumber == 3 ? '3 赤' : (entry.laneNumber == 4 ? '4 青' : (entry.laneNumber == 5 ? '5 黄' : (entry.laneNumber == 6 ? '6 緑' : (entry.laneNumber == 7 ? '7 オレンジ' : '8 ピンク'))))))}">1 白</div>
-                            <div class="fw-semibold fs-5" th:text="${#strings.isEmpty(entry.time) ? '未入力' : entry.time}">3.34</div>
+                            <div class="trial-time-head">
+                                <span th:class="${'record-detail-car-badge car-' + entry.laneNumber}" th:text="${entry.laneNumber}">1</span>
+                                <div class="min-w-0">
+                                    <div class="text-secondary small mb-1" th:text="${entry.laneNumber == 1 ? '1 白' : (entry.laneNumber == 2 ? '2 黒' : (entry.laneNumber == 3 ? '3 赤' : (entry.laneNumber == 4 ? '4 青' : (entry.laneNumber == 5 ? '5 黄' : (entry.laneNumber == 6 ? '6 緑' : (entry.laneNumber == 7 ? '7 オレンジ' : '8 ピンク'))))))}">1 白</div>
+                                    <div class="trial-time-rider"
+                                         th:classappend="${#strings.isEmpty(programName)} ? ' is-empty' : ''"
+                                         th:text="${#strings.isEmpty(programName) ? '選手名未入力' : programName}">選手名未入力</div>
+                                </div>
+                            </div>
+                            <div class="trial-time-value">
+                                <span class="record-detail-label mb-0">試走タイム</span>
+                                <span class="fw-semibold fs-5" th:text="${#strings.isEmpty(entry.time) ? '未入力' : entry.time}">3.34</span>
+                            </div>
                             <div class="trial-time-meta">
                                 <span th:if="${entry.hasFeaturedMark}" class="trial-mark-badge" th:text="${entry.featuredMark}">◎</span>
                                 <span th:if="${entry.hasFeaturedMark and !#strings.isEmpty(entry.featuredRiderName)}" class="small text-secondary" th:text="${entry.featuredRiderName}">蒼井ハヤト</span>
@@ -682,7 +841,7 @@
                     <p class="text-secondary mb-0">購入行と最終予想を確認します。</p>
                 </div>
                 <div class="row g-4 mb-4">
-                    <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行1</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.betLine1Type) ? '未入力' : record.betLine1Type}">3連単</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.finalPrediction) ? '未入力' : record.finalPrediction}">1-3-5</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine1Count != null ? record.betLine1Count + '点' : '未入力'}">6点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine1Amount != null ? record.betLine1Amount + '円' : '未入力'}">600円</span></div></div></div>
+                    <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行1</div><div class="record-detail-value mb-2" th:text="${!#strings.isEmpty(record.betLine1Type) ? record.betLine1Type : (!#strings.isEmpty(record.betType) ? record.betType : '未入力')}">3連単</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.finalPrediction) ? '未入力' : record.finalPrediction}">1-3-5</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine1Count != null ? record.betLine1Count + '点' : (record.betCount != null ? record.betCount + '点' : '未入力')}">6点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine1Amount != null ? record.betLine1Amount + '円' : (record.purchaseAmount != null ? record.purchaseAmount + '円' : '未入力')}">600円</span></div></div></div>
                     <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行2</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.betLine2Type) ? '未入力' : record.betLine2Type}">2連単</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.betLine2Marks) ? '未入力' : record.betLine2Marks}">3-1</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine2Count != null ? record.betLine2Count + '点' : '未入力'}">3点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine2Amount != null ? record.betLine2Amount + '円' : '未入力'}">300円</span></div></div></div>
                     <div class="col-lg-4"><div class="record-detail-field"><div class="record-detail-label">購入行3</div><div class="record-detail-value mb-2" th:text="${#strings.isEmpty(record.betLine3Type) ? '未入力' : record.betLine3Type}">ワイド</div><div class="small text-secondary">買い目: <span class="fw-semibold" th:text="${#strings.isEmpty(record.betLine3Marks) ? '未入力' : record.betLine3Marks}">1-3</span></div><div class="small text-secondary">点数: <span class="fw-semibold" th:text="${record.betLine3Count != null ? record.betLine3Count + '点' : '未入力'}">2点</span></div><div class="small text-secondary">金額: <span class="fw-semibold" th:text="${record.betLine3Amount != null ? record.betLine3Amount + '円' : '未入力'}">200円</span></div></div></div>
                 </div>
