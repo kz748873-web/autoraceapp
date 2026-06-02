@@ -2417,8 +2417,9 @@
                                         <div class="form-label fw-semibold mb-1">レース結果</div>
                                         <p class="field-caption mb-0">着順と競争タイムを結果として整理します。</p>
                                     </div>
-                                    <div class="row g-3">
-                                        <div class="col-6">
+                                    <div class="row g-2 text-center">
+                                        <div class="col-4">
+                                            <div class="summary-label mb-1">Ⅰ</div>
                                             <label for="raceResultFirstPlace" class="form-label fw-semibold">1着</label>
                                             <select id="raceResultFirstPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2432,11 +2433,8 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="raceCompetitionTime" class="form-label fw-semibold">競争タイム</label>
-                                            <input type="text" id="raceCompetitionTime" class="form-control form-control-lg js-race-result-part" placeholder="3.363">
-                                        </div>
-                                        <div class="col-12">
+                                        <div class="col-4">
+                                            <div class="summary-label mb-1">Ⅱ</div>
                                             <label for="raceResultSecondPlace" class="form-label fw-semibold">2着</label>
                                             <select id="raceResultSecondPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2450,7 +2448,8 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
-                                        <div class="col-12">
+                                        <div class="col-4">
+                                            <div class="summary-label mb-1">Ⅲ</div>
                                             <label for="raceResultThirdPlace" class="form-label fw-semibold">3着</label>
                                             <select id="raceResultThirdPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2464,6 +2463,10 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="mt-3 pt-3 border-top">
+                                        <label for="raceCompetitionTime" class="form-label fw-semibold">競争タイム</label>
+                                        <input type="text" id="raceCompetitionTime" class="form-control form-control-lg js-race-result-part" placeholder="3.363">
                                     </div>
                                 </div>
 
