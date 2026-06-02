@@ -2533,7 +2533,7 @@
 
                                 <div class="race-result-entry mt-3">
                                     <label for="riderQuickMemoInput" class="form-label fw-semibold">簡単メモ保存欄</label>
-                                    <textarea id="riderQuickMemoInput" class="form-control mb-2" rows="3" placeholder="例: 2号車は試走以上に伸びた"></textarea>
+                                    <textarea id="riderQuickMemoInput" class="form-control mb-2" rows="3" placeholder="右下の簡易メモ、またはここに入力した内容を保存できます。"></textarea>
                                     <div class="d-grid d-sm-flex gap-2 mb-3">
                                         <button type="button" class="btn btn-outline-primary js-save-rider-quick-memo">簡単メモを保存</button>
                                     </div>
@@ -3433,6 +3433,17 @@
         }
     }
 
+    function getFloatingQuickMemoField() {
+        return document.querySelector(".floating-memo-textarea");
+    }
+
+    function getQuickMemoInputValue(input, floatingInput) {
+        const localMemo = input && input.value ? input.value.trim() : "";
+        const floatingMemo = floatingInput && floatingInput.value ? floatingInput.value.trim() : "";
+
+        return floatingMemo || localMemo;
+    }
+
     function initializeRiderQuickMemoControls() {
         const featuredRiderField = document.getElementById("featuredRider");
         const input = document.getElementById("riderQuickMemoInput");
@@ -3449,10 +3460,15 @@
         refreshQuickMemoList();
 
         saveButton.addEventListener("click", function () {
-            const memo = input.value.trim();
+            const floatingInput = getFloatingQuickMemoField();
+            const memo = getQuickMemoInputValue(input, floatingInput);
 
             if (!memo) {
-                input.focus();
+                if (floatingInput) {
+                    floatingInput.focus();
+                } else {
+                    input.focus();
+                }
                 return;
             }
 
@@ -3461,6 +3477,9 @@
 
             featuredRiderField.value = buildFeaturedRiderMemoValue(parts.base, quickMemos);
             input.value = "";
+            if (floatingInput) {
+                floatingInput.value = "";
+            }
             renderRiderQuickMemoList(quickMemos);
             input.focus();
         });
