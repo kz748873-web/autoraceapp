@@ -142,26 +142,6 @@ public class RaceRecordService {
                 .ifPresent(record::setCreatedAt);
     }
 
-    private boolean matchesFeaturedRider(RaceRecord record, String searchValue) {
-        if (searchValue == null || searchValue.isBlank()) {
-            return true;
-        }
-
-        String keyword = searchValue.trim();
-        return contains(record.getFeaturedRider1Name(), keyword)
-                || contains(record.getFeaturedRider2Name(), keyword)
-                || contains(record.getFeaturedRider3Name(), keyword)
-                || contains(record.getProgramRider1Name(), keyword)
-                || contains(record.getProgramRider2Name(), keyword)
-                || contains(record.getProgramRider3Name(), keyword)
-                || contains(record.getProgramRider4Name(), keyword)
-                || contains(record.getProgramRider5Name(), keyword)
-                || contains(record.getProgramRider6Name(), keyword)
-                || contains(record.getProgramRider7Name(), keyword)
-                || contains(record.getProgramRider8Name(), keyword)
-                || contains(record.getFeaturedRider(), keyword);
-    }
-
     private boolean matchesRaceNumber(RaceRecord record, String searchValue) {
         if (searchValue == null || searchValue.isBlank()) {
             return true;
@@ -375,10 +355,6 @@ public class RaceRecordService {
             return false;
         }
         return recordValue.contains(searchValue.trim());
-    }
-
-    private boolean contains(String value, String keyword) {
-        return value != null && value.contains(keyword);
     }
 
     private String trimToEmpty(String value) {
