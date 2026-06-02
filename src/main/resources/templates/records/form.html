@@ -2527,6 +2527,17 @@
 
                                 <label for="featuredRider" class="form-label fw-semibold">選手メモ</label>
                                 <textarea id="featuredRider" th:field="*{featuredRider}" class="form-control" rows="4" placeholder="例: 蒼井ハヤトはスタート後の位置取りが良かった。"></textarea>
+
+                                <div class="race-result-entry mt-3">
+                                    <label for="riderQuickMemoInput" class="form-label fw-semibold">簡単メモ保存欄</label>
+                                    <textarea id="riderQuickMemoInput" class="form-control mb-2" rows="3" placeholder="例: 2号車は試走以上に伸びた"></textarea>
+                                    <div class="d-grid d-sm-flex gap-2 mb-3">
+                                        <button type="button" class="btn btn-outline-primary js-save-rider-quick-memo">簡単メモを保存</button>
+                                    </div>
+                                    <div class="summary-label mb-2">保存済みメモ</div>
+                                    <p class="field-caption mb-0" data-rider-quick-memo-empty>保存済みメモはありません。</p>
+                                    <ol class="list-group list-group-numbered mb-0" data-rider-quick-memo-list hidden></ol>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -3348,6 +3359,110 @@
                 syncRaceResultField();
             });
         });
+    }
+
+    const riderQuickMemoMarker = "【簡単メモ】";
+    const riderQuickMemoMaxItems = 3;
+
+    function splitFeaturedRiderMemo(value) {
+        const text = String(value || "");
+        const markerIndex = text.indexOf(riderQuickMemoMarker);
+
+        if (markerIndex < 0) {
+            return {
+                base: text.trimEnd(),
+                quickMemos: []
+            };
+        }
+
+        const base = text.slice(0, markerIndex).trimEnd();
+        const quickMemos = text
+            .slice(markerIndex + riderQuickMemoMarker.length)
+            .split(/\r?\n/)
+            .map(function (line) {
+                return line.replace(/^\s*(?:[0-9]+[.)]|[-・])\s*/, "").trim();
+            })
+            .filter(Boolean)
+            .slice(0, riderQuickMemoMaxItems);
+
+        return {
+            base: base,
+            quickMemos: quickMemos
+        };
+    }
+
+    function buildFeaturedRiderMemoValue(base, quickMemos) {
+        const normalizedBase = String(base || "").trimEnd();
+        const normalizedMemos = quickMemos
+            .map(function (memo) {
+                return String(memo || "").trim();
+            })
+            .filter(Boolean)
+            .slice(-riderQuickMemoMaxItems);
+        const quickMemoBlock = normalizedMemos.length
+            ? [riderQuickMemoMarker].concat(normalizedMemos.map(function (memo) {
+                return "・" + memo;
+            })).join("\n")
+            : "";
+
+        return [normalizedBase, quickMemoBlock].filter(Boolean).join("\n\n");
+    }
+
+    function renderRiderQuickMemoList(quickMemos) {
+        const list = document.querySelector("[data-rider-quick-memo-list]");
+        const empty = document.querySelector("[data-rider-quick-memo-empty]");
+
+        if (!list) {
+            return;
+        }
+
+        list.innerHTML = "";
+        quickMemos.forEach(function (memo) {
+            const item = document.createElement("li");
+            item.className = "list-group-item px-3 py-2";
+            item.textContent = memo;
+            list.appendChild(item);
+        });
+
+        list.hidden = quickMemos.length === 0;
+        if (empty) {
+            empty.hidden = quickMemos.length > 0;
+        }
+    }
+
+    function initializeRiderQuickMemoControls() {
+        const featuredRiderField = document.getElementById("featuredRider");
+        const input = document.getElementById("riderQuickMemoInput");
+        const saveButton = document.querySelector(".js-save-rider-quick-memo");
+
+        if (!featuredRiderField || !input || !saveButton) {
+            return;
+        }
+
+        function refreshQuickMemoList() {
+            renderRiderQuickMemoList(splitFeaturedRiderMemo(featuredRiderField.value).quickMemos);
+        }
+
+        refreshQuickMemoList();
+
+        saveButton.addEventListener("click", function () {
+            const memo = input.value.trim();
+
+            if (!memo) {
+                input.focus();
+                return;
+            }
+
+            const parts = splitFeaturedRiderMemo(featuredRiderField.value);
+            const quickMemos = parts.quickMemos.concat(memo).slice(-riderQuickMemoMaxItems);
+
+            featuredRiderField.value = buildFeaturedRiderMemoValue(parts.base, quickMemos);
+            input.value = "";
+            renderRiderQuickMemoList(quickMemos);
+            input.focus();
+        });
+
+        featuredRiderField.addEventListener("input", refreshQuickMemoList);
     }
 
     function initializeStartDiagramZoom() {
@@ -4608,6 +4723,9 @@
         if (section.dataset.sectionId === "start-diagram") {
             resetStartDiagramTokens();
         }
+        if (section.dataset.sectionId === "result-review") {
+            renderRiderQuickMemoList([]);
+        }
     }
 
     function updateSectionStatus(section, saved) {
@@ -4951,6 +5069,7 @@
 
         initializeBetLineVisibility(addBetLineButton);
         initializeRaceResultInputEvents();
+        initializeRiderQuickMemoControls();
         initializeFeaturedRider4InputEvents();
 
         if (addBetLineButton) {
