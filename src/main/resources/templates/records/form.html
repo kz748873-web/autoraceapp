@@ -2433,6 +2433,10 @@
                                             </select>
                                         </div>
                                         <div class="col-6">
+                                            <label for="raceCompetitionTime" class="form-label fw-semibold">競争タイム</label>
+                                            <input type="text" id="raceCompetitionTime" class="form-control form-control-lg js-race-result-part" placeholder="3.363">
+                                        </div>
+                                        <div class="col-12">
                                             <label for="raceResultSecondPlace" class="form-label fw-semibold">2着</label>
                                             <select id="raceResultSecondPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2446,7 +2450,7 @@
                                                 <option value="8">8号車</option>
                                             </select>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-12">
                                             <label for="raceResultThirdPlace" class="form-label fw-semibold">3着</label>
                                             <select id="raceResultThirdPlace" class="form-select form-select-lg js-race-result-part">
                                                 <option value="">選択</option>
@@ -2459,10 +2463,6 @@
                                                 <option value="7">7号車</option>
                                                 <option value="8">8号車</option>
                                             </select>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="raceCompetitionTime" class="form-label fw-semibold">競争タイム</label>
-                                            <input type="text" id="raceCompetitionTime" class="form-control form-control-lg js-race-result-part" placeholder="3.363">
                                         </div>
                                     </div>
                                 </div>
@@ -2515,8 +2515,6 @@
                                     </div>
                                 </div>
 
-                                <label for="resultComparison" class="form-label fw-semibold">予想との比較</label>
-                                <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control" rows="6" placeholder="例: 本線は的中、押さえは不要だった。"></textarea>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -2524,8 +2522,11 @@
                                 <label for="reviewNote" class="form-label fw-semibold">振り返りメモ</label>
                                 <textarea id="reviewNote" th:field="*{reviewNote}" class="form-control mb-3" rows="8" placeholder="例: 試走順位と実戦結果の差が大きく、展開読みをもっと重視したい。"></textarea>
 
-                                <label for="featuredRider" class="form-label fw-semibold">今回の中心選手まとめ</label>
-                                <input type="text" id="featuredRider" th:field="*{featuredRider}" class="form-control form-control-lg" placeholder="例: 蒼井ハヤト">
+                                <label for="resultComparison" class="form-label fw-semibold">予想との比較</label>
+                                <textarea id="resultComparison" th:field="*{resultComparison}" class="form-control mb-3" rows="6" placeholder="例: 本線は的中、押さえは不要だった。"></textarea>
+
+                                <label for="featuredRider" class="form-label fw-semibold">選手メモ</label>
+                                <textarea id="featuredRider" th:field="*{featuredRider}" class="form-control" rows="4" placeholder="例: 蒼井ハヤトはスタート後の位置取りが良かった。"></textarea>
                             </div>
                         </div>
                         <div class="col-md-4">
