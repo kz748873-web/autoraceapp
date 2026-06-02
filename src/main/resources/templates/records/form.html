@@ -2530,6 +2530,12 @@
 
                                 <label for="featuredRider" class="form-label fw-semibold">選手メモ</label>
                                 <textarea id="featuredRider" th:field="*{featuredRider}" class="form-control" rows="4" placeholder="例: 蒼井ハヤトはスタート後の位置取りが良かった。"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="sub-block p-4 h-100">
+                                <label for="note" class="form-label fw-semibold">次回につなげるメモ</label>
+                                <textarea id="note" th:field="*{note}" class="form-control mb-3" rows="5" placeholder="例: 湿走路では橘ミナトの評価を上げる。"></textarea>
 
                                 <div class="race-result-entry mt-3">
                                     <label for="riderQuickMemoInput" class="form-label fw-semibold">簡単メモ保存欄</label>
@@ -2541,12 +2547,6 @@
                                     <p class="field-caption mb-0" data-rider-quick-memo-empty>保存済みメモはありません。</p>
                                     <ol class="list-group list-group-numbered mb-0" data-rider-quick-memo-list hidden></ol>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="sub-block p-4 h-100">
-                                <label for="note" class="form-label fw-semibold">次回につなげるメモ</label>
-                                <textarea id="note" th:field="*{note}" class="form-control mb-3" rows="5" placeholder="例: 湿走路では橘ミナトの評価を上げる。"></textarea>
 
                                 <div class="summary-card p-3">
                                     <div class="summary-label">記録の最後に確認したいこと</div>
@@ -3444,6 +3444,60 @@
         return floatingMemo || localMemo;
     }
 
+    function saveRiderQuickMemoFromInputs() {
+        const featuredRiderField = document.getElementById("featuredRider");
+        const input = document.getElementById("riderQuickMemoInput");
+        const floatingInput = getFloatingQuickMemoField();
+
+        if (!featuredRiderField || !input) {
+            return false;
+        }
+
+        const memo = getQuickMemoInputValue(input, floatingInput);
+        if (!memo) {
+            return false;
+        }
+
+        const parts = splitFeaturedRiderMemo(featuredRiderField.value);
+        const quickMemos = parts.quickMemos.concat(memo).slice(-riderQuickMemoMaxItems);
+
+        featuredRiderField.value = buildFeaturedRiderMemoValue(parts.base, quickMemos);
+        input.value = "";
+        if (floatingInput) {
+            floatingInput.value = "";
+        }
+        renderRiderQuickMemoList(quickMemos);
+        return true;
+    }
+
+    function initializeFloatingQuickMemoTransferButton() {
+        const floatingInput = getFloatingQuickMemoField();
+
+        if (!floatingInput || floatingInput.dataset.riderQuickMemoTransferReady === "true") {
+            return;
+        }
+
+        const actions = document.createElement("div");
+        const button = document.createElement("button");
+
+        actions.className = "d-grid mt-2";
+        button.type = "button";
+        button.className = "btn btn-outline-primary btn-sm";
+        button.textContent = "結果考察欄へ転記";
+
+        button.addEventListener("click", function () {
+            if (!saveRiderQuickMemoFromInputs()) {
+                floatingInput.focus();
+                return;
+            }
+            floatingInput.focus();
+        });
+
+        actions.appendChild(button);
+        floatingInput.insertAdjacentElement("afterend", actions);
+        floatingInput.dataset.riderQuickMemoTransferReady = "true";
+    }
+
     function initializeRiderQuickMemoControls() {
         const featuredRiderField = document.getElementById("featuredRider");
         const input = document.getElementById("riderQuickMemoInput");
@@ -3457,13 +3511,13 @@
             renderRiderQuickMemoList(splitFeaturedRiderMemo(featuredRiderField.value).quickMemos);
         }
 
+        initializeFloatingQuickMemoTransferButton();
         refreshQuickMemoList();
 
         saveButton.addEventListener("click", function () {
             const floatingInput = getFloatingQuickMemoField();
-            const memo = getQuickMemoInputValue(input, floatingInput);
 
-            if (!memo) {
+            if (!saveRiderQuickMemoFromInputs()) {
                 if (floatingInput) {
                     floatingInput.focus();
                 } else {
@@ -3472,15 +3526,6 @@
                 return;
             }
 
-            const parts = splitFeaturedRiderMemo(featuredRiderField.value);
-            const quickMemos = parts.quickMemos.concat(memo).slice(-riderQuickMemoMaxItems);
-
-            featuredRiderField.value = buildFeaturedRiderMemoValue(parts.base, quickMemos);
-            input.value = "";
-            if (floatingInput) {
-                floatingInput.value = "";
-            }
-            renderRiderQuickMemoList(quickMemos);
             input.focus();
         });
 
@@ -4928,6 +4973,7 @@
 
         syncStartLineupPositionsField();
         syncRaceResultField();
+        saveRiderQuickMemoFromInputs();
         syncFeaturedRider4Storage();
         updateBetSummary();
         enableFormFieldsForSubmit(form);
@@ -5055,6 +5101,7 @@
                 if (form.dataset.skipSubmitConfirm === "true") {
                     syncStartLineupPositionsField();
                     syncRaceResultField();
+                    saveRiderQuickMemoFromInputs();
                     syncFeaturedRider4Storage();
                     updateBetSummary();
                     enableFormFieldsForSubmit(form);
@@ -5142,6 +5189,9 @@
                             return;
                         }
 
+                        if (sectionId === "result-review") {
+                            saveRiderQuickMemoFromInputs();
+                        }
                         saveButton.disabled = true;
                         saveCurrentRecordSection(form)
                             .then(function () {
