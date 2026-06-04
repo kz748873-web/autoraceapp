@@ -662,7 +662,7 @@
                     <p class="mb-2">条件を変えるか、新しく記録してください。</p>
                     <div class="d-grid d-sm-flex gap-2">
                         <a th:href="@{/records}" class="btn btn-outline-secondary btn-lg px-4">条件をリセット</a>
-                        <a th:href="@{/records/new}" class="btn btn-primary btn-lg px-4">新しく記録する</a>
+                        <a th:href="@{/records/new(raceDate=${selectedRaceDate},venue=${selectedVenue},raceNumber=${selectedRaceNumber})}" class="btn btn-primary btn-lg px-4">新規登録</a>
                     </div>
                 </div>
             </div>

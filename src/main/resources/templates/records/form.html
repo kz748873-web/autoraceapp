@@ -1695,9 +1695,11 @@
                                 <label for="raceScheduleType" class="form-label fw-semibold">開催区分</label>
                                 <select id="raceScheduleType" th:field="*{raceScheduleType}" class="form-select form-select-lg">
                                     <option value="">選択してください</option>
-                                    <option value="デイレース">デイレース</option>
+                                    <option value="アーリー">アーリー</option>
+                                    <option value="デイ">デイ</option>
                                     <option value="ナイター">ナイター</option>
                                     <option value="ミッドナイト">ミッドナイト</option>
+                                    <option value="オーバーミッドナイト">オーバーミッドナイト</option>
                                 </select>
                             </div>
                             <div class="col-xl-2">
@@ -2747,9 +2749,10 @@
             const raceDateField = document.getElementById("raceDate");
             const venueField = document.getElementById("venue");
             const raceNumberField = document.getElementById("raceNumber");
-            const dateParam = params.get("date");
-            const venueName = resolveRecordFormVenueFromPlaceParam(params.get("place"));
-            const raceParam = params.get("race");
+            const dateParam = params.get("raceDate") || params.get("date");
+            const venueParam = params.get("venue");
+            const venueName = venueParam || resolveRecordFormVenueFromPlaceParam(params.get("place"));
+            const raceParam = params.get("raceNumber") || params.get("race");
             const raceDate = dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) ? dateParam : "";
             const raceNumber = raceParam && /^[1-9][0-9]*$/.test(raceParam) ? String(Number(raceParam)) : "";
 
