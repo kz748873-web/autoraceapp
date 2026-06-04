@@ -809,6 +809,30 @@
             margin-bottom: 0.9rem;
         }
 
+        .external-confirm-message {
+            color: var(--home-strong-text);
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .external-confirm-check {
+            border: 1px solid var(--border-color);
+            border-radius: var(--home-control-radius);
+            background: var(--surface-tint);
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .external-confirm-modal .modal-footer {
+            gap: 0.75rem;
+        }
+
+        .external-confirm-modal .modal-footer .btn {
+            min-height: 3.25rem;
+            font-weight: 700;
+        }
+
         .floating-timer-panel {
             position: fixed;
             right: 0.85rem;
@@ -1168,6 +1192,20 @@
                 padding: 1rem !important;
             }
 
+            .external-confirm-modal .modal-dialog {
+                margin: 1rem;
+            }
+
+            .external-confirm-modal .modal-footer {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .external-confirm-modal .modal-footer .btn {
+                width: 100%;
+                margin: 0;
+            }
+
             .venue-choice-btn {
                 min-height: 3.35rem;
             }
@@ -1367,8 +1405,8 @@
                             <p class="link-note">当日判断で使う公式リンクと外部リンクをまとめています。</p>
 
                             <div class="link-stack">
-                                <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">AutoRace.jp</a>
-                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">公式FANCLUB</a>
+                                <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary" data-home-external-confirm-link data-external-confirm-storage-key="externalLinkConfirmDisabled">AutoRace.jp</a>
+                                <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary" data-home-external-confirm-link data-external-confirm-storage-key="externalLinkConfirmDisabled">公式FANCLUB</a>
                                 <a th:href="@{/links}" class="btn btn-primary" data-menu-param-target="links">外部リンク画面へ進む</a>
                             </div>
                         </section>
@@ -1455,6 +1493,28 @@
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
 
+    <div class="modal fade external-confirm-modal" id="homeExternalLinkConfirmModal" tabindex="-1" aria-labelledby="homeExternalLinkConfirmTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5 fw-bold" id="homeExternalLinkConfirmTitle">外部サイト確認</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="external-confirm-message mb-3">外部サイトへ移動します。<br><br>このサイトを開きますか？</p>
+                    <div class="form-check external-confirm-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="homeExternalLinkConfirmSkip">
+                        <label class="form-check-label" for="homeExternalLinkConfirmSkip">次回から表示しない</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="button" class="btn btn-primary btn-lg" id="homeExternalLinkConfirmMove">移動する</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
     <script>
         const liveVideoConfig = {
@@ -1502,6 +1562,133 @@
             } catch (error) {
                 return;
             }
+        }
+
+        function getExternalConfirmStorageKey(link) {
+            if (!link || !link.dataset) {
+                return "externalLinkConfirmDisabled";
+            }
+
+            return link.dataset.externalConfirmStorageKey || "externalLinkConfirmDisabled";
+        }
+
+        function isExternalConfirmSkipped(storageKey) {
+            try {
+                return safeStorageGet(window.localStorage, storageKey) === "true";
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function saveExternalConfirmSkip(storageKey) {
+            try {
+                safeStorageSet(window.localStorage, storageKey, "true");
+            } catch (error) {
+                return;
+            }
+        }
+
+        function openExternalLink(url, target) {
+            if (!url) {
+                return;
+            }
+
+            if (target === "_blank") {
+                const temporaryLink = document.createElement("a");
+                temporaryLink.href = url;
+                temporaryLink.target = "_blank";
+                temporaryLink.rel = "noopener noreferrer";
+                document.body.appendChild(temporaryLink);
+                temporaryLink.click();
+                temporaryLink.remove();
+                return;
+            }
+
+            window.location.href = url;
+        }
+
+        function initializeOfficialExternalLinkConfirm() {
+            const section = document.getElementById("officialLinksSection");
+            const modalElement = document.getElementById("homeExternalLinkConfirmModal");
+            const skipCheckbox = document.getElementById("homeExternalLinkConfirmSkip");
+            const moveButton = document.getElementById("homeExternalLinkConfirmMove");
+
+            if (!section || !modalElement || !skipCheckbox || !moveButton) {
+                return;
+            }
+
+            const externalLinks = section.querySelectorAll("[data-home-external-confirm-link]");
+
+            if (!externalLinks.length) {
+                return;
+            }
+
+            const confirmModal = window.bootstrap && window.bootstrap.Modal
+                ? window.bootstrap.Modal.getOrCreateInstance(modalElement)
+                : null;
+            let pendingLink = null;
+
+            function clearPendingLink() {
+                pendingLink = null;
+                skipCheckbox.checked = false;
+            }
+
+            externalLinks.forEach(function (link) {
+                if (!link) {
+                    return;
+                }
+
+                link.addEventListener("click", function (event) {
+                    const url = link.getAttribute("href");
+                    const storageKey = getExternalConfirmStorageKey(link);
+
+                    if (!url || isExternalConfirmSkipped(storageKey)) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    pendingLink = {
+                        url: url,
+                        target: link.getAttribute("target") || "_self",
+                        storageKey: storageKey
+                    };
+                    skipCheckbox.checked = false;
+
+                    if (confirmModal) {
+                        confirmModal.show();
+                        return;
+                    }
+
+                    if (window.confirm("外部サイトへ移動します。\n\nこのサイトを開きますか？")) {
+                        openExternalLink(pendingLink.url, pendingLink.target);
+                    }
+                    clearPendingLink();
+                });
+            });
+
+            moveButton.addEventListener("click", function () {
+                if (!pendingLink) {
+                    return;
+                }
+
+                const linkToOpen = pendingLink;
+
+                if (skipCheckbox.checked) {
+                    saveExternalConfirmSkip(linkToOpen.storageKey);
+                }
+
+                clearPendingLink();
+
+                if (confirmModal) {
+                    confirmModal.hide();
+                }
+
+                openExternalLink(linkToOpen.url, linkToOpen.target);
+            });
+
+            modalElement.addEventListener("hidden.bs.modal", function () {
+                clearPendingLink();
+            });
         }
 
         function getVenueChoiceButtons() {
@@ -1965,6 +2152,7 @@
             updateMenuContext();
             applyVenueTheme();
             updateVenueLinkedPanels();
+            initializeOfficialExternalLinkConfirm();
             setupManualTimer();
             layoutFloatingUtilities();
 
