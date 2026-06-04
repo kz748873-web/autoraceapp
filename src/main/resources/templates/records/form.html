@@ -3439,23 +3439,40 @@
         return document.querySelector(".floating-memo-textarea");
     }
 
-    function getQuickMemoInputValue(input, floatingInput) {
+    function getQuickMemoInputValue(input, floatingInput, includeFloating) {
         const localMemo = input && input.value ? input.value.trim() : "";
         const floatingMemo = floatingInput && floatingInput.value ? floatingInput.value.trim() : "";
 
-        return floatingMemo || localMemo;
+        return includeFloating ? floatingMemo : localMemo;
     }
 
-    function saveRiderQuickMemoFromInputs() {
+    function clearFloatingQuickMemo(floatingInput) {
+        if (window.AutoRaceFloatingMemo && typeof window.AutoRaceFloatingMemo.clear === "function") {
+            window.AutoRaceFloatingMemo.clear();
+            return;
+        }
+
+        if (floatingInput) {
+            floatingInput.value = "";
+            floatingInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+    }
+
+    function isNewRecordFormPage() {
+        return /\/records\/new\/?$/.test(window.location.pathname || "");
+    }
+
+    function saveRiderQuickMemoFromInputs(options) {
+        const includeFloating = !!(options && options.includeFloating);
         const featuredRiderField = document.getElementById("featuredRider");
         const input = document.getElementById("riderQuickMemoInput");
-        const floatingInput = getFloatingQuickMemoField();
+        const floatingInput = includeFloating ? getFloatingQuickMemoField() : null;
 
         if (!featuredRiderField || !input) {
             return false;
         }
 
-        const memo = getQuickMemoInputValue(input, floatingInput);
+        const memo = getQuickMemoInputValue(input, floatingInput, includeFloating);
         if (!memo) {
             return false;
         }
@@ -3464,9 +3481,10 @@
         const quickMemos = parts.quickMemos.concat(memo).slice(-riderQuickMemoMaxItems);
 
         featuredRiderField.value = buildFeaturedRiderMemoValue(parts.base, quickMemos);
-        input.value = "";
-        if (floatingInput) {
-            floatingInput.value = "";
+        if (includeFloating) {
+            clearFloatingQuickMemo(floatingInput);
+        } else {
+            input.value = "";
         }
         renderRiderQuickMemoList(quickMemos);
         return true;
@@ -3474,21 +3492,23 @@
 
     function initializeFloatingQuickMemoTransferButton() {
         const floatingInput = getFloatingQuickMemoField();
+        const actions = document.querySelector("[data-floating-memo-actions]");
 
-        if (!floatingInput || floatingInput.dataset.riderQuickMemoTransferReady === "true") {
+        if (!floatingInput || !actions || floatingInput.dataset.riderQuickMemoTransferReady === "true" || !isNewRecordFormPage()) {
             return;
         }
 
-        const actions = document.createElement("div");
         const button = document.createElement("button");
 
-        actions.className = "d-grid mt-2";
+        actions.innerHTML = "";
+        actions.className = "floating-memo-actions d-grid mt-2";
+        actions.hidden = false;
         button.type = "button";
         button.className = "btn btn-outline-primary btn-sm";
         button.textContent = "結果考察欄へ転記";
 
         button.addEventListener("click", function () {
-            if (!saveRiderQuickMemoFromInputs()) {
+            if (!saveRiderQuickMemoFromInputs({ includeFloating: true })) {
                 floatingInput.focus();
                 return;
             }
@@ -3496,7 +3516,6 @@
         });
 
         actions.appendChild(button);
-        floatingInput.insertAdjacentElement("afterend", actions);
         floatingInput.dataset.riderQuickMemoTransferReady = "true";
     }
 
@@ -3517,14 +3536,8 @@
         refreshQuickMemoList();
 
         saveButton.addEventListener("click", function () {
-            const floatingInput = getFloatingQuickMemoField();
-
             if (!saveRiderQuickMemoFromInputs()) {
-                if (floatingInput) {
-                    floatingInput.focus();
-                } else {
-                    input.focus();
-                }
+                input.focus();
                 return;
             }
 

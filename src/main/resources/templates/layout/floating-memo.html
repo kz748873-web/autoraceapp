@@ -32,6 +32,12 @@
         .floating-memo-textarea:focus {
             box-shadow: none;
         }
+
+        .floating-memo-guide {
+            color: #52657a;
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
     </style>
 
     <div class="floating-memo-wrapper">
@@ -48,7 +54,11 @@
                 </div>
                 <div class="p-3">
                     <textarea class="form-control floating-memo-textarea"
-                              placeholder="気になったことをここにメモできます。保存機能はまだありません。"></textarea>
+                              placeholder="気になったことをここにメモできます。ページを移動しても残ります。"></textarea>
+                    <div class="floating-memo-actions mt-2" data-floating-memo-actions>
+                        <p class="floating-memo-guide mb-2" data-floating-memo-guide>記録に反映するには新規登録ページで転記してください。</p>
+                        <a th:href="@{/records/new}" class="btn btn-outline-primary btn-sm w-100" data-floating-memo-new-link>新規登録ページへ移動</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,4 +73,81 @@
         </button>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const storageKey = "autoraceapp:floatingMemo:v1";
+            const memoInput = document.querySelector(".floating-memo-textarea");
+            const newRecordLink = document.querySelector("[data-floating-memo-new-link]");
+
+            function readStoredMemo() {
+                try {
+                    return window.localStorage.getItem(storageKey) || "";
+                } catch (error) {
+                    return "";
+                }
+            }
+
+            function writeStoredMemo(value) {
+                try {
+                    if (value) {
+                        window.localStorage.setItem(storageKey, value);
+                    } else {
+                        window.localStorage.removeItem(storageKey);
+                    }
+                } catch (error) {
+                    return;
+                }
+            }
+
+            function buildNewRecordUrl(baseHref) {
+                const nextUrl = new URL(baseHref || "/records/new", window.location.origin);
+                const currentParams = new URLSearchParams(window.location.search || "");
+                const raceDate = currentParams.get("raceDate") || currentParams.get("date") || "";
+                const venue = currentParams.get("venue") || "";
+                const raceNumber = currentParams.get("raceNumber") || currentParams.get("race") || "";
+
+                if (raceDate) {
+                    nextUrl.searchParams.set("raceDate", raceDate);
+                }
+                if (venue) {
+                    nextUrl.searchParams.set("venue", venue);
+                }
+                if (raceNumber) {
+                    nextUrl.searchParams.set("raceNumber", raceNumber);
+                }
+
+                return nextUrl.pathname + nextUrl.search + nextUrl.hash;
+            }
+
+            if (!memoInput) {
+                return;
+            }
+
+            memoInput.value = readStoredMemo();
+            memoInput.addEventListener("input", function () {
+                writeStoredMemo(memoInput.value || "");
+            });
+
+            if (newRecordLink) {
+                try {
+                    newRecordLink.href = buildNewRecordUrl(newRecordLink.getAttribute("href"));
+                } catch (error) {
+                    // 案内リンクの補完に失敗しても、メモ保持は継続する。
+                }
+            }
+
+            window.AutoRaceFloatingMemo = {
+                getValue: function () {
+                    return memoInput.value || "";
+                },
+                clear: function () {
+                    memoInput.value = "";
+                    writeStoredMemo("");
+                },
+                save: function () {
+                    writeStoredMemo(memoInput.value || "");
+                }
+            };
+        });
+    </script>
 </div>
