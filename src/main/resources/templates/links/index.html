@@ -99,6 +99,30 @@
             color: var(--deep);
         }
 
+        .external-confirm-message {
+            color: var(--deep);
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .external-confirm-check {
+            border: 1px solid var(--border-color);
+            border-radius: 0.9rem;
+            background: var(--surface-tint);
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .external-confirm-modal .modal-footer {
+            gap: 0.75rem;
+        }
+
+        .external-confirm-modal .modal-footer .btn {
+            min-height: 3.25rem;
+            font-weight: 700;
+        }
+
         .official-link-text {
             display: grid;
             gap: 0.2rem;
@@ -313,6 +337,20 @@
             .link-page-grid {
                 grid-template-columns: 1fr;
             }
+
+            .external-confirm-modal .modal-dialog {
+                margin: 1rem;
+            }
+
+            .external-confirm-modal .modal-footer {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .external-confirm-modal .modal-footer .btn {
+                width: 100%;
+                margin: 0;
+            }
         }
 
         @media (min-width: 768px) {
@@ -347,7 +385,7 @@
                         <span class="mini-badge mb-2">公式情報</span>
                         <h2 class="h4 fw-bold mb-2">AutoRace.jp</h2>
                         <p class="section-note mb-3">開催日程、出走表、結果など、まず確認したい公式情報を開きます。</p>
-                        <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
+                        <a th:if="${officialRelatedLinks.size() > 0}" th:href="${officialRelatedLinks[0].url}" target="_blank" rel="noopener noreferrer" class="official-link-card" data-external-confirm-link data-external-confirm-storage-key="autorace:external-link-confirm-skip:autorace-jp">
                             <span class="official-link-text">
                                 <span class="official-link-title" th:text="${officialRelatedLinks[0].siteName}">AutoRace.jp</span>
                                 <span class="official-link-note" th:text="${officialRelatedLinks[0].note}">オートレース公式サイトです。</span>
@@ -360,7 +398,7 @@
                         <span class="mini-badge mb-2">FANCLUB</span>
                         <h2 class="h4 fw-bold mb-2">公式FANCLUB</h2>
                         <p class="section-note mb-3">会員向け情報やファンサービスを確認したいときに使います。</p>
-                        <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="official-link-card">
+                        <a th:if="${officialRelatedLinks.size() > 1}" th:href="${officialRelatedLinks[1].url}" target="_blank" rel="noopener noreferrer" class="official-link-card" data-external-confirm-link data-external-confirm-storage-key="autorace:external-link-confirm-skip:official-fanclub">
                             <span class="official-link-text">
                                 <span class="official-link-title" th:text="${officialRelatedLinks[1].siteName}">公式FANCLUB</span>
                                 <span class="official-link-note" th:text="${officialRelatedLinks[1].note}">公式FANCLUBの入口です。</span>
@@ -452,9 +490,155 @@
         <div th:replace="~{layout/footer :: siteFooter}"></div>
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
+    <div class="modal fade external-confirm-modal" id="externalLinkConfirmModal" tabindex="-1" aria-labelledby="externalLinkConfirmTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5 fw-bold" id="externalLinkConfirmTitle">外部サイト確認</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="external-confirm-message mb-3">外部サイトへ移動します。<br><br>このサイトを開きますか？</p>
+                    <div class="form-check external-confirm-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="externalLinkConfirmSkip">
+                        <label class="form-check-label" for="externalLinkConfirmSkip">次回から表示しない</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="button" class="btn btn-primary btn-lg" id="externalLinkConfirmMove">移動する</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            const defaultExternalConfirmStorageKey = "autorace:external-link-confirm-skip";
+
+            function getExternalConfirmStorageKey(link) {
+                if (!link || !link.dataset) {
+                    return defaultExternalConfirmStorageKey;
+                }
+
+                return link.dataset.externalConfirmStorageKey || defaultExternalConfirmStorageKey;
+            }
+
+            function isExternalConfirmSkipped(storageKey) {
+                try {
+                    return window.localStorage.getItem(storageKey) === "true";
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            function saveExternalConfirmSkip(storageKey) {
+                try {
+                    window.localStorage.setItem(storageKey, "true");
+                } catch (error) {
+                    return;
+                }
+            }
+
+            function openExternalLink(url, target) {
+                if (!url) {
+                    return;
+                }
+
+                if (target === "_blank") {
+                    const temporaryLink = document.createElement("a");
+                    temporaryLink.href = url;
+                    temporaryLink.target = "_blank";
+                    temporaryLink.rel = "noopener noreferrer";
+                    document.body.appendChild(temporaryLink);
+                    temporaryLink.click();
+                    temporaryLink.remove();
+                    return;
+                }
+
+                window.location.href = url;
+            }
+
+            function initializeExternalLinkConfirm() {
+                const externalLinks = document.querySelectorAll("[data-external-confirm-link]");
+                const modalElement = document.getElementById("externalLinkConfirmModal");
+                const skipCheckbox = document.getElementById("externalLinkConfirmSkip");
+                const moveButton = document.getElementById("externalLinkConfirmMove");
+
+                if (!externalLinks.length || !modalElement || !skipCheckbox || !moveButton) {
+                    return;
+                }
+
+                const confirmModal = window.bootstrap && window.bootstrap.Modal
+                    ? window.bootstrap.Modal.getOrCreateInstance(modalElement)
+                    : null;
+                let pendingLink = null;
+
+                function clearPendingLink() {
+                    pendingLink = null;
+                    skipCheckbox.checked = false;
+                }
+
+                externalLinks.forEach(function (link) {
+                    if (!link) {
+                        return;
+                    }
+
+                    link.addEventListener("click", function (event) {
+                        const url = link.getAttribute("href");
+                        const storageKey = getExternalConfirmStorageKey(link);
+
+                        if (!url || isExternalConfirmSkipped(storageKey)) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        pendingLink = {
+                            url: url,
+                            target: link.getAttribute("target") || "_self",
+                            storageKey: storageKey
+                        };
+                        skipCheckbox.checked = false;
+
+                        if (confirmModal) {
+                            confirmModal.show();
+                            return;
+                        }
+
+                        if (window.confirm("外部サイトへ移動します。\n\nこのサイトを開きますか？")) {
+                            openExternalLink(pendingLink.url, pendingLink.target);
+                        }
+                        clearPendingLink();
+                    });
+                });
+
+                moveButton.addEventListener("click", function () {
+                    if (!pendingLink) {
+                        return;
+                    }
+
+                    const linkToOpen = pendingLink;
+
+                    if (skipCheckbox.checked) {
+                        saveExternalConfirmSkip(linkToOpen.storageKey);
+                    }
+
+                    clearPendingLink();
+
+                    if (confirmModal) {
+                        confirmModal.hide();
+                    }
+
+                    openExternalLink(linkToOpen.url, linkToOpen.target);
+                });
+
+                modalElement.addEventListener("hidden.bs.modal", function () {
+                    clearPendingLink();
+                });
+            }
+
+            initializeExternalLinkConfirm();
+
             const liveLinks = document.querySelectorAll("[data-live-youtube-link]");
 
             liveLinks.forEach(function (link) {
