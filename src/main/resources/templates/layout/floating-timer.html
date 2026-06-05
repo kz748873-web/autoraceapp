@@ -1,0 +1,538 @@
+<div th:fragment="floatingTimer">
+    <style>
+        .floating-timer-panel {
+            position: fixed;
+            right: 0.85rem;
+            bottom: calc(0.85rem + env(safe-area-inset-bottom));
+            z-index: 1040;
+            width: min(14.5rem, calc(100vw - 2rem));
+            border: 1px solid var(--border-color, #cfdced);
+            border-radius: 0.9rem;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 0.65rem 1.25rem rgba(15, 23, 42, 0.14);
+            backdrop-filter: blur(8px);
+        }
+
+        .floating-timer-panel.is-collapsed .floating-timer-body {
+            display: none;
+        }
+
+        .floating-timer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.45rem;
+            padding: 0.55rem 0.65rem;
+        }
+
+        .floating-timer-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--home-muted-text, #52657a);
+        }
+
+        .timer-clock {
+            color: var(--accent-color, var(--deep, #0b4d87));
+            font-size: 1.12rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .floating-timer-body {
+            padding: 0 0.65rem 0.65rem;
+            border-top: 1px solid var(--border-color, #cfdced);
+        }
+
+        .timer-status {
+            margin-top: 0.45rem;
+            font-size: 0.72rem;
+            color: var(--home-muted-text, #52657a);
+            line-height: 1.45;
+        }
+
+        .timer-toggle-btn {
+            min-width: 2.35rem;
+            min-height: 2.05rem;
+            padding: 0.35rem 0.55rem;
+            border-radius: 0.7rem;
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+
+        .timer-strength-select {
+            min-height: 2.25rem;
+            border-radius: 0.7rem;
+            font-size: 0.78rem;
+            padding-top: 0.28rem;
+            padding-bottom: 0.28rem;
+        }
+
+        .timer-button-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        .timer-preset-btn,
+        .timer-stop-btn {
+            min-height: 2.05rem;
+            border-radius: 0.65rem;
+            padding: 0.35rem 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .timer-action-row {
+            margin-top: 0.4rem;
+        }
+
+        .timer-stop-btn {
+            width: 100%;
+        }
+
+        body .floating-memo-wrapper {
+            right: 0.85rem !important;
+            bottom: var(--floating-memo-bottom, calc(0.85rem + env(safe-area-inset-bottom) + 3.15rem)) !important;
+            z-index: 1045 !important;
+        }
+
+        body .floating-memo-wrapper > .btn {
+            min-height: 2.35rem;
+            padding: 0.45rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+        }
+
+        body .floating-memo-panel {
+            width: min(17rem, calc(100vw - 2rem)) !important;
+        }
+
+        body .floating-memo-header {
+            padding-top: 0.45rem !important;
+            padding-bottom: 0.45rem !important;
+            font-size: 0.86rem;
+        }
+
+        body .floating-memo-panel .p-3 {
+            padding: 0.7rem !important;
+        }
+
+        body .floating-memo-textarea {
+            min-height: 7.5rem !important;
+            font-size: 0.86rem;
+        }
+
+        @media (max-width: 575.98px) {
+            .floating-timer-panel {
+                right: 0.95rem;
+                left: auto;
+                bottom: calc(0.65rem + env(safe-area-inset-bottom));
+                width: min(13.75rem, calc(100vw - 1.5rem));
+            }
+
+            body .floating-memo-wrapper {
+                right: 0.95rem !important;
+                left: auto !important;
+                width: auto;
+                text-align: right;
+            }
+
+            body .floating-memo-wrapper > .btn {
+                position: fixed !important;
+                right: 0.95rem !important;
+                left: auto !important;
+                bottom: var(--floating-memo-bottom, calc(0.65rem + env(safe-area-inset-bottom) + 3.15rem));
+                z-index: 1055;
+            }
+
+            body .floating-memo-wrapper #floatingMemoPanel {
+                position: fixed !important;
+                right: 0.95rem !important;
+                left: auto !important;
+                bottom: calc(var(--floating-memo-bottom, calc(0.65rem + env(safe-area-inset-bottom) + 3.15rem)) + 2.7rem);
+                z-index: 1054;
+                width: min(13.75rem, calc(100vw - 1.5rem));
+                margin-bottom: 0 !important;
+            }
+
+            body .floating-memo-panel {
+                width: min(13.75rem, calc(100vw - 1.5rem)) !important;
+            }
+        }
+    </style>
+
+    <div id="floatingTimerPanel" class="floating-timer-panel is-collapsed" data-panel-open="false">
+        <div class="floating-timer-header">
+            <div>
+                <div class="floating-timer-title">当日判断タイマー</div>
+                <div id="floatingTimerClock" class="timer-clock">20:00</div>
+            </div>
+            <button type="button" id="floatingTimerToggleBtn" class="btn btn-outline-primary timer-toggle-btn" aria-expanded="false">開く</button>
+        </div>
+        <div class="floating-timer-body">
+            <div id="floatingTimerStatus" class="timer-status">時間ボタンを押すとカウントダウンを開始します。</div>
+            <div class="mt-3">
+                <label for="floatingTimerStrengthSelect" class="form-label fw-semibold mb-1">バイブの強さ</label>
+                <select id="floatingTimerStrengthSelect" class="form-select timer-strength-select">
+                    <option value="200">小 200ms</option>
+                    <option value="500" selected>中 500ms</option>
+                    <option value="1000">大 1000ms</option>
+                </select>
+            </div>
+            <div class="timer-button-grid">
+                <button type="button" class="btn btn-primary timer-preset-btn" data-timer-seconds="1200">20分</button>
+                <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="600">10分</button>
+                <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="300">5分</button>
+                <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="180">3分</button>
+                <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="60">1分</button>
+            </div>
+            <div class="timer-action-row">
+                <button type="button" class="btn btn-outline-primary timer-stop-btn" data-timer-stop>停止</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                initializeFloatingTimer();
+            } catch (error) {
+                if (window.console && typeof window.console.warn === "function") {
+                    window.console.warn("Floating timer could not start.", error);
+                }
+            }
+        });
+
+        function initializeFloatingTimer() {
+            const timerStorageKey = "predictionPitTimer";
+            const legacyTimerStorageKey = "autoraceapp.home.timerState.v1";
+            const defaultTimerSeconds = 20 * 60;
+            const timerPanel = document.getElementById("floatingTimerPanel");
+            const toggleButton = document.getElementById("floatingTimerToggleBtn");
+            const timerClock = document.getElementById("floatingTimerClock");
+            const timerStatus = document.getElementById("floatingTimerStatus");
+            const strengthSelect = document.getElementById("floatingTimerStrengthSelect");
+            const timerButtons = Array.from(document.querySelectorAll("[data-timer-seconds]"));
+            const stopButtons = Array.from(document.querySelectorAll("[data-timer-stop]"));
+
+            if (!timerPanel || !toggleButton || !timerClock || !timerStatus || !strengthSelect || timerButtons.length === 0) {
+                return;
+            }
+
+            let countdownId = null;
+            let activeTimerSeconds = defaultTimerSeconds;
+            let timerStartedAt = null;
+            let timerEndAt = null;
+            let isTimerRunning = false;
+            let panelOpen = false;
+
+            function safeStorageGet(key) {
+                try {
+                    return window.localStorage.getItem(key);
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function safeStorageSet(key, value) {
+                try {
+                    window.localStorage.setItem(key, value);
+                } catch (error) {
+                    return;
+                }
+            }
+
+            function safeStorageRemove(key) {
+                try {
+                    window.localStorage.removeItem(key);
+                } catch (error) {
+                    return;
+                }
+            }
+
+            function clearStoredTimerState() {
+                safeStorageRemove(timerStorageKey);
+                safeStorageRemove(legacyTimerStorageKey);
+            }
+
+            function parseStoredTimerState(rawValue, storageKey) {
+                if (!rawValue) {
+                    return null;
+                }
+
+                try {
+                    return JSON.parse(rawValue);
+                } catch (error) {
+                    safeStorageRemove(storageKey);
+                    return null;
+                }
+            }
+
+            function normalizeTimerState(rawState) {
+                if (!rawState || typeof rawState !== "object") {
+                    return null;
+                }
+
+                const now = Date.now();
+                const endAt = Number(rawState.endAt);
+                const explicitStartAt = Number(rawState.startAt);
+                const savedRemainingSeconds = Number(rawState.remainingSeconds);
+                const savedDurationSeconds = Number(rawState.durationSeconds);
+                const isLegacyRunning = rawState.isRunning !== false && Number.isFinite(endAt) && endAt > now;
+                const shouldRun = rawState.isRunning === true || isLegacyRunning;
+
+                if (!shouldRun || !Number.isFinite(endAt) || endAt <= now) {
+                    return null;
+                }
+
+                let durationSeconds = Number.isFinite(savedDurationSeconds) && savedDurationSeconds > 0
+                    ? Math.floor(savedDurationSeconds)
+                    : defaultTimerSeconds;
+                const remainingSeconds = Math.max(0, Math.ceil((endAt - now) / 1000));
+
+                if (Number.isFinite(savedRemainingSeconds) && savedRemainingSeconds > durationSeconds) {
+                    durationSeconds = Math.floor(savedRemainingSeconds);
+                }
+                if (remainingSeconds > durationSeconds) {
+                    durationSeconds = remainingSeconds;
+                }
+
+                return {
+                    startAt: Number.isFinite(explicitStartAt) ? explicitStartAt : endAt - durationSeconds * 1000,
+                    endAt: endAt,
+                    remainingSeconds: remainingSeconds,
+                    isRunning: true,
+                    durationSeconds: durationSeconds,
+                    strength: Number(rawState.strength),
+                    panelOpen: rawState.panelOpen === true
+                };
+            }
+
+            function readTimerState() {
+                const currentState = normalizeTimerState(parseStoredTimerState(safeStorageGet(timerStorageKey), timerStorageKey));
+                if (currentState) {
+                    return currentState;
+                }
+
+                const legacyState = normalizeTimerState(parseStoredTimerState(safeStorageGet(legacyTimerStorageKey), legacyTimerStorageKey));
+                if (legacyState) {
+                    return legacyState;
+                }
+
+                clearStoredTimerState();
+                return null;
+            }
+
+            function getRemainingSeconds() {
+                if (!timerEndAt) {
+                    return activeTimerSeconds;
+                }
+                return Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
+            }
+
+            function writeTimerState(remainingSeconds) {
+                if (!isTimerRunning || !timerStartedAt || !timerEndAt) {
+                    return;
+                }
+
+                const nextRemainingSeconds = typeof remainingSeconds === "number" ? remainingSeconds : getRemainingSeconds();
+                if (nextRemainingSeconds <= 0) {
+                    clearStoredTimerState();
+                    return;
+                }
+
+                safeStorageSet(timerStorageKey, JSON.stringify({
+                    startAt: timerStartedAt,
+                    endAt: timerEndAt,
+                    remainingSeconds: nextRemainingSeconds,
+                    isRunning: true,
+                    durationSeconds: activeTimerSeconds,
+                    strength: Number(strengthSelect.value),
+                    panelOpen: panelOpen
+                }));
+                safeStorageRemove(legacyTimerStorageKey);
+            }
+
+            function formatCountdownTime(totalSeconds) {
+                const safeSeconds = Math.max(0, Number(totalSeconds) || 0);
+                const minutes = Math.floor(safeSeconds / 60);
+                const seconds = safeSeconds % 60;
+                return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+            }
+
+            function setTimerText(clockText, statusText) {
+                timerClock.textContent = clockText;
+                timerStatus.textContent = statusText;
+            }
+
+            function layoutFloatingUtilities() {
+                try {
+                    const memoWrapper = document.querySelector(".floating-memo-wrapper");
+
+                    if (!memoWrapper) {
+                        return;
+                    }
+
+                    const timerRect = timerPanel.getBoundingClientRect();
+                    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+                    const isNarrowViewport = window.matchMedia && window.matchMedia("(max-width: 575.98px)").matches;
+                    const gap = isNarrowViewport ? 8 : 10;
+                    const bottomOffset = Math.max(10, viewportHeight - timerRect.top + gap);
+                    document.body.style.setProperty("--floating-memo-bottom", bottomOffset + "px");
+                    memoWrapper.style.bottom = bottomOffset + "px";
+                } catch (error) {
+                    if (window.console && typeof window.console.warn === "function") {
+                        window.console.warn("Floating timer layout could not update.", error);
+                    }
+                }
+            }
+
+            function requestLayoutUpdate() {
+                if (window.requestAnimationFrame) {
+                    window.requestAnimationFrame(layoutFloatingUtilities);
+                } else {
+                    window.setTimeout(layoutFloatingUtilities, 0);
+                }
+            }
+
+            function setPanelOpen(nextOpen) {
+                panelOpen = nextOpen;
+                timerPanel.classList.toggle("is-collapsed", !nextOpen);
+                timerPanel.dataset.panelOpen = nextOpen ? "true" : "false";
+                toggleButton.textContent = nextOpen ? "閉じる" : "開く";
+                toggleButton.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+                writeTimerState();
+                requestLayoutUpdate();
+            }
+
+            function setRunningState(isRunning) {
+                timerButtons.forEach(function (button) {
+                    const buttonSeconds = Number(button.dataset.timerSeconds);
+                    const isActive = isRunning && buttonSeconds === activeTimerSeconds;
+                    button.classList.toggle("btn-primary", isActive);
+                    button.classList.toggle("btn-outline-primary", !isActive);
+                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+                });
+
+                stopButtons.forEach(function (button) {
+                    button.disabled = !isRunning;
+                });
+            }
+
+            function resetTimer(resetText) {
+                if (countdownId) {
+                    window.clearInterval(countdownId);
+                    countdownId = null;
+                }
+
+                timerStartedAt = null;
+                timerEndAt = null;
+                isTimerRunning = false;
+                setRunningState(false);
+                if (resetText !== false) {
+                    setTimerText(formatCountdownTime(activeTimerSeconds), "時間ボタンを押すとカウントダウンを開始します。");
+                }
+            }
+
+            function stopTimer() {
+                resetTimer(true);
+                clearStoredTimerState();
+            }
+
+            function finishTimer() {
+                if (navigator.vibrate) {
+                    navigator.vibrate([Number(strengthSelect.value), 120, Number(strengthSelect.value)]);
+                }
+                setTimerText("00:00", Math.floor(activeTimerSeconds / 60) + "分タイマーが終了しました。");
+                resetTimer(false);
+                clearStoredTimerState();
+            }
+
+            function tickTimer() {
+                if (!isTimerRunning || !timerEndAt) {
+                    stopTimer();
+                    return;
+                }
+
+                const remainingSeconds = getRemainingSeconds();
+                if (remainingSeconds <= 0) {
+                    finishTimer();
+                    return;
+                }
+
+                setTimerText(formatCountdownTime(remainingSeconds), Math.floor(activeTimerSeconds / 60) + "分タイマーを実行中です。");
+                writeTimerState(remainingSeconds);
+            }
+
+            function startTimer(totalSeconds) {
+                if (!totalSeconds) {
+                    return;
+                }
+
+                activeTimerSeconds = totalSeconds;
+                timerStartedAt = Date.now();
+                timerEndAt = timerStartedAt + totalSeconds * 1000;
+                isTimerRunning = true;
+
+                if (countdownId) {
+                    window.clearInterval(countdownId);
+                }
+
+                countdownId = window.setInterval(tickTimer, 1000);
+                setRunningState(true);
+                setPanelOpen(true);
+                writeTimerState(totalSeconds);
+                tickTimer();
+            }
+
+            const savedState = readTimerState();
+            if (savedState) {
+                activeTimerSeconds = savedState.durationSeconds || defaultTimerSeconds;
+                timerStartedAt = savedState.startAt;
+                timerEndAt = savedState.endAt;
+                isTimerRunning = savedState.isRunning === true;
+                panelOpen = savedState.panelOpen === true;
+                if (Number.isFinite(savedState.strength)) {
+                    strengthSelect.value = String(savedState.strength);
+                }
+            }
+
+            toggleButton.addEventListener("click", function () {
+                setPanelOpen(!panelOpen);
+            });
+
+            timerButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    startTimer(Number(button.dataset.timerSeconds));
+                });
+            });
+
+            stopButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    stopTimer();
+                });
+            });
+
+            strengthSelect.addEventListener("change", function () {
+                writeTimerState();
+            });
+
+            setPanelOpen(panelOpen);
+            if (isTimerRunning && timerEndAt && timerEndAt > Date.now()) {
+                countdownId = window.setInterval(tickTimer, 1000);
+                setRunningState(true);
+                tickTimer();
+            } else {
+                stopTimer();
+            }
+
+            window.addEventListener("resize", layoutFloatingUtilities);
+            window.AutoRaceFloatingTimer = {
+                layout: layoutFloatingUtilities
+            };
+            requestLayoutUpdate();
+        }
+    </script>
+</div>

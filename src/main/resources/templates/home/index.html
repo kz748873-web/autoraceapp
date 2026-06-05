@@ -1460,37 +1460,7 @@
             </div>
         </main>
 
-        <div id="floatingTimerPanel" class="floating-timer-panel is-collapsed" data-panel-open="false">
-            <div class="floating-timer-header">
-                <div>
-                    <div class="floating-timer-title">当日判断タイマー</div>
-                    <div id="floatingTimerClock" class="timer-clock">20:00</div>
-                </div>
-                <button type="button" id="floatingTimerToggleBtn" class="btn btn-outline-primary timer-toggle-btn" aria-expanded="false">開く</button>
-            </div>
-            <div class="floating-timer-body">
-                <div id="floatingTimerStatus" class="timer-status">時間ボタンを押すとカウントダウンを開始します。</div>
-                <div class="mt-3">
-                    <label for="floatingTimerStrengthSelect" class="form-label fw-semibold mb-1">バイブの強さ</label>
-                    <select id="floatingTimerStrengthSelect" class="form-select timer-strength-select">
-                        <option value="200">小 200ms</option>
-                        <option value="500" selected>中 500ms</option>
-                        <option value="1000">大 1000ms</option>
-                    </select>
-                </div>
-                <div class="timer-button-grid">
-                    <button type="button" class="btn btn-primary timer-preset-btn" data-timer-seconds="1200">20分</button>
-                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="600">10分</button>
-                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="300">5分</button>
-                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="180">3分</button>
-                    <button type="button" class="btn btn-outline-primary timer-preset-btn" data-timer-seconds="60">1分</button>
-                </div>
-                <div class="timer-action-row">
-                    <button type="button" class="btn btn-outline-primary timer-stop-btn" data-timer-stop>停止</button>
-                </div>
-            </div>
-        </div>
-
+        <div th:replace="~{layout/floating-timer :: floatingTimer}"></div>
         <div th:replace="~{layout/floating-memo :: floatingMemo}"></div>
     </div>
 
@@ -1946,12 +1916,6 @@
             }
         }
 
-        function formatCountdownTime(totalSeconds) {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
-        }
-
         function layoutFloatingUtilities() {
             try {
                 const timerPanel = document.getElementById("floatingTimerPanel");
@@ -1969,170 +1933,6 @@
                 memoWrapper.style.bottom = bottomOffset + "px";
             } catch (error) {
                 console.error("home/floating utility layout error", error);
-            }
-        }
-
-        function setupManualTimer() {
-            const timerStorageKey = "autoraceapp.home.timerState.v1";
-            const defaultTimerSeconds = 20 * 60;
-            const timerPanel = document.getElementById("floatingTimerPanel");
-            const toggleButton = document.getElementById("floatingTimerToggleBtn");
-            const timerClock = document.getElementById("floatingTimerClock");
-            const timerStatus = document.getElementById("floatingTimerStatus");
-            const strengthSelect = document.getElementById("floatingTimerStrengthSelect");
-            const timerButtons = Array.from(document.querySelectorAll("[data-timer-seconds]"));
-            const stopButtons = Array.from(document.querySelectorAll("[data-timer-stop]"));
-            if (!timerPanel || !toggleButton || !timerClock || !timerStatus || !strengthSelect || timerButtons.length === 0) {
-                return;
-            }
-
-            let countdownId = null;
-            let activeTimerSeconds = defaultTimerSeconds;
-            let timerEndAt = null;
-            let panelOpen = false;
-
-            function readTimerState() {
-                const raw = safeStorageGet(window.localStorage, timerStorageKey);
-                if (!raw) {
-                    return null;
-                }
-                try {
-                    return JSON.parse(raw);
-                } catch (error) {
-                    return null;
-                }
-            }
-
-            function writeTimerState() {
-                safeStorageSet(window.localStorage, timerStorageKey, JSON.stringify({
-                    endAt: timerEndAt,
-                    durationSeconds: activeTimerSeconds,
-                    strength: Number(strengthSelect.value),
-                    panelOpen: panelOpen
-                }));
-            }
-
-            function setTimerText(clockText, statusText) {
-                timerClock.textContent = clockText;
-                timerStatus.textContent = statusText;
-            }
-
-            function setPanelOpen(nextOpen) {
-                panelOpen = nextOpen;
-                timerPanel.classList.toggle("is-collapsed", !nextOpen);
-                timerPanel.dataset.panelOpen = nextOpen ? "true" : "false";
-                toggleButton.textContent = nextOpen ? "閉じる" : "開く";
-                toggleButton.setAttribute("aria-expanded", nextOpen ? "true" : "false");
-                writeTimerState();
-                window.requestAnimationFrame(layoutFloatingUtilities);
-            }
-
-            function setRunningState(isRunning) {
-                timerButtons.forEach(function (button) {
-                    const buttonSeconds = Number(button.dataset.timerSeconds);
-                    const isActive = isRunning && buttonSeconds === activeTimerSeconds;
-                    button.classList.toggle("btn-primary", isActive);
-                    button.classList.toggle("btn-outline-primary", !isActive);
-                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
-                });
-
-                stopButtons.forEach(function (button) {
-                    button.disabled = !isRunning;
-                });
-            }
-
-            function stopTimer(clearStorage) {
-                if (countdownId) {
-                    window.clearInterval(countdownId);
-                    countdownId = null;
-                }
-
-                timerEndAt = null;
-                setTimerText(formatCountdownTime(activeTimerSeconds), "時間ボタンを押すとカウントダウンを開始します。");
-                setRunningState(false);
-                if (clearStorage) {
-                    safeStorageRemove(window.localStorage, timerStorageKey);
-                } else {
-                    writeTimerState();
-                }
-            }
-
-            function tickTimer() {
-                if (!timerEndAt) {
-                    stopTimer(false);
-                    return;
-                }
-
-                const diffSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
-                setTimerText(formatCountdownTime(diffSeconds), Math.floor(activeTimerSeconds / 60) + "分タイマーを実行中です。");
-
-                if (diffSeconds <= 0) {
-                    if (navigator.vibrate) {
-                        navigator.vibrate([Number(strengthSelect.value), 120, Number(strengthSelect.value)]);
-                    }
-                    setTimerText("00:00", Math.floor(activeTimerSeconds / 60) + "分タイマーが終了しました。");
-                    stopTimer(false);
-                }
-            }
-
-            function startTimer(totalSeconds) {
-                if (!totalSeconds) {
-                    return;
-                }
-
-                activeTimerSeconds = totalSeconds;
-                timerEndAt = Date.now() + totalSeconds * 1000;
-
-                if (countdownId) {
-                    window.clearInterval(countdownId);
-                }
-
-                countdownId = window.setInterval(tickTimer, 1000);
-                setRunningState(true);
-                setPanelOpen(true);
-                writeTimerState();
-                tickTimer();
-            }
-
-            const savedState = readTimerState();
-            if (savedState) {
-                activeTimerSeconds = typeof savedState.durationSeconds === "number" ? savedState.durationSeconds : defaultTimerSeconds;
-                timerEndAt = typeof savedState.endAt === "number" ? savedState.endAt : null;
-                panelOpen = savedState.panelOpen === true;
-                if (typeof savedState.strength === "number") {
-                    strengthSelect.value = String(savedState.strength);
-                }
-            }
-
-            toggleButton.addEventListener("click", function () {
-                setPanelOpen(!panelOpen);
-            });
-
-            timerButtons.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    startTimer(Number(button.dataset.timerSeconds));
-                });
-            });
-
-            stopButtons.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    stopTimer(true);
-                });
-            });
-
-            strengthSelect.addEventListener("change", function () {
-                writeTimerState();
-            });
-
-            setPanelOpen(panelOpen);
-            if (timerEndAt && timerEndAt > Date.now()) {
-                countdownId = window.setInterval(tickTimer, 1000);
-                setRunningState(true);
-                tickTimer();
-            } else {
-                timerEndAt = null;
-                setTimerText(formatCountdownTime(activeTimerSeconds), "時間ボタンを押すとカウントダウンを開始します。");
-                setRunningState(false);
             }
         }
 
@@ -2154,7 +1954,6 @@
             applyVenueTheme();
             updateVenueLinkedPanels();
             initializeOfficialExternalLinkConfirm();
-            setupManualTimer();
             layoutFloatingUtilities();
 
             venueButtons.forEach(function (button) {
