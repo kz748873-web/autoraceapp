@@ -25,6 +25,7 @@
         }
 
         .record-list-title {
+            color: var(--theme-text);
             font-size: clamp(1.8rem, 5vw, 2.35rem);
             line-height: 1.2;
         }
@@ -46,6 +47,34 @@
             min-height: 3.15rem;
             border-radius: 0.75rem;
             font-weight: 800;
+        }
+
+        body.record-list-page .btn-primary {
+            --bs-btn-color: var(--main-color-text);
+            --bs-btn-bg: var(--main-color);
+            --bs-btn-border-color: color-mix(in srgb, var(--main-color) 82%, var(--accent-color));
+            --bs-btn-hover-color: var(--main-color-text);
+            --bs-btn-hover-bg: color-mix(in srgb, var(--main-color) 88%, var(--accent-color));
+            --bs-btn-hover-border-color: color-mix(in srgb, var(--main-color) 78%, var(--accent-color));
+            --bs-btn-active-color: var(--main-color-text);
+            --bs-btn-active-bg: color-mix(in srgb, var(--main-color) 82%, var(--accent-color));
+            --bs-btn-active-border-color: color-mix(in srgb, var(--main-color) 72%, var(--accent-color));
+            --bs-btn-disabled-color: var(--main-color-text);
+            --bs-btn-disabled-bg: var(--main-color);
+            --bs-btn-disabled-border-color: var(--main-color);
+        }
+
+        body.record-list-page .btn-outline-secondary {
+            --bs-btn-color: var(--theme-text);
+            --bs-btn-border-color: color-mix(in srgb, var(--border-color) 68%, var(--main-color));
+            --bs-btn-hover-color: var(--theme-text);
+            --bs-btn-hover-bg: var(--surface-tint);
+            --bs-btn-hover-border-color: var(--main-color);
+            --bs-btn-active-color: var(--main-color-text);
+            --bs-btn-active-bg: var(--main-color);
+            --bs-btn-active-border-color: var(--main-color);
+            --bs-btn-disabled-color: var(--theme-text);
+            --bs-btn-disabled-border-color: var(--border-color);
         }
 
         .record-summary-strip {
@@ -80,19 +109,19 @@
             min-height: 2.35rem;
             padding: 0.45rem 0.75rem;
             background: var(--soft-surface);
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 68%, var(--main-color));
             color: var(--sub);
             font-size: 0.92rem;
         }
 
         .record-filter-chip strong {
-            color: var(--deep);
+            color: var(--theme-text);
         }
 
         .record-search-panel,
         .record-list-panel {
             background: var(--surface);
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             border-radius: 0.75rem;
             box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
             overflow: hidden;
@@ -103,13 +132,19 @@
             content: "";
             display: block;
             height: 0.28rem;
-            background: linear-gradient(90deg, var(--brand-strong), rgba(255, 255, 255, 0));
+            background: linear-gradient(90deg, var(--main-color), var(--brand), transparent);
         }
 
         .record-search-toggle {
             min-height: 3rem;
             border-radius: 0.75rem;
             font-weight: 800;
+        }
+
+        .record-search-toggle[aria-expanded="true"] {
+            --bs-btn-color: var(--theme-text);
+            --bs-btn-bg: var(--surface-tint);
+            --bs-btn-border-color: var(--main-color);
         }
 
         .record-list-panel-header {

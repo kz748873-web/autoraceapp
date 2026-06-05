@@ -21,7 +21,7 @@
 
         .record-detail-section {
             background: var(--surface);
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             border-radius: 1.35rem;
             box-shadow: 0 0.9rem 1.8rem rgba(18, 61, 106, 0.08);
             overflow: hidden;
@@ -31,15 +31,15 @@
             content: "";
             display: block;
             height: 0.28rem;
-            background: linear-gradient(90deg, var(--brand-strong), rgba(255, 255, 255, 0));
+            background: linear-gradient(90deg, var(--main-color), var(--brand), transparent);
         }
 
         .record-detail-hero {
             padding: clamp(1rem, 2.4vw, 1.35rem);
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             border-radius: 1.1rem;
             background:
-                linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--surface-tint) 64%, white) 100%);
+                linear-gradient(135deg, var(--surface) 0%, color-mix(in srgb, var(--surface-tint) 64%, var(--surface)) 100%);
             box-shadow: 0 0.8rem 1.7rem rgba(15, 23, 42, 0.06);
         }
 
@@ -59,6 +59,45 @@
             line-height: 1.25;
         }
 
+        body.record-detail-page .btn-primary {
+            --bs-btn-color: var(--main-color-text);
+            --bs-btn-bg: var(--main-color);
+            --bs-btn-border-color: color-mix(in srgb, var(--main-color) 82%, var(--accent-color));
+            --bs-btn-hover-color: var(--main-color-text);
+            --bs-btn-hover-bg: color-mix(in srgb, var(--main-color) 88%, var(--accent-color));
+            --bs-btn-hover-border-color: color-mix(in srgb, var(--main-color) 78%, var(--accent-color));
+            --bs-btn-active-color: var(--main-color-text);
+            --bs-btn-active-bg: color-mix(in srgb, var(--main-color) 82%, var(--accent-color));
+            --bs-btn-active-border-color: color-mix(in srgb, var(--main-color) 72%, var(--accent-color));
+            --bs-btn-disabled-color: var(--main-color-text);
+            --bs-btn-disabled-bg: var(--main-color);
+            --bs-btn-disabled-border-color: var(--main-color);
+        }
+
+        body.record-detail-page .btn-outline-secondary,
+        body.record-detail-page .btn-outline-primary {
+            --bs-btn-color: var(--theme-text);
+            --bs-btn-border-color: color-mix(in srgb, var(--border-color) 68%, var(--main-color));
+            --bs-btn-hover-color: var(--theme-text);
+            --bs-btn-hover-bg: var(--surface-tint);
+            --bs-btn-hover-border-color: var(--main-color);
+            --bs-btn-active-color: var(--main-color-text);
+            --bs-btn-active-bg: var(--main-color);
+            --bs-btn-active-border-color: var(--main-color);
+            --bs-btn-disabled-color: var(--theme-text);
+            --bs-btn-disabled-border-color: var(--border-color);
+        }
+
+        .record-detail-section h2 {
+            color: var(--theme-text);
+        }
+
+        body.record-detail-page .section-badge {
+            background: var(--section-badge-bg);
+            border-color: color-mix(in srgb, var(--border-color) 68%, var(--main-color));
+            color: var(--theme-text);
+        }
+
         .record-detail-current-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -69,10 +108,10 @@
         .record-detail-current-item {
             min-width: 0;
             padding: 0.72rem 0.85rem;
-            border: 1px solid color-mix(in srgb, var(--brand-strong) 26%, white);
-            border-left: 0.25rem solid var(--brand-strong);
+            border: 1px solid color-mix(in srgb, var(--border-color) 68%, var(--main-color));
+            border-left: 0.25rem solid var(--main-color);
             border-radius: 0.82rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: color-mix(in srgb, var(--surface) 88%, var(--surface-tint));
         }
 
         .record-detail-current-label {
@@ -95,7 +134,7 @@
         }
 
         .record-detail-field {
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             border-radius: 1rem;
             padding: 1rem;
             background: var(--soft-surface);
@@ -156,7 +195,7 @@
         }
 
         .trial-time-card {
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             border-radius: 1rem;
             background: var(--soft-surface);
         }
@@ -191,7 +230,7 @@
             justify-content: space-between;
             gap: 0.75rem;
             padding-top: 0.65rem;
-            border-top: 1px solid color-mix(in srgb, var(--card) 70%, white);
+            border-top: 1px solid color-mix(in srgb, var(--border-color) 70%, var(--surface));
         }
 
         .trial-time-meta {
@@ -209,7 +248,7 @@
             padding: 0.35rem 0.65rem;
             border-radius: 999px;
             background: var(--section-badge-bg);
-            border: 1px solid color-mix(in srgb, var(--brand-strong) 55%, white);
+            border: 1px solid color-mix(in srgb, var(--border-color) 58%, var(--main-color));
             color: var(--deep);
             font-weight: 700;
         }
@@ -222,27 +261,27 @@
             padding: 0.35rem 0.65rem;
             border-radius: 999px;
             background: var(--soft-surface);
-            border: 1px solid var(--card);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             color: var(--theme-text);
             font-weight: 700;
         }
 
         .record-detail-start-diagram .start-diagram-shell {
-            --track-shadow-color: rgba(20, 43, 65, 0.1);
-            --track-label-color: #1f2f44;
-            border: 1px solid #f2dbe8;
+            --track-shadow-color: color-mix(in srgb, var(--main-color) 16%, transparent);
+            --track-label-color: var(--theme-text);
+            border: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             border-radius: 1.25rem;
-            background: #fff7fb;
+            background: var(--surface-tint);
             overflow: hidden;
-            box-shadow: 0 0.65rem 1.4rem rgba(197, 22, 46, 0.07);
+            box-shadow: 0 0.65rem 1.4rem rgba(15, 23, 42, 0.07);
         }
 
         .record-detail-start-diagram .start-diagram-viewport {
             width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
-            background: #fff7fb;
-            scrollbar-color: rgba(233, 30, 122, 0.45) rgba(255, 247, 251, 0.95);
+            background: var(--surface-tint);
+            scrollbar-color: color-mix(in srgb, var(--main-color) 54%, transparent) color-mix(in srgb, var(--surface-tint) 82%, var(--surface));
             scrollbar-width: thin;
         }
 
@@ -251,21 +290,21 @@
         }
 
         .record-detail-start-diagram .start-diagram-viewport::-webkit-scrollbar-track {
-            background: rgba(255, 247, 251, 0.95);
+            background: color-mix(in srgb, var(--surface-tint) 82%, var(--surface));
         }
 
         .record-detail-start-diagram .start-diagram-viewport::-webkit-scrollbar-thumb {
-            background: rgba(233, 30, 122, 0.45);
+            background: color-mix(in srgb, var(--main-color) 54%, transparent);
             border-radius: 999px;
         }
 
         .record-detail-start-diagram .start-diagram-readonly-note {
             padding: 0.72rem 0.9rem;
-            border-bottom: 1px solid #f2dbe8;
+            border-bottom: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             background:
-                radial-gradient(circle at 10% 0%, rgba(197, 22, 46, 0.08), transparent 32%),
-                linear-gradient(180deg, rgba(255, 246, 251, 0.98), rgba(255, 249, 252, 0.94));
-            color: #23415f;
+                radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--main-color) 12%, transparent), transparent 32%),
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 72%, var(--surface)), color-mix(in srgb, var(--surface-tint) 52%, var(--surface)));
+            color: var(--theme-text);
             font-size: 0.9rem;
             font-weight: 800;
             line-height: 1.6;
@@ -284,8 +323,8 @@
             min-height: 22rem;
             overflow: visible;
             background:
-                linear-gradient(180deg, rgba(255, 245, 251, 0.98) 0 18%, rgba(255, 247, 251, 0.88) 18% 100%),
-                #fff7fb;
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 82%, var(--surface)) 0 18%, color-mix(in srgb, var(--surface-tint) 68%, var(--surface)) 18% 100%),
+                var(--surface-tint);
         }
 
         .record-detail-start-diagram .start-diagram-course-layer,
@@ -346,7 +385,7 @@
         }
 
         .record-detail-start-diagram .start-diagram-track .track-curb-accent {
-            stroke: #c5162e;
+            stroke: var(--main-color);
             stroke-width: 5;
             stroke-dasharray: 20 20;
         }
@@ -434,10 +473,10 @@
             width: 100%;
             height: 6.85rem;
             z-index: 4;
-            border-bottom: 1px solid #f2dbe8;
+            border-bottom: 1px solid color-mix(in srgb, var(--border-color) 78%, var(--surface));
             background:
-                radial-gradient(circle at 12% 0%, rgba(197, 22, 46, 0.08), transparent 34%),
-                linear-gradient(180deg, rgba(255, 246, 251, 0.98), rgba(255, 249, 252, 0.92));
+                radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--main-color) 12%, transparent), transparent 34%),
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-tint) 72%, var(--surface)), color-mix(in srgb, var(--surface-tint) 52%, var(--surface)));
             pointer-events: none;
         }
 
@@ -529,9 +568,7 @@
         }
     </style>
 </head>
-<body class="record-detail-page"
-      th:with="detailVenue=${record != null and !#strings.isEmpty(record.venue) ? record.venue : ''}"
-      th:classappend="${detailVenue == '川口'} ? ' theme-kawaguchi' : (${detailVenue == '伊勢崎'} ? ' theme-isesaki' : (${detailVenue == '浜松'} ? ' theme-hamamatsu' : (${detailVenue == '飯塚'} ? ' theme-iizuka' : (${detailVenue == '山陽'} ? ' theme-sanyo' : ''))))">
+<body class="record-detail-page">
     <div class="app-shell d-flex flex-column">
     <div th:replace="~{layout/header :: siteHeader}"></div>
     <main class="container py-4 py-md-5 flex-grow-1">
