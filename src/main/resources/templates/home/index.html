@@ -30,51 +30,6 @@
             overflow-x: hidden;
         }
 
-        body.theme-kawaguchi {
-            --main-color: #d96aa0;
-            --accent-color: #8b2c5b;
-            --border-color: #e9b5cf;
-            --surface-tint: #f9e1eb;
-            --main-color-text: #ffffff;
-            --hero-overlay: linear-gradient(135deg, rgba(139, 44, 91, 0.48), rgba(217, 106, 160, 0.18));
-        }
-
-        body.theme-isesaki {
-            --main-color: #49515c;
-            --accent-color: #2f3640;
-            --border-color: #c4cad2;
-            --surface-tint: #e5e9ee;
-            --main-color-text: #ffffff;
-            --hero-overlay: linear-gradient(135deg, rgba(47, 54, 64, 0.5), rgba(73, 81, 92, 0.18));
-        }
-
-        body.theme-hamamatsu {
-            --main-color: #4d8fd6;
-            --accent-color: #21558b;
-            --border-color: #c5dbf4;
-            --surface-tint: #e3eefb;
-            --main-color-text: #ffffff;
-            --hero-overlay: linear-gradient(135deg, rgba(33, 85, 139, 0.5), rgba(77, 143, 214, 0.18));
-        }
-
-        body.theme-iizuka {
-            --main-color: #d4ad2d;
-            --accent-color: #6f5600;
-            --border-color: #ead48b;
-            --surface-tint: #fff6d6;
-            --main-color-text: #3f3200;
-            --hero-overlay: linear-gradient(135deg, rgba(111, 86, 0, 0.46), rgba(212, 173, 45, 0.16));
-        }
-
-        body.theme-sanyo {
-            --main-color: #d88949;
-            --accent-color: #8f5728;
-            --border-color: #ecc5a6;
-            --surface-tint: #fcebdd;
-            --main-color-text: #ffffff;
-            --hero-overlay: linear-gradient(135deg, rgba(143, 87, 40, 0.48), rgba(216, 137, 73, 0.16));
-        }
-
         .site-header {
             position: sticky;
             top: 0;
@@ -1503,14 +1458,6 @@
             }
         };
 
-        const venueThemeMap = {
-            kawaguchi: "theme-kawaguchi",
-            isesaki: "theme-isesaki",
-            hamamatsu: "theme-hamamatsu",
-            iizuka: "theme-iizuka",
-            sanyo: "theme-sanyo"
-        };
-
         function safeStorageGet(storage, key) {
             try {
                 return storage.getItem(key);
@@ -1827,13 +1774,18 @@
                 return;
             }
 
-            Object.keys(venueThemeMap).forEach(function (key) {
-                body.classList.remove(venueThemeMap[key]);
+            const venueContext = getSelectedVenueContext();
+            if (window.PredictionPitVenueTheme && typeof window.PredictionPitVenueTheme.setPlace === "function") {
+                window.PredictionPitVenueTheme.setPlace(venueContext.themeKey, { persist: true });
+                return;
+            }
+
+            ["kawaguchi", "isesaki", "hamamatsu", "iizuka", "sanyo"].forEach(function (key) {
+                body.classList.remove("theme-" + key);
             });
 
-            const venueContext = getSelectedVenueContext();
-            if (venueContext.themeKey && venueThemeMap[venueContext.themeKey]) {
-                body.classList.add(venueThemeMap[venueContext.themeKey]);
+            if (venueContext.themeKey) {
+                body.classList.add("theme-" + venueContext.themeKey);
             }
         }
 
@@ -1943,7 +1895,10 @@
             const raceNumberSelect = document.getElementById("raceNumberSelect");
 
             if (venueButtons.length > 0) {
-                const initialVenueName = venueInput && venueInput.value ? venueInput.value : venueButtons[0].dataset.venueName;
+                const storedVenueName = window.PredictionPitVenueTheme && typeof window.PredictionPitVenueTheme.getCurrentVenueName === "function"
+                    ? window.PredictionPitVenueTheme.getCurrentVenueName()
+                    : "";
+                const initialVenueName = venueInput && venueInput.value ? venueInput.value : (storedVenueName || venueButtons[0].dataset.venueName);
                 setVenueChoice(initialVenueName);
             }
 

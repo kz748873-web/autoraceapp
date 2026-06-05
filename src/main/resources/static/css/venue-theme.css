@@ -1,0 +1,96 @@
+body {
+    --main-color: #84acd9;
+    --accent-color: #1f4f83;
+    --border-color: #cbdced;
+    --surface-tint: #edf5fd;
+    --main-color-text: #ffffff;
+    --brand: color-mix(in srgb, var(--main-color) 34%, white);
+    --brand-strong: color-mix(in srgb, var(--main-color) 76%, white);
+    --btn-on-brand: var(--main-color-text);
+    --card: var(--border-color);
+    --deep: var(--accent-color);
+    --theme-text: var(--accent-color);
+    --soft-surface: color-mix(in srgb, var(--surface-tint) 78%, white);
+    --section-badge-bg: var(--surface-tint);
+    --hero-overlay: linear-gradient(135deg, rgba(16, 37, 64, 0.42), rgba(16, 37, 64, 0.14));
+}
+
+body.theme-kawaguchi,
+body.record-form-page.theme-kawaguchi,
+body.record-list-page.theme-kawaguchi,
+body.record-detail-page.theme-kawaguchi {
+    --main-color: #d96aa0;
+    --accent-color: #8b2c5b;
+    --border-color: #e9b5cf;
+    --surface-tint: #f9e1eb;
+    --main-color-text: #ffffff;
+    --hero-overlay: linear-gradient(135deg, rgba(139, 44, 91, 0.48), rgba(217, 106, 160, 0.18));
+}
+
+body.theme-isesaki,
+body.record-form-page.theme-isesaki,
+body.record-list-page.theme-isesaki,
+body.record-detail-page.theme-isesaki {
+    --main-color: #49515c;
+    --accent-color: #2f3640;
+    --border-color: #c4cad2;
+    --surface-tint: #e5e9ee;
+    --main-color-text: #ffffff;
+    --hero-overlay: linear-gradient(135deg, rgba(47, 54, 64, 0.5), rgba(73, 81, 92, 0.18));
+}
+
+body.theme-hamamatsu,
+body.record-form-page.theme-hamamatsu,
+body.record-list-page.theme-hamamatsu,
+body.record-detail-page.theme-hamamatsu {
+    --main-color: #4d8fd6;
+    --accent-color: #21558b;
+    --border-color: #c5dbf4;
+    --surface-tint: #e3eefb;
+    --main-color-text: #ffffff;
+    --hero-overlay: linear-gradient(135deg, rgba(33, 85, 139, 0.5), rgba(77, 143, 214, 0.18));
+}
+
+body.theme-iizuka,
+body.record-form-page.theme-iizuka,
+body.record-list-page.theme-iizuka,
+body.record-detail-page.theme-iizuka {
+    --main-color: #d4ad2d;
+    --accent-color: #6f5600;
+    --border-color: #ead48b;
+    --surface-tint: #fff6d6;
+    --main-color-text: #3f3200;
+    --hero-overlay: linear-gradient(135deg, rgba(111, 86, 0, 0.46), rgba(212, 173, 45, 0.16));
+}
+
+body.theme-sanyo,
+body.record-form-page.theme-sanyo,
+body.record-list-page.theme-sanyo,
+body.record-detail-page.theme-sanyo {
+    --main-color: #d88949;
+    --accent-color: #8f5728;
+    --border-color: #ecc5a6;
+    --surface-tint: #fcebdd;
+    --main-color-text: #ffffff;
+    --hero-overlay: linear-gradient(135deg, rgba(143, 87, 40, 0.48), rgba(216, 137, 73, 0.16));
+}
+
+.venue-kawaguchi {
+    --record-accent: #d96aa0;
+}
+
+.venue-isesaki {
+    --record-accent: #49515c;
+}
+
+.venue-hamamatsu {
+    --record-accent: #4d8fd6;
+}
+
+.venue-iizuka {
+    --record-accent: #d4ad2d;
+}
+
+.venue-sanyo {
+    --record-accent: #d88949;
+}

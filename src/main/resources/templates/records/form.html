@@ -22,46 +22,6 @@
             --section-badge-bg: var(--surface-tint);
         }
 
-        body.record-form-page.theme-kawaguchi {
-            --main-color: #d96aa0;
-            --accent-color: #8b2c5b;
-            --border-color: #e9b5cf;
-            --surface-tint: #f9e1eb;
-            --main-color-text: #ffffff;
-        }
-
-        body.record-form-page.theme-isesaki {
-            --main-color: #49515c;
-            --accent-color: #2f3640;
-            --border-color: #c4cad2;
-            --surface-tint: #e5e9ee;
-            --main-color-text: #ffffff;
-        }
-
-        body.record-form-page.theme-hamamatsu {
-            --main-color: #4d8fd6;
-            --accent-color: #21558b;
-            --border-color: #c5dbf4;
-            --surface-tint: #e3eefb;
-            --main-color-text: #ffffff;
-        }
-
-        body.record-form-page.theme-iizuka {
-            --main-color: #d4ad2d;
-            --accent-color: #6f5600;
-            --border-color: #ead48b;
-            --surface-tint: #fff6d6;
-            --main-color-text: #3f3200;
-        }
-
-        body.record-form-page.theme-sanyo {
-            --main-color: #d88949;
-            --accent-color: #8f5728;
-            --border-color: #ecc5a6;
-            --surface-tint: #fcebdd;
-            --main-color-text: #ffffff;
-        }
-
         .site-header {
             position: sticky;
             top: 0;
@@ -2603,26 +2563,36 @@
 <th:block th:replace="~{layout/base :: commonScripts}"></th:block>
 <script th:src="@{/js/records-start-diagram.js}"></script>
 <script>
-    const recordFormVenueThemeMap = {
-        "川口": "theme-kawaguchi",
-        "伊勢崎": "theme-isesaki",
-        "浜松": "theme-hamamatsu",
-        "飯塚": "theme-iizuka",
-        "山陽": "theme-sanyo"
-    };
     const startDiagramSectionStateKey = "__startDiagramState";
 
+    function getRecordFormPlaceFromVenueName(venueName) {
+        if (window.PredictionPitVenueTheme && typeof window.PredictionPitVenueTheme.getPlaceFromVenueName === "function") {
+            return window.PredictionPitVenueTheme.getPlaceFromVenueName(venueName);
+        }
+
+        const fallbackPlaceMap = {
+            "川口": "kawaguchi",
+            "伊勢崎": "isesaki",
+            "浜松": "hamamatsu",
+            "飯塚": "iizuka",
+            "山陽": "sanyo"
+        };
+        return fallbackPlaceMap[venueName] || "";
+    }
+
     function applyRecordFormVenueContext(venueName) {
-        const selectedVenueName = recordFormVenueThemeMap[venueName] ? venueName : "";
+        const selectedPlace = getRecordFormPlaceFromVenueName(venueName);
+        const selectedVenueName = selectedPlace ? venueName : "";
         const label = document.querySelector("[data-form-menu-venue-label]");
         const summaryVenue = document.querySelector("[data-form-summary-venue]");
 
-        Object.keys(recordFormVenueThemeMap).forEach(function (key) {
-            document.body.classList.remove(recordFormVenueThemeMap[key]);
-        });
-
-        if (selectedVenueName) {
-            document.body.classList.add(recordFormVenueThemeMap[selectedVenueName]);
+        if (selectedPlace && window.PredictionPitVenueTheme && typeof window.PredictionPitVenueTheme.setPlace === "function") {
+            window.PredictionPitVenueTheme.setPlace(selectedPlace, { persist: true });
+        } else if (selectedPlace && document.body) {
+            ["kawaguchi", "isesaki", "hamamatsu", "iizuka", "sanyo"].forEach(function (placeKey) {
+                document.body.classList.remove("theme-" + placeKey);
+            });
+            document.body.classList.add("theme-" + selectedPlace);
         }
 
         if (label) {
@@ -2701,16 +2671,27 @@
     }
 
     function resolveRecordFormVenueFromPlaceParam(placeParam) {
-        const normalizedPlace = placeParam ? placeParam.trim().toLowerCase() : "";
-        const themeName = normalizedPlace ? "theme-" + normalizedPlace : "";
+        const normalizedPlace = window.PredictionPitVenueTheme && typeof window.PredictionPitVenueTheme.normalizePlace === "function"
+            ? window.PredictionPitVenueTheme.normalizePlace(placeParam)
+            : (placeParam ? placeParam.trim().toLowerCase() : "");
 
-        if (!themeName) {
+        if (!normalizedPlace) {
             return "";
         }
 
-        return Object.keys(recordFormVenueThemeMap).find(function (venueName) {
-            return recordFormVenueThemeMap[venueName] === themeName;
-        }) || "";
+        if (window.PredictionPitVenueTheme && typeof window.PredictionPitVenueTheme.getVenueName === "function") {
+            return window.PredictionPitVenueTheme.getVenueName(normalizedPlace);
+        }
+
+        const fallbackVenueMap = {
+            kawaguchi: "川口",
+            isesaki: "伊勢崎",
+            hamamatsu: "浜松",
+            iizuka: "飯塚",
+            sanyo: "山陽"
+        };
+
+        return fallbackVenueMap[normalizedPlace] || "";
     }
 
     function setRecordFormFieldValue(field, value) {
