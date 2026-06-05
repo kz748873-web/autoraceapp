@@ -4,42 +4,59 @@
     <th:block th:replace="~{layout/base :: commonHead('記録一覧 | オートレース予想補助アプリ')}"></th:block>
     <style>
         body.record-list-page {
-            --accent-color: #84acd9;
+            --main-color: #84acd9;
+            --accent-color: #1f4f83;
+            --border-color: #cbdced;
             --surface-tint: #edf5fd;
-            --theme-text: #17304f;
-            --brand-strong: var(--accent-color);
+            --main-color-text: #ffffff;
+            --brand: color-mix(in srgb, var(--main-color) 34%, white);
+            --brand-strong: color-mix(in srgb, var(--main-color) 76%, white);
+            --btn-on-brand: var(--main-color-text);
+            --card: var(--border-color);
+            --deep: var(--accent-color);
+            --theme-text: var(--accent-color);
             --section-badge-bg: var(--surface-tint);
             --soft-surface: color-mix(in srgb, var(--surface-tint) 78%, white);
         }
 
         body.record-list-page.theme-kawaguchi {
-            --accent-color: #d96aa0;
-            --surface-tint: #fcedf5;
-            --theme-text: #a8336d;
+            --main-color: #d96aa0;
+            --accent-color: #8b2c5b;
+            --border-color: #e9b5cf;
+            --surface-tint: #f9e1eb;
+            --main-color-text: #ffffff;
         }
 
         body.record-list-page.theme-isesaki {
-            --accent-color: #7bc77b;
-            --surface-tint: #eef9ee;
-            --theme-text: #2f7d32;
+            --main-color: #49515c;
+            --accent-color: #2f3640;
+            --border-color: #c4cad2;
+            --surface-tint: #e5e9ee;
+            --main-color-text: #ffffff;
         }
 
         body.record-list-page.theme-hamamatsu {
-            --accent-color: #f2b15d;
-            --surface-tint: #fff5e6;
-            --theme-text: #9a5b00;
+            --main-color: #4d8fd6;
+            --accent-color: #21558b;
+            --border-color: #c5dbf4;
+            --surface-tint: #e3eefb;
+            --main-color-text: #ffffff;
         }
 
         body.record-list-page.theme-iizuka {
-            --accent-color: #8b80d8;
-            --surface-tint: #f1effd;
-            --theme-text: #4b3aa5;
+            --main-color: #d4ad2d;
+            --accent-color: #6f5600;
+            --border-color: #ead48b;
+            --surface-tint: #fff6d6;
+            --main-color-text: #3f3200;
         }
 
         body.record-list-page.theme-sanyo {
-            --accent-color: #58b8c6;
-            --surface-tint: #e9f8fb;
-            --theme-text: #207988;
+            --main-color: #d88949;
+            --accent-color: #8f5728;
+            --border-color: #ecc5a6;
+            --surface-tint: #fcebdd;
+            --main-color-text: #ffffff;
         }
 
         .record-list-hero {
@@ -233,16 +250,16 @@
         .record-mobile-card.venue-kawaguchi { --record-accent: #d96aa0; }
 
         .record-row.venue-isesaki,
-        .record-mobile-card.venue-isesaki { --record-accent: #7bc77b; }
+        .record-mobile-card.venue-isesaki { --record-accent: #49515c; }
 
         .record-row.venue-hamamatsu,
-        .record-mobile-card.venue-hamamatsu { --record-accent: #f2b15d; }
+        .record-mobile-card.venue-hamamatsu { --record-accent: #4d8fd6; }
 
         .record-row.venue-iizuka,
-        .record-mobile-card.venue-iizuka { --record-accent: #8b80d8; }
+        .record-mobile-card.venue-iizuka { --record-accent: #d4ad2d; }
 
         .record-row.venue-sanyo,
-        .record-mobile-card.venue-sanyo { --record-accent: #58b8c6; }
+        .record-mobile-card.venue-sanyo { --record-accent: #d88949; }
 
         .record-row td:first-child {
             border-left: 0.32rem solid var(--record-accent);
